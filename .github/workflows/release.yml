@@ -1,4 +1,4 @@
-name: Test, Build, and Deploy via GameCI and Butler  🎮
+name: [RELEASE CANDIDATE] Test, Build, and Deploy via GameCI and Butler 🎮
 
 on:
   workflow_dispatch: {}

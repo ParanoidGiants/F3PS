@@ -1,4 +1,4 @@
-name: Test, Build, and Deploy via GameCI and Butler  🎮
+name: [MAIN] Test, Build, and Deploy via GameCI and Butler
 
 on:
   push:
