@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using F3PSCharacterController;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -75,6 +76,10 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
         
+        // TODO: Group weapon related variables into a separate class
+        public BaseGun baseGun;
+        public float rotationSpeed;
+        
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -105,7 +110,6 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
-        private ShootBullet _shootBullet;
 
         private const float _threshold = 0.01f;
 
@@ -140,7 +144,6 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
-            _shootBullet = GetComponent<ShootBullet>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -161,9 +164,10 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            
             if (_input.shoot)
             {
-                _shootBullet.OnShoot();
+                baseGun.OnShoot();
                 _input.shoot = false;
             }
         }
@@ -203,7 +207,7 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime * rotationSpeed;
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
