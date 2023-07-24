@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8541015354598396516}
   - component: {fileID: 8541015354598396514}
   - component: {fileID: 6739350904307419869}
-  - component: {fileID: 2928921398925111896}
   - component: {fileID: 5561095795434186493}
+  - component: {fileID: 5004514709375848286}
   m_Layer: 6
   m_Name: Projectile
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8541015354598396513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8541015354598396513}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -3866609084552516401, guid: f0b1912294ff6fc49930452acf84e685, type: 3}
 --- !u!23 &8541015354598396516
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4f350193345fd854d8020238747fefcd, type: 2}
+  - {fileID: 2100000, guid: d3ad3954dc3b23944a80b29360106e26, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -115,21 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f730b930e8891041a39f403c7a54678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
---- !u!136 &2928921398925111896
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8541015354598396513}
-  m_Material: {fileID: 13400000, guid: 4ffd2050bcbcf3a4bb68b6e4638a6cf2, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &5561095795434186493
 TrailRenderer:
   serializedVersion: 2
@@ -238,3 +223,16 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!135 &5004514709375848286
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541015354598396513}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.002
+  m_Center: {x: 0, y: 0, z: 0}
