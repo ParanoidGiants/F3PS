@@ -174,7 +174,7 @@ namespace StarterAssets
             GroundedCheck();
             Move();
 
-            if (!_input.sprint && _input.shoot)
+            if ((_input.aim || !_input.sprint) && _input.shoot)
             {
                 baseGun.OnShoot();
             }
@@ -284,7 +284,7 @@ namespace StarterAssets
 
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                               _mainCamera.transform.eulerAngles.y;
-            if (!_input.sprint)
+            if (_input.aim || !_input.sprint)
             {
                 _lookRotation = Mathf.SmoothDampAngle(
                     transform.eulerAngles.y,
