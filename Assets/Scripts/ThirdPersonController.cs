@@ -123,6 +123,10 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        public bool isAiming;
+        public bool isSprinting;
+        public bool isShooting;
+        private StaminaManager _staminaManager;
 
         private bool IsCurrentDeviceMouse
         {
@@ -164,17 +168,33 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+            
+            _staminaManager = GetComponent<StaminaManager>();
         }
 
         private void Update()
         {
+            if (_staminaManager._isReloading)
+            {
+                isAiming = false;
+                isSprinting = false;
+            }
+            else
+            {
+                isAiming = _input.aim;
+                isSprinting = !isAiming && _input.sprint && _input.move.magnitude > 0.1f;
+            }
+            isShooting = _input.shoot && !isSprinting;
+            _staminaManager.UpdateSprinting(isSprinting);
+            _staminaManager.UpdateAiming(isAiming);
+
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
             GroundedCheck();
             Move();
 
-            if ((_input.aim || !_input.sprint) && _input.shoot)
+            if (isShooting)
             {
                 baseGun.OnShoot();
             }
@@ -240,11 +260,11 @@ namespace StarterAssets
             {
                 targetSpeed = 0.0f;
             }
-            else if (_input.aim)
+            else if (isAiming)
             {
                 targetSpeed = FocusSpeed;
             }
-            else if (_input.sprint)
+            else if (isSprinting)
             {
                 targetSpeed = SprintSpeed;
             }
@@ -284,7 +304,7 @@ namespace StarterAssets
 
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                               _mainCamera.transform.eulerAngles.y;
-            if (_input.aim || !_input.sprint)
+            if (!isSprinting)
             {
                 _lookRotation = Mathf.SmoothDampAngle(
                     transform.eulerAngles.y,
