@@ -124,6 +124,7 @@ namespace StarterAssets
         public bool isAiming;
         public bool isSprinting;
         public bool isShooting;
+        public bool isReloading;
         private StaminaManager _staminaManager;
         public BaseGun baseGun;
         public float rotationSpeed;
@@ -188,6 +189,7 @@ namespace StarterAssets
                 isSprinting = !isAiming && _input.sprint && _input.move.magnitude > 0.1f;
             }
             isShooting = _input.shoot && !isSprinting;
+            isReloading = _input.reload;
             _staminaManager.UpdateSprinting(isSprinting);
             _staminaManager.UpdateAiming(isAiming);
 
@@ -200,6 +202,10 @@ namespace StarterAssets
             if (isShooting)
             {
                 baseGun.OnShoot();
+            }
+            if (isReloading)
+            {
+                baseGun.OnReload();
             }
         }
 
