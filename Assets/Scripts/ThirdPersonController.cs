@@ -128,8 +128,10 @@ namespace StarterAssets
         private StaminaManager _staminaManager;
         public BaseGun baseGun;
         public float rotationSpeed;
-        public int CurrentReloadAmmo => baseGun.CurrentAmmo;
-        public int MaxAmmo => baseGun.MaxAmmo;
+        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmmo;
+        public int CurrentAmmo => baseGun.CurrentAmmo;
+        public float ReloadPercentage => baseGun.ReloadPercentage;
+        
         #endregion Extensions
 
         private bool IsCurrentDeviceMouse

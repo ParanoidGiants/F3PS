@@ -1,11 +1,12 @@
-using System;
 using StarterAssets;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {
     public TextMeshProUGUI ammoAmountText;
+    public Image ReloadCircle;
     private ThirdPersonController _playerController;
     private ThirdPersonController PlayerController
     {
@@ -20,11 +21,25 @@ public class AmmoUI : MonoBehaviour
 
     private void Update()
     {
-        UpdateAmmo(PlayerController.CurrentReloadAmmo, PlayerController.MaxAmmo);
+        UpdateAmmo(PlayerController.CurrentMagazineAmmo, PlayerController.CurrentAmmo);
+        UpdateReload(PlayerController.ReloadPercentage);
     }
 
-    public void UpdateAmmo(int currentReloadAmmo, int maxAmmo)
+    public void UpdateAmmo(int currentReloadAmmo, int currentAmmo)
     {
-        ammoAmountText.text = $"{currentReloadAmmo}/{maxAmmo}";
+        ammoAmountText.text = $"{currentReloadAmmo}/{currentAmmo}";
+    }
+    
+    public void UpdateReload(float percentage)
+    {
+        Debug.Log(percentage);
+        if (percentage == 0f)
+        {
+            ReloadCircle.fillAmount = 0f;
+        }
+        else
+        {
+            ReloadCircle.fillAmount = 1f - percentage;
+        }
     }
 }
