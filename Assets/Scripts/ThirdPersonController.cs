@@ -69,13 +69,17 @@ namespace StarterAssets
 
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject CinemachineCameraTarget;
+        public GameObject StandardCinemachineCameraTarget;
+        public GameObject SprintingCinemachineCameraTarget;
 
         [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClamp = 70.0f;
+        public float TopClampStandard = 70.0f;
 
         [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
+        public float BottomClampStandard = -30.0f;
+
+        public float TopClampSprinting = 70.0f;
+        public float BottomClampSprinting = -30.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -131,7 +135,7 @@ namespace StarterAssets
         public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmmo;
         public int CurrentAmmo => baseGun.CurrentAmmo;
         public float ReloadPercentage => baseGun.ReloadPercentage;
-        
+        public float cameraAngleOverrideSprinting = 25f;
         #endregion Extensions
 
         private bool IsCurrentDeviceMouse
@@ -158,7 +162,7 @@ namespace StarterAssets
 
         private void Start()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            _cinemachineTargetYaw = SprintingCinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
@@ -188,11 +192,11 @@ namespace StarterAssets
             else
             {
                 isAiming = _input.aim;
-                isSprinting = !isAiming && _input.sprint && _input.move.magnitude > 0.1f;
+                isSprinting = !isAiming && _input.sprint;
             }
             isShooting = _input.shoot && !isSprinting;
             isReloading = _input.reload;
-            _staminaManager.UpdateSprinting(isSprinting);
+            _staminaManager.UpdateSprinting(isSprinting && _input.move.magnitude > 0.1f);
             _staminaManager.UpdateAiming(isAiming);
 
             _hasAnimator = TryGetComponent(out _animator);
@@ -254,10 +258,14 @@ namespace StarterAssets
 
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            var pitchStandard = ClampAngle(_cinemachineTargetPitch, BottomClampStandard, TopClampStandard);
+            var pitchSprinting = ClampAngle(_cinemachineTargetPitch, BottomClampSprinting, TopClampSprinting);
+            _cinemachineTargetPitch = isSprinting ? pitchSprinting : pitchStandard;
 
             // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+            StandardCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchStandard + CameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
+            SprintingCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchSprinting + cameraAngleOverrideSprinting,
                 _cinemachineTargetYaw, 0.0f);
         }
 

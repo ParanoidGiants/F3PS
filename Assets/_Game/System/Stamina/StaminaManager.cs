@@ -8,7 +8,7 @@ public class StaminaManager : MonoBehaviour
     public float staminaMax = 100f;
     public float staminaRegenRate = 10f;
     public float staminaDepletionRateSprint = 10f;
-    public float staminaDepletionRateAim = 5f;
+    public float staminaDepletionRateAim = 0f;
 
     public bool _isSprinting = false;
     public bool _isAiming = false;

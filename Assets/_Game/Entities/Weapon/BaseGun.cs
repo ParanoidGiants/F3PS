@@ -12,6 +12,7 @@ namespace F3PSCharacterController
         public GameObject projectilePrefab;
         public Transform projectileSpawn;
         public ProjectilePool projectilePool;
+        public Transform meshHolder;
         
         [Space(10)]
         [Header("Settings")]
@@ -43,6 +44,11 @@ namespace F3PSCharacterController
 
             currentAmmo = maxAmmo;
         }
+        
+        private void Update()
+        {
+            meshHolder.rotation = _cam.transform.rotation;
+        }
 
         public void OnShoot()
         {
@@ -64,7 +70,7 @@ namespace F3PSCharacterController
             currentMagazineAmmo--;
             projectilePool.ShootBullet(
                 projectileSpawn.position,
-                _cam.transform.rotation,
+                meshHolder.rotation,
                 shotSpeed
             );
             while (shootCoolDownTime > 0f)

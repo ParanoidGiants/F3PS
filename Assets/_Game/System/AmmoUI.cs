@@ -32,7 +32,6 @@ public class AmmoUI : MonoBehaviour
     
     public void UpdateReload(float percentage)
     {
-        Debug.Log(percentage);
         if (percentage == 0f)
         {
             ReloadCircle.fillAmount = 0f;
