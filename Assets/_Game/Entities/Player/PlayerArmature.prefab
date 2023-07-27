@@ -1142,14 +1142,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4026656816572506844}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.346, z: 0}
+  m_LocalRotation: {x: 0.2164396, y: 0, z: 0, w: 0.97629607}
+  m_LocalPosition: {x: 0, y: 1.602, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6128214820260621315}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}
 --- !u!1 &4027253828663535920
 GameObject:
   m_ObjectHideFlags: 0
@@ -2071,8 +2071,10 @@ MonoBehaviour:
     m_Bits: 513
   StandardCinemachineCameraTarget: {fileID: 1204151532081024994}
   SprintingCinemachineCameraTarget: {fileID: 4026656816572506844}
-  TopClamp: 70
-  BottomClamp: -30
+  TopClampStandard: 70
+  BottomClampStandard: -30
+  TopClampSprinting: 70
+  BottomClampSprinting: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
   isAiming: 0
@@ -2081,7 +2083,7 @@ MonoBehaviour:
   isReloading: 0
   baseGun: {fileID: 7137088972954229245}
   rotationSpeed: 1
-  cameraAngleSprinting: 25
+  cameraAngleOverrideSprinting: 25
 --- !u!114 &3648044466085862473
 MonoBehaviour:
   m_ObjectHideFlags: 0
