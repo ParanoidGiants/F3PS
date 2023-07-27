@@ -83,10 +83,6 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
         
-        // TODO: Group weapon related variables into a separate class
-        public BaseGun baseGun;
-        public float rotationSpeed;
-        
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -123,10 +119,17 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        
+        #region Extensions
         public bool isAiming;
         public bool isSprinting;
         public bool isShooting;
         private StaminaManager _staminaManager;
+        public BaseGun baseGun;
+        public float rotationSpeed;
+        public int CurrentReloadAmmo => baseGun.CurrentAmmo;
+        public int MaxAmmo => baseGun.MaxAmmo;
+        #endregion Extensions
 
         private bool IsCurrentDeviceMouse
         {
