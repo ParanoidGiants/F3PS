@@ -7,52 +7,21 @@ using UnityEngine.UI;
 public class AmmoUI : MonoBehaviour
 {
     private RectTransform _rectTransform;
-    private ThirdPersonController _playerController;
     private int _magazineAmount;
     private int _totalAmount;
     private float _reloadPercentage;
+    private Animator _animator;
     
     public TextMeshProUGUI magazineAmountText;
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
     public Image ReloadCircle;
-
-    private ThirdPersonController PlayerController
-    {
-        get
-        {
-            if (_playerController) return _playerController;
-
-            _playerController = FindObjectOfType<ThirdPersonController>();
-            return _playerController;
-        }
-    }
+    private static readonly int Pulsate = Animator.StringToHash("pulsate");
 
     private void Start()
     {
+        _animator = GetComponent<Animator>();
         _rectTransform = GetComponent<RectTransform>();
-    }
-
-    private void Update()
-    {
-        if (_magazineAmount != PlayerController.CurrentMagazineAmmo || _totalAmount != PlayerController.CurrentAmmo)
-        {
-            UpdateAmmo(PlayerController.CurrentMagazineAmmo, PlayerController.CurrentAmmo);
-        }
-        if (Math.Abs(_reloadPercentage - PlayerController.ReloadPercentage) > Mathf.Epsilon)
-        {
-            UpdateReload(PlayerController.ReloadPercentage);
-        }
-    }
-
-    public void UpdateAmmo(int currentMagazineAmount, int currentTotalAmount)
-    {
-        magazineAmountText.text = currentMagazineAmount.ToString();
-        magazineAmountTextDuplicate.text = currentMagazineAmount.ToString();
-        totalAmountText.text = currentTotalAmount.ToString();
-        _magazineAmount = currentMagazineAmount;
-        _totalAmount = currentTotalAmount;
-        StartCoroutine(Helper.UpdateLayoutGroups(_rectTransform));
     }
     
     public void UpdateReload(float percentage)
@@ -65,5 +34,20 @@ public class AmmoUI : MonoBehaviour
         {
             ReloadCircle.fillAmount = 1f - percentage;
         }
+    }
+
+    public void OnShootEmptyClip()
+    {
+        _animator.SetTrigger(Pulsate);
+    }
+
+    public void OnShoot(int baseGunCurrentMagazineAmmo, int baseGunCurrentAmmo)
+    {
+        magazineAmountText.text = baseGunCurrentMagazineAmmo.ToString();
+        magazineAmountTextDuplicate.text = baseGunCurrentMagazineAmmo.ToString();
+        totalAmountText.text = baseGunCurrentAmmo.ToString();
+        _magazineAmount = baseGunCurrentMagazineAmmo;
+        _totalAmount = baseGunCurrentAmmo;
+        StartCoroutine(Helper.UpdateLayoutGroups(_rectTransform));
     }
 }

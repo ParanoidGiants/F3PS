@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Android;
@@ -26,14 +27,14 @@ namespace F3PSCharacterController
         
         [Space(10)]
         [Header("Watchers")]
-        public int currentAmmo = 100;
-        public int currentMagazineAmmo = 10;
+        public int totalAmount = 100;
+        public int currentMagazineAmount = 10;
         public float shootCoolDownTime = 0.0f;
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
 
-        public int CurrentMagazineAmmo => currentMagazineAmmo;
-        public int CurrentAmmo => currentAmmo;
+        public int CurrentMagazineAmount => currentMagazineAmount;
+        public int TotalAmount => totalAmount;
         public float ReloadPercentage => reloadMagazineTime / reloadMagazineTimer;
 
         private void Start()
@@ -42,7 +43,7 @@ namespace F3PSCharacterController
             projectilePool.Init(projectilePrefab);
             projectilePool.transform.parent = null;
 
-            currentAmmo = maxAmmo;
+            totalAmount = maxAmmo;
         }
         
         private void Update()
@@ -52,13 +53,6 @@ namespace F3PSCharacterController
 
         public void OnShoot()
         {
-            if (isShooting || isReloadingMagazine) return;
-            
-            if (currentMagazineAmmo <= 0)
-            {
-                // TODO: Play empty clip sound
-                return;
-            }
             
             StartCoroutine(Shoot());
         }
@@ -67,7 +61,7 @@ namespace F3PSCharacterController
         {
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
-            currentMagazineAmmo--;
+            currentMagazineAmount--;
             projectilePool.ShootBullet(
                 projectileSpawn.position,
                 meshHolder.rotation,
@@ -80,21 +74,20 @@ namespace F3PSCharacterController
             }
             isShooting = false;
         }
-
-        public void OnReload()
+        
+        public void OnReload(Action<float> updateCallback)
         {
-            if (isReloadingMagazine) return;
-
-            var reloadAmount = maxMagazineAmmo - currentMagazineAmmo;
-            reloadAmount = Mathf.Min(reloadAmount, currentAmmo);
-            
-            if (reloadAmount <= 0) return;
-            
-            StartCoroutine(Reload(reloadAmount));
+            StartCoroutine(Reload(updateCallback));
         }
-
-        private IEnumerator Reload(int reloadAmount)
+        
+        private IEnumerator Reload(Action<float> updateCallback)
         {
+            if (isReloadingMagazine) yield break;
+            
+            var reloadAmount = maxMagazineAmmo - currentMagazineAmount;
+            reloadAmount = Mathf.Min(reloadAmount, totalAmount);
+            if (reloadAmount <= 0) yield break;
+
             // TODO: Play reload sound
             // TODO: Play reload animation
             isReloadingMagazine = true;
@@ -102,12 +95,14 @@ namespace F3PSCharacterController
             while (reloadMagazineTime > 0f)
             {
                 reloadMagazineTime -= Time.deltaTime;
+                updateCallback(reloadMagazineTime / reloadMagazineTimer);
                 yield return null;
             }
             reloadMagazineTime = 0f;
+            updateCallback(reloadMagazineTime / reloadMagazineTimer);
 
-            currentMagazineAmmo += reloadAmount;
-            currentAmmo -= reloadAmount;
+            currentMagazineAmount += reloadAmount;
+            totalAmount -= reloadAmount;
             isReloadingMagazine = false;
         }
     }

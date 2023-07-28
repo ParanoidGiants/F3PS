@@ -132,10 +132,12 @@ namespace StarterAssets
         private StaminaManager _staminaManager;
         public BaseGun baseGun;
         public float rotationSpeed;
-        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmmo;
-        public int CurrentAmmo => baseGun.CurrentAmmo;
+        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
+        public int CurrentAmmo => baseGun.TotalAmount;
         public float ReloadPercentage => baseGun.ReloadPercentage;
         public float cameraAngleOverrideSprinting = 25f;
+        private AmmoUI _ammoUI;
+
         #endregion Extensions
 
         private bool IsCurrentDeviceMouse
@@ -162,6 +164,7 @@ namespace StarterAssets
 
         private void Start()
         {
+            _ammoUI = FindObjectOfType<AmmoUI>();
             _cinemachineTargetYaw = SprintingCinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
@@ -205,13 +208,22 @@ namespace StarterAssets
             GroundedCheck();
             Move();
 
-            if (isShooting)
+            if (isShooting && !baseGun.isShooting && !baseGun.isReloadingMagazine)
             {
-                baseGun.OnShoot();
+                if (baseGun.currentMagazineAmount <= 0)
+                {
+                    // TODO: Play empty clip sound
+                    _ammoUI.OnShootEmptyClip();
+                }
+                else
+                {
+                    baseGun.OnShoot();
+                    _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
+                }
             }
-            if (isReloading)
+            if (isReloading && !baseGun.isReloadingMagazine)
             {
-                baseGun.OnReload();
+                baseGun.OnReload(x => _ammoUI.UpdateReload(x));
             }
         }
 
