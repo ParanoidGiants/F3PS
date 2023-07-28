@@ -1,3 +1,4 @@
+using System;
 using StarterAssets;
 using TMPro;
 using UnityEngine;
@@ -5,9 +6,17 @@ using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {
-    public TextMeshProUGUI ammoAmountText;
-    public Image ReloadCircle;
+    private RectTransform _rectTransform;
     private ThirdPersonController _playerController;
+    private int _magazineAmount;
+    private int _totalAmount;
+    private float _reloadPercentage;
+    
+    public TextMeshProUGUI magazineAmountText;
+    public TextMeshProUGUI magazineAmountTextDuplicate;
+    public TextMeshProUGUI totalAmountText;
+    public Image ReloadCircle;
+
     private ThirdPersonController PlayerController
     {
         get
@@ -19,15 +28,31 @@ public class AmmoUI : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Start()
     {
-        UpdateAmmo(PlayerController.CurrentMagazineAmmo, PlayerController.CurrentAmmo);
-        UpdateReload(PlayerController.ReloadPercentage);
+        _rectTransform = GetComponent<RectTransform>();
     }
 
-    public void UpdateAmmo(int currentReloadAmmo, int currentAmmo)
+    private void Update()
     {
-        ammoAmountText.text = $"{currentReloadAmmo}/{currentAmmo}";
+        if (_magazineAmount != PlayerController.CurrentMagazineAmmo || _totalAmount != PlayerController.CurrentAmmo)
+        {
+            UpdateAmmo(PlayerController.CurrentMagazineAmmo, PlayerController.CurrentAmmo);
+        }
+        if (Math.Abs(_reloadPercentage - PlayerController.ReloadPercentage) > Mathf.Epsilon)
+        {
+            UpdateReload(PlayerController.ReloadPercentage);
+        }
+    }
+
+    public void UpdateAmmo(int currentMagazineAmount, int currentTotalAmount)
+    {
+        magazineAmountText.text = currentMagazineAmount.ToString();
+        magazineAmountTextDuplicate.text = currentMagazineAmount.ToString();
+        totalAmountText.text = currentTotalAmount.ToString();
+        _magazineAmount = currentMagazineAmount;
+        _totalAmount = currentTotalAmount;
+        StartCoroutine(Helper.UpdateLayoutGroups(_rectTransform));
     }
     
     public void UpdateReload(float percentage)
