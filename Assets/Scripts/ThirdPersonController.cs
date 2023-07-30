@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using F3PSCharacterController;
+using TimeBending;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -16,6 +18,9 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
+        public float FocusSpeed = 1.0f;
+        
+        [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
@@ -24,6 +29,10 @@ namespace StarterAssets
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
+        
+        [Tooltip("How fast the character turns to face movement direction when aiming")]
+        [Range(0.0f, 1.0f)]
+        public float AmingRotationSmoothTime = 0.3f;
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
@@ -61,13 +70,17 @@ namespace StarterAssets
 
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject CinemachineCameraTarget;
+        public GameObject StandardCinemachineCameraTarget;
+        public GameObject SprintingCinemachineCameraTarget;
 
         [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClamp = 70.0f;
+        public float TopClampStandard = 70.0f;
 
         [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
+        public float BottomClampStandard = -30.0f;
+
+        public float TopClampSprinting = 70.0f;
+        public float BottomClampSprinting = -30.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -83,6 +96,7 @@ namespace StarterAssets
         private float _speed;
         private float _animationBlend;
         private float _targetRotation = 0.0f;
+        private float _lookRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
@@ -104,12 +118,30 @@ namespace StarterAssets
         private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _input;
+        public StarterAssetsInputs Input => _input;
         private GameObject _mainCamera;
-        private ShootBullet _shootBullet;
 
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        
+        #region Extensions
+        public bool isAiming;
+        public bool isSprinting;
+        public bool isShooting;
+        public bool isReloading;
+        public bool isSlowMo;
+        private StaminaManager _staminaManager;
+        public TimeManager _timeManager;
+        public BaseGun baseGun;
+        public float rotationSpeed;
+        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
+        public int CurrentAmmo => baseGun.TotalAmount;
+        public float ReloadPercentage => baseGun.ReloadPercentage;
+        public float cameraAngleOverrideSprinting = 25f;
+        private AmmoUI _ammoUI;
+
+        #endregion Extensions
 
         private bool IsCurrentDeviceMouse
         {
@@ -131,16 +163,20 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+            if (_timeManager == null)
+            {
+                _timeManager = GetComponentInChildren<TimeManager>();
+            }
         }
 
         private void Start()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            _ammoUI = FindObjectOfType<AmmoUI>();
+            _cinemachineTargetYaw = SprintingCinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
-            _shootBullet = GetComponent<ShootBullet>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -152,19 +188,57 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+            
+            _staminaManager = GetComponent<StaminaManager>();
         }
 
         private void Update()
         {
+            if (_staminaManager._isReloading)
+            {
+                isAiming = false;
+                isSprinting = false;
+            }
+            else
+            {
+                isAiming = _input.aim;
+                isSprinting = !isAiming && _input.sprint;
+            }
+            isShooting = _input.shoot && !isSprinting;
+            isReloading = _input.reload;
+            _staminaManager.UpdateSprinting(isSprinting && _input.move.magnitude > 0.1f);
+            _staminaManager.UpdateAiming(isAiming);
+
+            
+
+            if (!isSlowMo && _input.slowmo)
+            { 
+                _timeManager.StartSlowMotion();
+            }
+            isSlowMo = _input.slowmo;
+
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
             GroundedCheck();
             Move();
-            if (_input.shoot)
+
+            if (isShooting && !baseGun.isShooting && !baseGun.isReloadingMagazine)
             {
-                _shootBullet.OnShoot();
-                _input.shoot = false;
+                if (baseGun.currentMagazineAmount <= 0)
+                {
+                    // TODO: Play empty clip sound
+                    _ammoUI.OnShootEmptyClip();
+                }
+                else
+                {
+                    baseGun.OnShoot();
+                    _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
+                }
+            }
+            if (isReloading && !baseGun.isReloadingMagazine)
+            {
+                baseGun.OnReload(x => _ammoUI.UpdateReload(x));
             }
         }
 
@@ -181,7 +255,7 @@ namespace StarterAssets
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
-
+        
         private void GroundedCheck()
         {
             // set sphere position, with offset
@@ -203,7 +277,7 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime * rotationSpeed;
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
@@ -211,23 +285,39 @@ namespace StarterAssets
 
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            var pitchStandard = ClampAngle(_cinemachineTargetPitch, BottomClampStandard, TopClampStandard);
+            var pitchSprinting = ClampAngle(_cinemachineTargetPitch, BottomClampSprinting, TopClampSprinting);
+            _cinemachineTargetPitch = isSprinting ? pitchSprinting : pitchStandard;
 
             // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+            StandardCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchStandard + CameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
+            SprintingCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchSprinting + cameraAngleOverrideSprinting,
                 _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
         {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = SprintSpeed;
-
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+            float targetSpeed;
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+            if (_input.move == Vector2.zero)
+            {
+                targetSpeed = 0.0f;
+            }
+            else if (isAiming)
+            {
+                targetSpeed = FocusSpeed;
+            }
+            else if (isSprinting)
+            {
+                targetSpeed = SprintSpeed;
+            }
+            else
+            {
+                targetSpeed = MoveSpeed;
+            }
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -258,18 +348,29 @@ namespace StarterAssets
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
-            // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                              _mainCamera.transform.eulerAngles.y;
+            if (!isSprinting)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
-
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                _lookRotation = Mathf.SmoothDampAngle(
+                    transform.eulerAngles.y,
+                    _cinemachineTargetYaw,
+                    ref _rotationVelocity,
+                    AmingRotationSmoothTime
+                );
             }
+            else
+            {
+                _lookRotation = Mathf.SmoothDampAngle(
+                    transform.eulerAngles.y,
+                    _targetRotation,
+                    ref _rotationVelocity,
+                    RotationSmoothTime
+                );
+            }
+            
+            // rotate to face input direction relative to camera position
+            transform.rotation = Quaternion.Euler(0.0f, _lookRotation, 0.0f);
 
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;

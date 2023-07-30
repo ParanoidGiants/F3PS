@@ -13,6 +13,9 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 		public bool shoot;
+		public bool aim;
+		public bool reload;
+		public bool slowmo;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -47,8 +50,24 @@ namespace StarterAssets
 		
 		public void OnShoot(InputValue value)
 		{
-			shoot = value.isPressed;		
+			ShootInput(shoot = value.isPressed);		
 		}
+
+		public void OnAim(InputValue value)
+		{
+			AimInput(value.isPressed);
+		}
+
+		public void OnReload(InputValue value)
+		{
+			ReloadValue(value.isPressed);
+		}
+
+		public void OnSlowMo(InputValue value)
+        {
+			SlowMoInput(value.isPressed);
+        }
+
 #endif
 
 
@@ -71,6 +90,26 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
+		
+		private void ShootInput(bool newShootState)
+		{
+			shoot = newShootState;
+		}
+		
+		private void AimInput(bool newAimState)
+		{
+			aim = newAimState;
+		}
+		
+		private void ReloadValue(bool valueIsPressed)
+		{
+			reload = valueIsPressed;
+		}
+
+		private void SlowMoInput(bool valueIsPressed)
+        {
+			slowmo = valueIsPressed;
+        }
 
 		private void OnApplicationFocus(bool hasFocus)
 		{

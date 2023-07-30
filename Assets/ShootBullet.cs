@@ -1,3 +1,4 @@
+using TimeBending;
 using UnityEngine;
 
 public class ShootBullet : MonoBehaviour
@@ -9,6 +10,8 @@ public class ShootBullet : MonoBehaviour
     
     private float shootAgainTime = 0.0f;
     private Camera _cam;
+
+    public TimeManager timeManager;
     
     void Start()
     {
@@ -32,6 +35,7 @@ public class ShootBullet : MonoBehaviour
         if (shootAgainTime != 0f) return;
         
         shootAgainTime = shootAgainTimer;
+        timeManager.StartSlowMotion();
         GameObject bullet = Instantiate(bulletPrefab, bulletPool);
         bullet.transform.position = bulletSpawn.position;
         bullet.transform.rotation = _cam.transform.rotation;
