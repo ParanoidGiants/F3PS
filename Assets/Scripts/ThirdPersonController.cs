@@ -1,4 +1,5 @@
 ﻿using F3PSCharacterController;
+using TimeBending;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -129,7 +130,9 @@ namespace StarterAssets
         public bool isSprinting;
         public bool isShooting;
         public bool isReloading;
+        public bool isSlowMo;
         private StaminaManager _staminaManager;
+        public TimeManager _timeManager;
         public BaseGun baseGun;
         public float rotationSpeed;
         public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
@@ -159,6 +162,10 @@ namespace StarterAssets
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            }
+            if (_timeManager == null)
+            {
+                _timeManager = GetComponentInChildren<TimeManager>();
             }
         }
 
@@ -201,6 +208,14 @@ namespace StarterAssets
             isReloading = _input.reload;
             _staminaManager.UpdateSprinting(isSprinting && _input.move.magnitude > 0.1f);
             _staminaManager.UpdateAiming(isAiming);
+
+            
+
+            if (!isSlowMo && _input.slowmo)
+            { 
+                _timeManager.StartSlowMotion();
+            }
+            isSlowMo = _input.slowmo;
 
             _hasAnimator = TryGetComponent(out _animator);
 
