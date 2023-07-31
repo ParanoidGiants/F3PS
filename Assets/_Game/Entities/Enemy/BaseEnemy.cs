@@ -3,6 +3,7 @@ using StarterAssets;
 using UnityEditor.Build;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum EnemyState
 {
@@ -21,6 +22,7 @@ public class BaseEnemy : MonoBehaviour
     public Material suspiciousMaterial;
     public Material detectedTargetMaterial;
     public Material returnToIdleMaterial;
+    public NavMeshAgent navMeshAgent;
 
     [Space(10)]
     [Header("Settings")]
@@ -67,8 +69,10 @@ public class BaseEnemy : MonoBehaviour
 
         if (playerDistance < obstacleDistance)
         {
-            meshRenderer.transform.forward = direction;
+            // meshRenderer.transform.forward = direction;
             Debug.Log("Player in sight!");
+
+            navMeshAgent.destination = target.position;
         }
         else
         {
@@ -111,6 +115,5 @@ public class BaseEnemy : MonoBehaviour
         Debug.Log("Player out of radius");
         isPlayerInDetectionRadius = false;
         target = null;
-        meshRenderer.transform.forward = _originalRotation * Vector3.forward;
     }
 }
