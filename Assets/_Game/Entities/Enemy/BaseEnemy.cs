@@ -29,6 +29,8 @@ public class BaseEnemy : MonoBehaviour
     public float isSuspiciousTime;
     public float detectedSpeed = 3f;
     public float patrolSpeed = 1f;
+    public float attackDistance = 1f;
+
 
     [Space(10)]
     [Header("Watchers")]
@@ -48,32 +50,7 @@ public class BaseEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool isTargetInSight = false;
-        Vector3 targetDirection = Vector3.zero;
-        if (target != null)
-        {
-            var targetPosition = target.position + 0.5f * Vector3.up;
-            var position = headMeshRenderer.transform.position;
-            var direction = targetPosition - position;
-            float playerDistance = direction.magnitude;
-            direction.Normalize();
-            float obstacleDistance = maxRaycastDistance;
-            Debug.DrawRay(position, direction * playerDistance, Color.red);
-            
-            RaycastHit hit;
-            if (Physics.Raycast(position, direction, out hit, maxRaycastDistance, Helper.DefaultLayer))
-            {
-                obstacleDistance = hit.distance;
-            }
-            Debug.DrawRay(position, direction * obstacleDistance, Color.green);
-
-            if (playerDistance < obstacleDistance)
-            {
-                isTargetInSight = true;
-                targetDirection = direction;
-            }
-        }
-        
+        bool isTargetInSight = IsTargetInSight(out Vector3 targetDirection);
         if (isTargetInSight && state != EnemyState.DETECTED_TARGET)
         {
             navMeshAgent.speed = detectedSpeed;
@@ -88,13 +65,17 @@ public class BaseEnemy : MonoBehaviour
                 transform.position = _originalPosition;
                 break;
             case EnemyState.DETECTED_TARGET:
-                if (isTargetInSight)
+                if (!isTargetInSight)
                 {
-                    navMeshAgent.destination = target.position;
+                    UpdateState(EnemyState.CHECKING);
                     break;
                 }
                 
-                UpdateState(EnemyState.CHECKING);
+                navMeshAgent.destination = target.position;
+                if (navMeshAgent.remainingDistance <= attackDistance)
+                {
+                    navMeshAgent.speed = 0f;
+                }
                 break;
             case EnemyState.CHECKING:
                 if (navMeshAgent.remainingDistance > 0.1f)
@@ -126,6 +107,30 @@ public class BaseEnemy : MonoBehaviour
         }
     }
 
+    public bool IsTargetInSight(out Vector3 targetDirection)
+    {
+        targetDirection = Vector3.zero;
+        if (triggerCount == 0) return false;
+        
+        var targetPosition = target.position + 0.5f * Vector3.up;
+        var position = headMeshRenderer.transform.position;
+        var direction = targetPosition - position;
+        float playerDistance = direction.magnitude;
+        
+        direction.Normalize();
+        Debug.DrawRay(position, direction * playerDistance, Color.red);
+        RaycastHit hit;
+        if (Physics.Raycast(position, direction, out hit, playerDistance, Helper.DefaultLayer))
+        {
+            Debug.Log(hit.collider.name);
+            Debug.DrawRay(position, direction * playerDistance, Color.green);
+            return false;
+        }
+
+        targetDirection = direction;
+        return true;
+    }
+
     void UpdateState(EnemyState state)
     {
         switch (state)
@@ -149,15 +154,21 @@ public class BaseEnemy : MonoBehaviour
         this.state = state;
     }
 
+    public int triggerCount = 0;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+        triggerCount++;
         target = other.transform;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+        triggerCount--;
+        
+        if (triggerCount > 0) return;
         target = null;
     }
 }
