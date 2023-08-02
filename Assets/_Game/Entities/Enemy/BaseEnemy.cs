@@ -50,10 +50,9 @@ public class BaseEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool isTargetInSight = IsTargetInSight(out Vector3 targetDirection);
+        bool isTargetInSight = IsTargetInSight();
         if (isTargetInSight && state != EnemyState.DETECTED_TARGET)
         {
-            navMeshAgent.speed = detectedSpeed;
             UpdateState(EnemyState.DETECTED_TARGET);
         }
         
@@ -72,10 +71,6 @@ public class BaseEnemy : MonoBehaviour
                 }
                 
                 navMeshAgent.destination = target.position;
-                if (navMeshAgent.remainingDistance <= attackDistance)
-                {
-                    navMeshAgent.speed = 0f;
-                }
                 break;
             case EnemyState.CHECKING:
                 if (navMeshAgent.remainingDistance > 0.1f)
@@ -83,7 +78,6 @@ public class BaseEnemy : MonoBehaviour
 
                 isSuspiciousTime = isSuspiciousTimer;
                 _suspiciousRotation = transform.rotation;
-                navMeshAgent.speed = patrolSpeed;
                 UpdateState(EnemyState.SUSPICIOUS);
                 break;
             case EnemyState.SUSPICIOUS:
@@ -107,27 +101,35 @@ public class BaseEnemy : MonoBehaviour
         }
     }
 
-    public bool IsTargetInSight(out Vector3 targetDirection)
+    public bool IsTargetInSight()
     {
-        targetDirection = Vector3.zero;
         if (triggerCount == 0) return false;
         
-        var targetPosition = target.position + 0.5f * Vector3.up;
         var position = headMeshRenderer.transform.position;
-        var direction = targetPosition - position;
-        float playerDistance = direction.magnitude;
         
-        direction.Normalize();
-        Debug.DrawRay(position, direction * playerDistance, Color.red);
+        var targetPosition1 = target.position;
+        var direction1 = targetPosition1 - position;
+        var playerDistance1 = direction1.magnitude;
+        
+        direction1.Normalize();
+        Debug.DrawRay(position, direction1 * playerDistance1, Color.red);
         RaycastHit hit;
-        if (Physics.Raycast(position, direction, out hit, playerDistance, Helper.DefaultLayer))
+        // check if the player's feet are in sight
+        if (Physics.Raycast(position, direction1, out hit, playerDistance1, Helper.DefaultLayer))
         {
-            Debug.Log(hit.collider.name);
-            Debug.DrawRay(position, direction * playerDistance, Color.green);
-            return false;
+            Debug.DrawRay(position, direction1 * playerDistance1, Color.green);
+            
+            var targetPosition2 = targetPosition1 + Vector3.up;
+            var direction2 = targetPosition2 - position;
+            var playerDistance2 = direction2.magnitude;
+            direction2.Normalize();
+            // check if the player's head is in sight
+            if (Physics.Raycast(position, direction2, out hit, playerDistance2, Helper.DefaultLayer))
+            {
+                Debug.DrawRay(position, direction2 * playerDistance2, Color.green);
+                return false;
+            }
         }
-
-        targetDirection = direction;
         return true;
     }
 
@@ -142,9 +144,11 @@ public class BaseEnemy : MonoBehaviour
                 headMeshRenderer.sharedMaterial = checkingMaterial;
                 break;
             case EnemyState.SUSPICIOUS:
+                navMeshAgent.speed = patrolSpeed;
                 headMeshRenderer.sharedMaterial = suspiciousMaterial;
                 break;
             case EnemyState.DETECTED_TARGET:
+                navMeshAgent.speed = detectedSpeed;
                 headMeshRenderer.sharedMaterial = detectedTargetMaterial;
                 break;
             case EnemyState.RETURN_TO_IDLE:
