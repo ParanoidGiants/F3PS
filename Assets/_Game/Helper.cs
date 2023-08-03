@@ -6,6 +6,7 @@ public static class Helper
 {
     public static LayerMask PlayerLayer => LayerMask.GetMask("Character");
     public static LayerMask DefaultLayer => LayerMask.GetMask("Default");
+    public static LayerMask ProjectileLayer => LayerMask.GetMask("Projectile");
     public static IEnumerator UpdateLayoutGroups(RectTransform rectTransform)
     {
         yield return null;
@@ -23,6 +24,13 @@ public static class Helper
     {
         var colliderLayer = 1 << layer;
         var result = colliderLayer & DefaultLayer;
+        return result != 0;
+    }
+
+    public static bool IsLayerProjectileLayer(int layer)
+    {
+        var colliderLayer = 1 << layer;
+        var result = colliderLayer & ProjectileLayer;
         return result != 0;
     }
 }

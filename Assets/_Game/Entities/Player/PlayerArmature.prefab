@@ -2319,7 +2319,7 @@ MonoBehaviour:
   stamina: 0
   staminaMax: 100
   staminaRegenRate: 10
-  staminaDepletionRateSprint: 0
+  staminaDepletionRateSprint: 10
   staminaDepletionRateAim: 0
   _isSprinting: 0
   _isAiming: 0

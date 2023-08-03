@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private float _speed = 0f;
+    public bool Hit { get; private set; }
+    public float speed = 0f;
+    public int damage = 50;
     private Rigidbody _rb;
     private TrailRenderer _trailRenderer;
 
@@ -16,14 +18,14 @@ public class Projectile : MonoBehaviour
     {
         transform.position = position;
         transform.rotation = rotation;
-        _speed = shootSpeed;
+        speed = shootSpeed;
     }
     
     private void OnEnable()
     {
         _trailRenderer.Clear();
         _rb = GetComponent<Rigidbody>();
-        _rb.velocity = transform.forward * _speed;
+        _rb.velocity = transform.forward * speed;
     }
     
     private void OnDisable()
@@ -33,6 +35,9 @@ public class Projectile : MonoBehaviour
 
     private IEnumerator OnCollisionEnter(Collision other)
     {
+        if (Hit) yield break;
+        
+        Hit = true;
         _rb.velocity *= 0.1f;
         yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -32,7 +33,8 @@ public class BaseEnemy : MonoBehaviour
     public float attackStoppingDistance = 1.2f;
     public float defaultStoppingDistance = 0f;
     public float attackDistance = 1f;
-
+    public int maxHealth = 100;
+    public int health;
 
     [Space(10)]
     [Header("Watchers")]
@@ -47,6 +49,7 @@ public class BaseEnemy : MonoBehaviour
     {
         _originalPosition = transform.position;
         _originalRotation = transform.rotation;
+        health = maxHealth;
         UpdateState(EnemyState.IDLE);
     }
 
@@ -166,6 +169,23 @@ public class BaseEnemy : MonoBehaviour
     }
 
     public int triggerCount = 0;
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!Helper.IsLayerProjectileLayer(other.gameObject.layer)) return;
+
+        var projectile = other.gameObject.GetComponent<Projectile>();
+        health -= projectile.damage;
+        if (health > 0)
+        {
+            FindObjectOfType<EnemyHealthUIPool>().OnHitTarget(this);
+        }
+        else
+        {
+            FindObjectOfType<EnemyHealthUIPool>().OnKillTarget(transform);
+            Destroy(gameObject);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
