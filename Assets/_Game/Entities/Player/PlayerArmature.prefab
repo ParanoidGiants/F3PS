@@ -2163,7 +2163,7 @@ MonoBehaviour:
   isSlowMo: 0
   _timeManager: {fileID: 1453565625}
   baseGun: {fileID: 7137088972954229245}
-  rotationSpeed: 1
+  rotationSpeed: 0.25
   cameraAngleOverrideSprinting: 25
 --- !u!114 &3648044466085862473
 MonoBehaviour:
