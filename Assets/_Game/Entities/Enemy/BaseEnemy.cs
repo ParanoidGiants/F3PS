@@ -29,6 +29,8 @@ public class BaseEnemy : MonoBehaviour
     public float isSuspiciousTime;
     public float detectedSpeed = 3f;
     public float patrolSpeed = 1f;
+    public float attackStoppingDistance = 1.2f;
+    public float defaultStoppingDistance = 0f;
     public float attackDistance = 1f;
 
 
@@ -141,17 +143,22 @@ public class BaseEnemy : MonoBehaviour
                 headMeshRenderer.sharedMaterial = idleMaterial;
                 break;
             case EnemyState.CHECKING:
+                navMeshAgent.stoppingDistance = defaultStoppingDistance;
                 headMeshRenderer.sharedMaterial = checkingMaterial;
                 break;
             case EnemyState.SUSPICIOUS:
                 navMeshAgent.speed = patrolSpeed;
+                navMeshAgent.stoppingDistance = defaultStoppingDistance;
                 headMeshRenderer.sharedMaterial = suspiciousMaterial;
                 break;
             case EnemyState.DETECTED_TARGET:
                 navMeshAgent.speed = detectedSpeed;
+                navMeshAgent.stoppingDistance = attackStoppingDistance;
                 headMeshRenderer.sharedMaterial = detectedTargetMaterial;
                 break;
             case EnemyState.RETURN_TO_IDLE:
+                navMeshAgent.speed = patrolSpeed;
+                navMeshAgent.stoppingDistance = defaultStoppingDistance;
                 headMeshRenderer.sharedMaterial = returnToIdleMaterial;
                 break;
         }

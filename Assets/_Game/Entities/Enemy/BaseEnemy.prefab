@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4576980879518650884}
   - component: {fileID: 836340618498360709}
   m_Layer: 7
-  m_Name: FieldOfHear
+  m_Name: FieldOfSuspicous
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3874779326497168274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.9775, y: 4.9775, z: 4.9775}
+  m_LocalPosition: {x: 0, y: 0, z: 11.52}
+  m_LocalScale: {x: 22.8496, y: 22.8496, z: 22.8496}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4784554455562137025}
@@ -359,12 +359,12 @@ NavMeshAgent:
   m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 1000
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2.18
-  m_BaseOffset: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
 --- !u!114 &4776444785976893130
@@ -392,7 +392,9 @@ MonoBehaviour:
   isSuspiciousTimer: 5
   isSuspiciousTime: 0
   detectedSpeed: 3
-  patrolSpeed: 2
+  patrolSpeed: 1
+  attackStoppingDistance: 1.2
+  defaultStoppingDistance: 0
   attackDistance: 1
   state: 0
   target: {fileID: 0}
@@ -549,10 +551,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: FieldOfView
       objectReference: {fileID: 0}
+    - target: {fileID: 6057705855524073122, guid: fe052b2d0dd10f04a8ed03874295f7c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6057705855524073122, guid: fe052b2d0dd10f04a8ed03874295f7c9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6870975490352526360, guid: fe052b2d0dd10f04a8ed03874295f7c9,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6870975490352526360, guid: fe052b2d0dd10f04a8ed03874295f7c9,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 358.59375
+      objectReference: {fileID: 0}
+    - target: {fileID: 6870975490352526360, guid: fe052b2d0dd10f04a8ed03874295f7c9,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 712.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6870975490352526360, guid: fe052b2d0dd10f04a8ed03874295f7c9,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1150
       objectReference: {fileID: 0}
     - target: {fileID: 6870975490352526360, guid: fe052b2d0dd10f04a8ed03874295f7c9,
         type: 3}
