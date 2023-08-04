@@ -140,6 +140,7 @@ namespace StarterAssets
         public float ReloadPercentage => baseGun.ReloadPercentage;
         public float cameraAngleOverrideSprinting = 25f;
         private AmmoUI _ammoUI;
+        private static readonly int Dodge = Animator.StringToHash("Dodge");
 
         #endregion Extensions
 
@@ -222,7 +223,18 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            ShootAndReload();
+            Dodging();
+        }
 
+        private void Dodging()
+        {
+            var dodge = Grounded && _input.dodge;
+            _animator.SetBool(Dodge, dodge);
+        }
+
+        private void ShootAndReload()
+        {
             if (isShooting && !baseGun.isShooting && !baseGun.isReloadingMagazine)
             {
                 if (baseGun.currentMagazineAmount <= 0)
