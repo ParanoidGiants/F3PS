@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -173,9 +172,11 @@ public class BaseEnemy : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         if (!Helper.IsLayerProjectileLayer(other.gameObject.layer)) return;
+        
 
         var projectile = other.gameObject.GetComponent<Projectile>();
         health -= projectile.damage;
+        Debug.Log("Hit by projectile");
         if (health > 0)
         {
             FindObjectOfType<EnemyHealthUIPool>().OnHitTarget(this);

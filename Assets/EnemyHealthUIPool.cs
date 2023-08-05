@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHealthUIPool : MonoBehaviour
@@ -14,10 +11,12 @@ public class EnemyHealthUIPool : MonoBehaviour
 
     public void OnHitTarget(BaseEnemy target)
     {
-        if (enemyHealthUI.target == target.transform) return;
+        if (enemyHealthUI.target != target.transform)
+        {
+            enemyHealthUI.gameObject.SetActive(true);
+            enemyHealthUI.SetTarget(target.transform);
+        }
         
-        enemyHealthUI.gameObject.SetActive(true);
-        enemyHealthUI.SetTarget(target.transform);
         enemyHealthUI.SetFill(target.health/ (float) target.maxHealth);
     }
     
