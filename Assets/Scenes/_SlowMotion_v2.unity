@@ -1533,7 +1533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowdownFactor: 0.05
-  slowdownLength: 2
+  isActive: 0
 --- !u!4 &1110762796
 Transform:
   m_ObjectHideFlags: 0
@@ -1706,6 +1706,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
+        type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409498, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_Name
@@ -2979,6 +2984,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5561460374035165852, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: timeManager
+      value: 
+      objectReference: {fileID: 1110762795}
+    - target: {fileID: 5561460374035165852, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: staminaRegenRate
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561460374035165852, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: staminaDepletionRateSlowMo
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561460374035165852, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: staminaDepletionRateSprint
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6128214820260621315, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_RootOrder
@@ -3048,6 +3073,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerArmature
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137088972954229245, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: shotSpeed
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137088972954229245, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: maxMagazineAmmo
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137088972954229245, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: shootCoolDownTimer
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4db73df165e4d40aed90ef571a18f0, type: 3}

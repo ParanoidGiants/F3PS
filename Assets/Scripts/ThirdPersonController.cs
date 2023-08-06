@@ -130,10 +130,10 @@ namespace StarterAssets
         public bool isSprinting;
         public bool isShooting;
         public bool isReloading;
-        public bool isSlowMo;
         private StaminaManager _staminaManager;
         public TimeManager _timeManager;
         public BaseGun baseGun;
+        public bool isSlowMo;
         public float rotationSpeed;
         public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
         public int CurrentAmmo => baseGun.TotalAmount;
@@ -194,7 +194,7 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (_staminaManager._isReloading)
+            if (_staminaManager._isRegenerating)
             {
                 isAiming = false;
                 isSprinting = false;
@@ -214,6 +214,10 @@ namespace StarterAssets
             if (!isSlowMo && _input.slowmo)
             { 
                 _timeManager.StartSlowMotion();
+            }
+            if (isSlowMo && !_input.slowmo)
+            {
+                _timeManager.StopSlowMotion();
             }
             isSlowMo = _input.slowmo;
 

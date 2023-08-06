@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using TimeBending;
 using UnityEngine;
 
 public class StaminaManager : MonoBehaviour
@@ -9,45 +8,60 @@ public class StaminaManager : MonoBehaviour
     public float staminaRegenRate = 10f;
     public float staminaDepletionRateSprint = 10f;
     public float staminaDepletionRateAim = 0f;
+    public float staminaDepletionRateSlowMo = 20f;
 
     public bool _isSprinting = false;
     public bool _isAiming = false;
-    public bool _isReloading = false;
+    public bool _isRegenerating = false;
+    public bool _isSlowMotion = false;
     public float StaminaPercentage => stamina / staminaMax;
+
+    public TimeManager timeManager;
 
     private void Start()
     {
         stamina = staminaMax;
+        if (timeManager == null)
+        {
+            timeManager = FindObjectOfType<TimeManager>();
+        }
     }
     private void Update()
     {
-        if (!_isReloading)
+        _isSlowMotion = timeManager.isActive;
+
+        if (!_isRegenerating)
         {
-            if (_isSprinting)
+            if (_isSlowMotion)
             {
-                stamina -= staminaDepletionRateSprint * Time.deltaTime;
+                stamina -= staminaDepletionRateSlowMo * Time.unscaledDeltaTime;
+            }
+            else if (_isSprinting)
+            {
+                stamina -= staminaDepletionRateSprint * Time.unscaledDeltaTime;
             }
             else if (_isAiming)
             {
-                stamina -= staminaDepletionRateAim * Time.deltaTime;
+                stamina -= staminaDepletionRateAim * Time.unscaledDeltaTime;
             }
             else
             {
-                stamina += staminaRegenRate * Time.deltaTime;
+                stamina += staminaRegenRate * Time.unscaledDeltaTime;
             }
         }
         else
         {
-            stamina += staminaRegenRate * Time.deltaTime;
+            stamina += staminaRegenRate * Time.unscaledDeltaTime;
         }
         
         if (stamina >= staminaMax)
         {
-            _isReloading = false;
+            _isRegenerating = false;
         }
         else if (stamina < 0f)
         {
-            _isReloading = true;
+            _isRegenerating = true;
+            timeManager.StopSlowMotion();
         }
         stamina = Mathf.Clamp(stamina, 0f, staminaMax);
     }

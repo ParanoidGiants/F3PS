@@ -6,19 +6,24 @@ namespace TimeBending
     public class TimeManager : MonoBehaviour
     {
         public float slowdownFactor = 0.05f;
-        public float slowdownLength = 2f;
+        public bool isActive = false;
 
-        void Update()
-        {
-            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-        }
+        private float _fps = 60f;
 
         public void StartSlowMotion ()
-        {
+        { 
             Time.timeScale = slowdownFactor;
-            Time.fixedDeltaTime = Time.timeScale * (float)(1f/60f); // timeScale divided by 60fps
+            Time.fixedDeltaTime = Time.timeScale * (float)(1f/_fps); // timeScale divided by 60fps
             Debug.Log($"Slow motion initiated by a factor of {1/slowdownFactor}");
+            isActive = true;
+        }
+        
+        public void StopSlowMotion ()
+        {
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = (1f / _fps);
+            Debug.Log("Slow motion is stopped");
+            isActive = false;
         }
     }
 
