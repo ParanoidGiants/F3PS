@@ -195,6 +195,7 @@ namespace StarterAssets
             _fallTimeoutDelta = FallTimeout;
             
             _staminaManager = GetComponent<StaminaManager>();
+            _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
         }
 
         private void Update()
@@ -249,7 +250,7 @@ namespace StarterAssets
                 else
                 {
                     baseGun.OnShoot();
-                    _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
+                    _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
                 }
             }
             if (isReloading && !baseGun.isReloadingMagazine)
@@ -261,7 +262,7 @@ namespace StarterAssets
                     if (x <= 0f)
                     {
                         Debug.Log("Update UI");
-                        _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
+                        _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
                     }
                 });
             }

@@ -41,7 +41,7 @@ public class AmmoUI : MonoBehaviour
         _animator.SetTrigger(Pulsate);
     }
 
-    public void OnShoot(int baseGunCurrentMagazineAmmo, int baseGunCurrentAmmo)
+    public void UpdateAmmoText(int baseGunCurrentMagazineAmmo, int baseGunCurrentAmmo)
     {
         magazineAmountText.text = baseGunCurrentMagazineAmmo.ToString();
         magazineAmountTextDuplicate.text = baseGunCurrentMagazineAmmo.ToString();
