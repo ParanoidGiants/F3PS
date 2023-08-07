@@ -135,12 +135,11 @@ namespace StarterAssets
         public TimeManager _timeManager;
         public BaseGun baseGun;
         public float rotationSpeed;
-        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
-        public int CurrentAmmo => baseGun.TotalAmount;
-        public float ReloadPercentage => baseGun.ReloadPercentage;
         public float cameraAngleOverrideSprinting = 25f;
         private AmmoUI _ammoUI;
         private static readonly int Dodge = Animator.StringToHash("Dodge");
+        public float health = 100;
+        public float maxHealth = 100;
 
         #endregion Extensions
 
@@ -507,6 +506,11 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        public void Hit(int damage)
+        {
+            health -= damage;
         }
     }
 }

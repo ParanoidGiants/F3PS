@@ -227,7 +227,6 @@ Transform:
   m_Children:
   - {fileID: 4776444784549637148}
   - {fileID: 4776444786326003610}
-  - {fileID: 4784554455562137025}
   m_Father: {fileID: 4776444785976893129}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -326,6 +325,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4776444785553750746}
+  - {fileID: 1187658047388652633}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -344,7 +344,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!195 &4776444785976893128
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -381,24 +381,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headMeshRenderer: {fileID: 4776444785553750741}
   navMeshAgent: {fileID: 4776444785976893128}
-  idleMaterial: {fileID: 2100000, guid: 69473110e898fa54f83a37b5893e2016, type: 2}
-  checkingMaterial: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
-  suspiciousMaterial: {fileID: 2100000, guid: 98e00788c2b74b247b7dc4202dc2878c, type: 2}
-  detectedTargetMaterial: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7,
-    type: 2}
-  returnToIdleMaterial: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128,
-    type: 2}
-  maxRaycastDistance: 100
-  isSuspiciousTimer: 5
-  isSuspiciousTime: 0
-  detectedSpeed: 3
-  patrolSpeed: 1
-  attackStoppingDistance: 1.2
-  defaultStoppingDistance: 0
-  attackDistance: 1
-  state: 0
-  target: {fileID: 0}
-  triggerCount: 0
+  maxHealth: 100
+  damage: 10
+  health: 0
+  isRushing: 0
 --- !u!1 &4776444786326003611
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +482,101 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5477658672902255771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1187658047388652633}
+  - component: {fileID: 8483852239593265513}
+  - component: {fileID: 40879628}
+  m_Layer: 7
+  m_Name: StateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1187658047388652633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5477658672902255771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4784554455562137025}
+  m_Father: {fileID: 4776444785976893129}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8483852239593265513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5477658672902255771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6114c7b9d49387459e903d4deb2b9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStateName: 
+  enemy: {fileID: 4776444785976893130}
+  idle:
+    enemySpeed: 0
+    enemyStoppingDistance: 0
+    material: {fileID: 2100000, guid: 69473110e898fa54f83a37b5893e2016, type: 2}
+  checking:
+    enemySpeed: 3
+    enemyStoppingDistance: 0
+    material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
+  aggressive:
+    enemySpeed: 5
+    enemyStoppingDistance: 1.7
+    material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
+    target: {fileID: 0}
+  rush:
+    enemySpeed: 0
+    enemyStoppingDistance: 0
+    material: {fileID: 2100000, guid: 194295e07de718741b554108f43cf498, type: 2}
+    recoveryTime: 0
+    recoveryTimer: 1
+  suspicious:
+    enemySpeed: 0
+    enemyStoppingDistance: 0
+    material: {fileID: 2100000, guid: 98e00788c2b74b247b7dc4202dc2878c, type: 2}
+    isSuspiciousTimer: 1
+  returnToIdle:
+    enemySpeed: 1
+    enemyStoppingDistance: 0
+    material: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128, type: 2}
+  isTargetInSight: 0
+  target: {fileID: 0}
+  triggerCount: 0
+--- !u!54 &40879628
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5477658672902255771}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
 --- !u!1 &7771167463628945596
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,15 +600,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7771167463628945596}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3416490564151985376}
   - {fileID: 6343794621975609512}
-  m_Father: {fileID: 4776444785553750746}
-  m_RootOrder: 2
+  m_Father: {fileID: 1187658047388652633}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8084889168152391928
 PrefabInstance:
