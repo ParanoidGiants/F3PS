@@ -5,14 +5,13 @@ namespace Enemy
 {
     public class EnemyStateManager : MonoBehaviour
     {
-        public string currentStateName;
         private State currentState;
 
-        [Space(20)]
+        [Space(10)]
         [Header("References")]
         public BaseEnemy enemy;
         
-        [Space(20)]
+        [Space(10)]
         [Header("States")]
         public Idle idle;
         public Checking checking;
@@ -23,6 +22,7 @@ namespace Enemy
 
         [Space(20)]
         [Header("Watchers")]
+        public string currentStateName;
         public bool isTargetInSight;
         public Transform target;
         public int triggerCount;

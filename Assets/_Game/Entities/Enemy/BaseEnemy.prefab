@@ -528,7 +528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6114c7b9d49387459e903d4deb2b9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStateName: 
   enemy: {fileID: 4776444785976893130}
   idle:
     enemySpeed: 0
@@ -540,7 +539,7 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
   aggressive:
     enemySpeed: 5
-    enemyStoppingDistance: 1.7
+    enemyStoppingDistance: 2
     material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
     target: {fileID: 0}
   rush:
@@ -548,7 +547,7 @@ MonoBehaviour:
     enemyStoppingDistance: 0
     material: {fileID: 2100000, guid: 194295e07de718741b554108f43cf498, type: 2}
     recoveryTime: 0
-    recoveryTimer: 1
+    recoveryTimer: 2
   suspicious:
     enemySpeed: 0
     enemyStoppingDistance: 0
@@ -558,6 +557,7 @@ MonoBehaviour:
     enemySpeed: 1
     enemyStoppingDistance: 0
     material: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128, type: 2}
+  currentStateName: 
   isTargetInSight: 0
   target: {fileID: 0}
   triggerCount: 0
