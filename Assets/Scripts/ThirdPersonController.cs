@@ -254,7 +254,16 @@ namespace StarterAssets
             }
             if (isReloading && !baseGun.isReloadingMagazine)
             {
-                baseGun.OnReload(x => _ammoUI.UpdateReload(x));
+                baseGun.OnReload(x =>
+                {
+                    _ammoUI.UpdateReload(x);
+                    
+                    if (x <= 0f)
+                    {
+                        Debug.Log("Update UI");
+                        _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
+                    }
+                });
             }
         }
 

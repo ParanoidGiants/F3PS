@@ -99,10 +99,11 @@ namespace F3PSCharacterController
                 yield return null;
             }
             reloadMagazineTime = 0f;
-            updateCallback(reloadMagazineTime / reloadMagazineTimer);
+            updateCallback(0f);
 
             currentMagazineAmount += reloadAmount;
             totalAmount -= reloadAmount;
+            updateCallback(0f);
             isReloadingMagazine = false;
         }
     }
