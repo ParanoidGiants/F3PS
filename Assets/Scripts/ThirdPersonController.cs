@@ -1,6 +1,7 @@
 ﻿using F3PSCharacterController;
 using TimeBending;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -140,7 +141,8 @@ namespace StarterAssets
         private static readonly int Dodge = Animator.StringToHash("Dodge");
         public float health = 100;
         public float maxHealth = 100;
-
+        public PlayerHealthUI playerHealthUI;
+        
         #endregion Extensions
 
         private bool IsCurrentDeviceMouse
@@ -156,6 +158,7 @@ namespace StarterAssets
         }
 
 
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -167,6 +170,8 @@ namespace StarterAssets
             {
                 _timeManager = GetComponentInChildren<TimeManager>();
             }
+
+            playerHealthUI = FindObjectOfType<PlayerHealthUI>();
         }
 
         private void Start()
@@ -511,6 +516,11 @@ namespace StarterAssets
         public void Hit(int damage)
         {
             health -= damage;
+            playerHealthUI.UpdateHealth((float)health/maxHealth);
+            if (health <= 0)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
     }
 }
