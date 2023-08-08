@@ -1,19 +1,14 @@
-using System;
-
 namespace Enemy.States
 {
-    [Serializable]
     public class Checking : State
     {
-        public override void Update()
+        public override void OnUpdate()
         {
-            if (stateManager.enemy.navMeshAgent.remainingDistance < 0.1f)
+            base.OnUpdate();
+            if (Helper.HasReachedDestination(navMeshAgent))
             {
-                stateManager.SwitchState(stateManager.suspicious);
-                return;
+                stateManager.SwitchState(StateType.SUSPICIOUS);
             }
-            
-            AggressiveSwitchWhenTargetIsInSight();
         }
     }
 }

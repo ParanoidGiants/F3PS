@@ -7,9 +7,8 @@ namespace Enemy.States
     public class ReturnToIdle : State
     {
         private Vector3 _originalPosition;
-        public override void Initialize(BaseEnemy enemy, EnemyStateManager stateManager, string name)
+        public void Start()
         {
-            base.Initialize(enemy, stateManager, name);
             _originalPosition = enemy.transform.position;
             enemy.navMeshAgent.destination = _originalPosition;
         }
@@ -20,15 +19,13 @@ namespace Enemy.States
             enemy.navMeshAgent.destination = _originalPosition;
         }
 
-        public override void Update()
+        public override void OnUpdate()
         {
-            if (enemy.HasReachedDestination())
+            base.OnUpdate();
+            if (Helper.HasReachedDestination(navMeshAgent))
             {
-                stateManager.SwitchState(stateManager.idle);
-                return;
+                stateManager.SwitchState(StateType.IDLE);
             }
-            
-            AggressiveSwitchWhenTargetIsInSight();
         }
     }
 }

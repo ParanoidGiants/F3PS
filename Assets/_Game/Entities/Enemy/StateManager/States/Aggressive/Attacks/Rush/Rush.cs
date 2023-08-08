@@ -1,28 +1,47 @@
 using System;
-using UnityEngine;
 
 namespace Enemy.States
 {
-    [Serializable]
-    public class Rush : AttackState
+    public class Rush : Attack
     {
-        public override void OnEnter()
+        public float rushStrength;
+        public BaseEnemy enemy;
+        public bool wasEarlyHit;
+
+        private void Start()
         {
-            base.OnEnter();
-            enemy.Rush();
+            enemy = navMeshAgent.GetComponent<BaseEnemy>();
         }
-        
-        public override void Update()
+
+        private void EarlyHit()
         {
-            if (enemy.Velocity.magnitude < 0.5f)
+            OnRecover();
+            wasEarlyHit = true;
+        }
+
+        override
+        protected void OnHit()
+        {
+            wasEarlyHit = false;
+            base.OnHit();
+            enemy.Rush(rushStrength, damage, () => EarlyHit());
+        }
+
+        override
+        protected void HandleHitting()
+        {
+            if (wasEarlyHit)
             {
-                stateManager.SwitchState(stateManager.checking);
+                hitTime = hitTimer;
+                return;
             }
+            base.HandleHitting();
         }
-        
-        public override void OnExit()
+
+        override
+        protected void OnRecover()
         {
-            base.OnExit();
+            base.OnRecover();
             enemy.StopRush();
         }
     }

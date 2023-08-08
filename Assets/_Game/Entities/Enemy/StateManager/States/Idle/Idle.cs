@@ -1,40 +1,45 @@
-using System;
 using UnityEngine;
 
 namespace Enemy.States
 {
-    [Serializable]
     public class Idle : State
     {
         private Transform _transform;
-        private Vector3 _originalPosition;
         private Quaternion _originalRotation;
+        private Quaternion _startRotation;
+        private float _rotateTime;
+        private readonly float _rotateTimer = 1f;
 
-        public override void Initialize(BaseEnemy enemy, EnemyStateManager stateManager, string name)
+        private void Awake()
         {
-            base.Initialize(enemy, stateManager, name);
             _transform = enemy.transform;
-            _originalPosition = _transform.position;
             _originalRotation = _transform.rotation;
         }
         
-        public override void OnEnter()
+        override
+        public void OnEnter()
         {
             base.OnEnter();
-            enemy.navMeshAgent.isStopped = true;
+            _startRotation = _transform.rotation;
+            _rotateTime = 0f;
+            navMeshAgent.isStopped = true;
+        }
+        
+        override
+        public void OnExit()
+        {
+            navMeshAgent.isStopped = false;
         }
 
-        public override void OnExit()
+        override
+        public void OnUpdate()
         {
-            enemy.navMeshAgent.isStopped = false;
-        }
-
-        public override void Update()
-        {
-            _transform.rotation = Quaternion.Slerp(_transform.rotation, _originalRotation, Time.deltaTime);
-            _transform.position = _originalPosition;
+            base.OnUpdate();
             
-            AggressiveSwitchWhenTargetIsInSight();
+            if (_rotateTime >= _rotateTimer) return;
+            
+            _transform.rotation = Quaternion.Slerp(_startRotation, _originalRotation, _rotateTime);
+            _rotateTime += Time.deltaTime;
         }
     }
 }

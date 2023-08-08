@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public static class Helper
@@ -32,5 +33,12 @@ public static class Helper
         var colliderLayer = 1 << layer;
         var result = colliderLayer & ProjectileLayer;
         return result != 0;
+    }
+    
+    public static bool HasReachedDestination(NavMeshAgent navMeshAgent)
+    {
+        return !navMeshAgent.pathPending 
+               && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance 
+               && (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f);
     }
 }

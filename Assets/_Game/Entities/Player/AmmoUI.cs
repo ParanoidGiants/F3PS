@@ -18,7 +18,7 @@ public class AmmoUI : MonoBehaviour
     public Image ReloadCircle;
     private static readonly int Pulsate = Animator.StringToHash("pulsate");
 
-    private void Start()
+    private void Awake()
     {
         _animator = GetComponent<Animator>();
         _rectTransform = GetComponent<RectTransform>();

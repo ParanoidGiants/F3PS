@@ -2121,7 +2121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FocusSpeed: 2
   MoveSpeed: 3.5
-  SprintSpeed: 6
+  SprintSpeed: 10
   RotationSmoothTime: 0.12
   AmingRotationSmoothTime: 0.05
   SpeedChangeRate: 10
@@ -2165,6 +2165,9 @@ MonoBehaviour:
   baseGun: {fileID: 7137088972954229245}
   rotationSpeed: 0.25
   cameraAngleOverrideSprinting: 25
+  health: 100
+  maxHealth: 100
+  playerHealthUI: {fileID: 0}
 --- !u!114 &3648044466085862473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2202,6 +2205,7 @@ MonoBehaviour:
   aim: 0
   reload: 0
   slowmo: 0
+  dodge: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -2319,7 +2323,7 @@ MonoBehaviour:
   stamina: 0
   staminaMax: 100
   staminaRegenRate: 10
-  staminaDepletionRateSprint: 10
+  staminaDepletionRateSprint: 0
   staminaDepletionRateAim: 0
   _isSprinting: 0
   _isAiming: 0
@@ -2863,17 +2867,17 @@ PrefabInstance:
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.236
+      value: 0.067
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.502
+      value: 1.347
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.375
+      value: 0.485
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}

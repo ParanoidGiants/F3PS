@@ -3,7 +3,12 @@ guid: 308eb05a8c8fd094a9e0ad654d0da8bc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - navMeshAgent: {instanceID: 0}
+  - enemy: {instanceID: 0}
+  - stateManager: {instanceID: 0}
+  - defaultVision: {instanceID: 0}
+  - material: {fileID: 2100000, guid: 98e00788c2b74b247b7dc4202dc2878c, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

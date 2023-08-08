@@ -1,46 +1,37 @@
-using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Enemy.States
 {
-    [Serializable]
-    public abstract class State
+    public class State : MonoBehaviour
     {
-        protected string name;
-        protected BaseEnemy enemy;
-        protected EnemyStateManager stateManager;
+        public StateType stateType;
+        
+        [Header("Base References")]
+        public NavMeshAgent navMeshAgent;
+        public BaseEnemy enemy;
+        public EnemyStateManager stateManager;
+        public Vision defaultVision;
         
         [Header("Base Settings")]
         public float enemySpeed;
         public float enemyStoppingDistance;
         public Material material;
         
-        public string Name => name;
-        
-        public virtual void Update() {}
-        public virtual void OnExit() {}
-        
-        public virtual void Initialize(BaseEnemy enemy, EnemyStateManager stateManager, string name)
-        {
-            this.name = name;
-            this.enemy = enemy;
-            this.stateManager = stateManager;
-        }
-        
         public virtual void OnEnter()
         {
-            enemy.navMeshAgent.speed = enemySpeed;
-            enemy.navMeshAgent.stoppingDistance = enemyStoppingDistance;
-            enemy.headMeshRenderer.sharedMaterial = material;
+            navMeshAgent.speed = enemySpeed;
+            navMeshAgent.stoppingDistance = enemyStoppingDistance;
+            enemy.SetMaterial(material);
         }
-        
-        public void AggressiveSwitchWhenTargetIsInSight()
+
+        public virtual void OnUpdate()
         {
-            if (stateManager.isTargetInSight)
+            if (stateType != StateType.AGGRESSIVE && defaultVision.IsTargetInSight())
             {
-                stateManager.aggressive.SetTarget(stateManager.target);
-                stateManager.SwitchState(stateManager.aggressive);
+                stateManager.SwitchState(StateType.AGGRESSIVE);
             }
         }
+        public virtual void OnExit() {}
     }
 }

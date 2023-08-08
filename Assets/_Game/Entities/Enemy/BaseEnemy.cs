@@ -9,9 +9,10 @@ namespace Enemy
     {
         private Rigidbody _rigidbody;
         
-        [Header("References")] 
+        [Header("References")]
         public MeshRenderer headMeshRenderer;
         public NavMeshAgent navMeshAgent;
+        private EnemyHealthUIPool _healthUIPool;
 
         [Space(10)]
         [Header("Settings")]
@@ -27,6 +28,7 @@ namespace Enemy
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
         }
 
         private void Start()
@@ -41,43 +43,45 @@ namespace Enemy
                 var projectile = other.gameObject.GetComponent<Projectile>();
                 health -= projectile.damage;
                 Debug.Log("Hit by projectile");
-                if (health > 0)
+                if (health <= 0)
                 {
-                    FindObjectOfType<EnemyHealthUIPool>().OnHitTarget(this);
-                }
-                else
-                {
-                    FindObjectOfType<EnemyHealthUIPool>().OnKillTarget(transform);
+                    _healthUIPool.OnKillTarget(transform);
                     Destroy(gameObject);
+                    return;
                 }
+                
+                _healthUIPool.OnHitTarget(this);
+                GetComponentInChildren<EnemyStateManager>();
+                return;
             }
 
             if (isRushing && Helper.IsLayerPlayerLayer(other.gameObject.layer))
             {
                 other.gameObject.GetComponent<ThirdPersonController>().Hit(damage);
+                StopRush();
+                _earlyHit();
             }
         }
 
-        public void Rush()
+        private Action _earlyHit;
+        public void Rush(float strength, int attackDamage, Action earlyHit)
         {
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            navMeshAgent.enabled = false;
+            damage = attackDamage;
             isRushing = true;
-            _rigidbody.AddForce(10f * transform.forward + transform.up, ForceMode.Impulse);
+            _rigidbody.AddForce(strength * transform.forward + transform.up, ForceMode.Impulse);
+            _earlyHit = earlyHit;
         }
+        
         public void StopRush()
         {
             _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-            navMeshAgent.enabled = true;
             isRushing = false;
         }
 
-        public bool HasReachedDestination()
+        public void SetMaterial(Material material)
         {
-            return !navMeshAgent.pathPending 
-                   && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance 
-                   && (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f);
+            headMeshRenderer.sharedMaterial = material;
         }
-
     }
 }

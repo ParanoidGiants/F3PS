@@ -16,8 +16,8 @@ namespace Enemy.States
             isSuspiciousTime = isSuspiciousTimer;
             _suspiciousRotation = enemy.transform.rotation;
         }
-
-        public override void Update()
+        
+        public override void OnUpdate()
         {
             isSuspiciousTime -= Time.deltaTime;
                 
@@ -28,12 +28,8 @@ namespace Enemy.States
             if (isSuspiciousTime <= 0f)
             {
                 isSuspiciousTime = 0;
-                stateManager.SwitchState(stateManager.returnToIdle);
-                return;
+                stateManager.SwitchState(StateType.RETURN_TO_IDLE);
             }
-                
-            
-            AggressiveSwitchWhenTargetIsInSight();
         }
     }
 }
