@@ -81,23 +81,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  enemy: {fileID: 4776444785976893130}
   navMeshAgent: {fileID: 4776444785976893128}
   stoppingDistance: 2
   coolDownTime: 0
   coolDownTimer: 3
+  chargeMaterial: {fileID: 2100000, guid: 140a6908b25135347b310b1b7eda2984, type: 2}
   isCharging: 0
+  hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
+  isHitting: 0
+  recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
+  isRecovering: 0
+  damage: 50
+  rushStrength: 20
+  wasEarlyHit: 0
   chargeTime: 0
   chargeTimer: 0.5
-  isHitting: 0
   hitTime: 0
   hitTimer: 0.2
-  isRecovering: 0
   recoverTime: 0
   recoverTimer: 0.2
-  damage: 50
-  rushStrength: 10
-  enemy: {fileID: 0}
-  wasEarlyHit: 0
 --- !u!1 &851668464
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +334,7 @@ MonoBehaviour:
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
-  enemySpeed: 3
+  enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
   aggressiveVision: {fileID: 851668466}
@@ -388,7 +391,7 @@ MonoBehaviour:
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
-  enemySpeed: 3
+  enemySpeed: 4
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
 --- !u!1 &2116068019
@@ -493,7 +496,7 @@ MonoBehaviour:
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
-  enemySpeed: 2
+  enemySpeed: 3
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128, type: 2}
 --- !u!1 &3874779326497168274

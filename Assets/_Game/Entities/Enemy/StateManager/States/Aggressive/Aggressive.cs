@@ -69,6 +69,7 @@ namespace Enemy.States
             else
             {
                 _isAttacking = false;
+                enemy.SetMaterial(material);
             }
         }
         

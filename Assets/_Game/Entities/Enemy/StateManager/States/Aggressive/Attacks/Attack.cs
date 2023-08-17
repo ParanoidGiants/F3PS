@@ -6,19 +6,23 @@ namespace Enemy.States
     public abstract class Attack : MonoBehaviour
     {
         private Transform _target;
-        
+
         [Space(10)]
         [Header("Base Attack Settings")]
         public AttackType type;
 
+        public BaseEnemy enemy;
         public NavMeshAgent navMeshAgent;
         public float stoppingDistance;
         
         public float coolDownTime;
         public float coolDownTimer;
 
+        public Material chargeMaterial;
         public bool isCharging;
+        public Material hitMaterial;
         public bool isHitting;
+        public Material recoverMaterial;
         public bool isRecovering;
 
         public int damage;
@@ -37,6 +41,7 @@ namespace Enemy.States
         protected virtual void OnCharge()
         {
             isCharging = true;
+            enemy.SetMaterial(chargeMaterial);
             Debug.Log("OnCharge:" + name);
         }
 
@@ -49,6 +54,7 @@ namespace Enemy.States
         protected virtual void OnHit()
         {
             Debug.Log("OnHit: " + name);
+            enemy.SetMaterial(hitMaterial);
             isCharging = false;
             isHitting = true;
         }
@@ -61,6 +67,7 @@ namespace Enemy.States
         }
         protected virtual void OnRecover()
         {
+            enemy.SetMaterial(recoverMaterial);
             Debug.Log("OnRecover: " + name);
             isHitting = false;
             isRecovering = true;

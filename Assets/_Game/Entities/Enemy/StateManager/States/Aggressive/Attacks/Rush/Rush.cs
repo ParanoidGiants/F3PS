@@ -5,7 +5,6 @@ namespace Enemy.States
     public class Rush : Attack
     {
         public float rushStrength;
-        public BaseEnemy enemy;
         public bool wasEarlyHit;
 
         public float chargeTime;
@@ -28,6 +27,9 @@ namespace Enemy.States
             wasEarlyHit = true;
         }
 
+        private Vector3 _chargeStartPosition;
+        private Vector3 _chargeEndPosition;
+        private Vector3 _chargeForward;
         override
         protected void OnCharge()
         {
@@ -38,6 +40,10 @@ namespace Enemy.States
             navMeshAgent.isStopped = true;
             navMeshAgent.updateRotation = false;
             
+            _chargeStartPosition = navMeshAgent.transform.position;
+            _chargeForward = navMeshAgent.transform.forward;
+            _chargeEndPosition = _chargeStartPosition - _chargeForward * 0.5f;
+            
             base.OnCharge();
         }
 
@@ -46,6 +52,7 @@ namespace Enemy.States
         {
             chargeTime += Time.deltaTime;
             isCharging = chargeTime < chargeTimer;
+            navMeshAgent.transform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
             base.HandleCharging();
         }
         
@@ -71,17 +78,27 @@ namespace Enemy.States
             base.HandleHitting();
         }
 
+        private Vector3 _recoverStartPosition;
+        private Vector3 _recoverEndPosition;
+        private Vector3 _recoverForward;
         override
         protected void OnRecover()
         {
             base.OnRecover();
             enemy.StopRush();
+            var enemyTransform = enemy.transform;
+            _recoverStartPosition = enemyTransform.position;
+            _recoverForward = enemyTransform.forward;
+            _recoverEndPosition = _recoverStartPosition - _recoverForward * 0.2f;
         }
         
         override
         protected void HandleRecovering()
         {
             recoverTime += Time.deltaTime;
+            var newPositioon = Vector3.Lerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
+            enemy.transform.position = newPositioon;
+            _recoverStartPosition = enemy.transform.position;
             isRecovering = recoverTime < recoverTimer;
             base.HandleRecovering();
         }
