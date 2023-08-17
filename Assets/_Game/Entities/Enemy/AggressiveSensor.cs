@@ -3,26 +3,29 @@ using UnityEngine;
 public class AggressiveSensor : MonoBehaviour
 {
     public bool isTargetDetected;
-    public Transform target;
+    public Hittable target;
     public int triggerCount;
     
     private void OnTriggerEnter(Collider other)
     {
-        if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
-        
+        var hittable = other.GetComponent<Hittable>();
+        if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+
+        target = hittable;
         isTargetDetected = true;
         triggerCount++;
         if (triggerCount > 1) return;
-        target = other.transform;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
-        triggerCount--;
-        if (triggerCount > 0) return;
+        var hittable = other.GetComponent<Hittable>();
+        if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
         
-        isTargetDetected = false;
+        triggerCount--;
+        
+        if (triggerCount > 0) return;
         target = null;
+        isTargetDetected = false;
     }
 }

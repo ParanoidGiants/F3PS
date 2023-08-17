@@ -8,6 +8,7 @@ public static class Helper
     public static LayerMask PlayerLayer => LayerMask.GetMask("Character");
     public static LayerMask DefaultLayer => LayerMask.GetMask("Default");
     public static LayerMask ProjectileLayer => LayerMask.GetMask("Projectile");
+    public static LayerMask EnemyLayer => LayerMask.GetMask("Enemy");
     public static IEnumerator UpdateLayoutGroups(RectTransform rectTransform)
     {
         yield return null;
@@ -35,10 +36,24 @@ public static class Helper
         return result != 0;
     }
     
-    public static bool HasReachedDestination(NavMeshAgent navMeshAgent)
+    public static bool IsLayerEnemyLayer(int layer)
     {
-        return !navMeshAgent.pathPending 
-               && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance 
-               && (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f);
+        var colliderLayer = 1 << layer;
+        var result = colliderLayer & EnemyLayer;
+        return result != 0;
+    }
+
+    public static bool HasReachedDestination(NavMeshAgent agent, float threshold = 0.1f)
+    {
+        return !agent.pathPending 
+               && agent.remainingDistance <= agent.stoppingDistance + threshold 
+               && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
+    }
+
+    public static bool HasReachedStoppingDistance(NavMeshAgent agent, float stoppingDistance, float threshold = 0.1f)
+    {
+        return !agent.pathPending 
+               && agent.remainingDistance <= stoppingDistance + threshold 
+               && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
     }
 }

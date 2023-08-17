@@ -1,4 +1,5 @@
 public enum AttackType
 {
-    RUSH
+    RUSH,
+    SHOOT
 }

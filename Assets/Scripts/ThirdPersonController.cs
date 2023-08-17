@@ -200,6 +200,7 @@ namespace StarterAssets
 
         private void Update()
         {
+            baseGun.UpdateRotation(_mainCamera.transform.rotation);
             if (_staminaManager._isReloading)
             {
                 isAiming = false;
@@ -240,32 +241,8 @@ namespace StarterAssets
 
         private void ShootAndReload()
         {
-            if (isShooting && !baseGun.isShooting && !baseGun.isReloadingMagazine)
-            {
-                if (baseGun.currentMagazineAmount <= 0)
-                {
-                    // TODO: Play empty clip sound
-                    _ammoUI.OnShootEmptyClip();
-                }
-                else
-                {
-                    baseGun.OnShoot();
-                    _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
-                }
-            }
-            if (isReloading && !baseGun.isReloadingMagazine)
-            {
-                baseGun.OnReload(x =>
-                {
-                    _ammoUI.UpdateReload(x);
-                    
-                    if (x <= 0f)
-                    {
-                        Debug.Log("Update UI");
-                        _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
-                    }
-                });
-            }
+            if (isShooting) baseGun.Shoot(_ammoUI);
+            if (isReloading) baseGun.Reload(_ammoUI);
         }
 
         private void LateUpdate()

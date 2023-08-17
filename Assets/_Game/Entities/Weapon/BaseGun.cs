@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Android;
 
 namespace F3PSCharacterController
 {
     public class BaseGun : MonoBehaviour
     {
-        private Camera _cam;
-        
         [Header("Bullet References")]
         public GameObject projectilePrefab;
         public Transform projectileSpawn;
@@ -33,28 +30,23 @@ namespace F3PSCharacterController
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
 
-        public int CurrentMagazineAmount => currentMagazineAmount;
-        public int TotalAmount => totalAmount;
-        public float ReloadPercentage => reloadMagazineTime / reloadMagazineTimer;
-
         private void Start()
         {
-            _cam = Camera.main;
             projectilePool.Init(projectilePrefab);
             projectilePool.transform.parent = null;
 
             totalAmount = maxAmmo;
         }
         
-        private void Update()
+        public void UpdateRotation(Quaternion rotation)
         {
-            meshHolder.rotation = _cam.transform.rotation;
+            meshHolder.rotation = rotation;
         }
 
         public void OnShoot()
         {
+            if (isShooting) return;
             
-            StartCoroutine(Shoot());
         }
 
         private IEnumerator Shoot()
@@ -67,7 +59,7 @@ namespace F3PSCharacterController
                 meshHolder.rotation,
                 shotSpeed
             );
-            while (shootCoolDownTime > 0f)
+            while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {
                 shootCoolDownTime -= Time.deltaTime;
                 yield return null;
@@ -75,7 +67,7 @@ namespace F3PSCharacterController
             isShooting = false;
         }
         
-        public void OnReload(Action<float> updateCallback)
+        private void OnReload(Action<float> updateCallback)
         {
             StartCoroutine(Reload(updateCallback));
         }
@@ -90,6 +82,7 @@ namespace F3PSCharacterController
 
             // TODO: Play reload sound
             // TODO: Play reload animation
+            
             isReloadingMagazine = true;
             reloadMagazineTime = reloadMagazineTimer;
             while (reloadMagazineTime > 0f)
@@ -105,6 +98,37 @@ namespace F3PSCharacterController
             totalAmount -= reloadAmount;
             updateCallback(0f);
             isReloadingMagazine = false;
+        }
+
+        public void Shoot(AmmoUI _ammoUI = null)
+        {
+            if (isShooting || isReloadingMagazine) return;
+            
+            if (currentMagazineAmount <= 0)
+            {
+                // TODO: Play empty clip sound
+                _ammoUI?.OnShootEmptyClip();
+            }
+            else
+            {
+                StartCoroutine(Shoot());
+                _ammoUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+            }
+        }
+
+        public void Reload(AmmoUI _ammoUI = null)
+        {
+            if (isReloadingMagazine) return;
+            
+            OnReload(x =>
+            {
+                _ammoUI?.UpdateReload(x);
+                    
+                if (x <= 0f)
+                {
+                    _ammoUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                }
+            });
         }
     }
 }

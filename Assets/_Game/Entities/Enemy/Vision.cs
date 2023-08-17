@@ -5,24 +5,28 @@ namespace Enemy
 {
     public class Vision : MonoBehaviour
     {
-        public Transform source;
-        public Transform target;
+        public Transform eyes;
+        public Hittable target;
         public int triggerCount;
 
         public bool canTargetBeDetected;
         private void OnTriggerEnter(Collider other)
         {
-            if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+            var hittable = other.GetComponent<Hittable>();
+            if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+
             triggerCount++;
             
             if (triggerCount > 1) return;
             canTargetBeDetected = true;
-            target = other.transform;
+            target = hittable;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (!Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+            var hittable = other.GetComponent<Hittable>();
+            if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
+
             triggerCount--;
             
             if (triggerCount > 0) return;
@@ -35,8 +39,8 @@ namespace Enemy
         {
             if (!canTargetBeDetected) return false;
             
-            var position = source.position;
-            var targetPosition1 = target.position;
+            var position = eyes.position;
+            var targetPosition1 = target.Center();
             var direction1 = targetPosition1 - position;
             var playerDistance1 = direction1.magnitude;
                 

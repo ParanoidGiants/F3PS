@@ -17,7 +17,7 @@ namespace Enemy
         [Space(10)]
         [Header("Settings")]
         public int maxHealth = 100;
-        public int damage = 10;
+        private int _damage;
         
         [Space(10)]
         [Header("Watchers")]
@@ -38,36 +38,33 @@ namespace Enemy
 
         private void OnCollisionEnter(Collision other)
         {
-            if (Helper.IsLayerProjectileLayer(other.gameObject.layer))
-            {
-                var projectile = other.gameObject.GetComponent<Projectile>();
-                health -= projectile.damage;
-                Debug.Log("Hit by projectile");
-                if (health <= 0)
-                {
-                    _healthUIPool.OnKillTarget(transform);
-                    Destroy(gameObject);
-                    return;
-                }
-                
-                _healthUIPool.OnHitTarget(this);
-                GetComponentInChildren<EnemyStateManager>();
-                return;
-            }
-
             if (isRushing && Helper.IsLayerPlayerLayer(other.gameObject.layer))
             {
-                other.gameObject.GetComponent<ThirdPersonController>().Hit(damage);
+                other.gameObject.GetComponent<ThirdPersonController>().Hit(_damage);
                 StopRush();
                 _earlyHit();
             }
+        }
+
+        public void Hit(int damage)
+        {
+            health -= damage;
+            Debug.Log("Hit by projectile");
+            if (health <= 0)
+            {
+                _healthUIPool.OnKillTarget(transform);
+                Destroy(gameObject);
+                return;
+            }
+                
+            _healthUIPool.OnHitTarget(this);
         }
 
         private Action _earlyHit;
         public void Rush(float strength, int attackDamage, Action earlyHit)
         {
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            damage = attackDamage;
+            _damage = attackDamage;
             isRushing = true;
             _rigidbody.AddForce(strength * transform.forward + transform.up, ForceMode.Impulse);
             _earlyHit = earlyHit;

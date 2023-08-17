@@ -50,14 +50,15 @@ MonoBehaviour:
     type: 3}
   projectileSpawn: {fileID: 1041052903905260205}
   projectilePool: {fileID: 4652717157334889740}
-  maxAmmo: 100
+  meshHolder: {fileID: 5204241600584662912}
+  maxAmmo: 1000
   maxMagazineAmmo: 10
   shotSpeed: 100
   shootCoolDownTimer: 0.2
   reloadMagazineTimer: 1
   isShooting: 0
-  currentAmmo: 100
-  currentMagazineAmmo: 10
+  totalAmount: 100
+  currentMagazineAmount: 10
   shootCoolDownTime: 0
   reloadMagazineTime: 0
   isReloadingMagazine: 0

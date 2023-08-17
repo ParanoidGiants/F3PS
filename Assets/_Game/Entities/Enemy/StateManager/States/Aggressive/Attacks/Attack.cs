@@ -5,15 +5,16 @@ namespace Enemy.States
 {
     public abstract class Attack : MonoBehaviour
     {
-        private Transform _target;
+        public bool isActive;
+        protected Hittable _target;
 
-        [Space(10)]
         [Header("Base Attack Settings")]
         public AttackType type;
 
         public BaseEnemy enemy;
         public NavMeshAgent navMeshAgent;
-        public float stoppingDistance;
+        public float stoppingDistanceStay;
+        public float stoppingDistanceFollow;
         
         public float coolDownTime;
         public float coolDownTimer;
@@ -24,17 +25,19 @@ namespace Enemy.States
         public bool isHitting;
         public Material recoverMaterial;
         public bool isRecovering;
+        public float attackDistance;
 
         public int damage;
-        
+
         public void CoolDown()
         {
             coolDownTime += Time.deltaTime;
         }
         
-        public void OnStartAttack(Transform transform)
+        public void OnStartAttack(Hittable hittable)
         {
-            _target = transform;
+            isActive = true;
+            _target = hittable;
             OnCharge();
         }
         
@@ -42,7 +45,6 @@ namespace Enemy.States
         {
             isCharging = true;
             enemy.SetMaterial(chargeMaterial);
-            Debug.Log("OnCharge:" + name);
         }
 
         protected virtual void HandleCharging()
@@ -53,7 +55,6 @@ namespace Enemy.States
 
         protected virtual void OnHit()
         {
-            Debug.Log("OnHit: " + name);
             enemy.SetMaterial(hitMaterial);
             isCharging = false;
             isHitting = true;
@@ -68,7 +69,6 @@ namespace Enemy.States
         protected virtual void OnRecover()
         {
             enemy.SetMaterial(recoverMaterial);
-            Debug.Log("OnRecover: " + name);
             isHitting = false;
             isRecovering = true;
         }
@@ -103,10 +103,15 @@ namespace Enemy.States
 
         protected virtual void OnStopAttacking()
         {
-            Debug.Log("OnStopAtteck: " + name);
             coolDownTime = 0f;
+            isActive = false;
             _target = null;
             isRecovering = false;
+        }
+
+        public virtual bool IsInAttackDistance(Vector3 targetPosition)
+        {
+            return attackDistance >= Vector3.Distance(navMeshAgent.transform.position, targetPosition);
         }
     }
 }

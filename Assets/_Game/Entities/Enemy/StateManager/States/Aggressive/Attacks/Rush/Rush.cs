@@ -4,6 +4,8 @@ namespace Enemy.States
 {
     public class Rush : Attack
     {
+        [Space(10)]
+        [Header("Rush Settings")]
         public float rushStrength;
         public bool wasEarlyHit;
 
@@ -37,9 +39,6 @@ namespace Enemy.States
             hitTime = 0f;
             recoverTime = 0f;
             
-            navMeshAgent.isStopped = true;
-            navMeshAgent.updateRotation = false;
-            
             _chargeStartPosition = navMeshAgent.transform.position;
             _chargeForward = navMeshAgent.transform.forward;
             _chargeEndPosition = _chargeStartPosition - _chargeForward * 0.5f;
@@ -59,7 +58,6 @@ namespace Enemy.States
         override
         protected void OnHit()
         {
-            navMeshAgent.updateRotation = true;
             wasEarlyHit = false;
             enemy.Rush(rushStrength, damage, () => EarlyHit());
             base.OnHit();
@@ -101,13 +99,6 @@ namespace Enemy.States
             _recoverStartPosition = enemy.transform.position;
             isRecovering = recoverTime < recoverTimer;
             base.HandleRecovering();
-        }
-        
-        override
-        protected void OnStopAttacking()
-        {
-            navMeshAgent.isStopped = false;
-            base.OnStopAttacking();
         }
     }
 }
