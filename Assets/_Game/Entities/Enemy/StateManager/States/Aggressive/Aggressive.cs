@@ -76,13 +76,24 @@ namespace Enemy.States
         public void HandlePositioning()
         {
             if (!IsTargetDetected()) return;
-            
             navMeshAgent.destination = _target.position;
+
+            if (!Helper.HasReachedDestination(navMeshAgent)) return;
         
-            if (Helper.HasReachedDestination(navMeshAgent) && nextAttack.HasCooledDown())
+            if (nextAttack.HasCooledDown())
             {
                 _isAttacking = true;
                 nextAttack.OnStartAttack(_target);
+            }
+            else
+            {
+                var enemyTransform = enemy.transform;
+                var position = enemyTransform.position;
+                var lookDirection = _target.position - position;
+                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
+                Debug.DrawRay(position, newForward, Color.red);
             }
         }
 
