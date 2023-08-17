@@ -18,16 +18,8 @@ namespace Enemy.States
         public float coolDownTimer;
 
         public bool isCharging;
-        public float chargeTime;
-        public float chargeTimer;
-        
         public bool isHitting;
-        public float hitTime;
-        public float hitTimer;
-        
         public bool isRecovering;
-        public float recoverTime;
-        public float recoverTimer;
 
         public int damage;
         
@@ -39,11 +31,46 @@ namespace Enemy.States
         public void OnStartAttack(Transform transform)
         {
             _target = transform;
-            chargeTime = 0f;
-            hitTime = 0f;
-            recoverTime = 0f;
-            
             OnCharge();
+        }
+        
+        protected virtual void OnCharge()
+        {
+            isCharging = true;
+            Debug.Log("OnCharge:" + name);
+        }
+
+        protected virtual void HandleCharging()
+        {
+            if (isCharging) return; 
+            OnHit();
+        }
+
+        protected virtual void OnHit()
+        {
+            Debug.Log("OnHit: " + name);
+            isCharging = false;
+            isHitting = true;
+        }
+
+        protected virtual void HandleHitting()
+        {
+            if (isHitting) return;
+            
+            OnRecover();
+        }
+        protected virtual void OnRecover()
+        {
+            Debug.Log("OnRecover: " + name);
+            isHitting = false;
+            isRecovering = true;
+        }
+
+        protected virtual void HandleRecovering()
+        {
+            if (isRecovering) return;
+            
+            OnStopAttacking();
         }
 
         public bool HasCooledDown()
@@ -67,66 +94,12 @@ namespace Enemy.States
             }
         }
 
-        public void OnCharge()
+        protected virtual void OnStopAttacking()
         {
-            navMeshAgent.isStopped = true;
-            navMeshAgent.updateRotation = false;
-            isCharging = true;
-            chargeTime = 0f;
-            hitTime = 0f;
-            recoverTime = 0f;
-            Debug.Log("CHARGE");
-        }
-        
-        private void HandleCharging()
-        {
-            chargeTime += Time.deltaTime;
-            if (chargeTime >= chargeTimer)
-            {
-                OnHit();
-            }
-        }
-
-        protected virtual void OnHit()
-        {
-            navMeshAgent.updateRotation = true;
-            isCharging = false;
-            isHitting = true;
-            Debug.Log("HIT");
-        }
-
-        protected virtual void HandleHitting()
-        {
-            hitTime += Time.deltaTime;
-            if (hitTime >= hitTimer)
-            {
-                OnRecover();
-            }
-        }
-
-        protected virtual void OnRecover()
-        {
-            isHitting = false;
-            isRecovering = true;
-            Debug.Log("RECOVER");
-        }
-        
-        private void HandleRecovering()
-        {
-            recoverTime += Time.deltaTime;
-            if (recoverTime >= recoverTimer)
-            {
-                OnStopAttacking();
-            }
-        }
-
-        private void OnStopAttacking()
-        {
+            Debug.Log("OnStopAtteck: " + name);
             coolDownTime = 0f;
             _target = null;
             isRecovering = false;
-            navMeshAgent.isStopped = false;
-            Debug.Log("DONE!");
         }
     }
 }
