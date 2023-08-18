@@ -111,7 +111,18 @@ namespace Enemy.States
 
         public virtual bool IsInAttackDistance(Vector3 targetPosition)
         {
-            return attackDistance >= Vector3.Distance(navMeshAgent.transform.position, targetPosition);
+            var position = navMeshAgent.transform.position;
+            var direction1 = (targetPosition - position).normalized;
+            
+            if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))
+            {
+                if (Physics.Raycast(position, direction1, hit.distance, Helper.DefaultLayer))
+                {
+                    return false;                
+                } 
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -157,6 +157,7 @@ MonoBehaviour:
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
+  target: {fileID: 0}
   aggressiveVision: {fileID: 500810892701307493}
   aggressiveSensor: {fileID: 500810891481181004}
   attacks:
@@ -1041,7 +1042,7 @@ MonoBehaviour:
   isHitting: 0
   recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
   isRecovering: 0
-  attackDistance: 150
+  attackDistance: 50
   damage: 0
   gun: {fileID: 1148091551482030991}
   chargeTime: 0
@@ -1295,6 +1296,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 4652717156856035641, guid: 961cf1379f54b3148a33ef308d4eb4dd,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_RootOrder
@@ -1308,12 +1314,12 @@ PrefabInstance:
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}

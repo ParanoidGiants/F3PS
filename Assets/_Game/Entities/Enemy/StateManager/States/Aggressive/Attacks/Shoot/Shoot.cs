@@ -87,5 +87,24 @@ namespace Enemy.States
             isRecovering = recoverTime < recoverTimer;
             base.HandleRecovering();
         }
+        
+        override
+        public bool IsInAttackDistance(Vector3 targetPosition)
+        {
+            var position = gun.transform.position;
+            var direction1 = (targetPosition - position).normalized;
+            
+            Debug.DrawRay(position, direction1 * attackDistance, Color.red);
+            if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))
+            {
+                if (Physics.Raycast(position, direction1, out hit, hit.distance, Helper.DefaultLayer))
+                {
+                    Debug.DrawRay(position, direction1 * hit.distance, Color.green);
+                    return false;                
+                } 
+                return true;
+            }
+            return false;
+        }
     }
 }
