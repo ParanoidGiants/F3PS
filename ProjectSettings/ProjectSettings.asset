@@ -697,8 +697,8 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Android: STARTER_ASSETS_PACKAGES_CHECKED
-    Standalone: STARTER_ASSETS_PACKAGES_CHECKED
-    WebGL: STARTER_ASSETS_PACKAGES_CHECKED
+    Standalone: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED
+    WebGL: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
