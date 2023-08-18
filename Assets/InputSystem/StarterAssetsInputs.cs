@@ -16,6 +16,7 @@ namespace StarterAssets
 		public bool aim;
 		public bool reload;
 		public bool slowmo;
+		public bool dodge;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -64,10 +65,14 @@ namespace StarterAssets
 		}
 
 		public void OnSlowMo(InputValue value)
-        {
+		{
 			SlowMoInput(value.isPressed);
-        }
+		}
 
+		public void OnDodge(InputValue value)
+		{
+			DodgeInput(value.isPressed);
+		}
 #endif
 
 
@@ -110,6 +115,11 @@ namespace StarterAssets
         {
 			slowmo = valueIsPressed;
         }
+		
+		private void DodgeInput(bool valueIsPressed)
+		{
+			dodge = valueIsPressed;
+		}
 
 		private void OnApplicationFocus(bool hasFocus)
 		{

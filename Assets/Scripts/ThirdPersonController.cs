@@ -1,6 +1,7 @@
 ﻿using F3PSCharacterController;
 using TimeBending;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -135,12 +136,13 @@ namespace StarterAssets
         public BaseGun baseGun;
         public bool isSlowMo;
         public float rotationSpeed;
-        public int CurrentMagazineAmmo => baseGun.CurrentMagazineAmount;
-        public int CurrentAmmo => baseGun.TotalAmount;
-        public float ReloadPercentage => baseGun.ReloadPercentage;
         public float cameraAngleOverrideSprinting = 25f;
         private AmmoUI _ammoUI;
-
+        private static readonly int Dodge = Animator.StringToHash("Dodge");
+        public float health = 100;
+        public float maxHealth = 100;
+        public PlayerHealthUI playerHealthUI;
+        
         #endregion Extensions
 
         private bool IsCurrentDeviceMouse
@@ -156,6 +158,7 @@ namespace StarterAssets
         }
 
 
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -167,6 +170,8 @@ namespace StarterAssets
             {
                 _timeManager = GetComponentInChildren<TimeManager>();
             }
+
+            playerHealthUI = FindObjectOfType<PlayerHealthUI>();
         }
 
         private void Start()
@@ -190,10 +195,12 @@ namespace StarterAssets
             _fallTimeoutDelta = FallTimeout;
             
             _staminaManager = GetComponent<StaminaManager>();
+            _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
         }
 
         private void Update()
         {
+            baseGun.UpdateRotation(_mainCamera.transform.rotation);
             if (_staminaManager._isRegenerating)
             {
                 isAiming = false;
@@ -226,24 +233,20 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            ShootAndReload();
+            Dodging();
+        }
 
-            if (isShooting && !baseGun.isShooting && !baseGun.isReloadingMagazine)
-            {
-                if (baseGun.currentMagazineAmount <= 0)
-                {
-                    // TODO: Play empty clip sound
-                    _ammoUI.OnShootEmptyClip();
-                }
-                else
-                {
-                    baseGun.OnShoot();
-                    _ammoUI.OnShoot(baseGun.currentMagazineAmount, baseGun.totalAmount);
-                }
-            }
-            if (isReloading && !baseGun.isReloadingMagazine)
-            {
-                baseGun.OnReload(x => _ammoUI.UpdateReload(x));
-            }
+        private void Dodging()
+        {
+            var dodge = Grounded && _input.dodge;
+            _animator.SetBool(Dodge, dodge);
+        }
+
+        private void ShootAndReload()
+        {
+            if (isShooting) baseGun.Shoot(_ammoUI);
+            if (isReloading) baseGun.Reload(_ammoUI);
         }
 
         private void LateUpdate()
@@ -498,6 +501,16 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+            }
+        }
+
+        public void Hit(int damage)
+        {
+            health -= damage;
+            playerHealthUI.UpdateHealth((float)health/maxHealth);
+            if (health <= 0)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }

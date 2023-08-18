@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 3d206ac8ab77db546bf3c39c0a98fb79
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - navMeshAgent: {instanceID: 0}
+  - enemy: {instanceID: 0}
+  - stateManager: {instanceID: 0}
+  - defaultVision: {instanceID: 0}
+  - material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
