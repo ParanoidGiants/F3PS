@@ -2,6 +2,7 @@ using System;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.AI;
+using DarkTonic.MasterAudio;
 
 namespace Enemy
 {
@@ -50,6 +51,7 @@ namespace Enemy
         {
             health -= damage;
             Debug.Log("Hit by projectile");
+            MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", transform);
             if (health <= 0)
             {
                 _healthUIPool.OnKillTarget(transform);

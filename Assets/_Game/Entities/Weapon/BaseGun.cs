@@ -1,3 +1,4 @@
+using DarkTonic.MasterAudio;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -59,6 +60,7 @@ namespace F3PSCharacterController
                 meshHolder.rotation,
                 shotSpeed
             );
+            MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
             while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {
                 shootCoolDownTime -= Time.deltaTime;
