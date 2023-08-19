@@ -32,21 +32,24 @@ public class StaminaManager : MonoBehaviour
 
         if (!_isRegenerating)
         {
-            if (_isSlowMotion)
+            if (!_isSlowMotion && !_isSprinting && !_isAiming)
             {
-                stamina -= staminaDepletionRateSlowMo * Time.unscaledDeltaTime;
-            }
-            else if (_isSprinting)
-            {
-                stamina -= staminaDepletionRateSprint * Time.unscaledDeltaTime;
-            }
-            else if (_isAiming)
-            {
-                stamina -= staminaDepletionRateAim * Time.unscaledDeltaTime;
+                stamina += staminaRegenRate * Time.unscaledDeltaTime;
             }
             else
             {
-                stamina += staminaRegenRate * Time.unscaledDeltaTime;
+                if (_isSlowMotion)
+                {
+                    stamina -= staminaDepletionRateSlowMo * Time.unscaledDeltaTime;
+                }
+                if (_isSprinting)
+                {
+                    stamina -= staminaDepletionRateSprint * Time.unscaledDeltaTime;
+                }
+                if (_isAiming)
+                {
+                    stamina -= staminaDepletionRateAim * Time.unscaledDeltaTime;
+                }
             }
         }
         else

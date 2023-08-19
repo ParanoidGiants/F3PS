@@ -41,7 +41,7 @@ namespace Enemy
         {
             if (isRushing && Helper.IsLayerPlayerLayer(other.gameObject.layer))
             {
-                other.gameObject.GetComponent<ThirdPersonController>().Hit(_damage);
+                other.gameObject.GetComponent<ThirdPersonController>().extensions.Hit(_damage);
                 StopRush();
                 _earlyHit();
             }

@@ -1,5 +1,5 @@
 using UnityEngine;
-using F3PSCharacterController;
+using Player;
 
 namespace Enemy.States
 {

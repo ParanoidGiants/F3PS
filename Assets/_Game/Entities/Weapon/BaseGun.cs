@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace F3PSCharacterController
+namespace Player
 {
     public class BaseGun : MonoBehaviour
     {

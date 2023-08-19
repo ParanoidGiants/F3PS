@@ -66,7 +66,7 @@ public class Projectile : MonoBehaviour
         if (Helper.IsLayerPlayerLayer(other.gameObject.layer))
         {
             var player = other.gameObject.GetComponentInParent<ThirdPersonController>();
-            player.Hit(damage);
+            player.extensions.Hit(damage);
         }
     }
 

@@ -21,13 +21,13 @@ public class PlayerCameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerController.isAiming)
+        if (PlayerController.extensions.isAiming)
         {
             StandardCamera.SetActive(false);
             SprintCamera.SetActive(false);
             AimCamera.SetActive(true);
         }
-        else if (PlayerController.isSprinting)
+        else if (PlayerController.extensions.isSprinting)
         {
             StandardCamera.SetActive(false);
             AimCamera.SetActive(false);

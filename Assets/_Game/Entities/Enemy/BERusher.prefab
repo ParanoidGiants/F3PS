@@ -95,11 +95,11 @@ MonoBehaviour:
   recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
   isRecovering: 0
   attackDistance: 3
-  damage: 50
-  rushStrength: 20
+  damage: 25
+  rushStrength: 50
   wasEarlyHit: 0
   chargeTime: 0
-  chargeTimer: 0.5
+  chargeTimer: 0.2
   hitTime: 0
   hitTimer: 0.2
   recoverTime: 0
@@ -340,6 +340,7 @@ MonoBehaviour:
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
+  target: {fileID: 0}
   aggressiveVision: {fileID: 851668466}
   aggressiveSensor: {fileID: 2075727067}
   attacks:

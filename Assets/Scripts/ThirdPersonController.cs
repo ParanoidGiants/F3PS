@@ -1,4 +1,4 @@
-﻿using F3PSCharacterController;
+﻿using Player;
 using TimeBending;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,22 +18,6 @@ namespace StarterAssets
     public class ThirdPersonController : MonoBehaviour
     {
         [Header("Player")]
-        [Tooltip("Move speed of the character in m/s")]
-        public float FocusSpeed = 1.0f;
-        
-        [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
-
-        [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 5.335f;
-
-        [Tooltip("How fast the character turns to face movement direction")]
-        [Range(0.0f, 0.3f)]
-        public float RotationSmoothTime = 0.12f;
-        
-        [Tooltip("How fast the character turns to face movement direction when aiming")]
-        [Range(0.0f, 1.0f)]
-        public float AmingRotationSmoothTime = 0.3f;
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
@@ -56,32 +40,15 @@ namespace StarterAssets
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
 
-        [Header("Player Grounded")]
-        [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-        public bool Grounded = true;
-
-        [Tooltip("Useful for rough ground")]
-        public float GroundedOffset = -0.14f;
-
-        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-        public float GroundedRadius = 0.28f;
-
-        [Tooltip("What layers the character uses as ground")]
-        public LayerMask GroundLayers;
-
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject StandardCinemachineCameraTarget;
-        public GameObject SprintingCinemachineCameraTarget;
+        public GameObject CinemachineCameraTarget;
 
         [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClampStandard = 70.0f;
+        public float CameraTopClamp = 70.0f;
 
         [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClampStandard = -30.0f;
-
-        public float TopClampSprinting = 70.0f;
-        public float BottomClampSprinting = -30.0f;
+        public float CameraBottomClamp = -30.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -98,7 +65,6 @@ namespace StarterAssets
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _lookRotation = 0.0f;
-        private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
@@ -125,25 +91,8 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
-        
-        #region Extensions
-        public bool isAiming;
-        public bool isSprinting;
-        public bool isShooting;
-        public bool isReloading;
-        private StaminaManager _staminaManager;
-        public TimeManager _timeManager;
-        public BaseGun baseGun;
-        public bool isSlowMo;
-        public float rotationSpeed;
-        public float cameraAngleOverrideSprinting = 25f;
-        private AmmoUI _ammoUI;
-        private static readonly int Dodge = Animator.StringToHash("Dodge");
-        public float health = 100;
-        public float maxHealth = 100;
-        public PlayerHealthUI playerHealthUI;
-        
-        #endregion Extensions
+
+        public Extensions extensions;
 
         private bool IsCurrentDeviceMouse
         {
@@ -166,18 +115,12 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-            if (_timeManager == null)
-            {
-                _timeManager = GetComponentInChildren<TimeManager>();
-            }
 
-            playerHealthUI = FindObjectOfType<PlayerHealthUI>();
         }
 
         private void Start()
         {
-            _ammoUI = FindObjectOfType<AmmoUI>();
-            _cinemachineTargetYaw = SprintingCinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
@@ -193,60 +136,16 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
-            
-            _staminaManager = GetComponent<StaminaManager>();
-            _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
         }
 
         private void Update()
         {
-            baseGun.UpdateRotation(_mainCamera.transform.rotation);
-            if (_staminaManager._isRegenerating)
-            {
-                isAiming = false;
-                isSprinting = false;
-            }
-            else
-            {
-                isAiming = _input.aim;
-                isSprinting = !isAiming && _input.sprint;
-            }
-            isShooting = _input.shoot && !isSprinting;
-            isReloading = _input.reload;
-            _staminaManager.UpdateSprinting(isSprinting && _input.move.magnitude > 0.1f);
-            _staminaManager.UpdateAiming(isAiming);
-
-            
-
-            if (!isSlowMo && _input.slowmo)
-            { 
-                _timeManager.StartSlowMotion();
-            }
-            if (isSlowMo && !_input.slowmo)
-            {
-                _timeManager.StopSlowMotion();
-            }
-            isSlowMo = _input.slowmo;
-
+            extensions.OnUpdate(_input);
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
-            GroundedCheck();
             Move();
-            ShootAndReload();
-            Dodging();
-        }
-
-        private void Dodging()
-        {
-            var dodge = Grounded && _input.dodge;
-            _animator.SetBool(Dodge, dodge);
-        }
-
-        private void ShootAndReload()
-        {
-            if (isShooting) baseGun.Shoot(_ammoUI);
-            if (isReloading) baseGun.Reload(_ammoUI);
+            _animator.SetBool(_animIDGrounded, extensions.Grounded);
         }
 
         private void LateUpdate()
@@ -262,21 +161,6 @@ namespace StarterAssets
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
-        
-        private void GroundedCheck()
-        {
-            // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                transform.position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
-
-            // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetBool(_animIDGrounded, Grounded);
-            }
-        }
 
         private void CameraRotation()
         {
@@ -284,7 +168,7 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime * rotationSpeed;
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * extensions.RotationSpeed;
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
@@ -292,39 +176,16 @@ namespace StarterAssets
 
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            var pitchStandard = ClampAngle(_cinemachineTargetPitch, BottomClampStandard, TopClampStandard);
-            var pitchSprinting = ClampAngle(_cinemachineTargetPitch, BottomClampSprinting, TopClampSprinting);
-            _cinemachineTargetPitch = isSprinting ? pitchSprinting : pitchStandard;
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, CameraBottomClamp, CameraTopClamp);
 
             // Cinemachine will follow this target
-            StandardCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchStandard + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
-            SprintingCinemachineCameraTarget.transform.rotation = Quaternion.Euler(pitchSprinting + cameraAngleOverrideSprinting,
-                _cinemachineTargetYaw, 0.0f);
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
         {
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-            float targetSpeed;
-            // if there is no input, set the target speed to 0
-            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            if (_input.move == Vector2.zero)
-            {
-                targetSpeed = 0.0f;
-            }
-            else if (isAiming)
-            {
-                targetSpeed = FocusSpeed;
-            }
-            else if (isSprinting)
-            {
-                targetSpeed = SprintSpeed;
-            }
-            else
-            {
-                targetSpeed = MoveSpeed;
-            }
+            float targetSpeed = extensions.GetTargetSpeed(_input.move);
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -357,24 +218,7 @@ namespace StarterAssets
 
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                               _mainCamera.transform.eulerAngles.y;
-            if (!isSprinting)
-            {
-                _lookRotation = Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    _cinemachineTargetYaw,
-                    ref _rotationVelocity,
-                    AmingRotationSmoothTime
-                );
-            }
-            else
-            {
-                _lookRotation = Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    _targetRotation,
-                    ref _rotationVelocity,
-                    RotationSmoothTime
-                );
-            }
+            _lookRotation = extensions.GetLookRotation(transform, _targetRotation, _cinemachineTargetYaw);
             
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, _lookRotation, 0.0f);
@@ -396,7 +240,7 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
-            if (Grounded)
+            if (extensions.Grounded)
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
@@ -470,20 +314,6 @@ namespace StarterAssets
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-            Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-            if (Grounded) Gizmos.color = transparentGreen;
-            else Gizmos.color = transparentRed;
-
-            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-            Gizmos.DrawSphere(
-                new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-                GroundedRadius);
-        }
-
         private void OnFootstep(AnimationEvent animationEvent)
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
@@ -501,16 +331,6 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
-            }
-        }
-
-        public void Hit(int damage)
-        {
-            health -= damage;
-            playerHealthUI.UpdateHealth((float)health/maxHealth);
-            if (health <= 0)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }

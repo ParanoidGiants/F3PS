@@ -84,7 +84,7 @@ namespace Enemy.States
 
         private void HandlePositionAndRotation(bool isInAttackDistance, bool hasReachedDestination)
         {
-            if (isInAttackDistance)
+            if (isInAttackDistance && !nextAttack.isActive)
             {
                 var enemyTransform = enemy.transform;
                 var position = enemyTransform.position;

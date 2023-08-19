@@ -70,12 +70,12 @@
                 },
                 {
                     "name": "SlowMo",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "aef0cd7d-937e-4803-a235-108a317d3a25",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Dodge",
@@ -256,7 +256,7 @@
                 {
                     "name": "",
                     "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/leftStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -278,7 +278,7 @@
                 {
                     "name": "",
                     "id": "aa29a721-8a3d-4b6c-9e16-3cd873020ab6",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -300,7 +300,7 @@
                 {
                     "name": "",
                     "id": "5bb57161-7efe-4fc1-ae3a-c3451f051628",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -322,7 +322,7 @@
                 {
                     "name": "",
                     "id": "efeb28bc-2bdf-47d6-9de9-c55ae3c11993",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -344,7 +344,7 @@
                 {
                     "name": "",
                     "id": "13572232-7480-4f90-a0f9-7a8d758035c7",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
