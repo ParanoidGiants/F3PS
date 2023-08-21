@@ -9,6 +9,7 @@ namespace Enemy
     public class BaseEnemy : MonoBehaviour
     {
         private Rigidbody _rigidbody;
+        private ThirdPersonController _player;
         
         [Header("References")]
         public MeshRenderer headMeshRenderer;
@@ -30,6 +31,7 @@ namespace Enemy
         {
             _rigidbody = GetComponent<Rigidbody>();
             _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+            _player = FindObjectOfType<ThirdPersonController>();
         }
 
         private void Start()
@@ -41,7 +43,7 @@ namespace Enemy
         {
             if (isRushing && Helper.IsLayerPlayerLayer(other.gameObject.layer))
             {
-                other.gameObject.GetComponent<ThirdPersonController>().extensions.Hit(_damage);
+                _player.extensions.Hit(_damage);
                 StopRush();
                 _earlyHit();
             }

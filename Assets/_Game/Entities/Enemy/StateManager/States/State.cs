@@ -5,19 +5,19 @@ namespace Enemy.States
 {
     public class State : MonoBehaviour
     {
-        public StateType stateType;
-        
         [Header("Base References")]
         public NavMeshAgent navMeshAgent;
         public BaseEnemy enemy;
         public EnemyStateManager stateManager;
         public Vision defaultVision;
         
+        [Space(10)]
         [Header("Base Settings")]
+        public StateType stateType;
         public float enemySpeed;
         public float enemyStoppingDistance;
         public Material material;
-        
+
         public virtual void OnEnter()
         {
             navMeshAgent.speed = enemySpeed;

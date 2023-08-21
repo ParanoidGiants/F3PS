@@ -888,9 +888,9 @@ MonoBehaviour:
   maxHealth: 100
   RotationSmoothTime: 0.12
   AmingRotationSmoothTime: 0.3
-  FocusSpeed: 3
-  MoveSpeed: 5
-  SprintSpeed: 8
+  FocusSpeed: 5
+  MoveSpeed: 8
+  SprintSpeed: 15
 --- !u!1 &2101756639674773493
 GameObject:
   m_ObjectHideFlags: 0

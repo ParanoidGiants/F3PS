@@ -5,28 +5,27 @@ namespace Enemy.States
 {
     public abstract class Attack : MonoBehaviour
     {
-        public bool isActive;
         protected Hittable _target;
+        [Header("General Watchers")]
+        public bool isActive;
+        public bool isCharging;
+        public bool isHitting;
+        public bool isRecovering;
+        
+        [Header("General References")]
+        public Material chargeMaterial;
+        public Material hitMaterial;
+        public Material recoverMaterial;
 
-        [Header("Base Attack Settings")]
+        [Header("General Attack Settings")]
         public AttackType type;
-
         public BaseEnemy enemy;
         public NavMeshAgent navMeshAgent;
         public float stoppingDistanceStay;
         public float stoppingDistanceFollow;
-        
         public float coolDownTime;
         public float coolDownTimer;
-
-        public Material chargeMaterial;
-        public bool isCharging;
-        public Material hitMaterial;
-        public bool isHitting;
-        public Material recoverMaterial;
-        public bool isRecovering;
         public float attackDistance;
-
         public int damage;
 
         public void CoolDown()
@@ -101,7 +100,7 @@ namespace Enemy.States
             }
         }
 
-        protected virtual void OnStopAttacking()
+        private void OnStopAttacking()
         {
             coolDownTime = 0f;
             isActive = false;

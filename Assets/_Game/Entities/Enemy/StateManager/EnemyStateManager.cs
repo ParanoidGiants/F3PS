@@ -6,25 +6,29 @@ namespace Enemy
 {
     public class EnemyStateManager : MonoBehaviour
     {
-        public State currentState;
-        public State[] states;
+        [Header("Watchers")]
+        [SerializeField]
+        private State _currentState;
 
+        [Space(10)]
+        [Header("Watchers")]
+        public State[] states;
         private void Start()
         {
-            currentState = GetState(StateType.IDLE);
-            currentState.OnEnter();
+            _currentState = GetState(StateType.IDLE);
+            _currentState.OnEnter();
         }
 
         void FixedUpdate()
         {
-            currentState.OnUpdate();
+            _currentState.OnUpdate();
         }
         
         public void SwitchState(StateType stateType)
         {
-            currentState.OnExit();
-            currentState = GetState(stateType);
-            currentState.OnEnter();
+            _currentState.OnExit();
+            _currentState = GetState(stateType);
+            _currentState.OnEnter();
         }
 
         private State GetState(StateType stateType)

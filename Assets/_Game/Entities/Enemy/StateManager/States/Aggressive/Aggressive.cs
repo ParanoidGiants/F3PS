@@ -5,12 +5,14 @@ namespace Enemy.States
     public class Aggressive : State
     {
         private bool _isAttacking;
-        public Hittable target;
+        private Hittable _target;
+        private Attack _nextAttack;
         
+        [Space(10)]
+        [Header("Specific Settings")]
         public Vision aggressiveVision;
         public AggressiveSensor aggressiveSensor;
         public Attack[] attacks;
-        public Attack nextAttack;
         
         private void Update()
         {
@@ -27,11 +29,11 @@ namespace Enemy.States
             base.OnEnter();
             aggressiveVision.gameObject.SetActive(true);
             aggressiveSensor.gameObject.SetActive(true);
-            target = GetTargetFromSensors();
+            _target = GetTargetFromSensors();
             // set default vision to false after getting the target from the sensors
             defaultVision.gameObject.SetActive(false);
             
-            nextAttack = NextAttack();
+            _nextAttack = NextAttack();
             HandlePositionAndRotation(false, false);
         }
 
@@ -54,21 +56,21 @@ namespace Enemy.States
             }
 
             bool hasReachedDestination = Helper.HasReachedDestination(navMeshAgent);
-            bool attackHasCooledDown = nextAttack.HasCooledDown();
-            bool isInAttackDistance = nextAttack.IsInAttackDistance(target.Center());
+            bool attackHasCooledDown = _nextAttack.HasCooledDown();
+            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_target.Center());
             bool canAttack = attackHasCooledDown && isInAttackDistance;
-            bool isAttacking = nextAttack.isActive;
+            bool isAttacking = _nextAttack.isActive;
 
             navMeshAgent.isStopped = isInAttackDistance;
             
             if (!isAttacking && canAttack)
             {
                 _isAttacking = true;
-                nextAttack.OnStartAttack(target);
+                _nextAttack.OnStartAttack(_target);
             }
             else if (_isAttacking && attackHasCooledDown)
             {
-                nextAttack.OnUpdate();
+                _nextAttack.OnUpdate();
                 
             }
             else if (_isAttacking)
@@ -84,11 +86,11 @@ namespace Enemy.States
 
         private void HandlePositionAndRotation(bool isInAttackDistance, bool hasReachedDestination)
         {
-            if (isInAttackDistance && !nextAttack.isActive)
+            if (isInAttackDistance && !_nextAttack.isActive)
             {
                 var enemyTransform = enemy.transform;
                 var position = enemyTransform.position;
-                var lookDirection = target.Center() - position;
+                var lookDirection = _target.Center() - position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
                 var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
                 enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
@@ -96,14 +98,14 @@ namespace Enemy.States
             }
             
             navMeshAgent.isStopped = false;
-            navMeshAgent.destination = target.Center();
+            navMeshAgent.destination = _target.Center();
             if (hasReachedDestination)
             {
-                navMeshAgent.stoppingDistance = nextAttack.stoppingDistanceStay;
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
             }
             else
             {
-                navMeshAgent.stoppingDistance = nextAttack.stoppingDistanceFollow;
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
             }
         }
         
@@ -121,7 +123,7 @@ namespace Enemy.States
             aggressiveSensor.gameObject.SetActive(false);
             defaultVision.gameObject.SetActive(true);
 
-            target = null;
+            _target = null;
         }
         
         private Hittable GetTargetFromSensors()

@@ -6,16 +6,20 @@ namespace Enemy.States
     public class Shoot : Attack
     {
         [Space(10)]
-        [Header("Shoot Settings")]
+        [Header("Shoot References")]
         public BaseGun gun;
-        public float chargeTime;
+        
+        [Space(10)]
+        [Header("Shoot Settings")]
         public float chargeTimer;
-        
-        public float hitTime;
         public float hitTimer;
-        
-        public float recoverTime;
         public float recoverTimer;
+        
+        [Space(10)]
+        [Header("Shoot Watchers")]
+        public float chargeTime;
+        public float hitTime;
+        public float recoverTime;
         
         private void Start()
         {

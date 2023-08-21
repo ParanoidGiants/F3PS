@@ -4,20 +4,24 @@ namespace Enemy.States
 {
     public class Rush : Attack
     {
+        private Vector3 _chargeStartPosition;
+        private Vector3 _chargeEndPosition;
+        private Vector3 _chargeForward;
+        
         [Space(10)]
         [Header("Rush Settings")]
         public float rushStrength;
-        public bool wasEarlyHit;
-
-        public float chargeTime;
         public float chargeTimer;
-        
-        public float hitTime;
         public float hitTimer;
-        
-        public float recoverTime;
         public float recoverTimer;
         
+        [Space(10)]
+        [Header("Rush Watchers")]
+        public bool wasEarlyHit;
+        public float chargeTime;
+        public float hitTime;
+        public float recoverTime;
+
         private void Start()
         {
             enemy = navMeshAgent.GetComponent<BaseEnemy>();
@@ -29,9 +33,6 @@ namespace Enemy.States
             wasEarlyHit = true;
         }
 
-        private Vector3 _chargeStartPosition;
-        private Vector3 _chargeEndPosition;
-        private Vector3 _chargeForward;
         override
         protected void OnCharge()
         {
