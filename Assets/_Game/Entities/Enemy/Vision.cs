@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy
@@ -6,8 +6,9 @@ namespace Enemy
     public class Vision : MonoBehaviour
     {
         public Transform eyes;
-        public Hittable target;
+        public Hittable SelectedTarget { get; private set; }
         public int triggerCount;
+        public List<Hittable> targetCandidates;
 
         public bool canTargetBeDetected;
         private void OnTriggerEnter(Collider other)
@@ -16,10 +17,8 @@ namespace Enemy
             if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
 
             triggerCount++;
-            
-            if (triggerCount > 1) return;
-            canTargetBeDetected = true;
-            target = hittable;
+            targetCandidates.Add(hittable);
+            EvaluateBestTarget();
         }
 
         private void OnTriggerExit(Collider other)
@@ -28,10 +27,8 @@ namespace Enemy
             if (!hittable || !Helper.IsLayerPlayerLayer(other.gameObject.layer)) return;
 
             triggerCount--;
-            
-            if (triggerCount > 0) return;
-            canTargetBeDetected = false;
-            target = null;
+            targetCandidates.Remove(hittable);
+            EvaluateBestTarget();
         }
         
             
@@ -40,7 +37,7 @@ namespace Enemy
             if (!canTargetBeDetected) return false;
             
             var position = eyes.position;
-            var targetPosition1 = target.Center();
+            var targetPosition1 = SelectedTarget.Center();
             var direction1 = targetPosition1 - position;
             var playerDistance1 = direction1.magnitude;
                 
@@ -65,12 +62,34 @@ namespace Enemy
             }
             return true;
         }
+        
+
+        private void EvaluateBestTarget()
+        {
+            if (targetCandidates.Count == 0)
+            {
+                canTargetBeDetected = false;
+                SelectedTarget = null;
+            }
+            else
+            {
+                canTargetBeDetected = true;
+                SelectedTarget = targetCandidates[0];
+                foreach (var targetCandidate in targetCandidates)
+                {
+                    if (targetCandidate.damageMultiplier > SelectedTarget.damageMultiplier)
+                    {
+                        SelectedTarget = targetCandidate;
+                    }
+                }
+            }
+        }
 
         private void OnDisable()
         {
             triggerCount = 0;
             canTargetBeDetected = false;
-            target = null;
+            SelectedTarget = null;
         }
     }
 }

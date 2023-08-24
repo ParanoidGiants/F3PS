@@ -66,14 +66,16 @@ namespace Player
         private PlayerHealthUI _playerHealthUI;
         private Camera _mainCamera;
         private readonly int Dodge = Animator.StringToHash("Dodge");
-        public float RotationSpeed { get { return isAiming ? aimingRotationSpeed : defaultRotationSpeed; } }
-
-        // Start is called before the first frame update
+        public float RotationSpeed => isAiming ? aimingRotationSpeed : defaultRotationSpeed;
         private void Awake()
         {
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
+        }
+
+        private void Start()
+        {
             _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
         }
 

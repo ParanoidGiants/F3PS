@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 291886724}
   - component: {fileID: 291886725}
+  - component: {fileID: 6967132079510557092}
   m_Layer: 7
   m_Name: Rush
   m_TagString: Untagged
@@ -81,6 +82,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
+  isCharging: 0
+  isHitting: 0
+  isRecovering: 0
+  chargeMaterial: {fileID: 2100000, guid: 140a6908b25135347b310b1b7eda2984, type: 2}
+  hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
+  recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
   type: 0
   enemy: {fileID: 4776444785976893130}
   navMeshAgent: {fileID: 4776444785976893128}
@@ -88,22 +95,29 @@ MonoBehaviour:
   stoppingDistanceFollow: 2
   coolDownTime: 0
   coolDownTimer: 3
-  chargeMaterial: {fileID: 2100000, guid: 140a6908b25135347b310b1b7eda2984, type: 2}
-  isCharging: 0
-  hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
-  isHitting: 0
-  recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
-  isRecovering: 0
   attackDistance: 3
   damage: 25
-  rushStrength: 50
+  rushStrength: 25
+  chargeTimer: 0.5
+  hitTimer: 0.2
+  recoverTimer: 0.2
   wasEarlyHit: 0
   chargeTime: 0
-  chargeTimer: 0.2
   hitTime: 0
-  hitTimer: 0.2
   recoverTime: 0
-  recoverTimer: 0.2
+--- !u!65 &6967132079510557092
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291886723}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 0.9, z: 0.029095411}
+  m_Center: {x: 0, y: 0, z: 0.53545225}
 --- !u!1 &851668464
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,11 +293,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616684378d524364599b543a1e991d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 0
   navMeshAgent: {fileID: 4776444785976893128}
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
+  stateType: 0
   enemySpeed: 0
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 69473110e898fa54f83a37b5893e2016, type: 2}
@@ -332,20 +346,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f58796fbeca0c4785fb0c93df90222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 1
   navMeshAgent: {fileID: 4776444785976893128}
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
+  stateType: 1
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
-  target: {fileID: 0}
   aggressiveVision: {fileID: 851668466}
   aggressiveSensor: {fileID: 2075727067}
   attacks:
   - {fileID: 291886725}
-  nextAttack: {fileID: 0}
 --- !u!1 &1428660925
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,11 +402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d206ac8ab77db546bf3c39c0a98fb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 2
   navMeshAgent: {fileID: 4776444785976893128}
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
+  stateType: 2
   enemySpeed: 4
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
@@ -442,15 +454,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308eb05a8c8fd094a9e0ad654d0da8bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 3
   navMeshAgent: {fileID: 4776444785976893128}
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
+  stateType: 3
   enemySpeed: 0
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 98e00788c2b74b247b7dc4202dc2878c, type: 2}
-  isSuspiciousTimer: 2
 --- !u!1 &1241237544688633345
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,11 +506,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360d067754119b34687146712176e824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 4
   navMeshAgent: {fileID: 4776444785976893128}
   enemy: {fileID: 4776444785976893130}
   stateManager: {fileID: 8483852239593265513}
   defaultVision: {fileID: 1073936320}
+  stateType: 4
   enemySpeed: 3
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128, type: 2}
@@ -678,7 +689,6 @@ GameObject:
   - component: {fileID: 4776444784549637148}
   - component: {fileID: 4776444784549637153}
   - component: {fileID: 4776444784549637154}
-  - component: {fileID: 4776444784549637155}
   m_Layer: 7
   m_Name: RightEye
   m_TagString: Untagged
@@ -751,19 +761,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4776444784549637155
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4776444784549637149}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4776444785553750742
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,8 +930,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
+  m_Height: 0.5
+  m_BaseOffset: 0.375
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
 --- !u!114 &4776444785976893130
@@ -953,7 +950,6 @@ MonoBehaviour:
   navMeshAgent: {fileID: 4776444785976893128}
   maxHealth: 100
   health: 0
-  isRushing: 0
 --- !u!1 &4776444786326003611
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,7 +961,6 @@ GameObject:
   - component: {fileID: 4776444786326003610}
   - component: {fileID: 4776444786326003615}
   - component: {fileID: 4776444786326003608}
-  - component: {fileID: 4776444786326003609}
   m_Layer: 7
   m_Name: LeftEye
   m_TagString: Untagged
@@ -1038,19 +1033,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4776444786326003609
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4776444786326003611}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4880633714221677386
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,7 +1076,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1187658047388652633}
   - component: {fileID: 8483852239593265513}
-  - component: {fileID: 40879628}
   m_Layer: 7
   m_Name: StateManager
   m_TagString: Untagged
@@ -1130,29 +1111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6114c7b9d49387459e903d4deb2b9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: {fileID: 0}
+  _currentState: {fileID: 0}
   states:
   - {fileID: 1253976361}
   - {fileID: 1354048579}
   - {fileID: 1428660927}
   - {fileID: 2116068021}
   - {fileID: 3789476686836440869}
---- !u!54 &40879628
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5477658672902255771}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 2
 --- !u!1 &5662283861782909352
 GameObject:
   m_ObjectHideFlags: 0

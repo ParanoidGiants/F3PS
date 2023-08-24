@@ -53,7 +53,7 @@ MonoBehaviour:
   meshHolder: {fileID: 5204241600584662912}
   maxAmmo: 1000
   maxMagazineAmmo: 10
-  shotSpeed: 100
+  shotSpeed: 500
   shootCoolDownTimer: 0.2
   reloadMagazineTimer: 1
   isShooting: 0

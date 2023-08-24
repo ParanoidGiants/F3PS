@@ -4,8 +4,7 @@ namespace Enemy.States
 {
     public class Aggressive : State
     {
-        private bool _isAttacking;
-        private Hittable _target;
+        private Hittable _selectedTarget;
         private Attack _nextAttack;
         
         [Space(10)]
@@ -29,8 +28,8 @@ namespace Enemy.States
             base.OnEnter();
             aggressiveVision.gameObject.SetActive(true);
             aggressiveSensor.gameObject.SetActive(true);
-            _target = GetTargetFromSensors();
-            // set default vision to false after getting the target from the sensors
+            _selectedTarget = GetTargetFromSensors();
+            // set default vision to false AFTER getting the target from the sensors
             defaultVision.gameObject.SetActive(false);
             
             _nextAttack = NextAttack();
@@ -48,35 +47,24 @@ namespace Enemy.States
         override
         public void OnUpdate()
         {
-            
-            if (!_isAttacking && !IsTargetDetected())
+            bool isAttacking = _nextAttack.isActive;
+            if (!isAttacking && !IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
-
             bool hasReachedDestination = Helper.HasReachedDestination(navMeshAgent);
             bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_target.Center());
+            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
             bool canAttack = attackHasCooledDown && isInAttackDistance;
-            bool isAttacking = _nextAttack.isActive;
 
-            navMeshAgent.isStopped = isInAttackDistance;
-            
             if (!isAttacking && canAttack)
             {
-                _isAttacking = true;
-                _nextAttack.OnStartAttack(_target);
+                _nextAttack.OnStartAttack(_selectedTarget);
             }
-            else if (_isAttacking && attackHasCooledDown)
+            else if (isAttacking)
             {
                 _nextAttack.OnUpdate();
-                
-            }
-            else if (_isAttacking)
-            {
-                _isAttacking = false;
-                enemy.SetMaterial(material);
             }
             else
             {
@@ -86,19 +74,19 @@ namespace Enemy.States
 
         private void HandlePositionAndRotation(bool isInAttackDistance, bool hasReachedDestination)
         {
-            if (isInAttackDistance && !_nextAttack.isActive)
+            navMeshAgent.isStopped = isInAttackDistance;
+            navMeshAgent.destination = _selectedTarget.Center();
+            
+            if (isInAttackDistance)
             {
                 var enemyTransform = enemy.transform;
                 var position = enemyTransform.position;
-                var lookDirection = _target.Center() - position;
+                var lookDirection = _selectedTarget.Center() - position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
                 var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
                 enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
-                return;
             }
             
-            navMeshAgent.isStopped = false;
-            navMeshAgent.destination = _target.Center();
             if (hasReachedDestination)
             {
                 navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
@@ -122,19 +110,18 @@ namespace Enemy.States
             aggressiveVision.gameObject.SetActive(false);
             aggressiveSensor.gameObject.SetActive(false);
             defaultVision.gameObject.SetActive(true);
-
-            _target = null;
+            _selectedTarget = null;
         }
         
         private Hittable GetTargetFromSensors()
         {
             if (defaultVision.canTargetBeDetected)
             {
-                return defaultVision.target;
+                return defaultVision.SelectedTarget;
             }
             if (aggressiveVision.canTargetBeDetected)
             {
-                return aggressiveVision.target;
+                return aggressiveVision.SelectedTarget;
             }
             if (aggressiveSensor.triggerCount > 0)
             {

@@ -33,7 +33,7 @@ namespace Enemy.States
             coolDownTime += Time.deltaTime;
         }
         
-        public void OnStartAttack(Hittable hittable)
+        public virtual void OnStartAttack(Hittable hittable)
         {
             isActive = true;
             _target = hittable;
@@ -42,8 +42,8 @@ namespace Enemy.States
         
         protected virtual void OnCharge()
         {
-            isCharging = true;
             enemy.SetMaterial(chargeMaterial);
+            isCharging = true;
         }
 
         protected virtual void HandleCharging()
@@ -100,7 +100,7 @@ namespace Enemy.States
             }
         }
 
-        private void OnStopAttacking()
+        protected virtual void OnStopAttacking()
         {
             coolDownTime = 0f;
             isActive = false;

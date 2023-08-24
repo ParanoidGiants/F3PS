@@ -1,18 +1,15 @@
-using System;
 using System.Collections;
-using Enemy;
-using StarterAssets;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private bool _hit;
     public float speed = 0f;
     public int damage = 50;
     private Rigidbody _rb;
     private TrailRenderer _trailRenderer;
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
+    public bool Hit { get; private set; }
 
     private void Awake()
     {
@@ -33,7 +30,7 @@ public class Projectile : MonoBehaviour
         transform.position = position;
         transform.rotation = rotation;
         speed = shootSpeed;
-        _hit = false;
+        Hit = false;
     }
     
     private void OnEnable()
@@ -49,25 +46,13 @@ public class Projectile : MonoBehaviour
         _rb.velocity = Vector3.zero;
     }
 
-    private void OnCollisionEnter(Collision other)
+    public void SetHit()
     {
-        if (_hit) return;
+        if (Hit) return;
         
-        _hit = true;
+        Hit = true;
         _rb.velocity *= 0.1f;
         StartCoroutine(SetInactiveAfterSeconds(2));
-        
-        if (Helper.IsLayerEnemyLayer(other.gameObject.layer))
-        {
-            var enemy = other.gameObject.GetComponent<BaseEnemy>();
-            enemy.Hit(damage);
-        }
-        
-        if (Helper.IsLayerPlayerLayer(other.gameObject.layer))
-        {
-            var player = other.gameObject.GetComponentInParent<ThirdPersonController>();
-            player.extensions.Hit(damage);
-        }
     }
 
     private IEnumerator SetInactiveAfterSeconds(float seconds)
