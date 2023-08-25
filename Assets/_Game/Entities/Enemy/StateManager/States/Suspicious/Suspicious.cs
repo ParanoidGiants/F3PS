@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Enemy.States
+namespace F3PS.AI.States.Action
 {
     [Serializable]
     public class Suspicious : State

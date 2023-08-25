@@ -1,4 +1,4 @@
-namespace Enemy.States
+namespace F3PS.AI.States.Action
 {
     public class Checking : State
     {

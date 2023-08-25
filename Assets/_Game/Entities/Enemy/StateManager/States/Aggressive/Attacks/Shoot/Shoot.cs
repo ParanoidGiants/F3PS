@@ -1,7 +1,8 @@
+using F3PS.Enemy;
 using UnityEngine;
 using Player;
 
-namespace Enemy.States
+namespace F3PS.AI.States.Action
 {
     public class Shoot : Attack
     {
@@ -41,7 +42,7 @@ namespace Enemy.States
             base.OnCharge();
         }
         
-        private void UpdateGunRotation()
+        private void UpdateGunAndEnemyRotation()
         {
             var targetPosition = _target.Center();
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
@@ -58,7 +59,7 @@ namespace Enemy.States
         override
         protected void HandleCharging()
         {
-            UpdateGunRotation();
+            UpdateGunAndEnemyRotation();
             chargeTime += Time.deltaTime;
             isCharging = chargeTime < chargeTimer;
             base.HandleCharging();
@@ -67,7 +68,7 @@ namespace Enemy.States
         override
         protected void HandleHitting()
         {
-            UpdateGunRotation();
+            UpdateGunAndEnemyRotation();
             hitTime += Time.deltaTime;
             isHitting = hitTime < hitTimer;
             gun.Shoot();
@@ -87,6 +88,7 @@ namespace Enemy.States
         override
         protected void HandleRecovering()
         {
+            UpdateGunAndEnemyRotation();
             recoverTime += Time.deltaTime;
             isRecovering = recoverTime < recoverTimer;
             base.HandleRecovering();

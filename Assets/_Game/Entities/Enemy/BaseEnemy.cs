@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.AI;
 using DarkTonic.MasterAudio;
+using F3PS.Enemy.UI;
 
-namespace Enemy
+namespace F3PS.Enemy
 {
     public class BaseEnemy : MonoBehaviour
     {
@@ -36,6 +37,7 @@ namespace Enemy
         {
             health -= damage;
             Debug.Log("Hit by projectile");
+            Debug.Log("Took " + damage + " damage");
             MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", transform);
             if (health <= 0)
             {
@@ -48,25 +50,18 @@ namespace Enemy
         
         public void Rush(float strength)
         {
-            Debug.Log("Start Rush");
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             _rigidbody.AddForce(strength * transform.forward, ForceMode.Impulse);
         }
         
         public void StopRush()
         {
-            Debug.Log("Stop Rush");
             _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         public void SetMaterial(Material material)
         {
             headMeshRenderer.sharedMaterial = material;
-        }
-        
-        private void OnCollisionEnter(Collision other)
-        {
-            Debug.Log(other.gameObject.name);
         }
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 353750834}
   - component: {fileID: 353750833}
   - component: {fileID: 1907365364}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: UpperBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1494138342}
   - component: {fileID: 1494138341}
   - component: {fileID: 48723722}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1080,7 +1080,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8753443833285472442}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Hittables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1910,7 +1910,7 @@ GameObject:
   - component: {fileID: 474721059137053452}
   - component: {fileID: 7190970460023110499}
   - component: {fileID: 488391444223743033}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,18 +1,21 @@
+using F3PS.AI.States.Action;
+using F3PS.Damage.Take;
 using UnityEngine;
 
-namespace Enemy.States
+namespace F3PS.AI.States
 {
     public class Aggressive : State
     {
-        private Hittable _selectedTarget;
         private Attack _nextAttack;
         
         [Space(10)]
         [Header("Specific Settings")]
-        public Vision aggressiveVision;
-        public AggressiveSensor aggressiveSensor;
         public Attack[] attacks;
-        
+
+        [Space(10)]
+        [Header("Specific Watchers")]
+        [SerializeField] private Hittable _selectedTarget;
+
         private void Update()
         {
             foreach (var attack in attacks)
@@ -26,22 +29,15 @@ namespace Enemy.States
         public void OnEnter()
         {
             base.OnEnter();
-            aggressiveVision.gameObject.SetActive(true);
-            aggressiveSensor.gameObject.SetActive(true);
-            _selectedTarget = GetTargetFromSensors();
-            // set default vision to false AFTER getting the target from the sensors
-            defaultVision.gameObject.SetActive(false);
-            
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             _nextAttack = NextAttack();
-            HandlePositionAndRotation(false, false);
+            HandlePositionAndRotation(false);
         }
 
 
         public bool IsTargetDetected()
         {
-            return defaultVision.canTargetBeDetected 
-                   || aggressiveVision.canTargetBeDetected
-                   || aggressiveVision.triggerCount > 0;
+            return stateManager.sensorController.IsTargetDetected();
         }
 
         override
@@ -53,27 +49,29 @@ namespace Enemy.States
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
-            bool hasReachedDestination = Helper.HasReachedDestination(navMeshAgent);
-            bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
-            bool canAttack = attackHasCooledDown && isInAttackDistance;
-
-            if (!isAttacking && canAttack)
-            {
-                _nextAttack.OnStartAttack(_selectedTarget);
-            }
             else if (isAttacking)
             {
                 _nextAttack.OnUpdate();
+                return;
+            }
+            
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+            bool attackHasCooledDown = _nextAttack.HasCooledDown();
+            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
+
+            if (attackHasCooledDown && isInAttackDistance)
+            {
+                _nextAttack.OnStartAttack(_selectedTarget);
             }
             else
             {
-                HandlePositionAndRotation(isInAttackDistance, hasReachedDestination);
+                HandlePositionAndRotation(isInAttackDistance);
             }
         }
 
-        private void HandlePositionAndRotation(bool isInAttackDistance, bool hasReachedDestination)
+        private void HandlePositionAndRotation(bool isInAttackDistance)
         {
+            bool hasReachedDestination = Helper.HasReachedDestination(navMeshAgent);
             navMeshAgent.isStopped = isInAttackDistance;
             navMeshAgent.destination = _selectedTarget.Center();
             
@@ -102,33 +100,6 @@ namespace Enemy.States
             var attack = attacks[0];
             navMeshAgent.stoppingDistance = attack.stoppingDistanceFollow;
             return attack;
-        }
-
-        override
-        public void OnExit()
-        {
-            aggressiveVision.gameObject.SetActive(false);
-            aggressiveSensor.gameObject.SetActive(false);
-            defaultVision.gameObject.SetActive(true);
-            _selectedTarget = null;
-        }
-        
-        private Hittable GetTargetFromSensors()
-        {
-            if (defaultVision.canTargetBeDetected)
-            {
-                return defaultVision.SelectedTarget;
-            }
-            if (aggressiveVision.canTargetBeDetected)
-            {
-                return aggressiveVision.SelectedTarget;
-            }
-            if (aggressiveSensor.triggerCount > 0)
-            {
-                return  aggressiveSensor.target;
-            }
-
-            return null;
         }
     }
 }

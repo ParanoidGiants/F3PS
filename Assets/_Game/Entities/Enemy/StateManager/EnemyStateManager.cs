@@ -1,8 +1,8 @@
 using System.Linq;
 using UnityEngine;
-using Enemy.States;
+using F3PS.AI.Sensors;
 
-namespace Enemy
+namespace F3PS.AI.States
 {
     public class EnemyStateManager : MonoBehaviour
     {
@@ -11,8 +11,9 @@ namespace Enemy
         private State _currentState;
 
         [Space(10)]
-        [Header("Watchers")]
+        [Header("Settings")]
         public State[] states;
+        public SensorController sensorController;
         private void Start()
         {
             _currentState = GetState(StateType.IDLE);

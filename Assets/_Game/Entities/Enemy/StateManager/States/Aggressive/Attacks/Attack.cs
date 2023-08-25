@@ -1,7 +1,9 @@
+using F3PS.Damage.Take;
+using F3PS.Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Enemy.States
+namespace F3PS.AI.States.Action
 {
     public abstract class Attack : MonoBehaviour
     {

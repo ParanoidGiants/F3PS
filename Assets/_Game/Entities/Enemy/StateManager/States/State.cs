@@ -1,7 +1,9 @@
+using F3PS.AI.Sensors;
+using F3PS.Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Enemy.States
+namespace F3PS.AI.States
 {
     public class State : MonoBehaviour
     {
@@ -9,7 +11,6 @@ namespace Enemy.States
         public NavMeshAgent navMeshAgent;
         public BaseEnemy enemy;
         public EnemyStateManager stateManager;
-        public Vision defaultVision;
         
         [Space(10)]
         [Header("Base Settings")]
@@ -22,12 +23,29 @@ namespace Enemy.States
         {
             navMeshAgent.speed = enemySpeed;
             navMeshAgent.stoppingDistance = enemyStoppingDistance;
+            SetSensorState();
             enemy.SetMaterial(material);
+        }
+
+        private void SetSensorState()
+        {
+            if (stateType == StateType.IDLE)
+            {
+                stateManager.sensorController.SetState(SensorState.IDLE);
+            }
+            else if (stateType == StateType.AGGRESSIVE)
+            {
+                stateManager.sensorController.SetState(SensorState.AGGRESSIVE);
+            }
+            else
+            {
+                stateManager.sensorController.SetState(SensorState.SEARCHING);
+            }
         }
 
         public virtual void OnUpdate()
         {
-            if (stateType != StateType.AGGRESSIVE && defaultVision.IsTargetInSight())
+            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.AGGRESSIVE);
             }

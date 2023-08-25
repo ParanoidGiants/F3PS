@@ -1,16 +1,15 @@
 using F3PS.AI.States.Action;
-using Player;
+using F3PS.Enemy;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
 {
-    public class PlayerHittable : Hittable
+    public class EnemyHittable : Hittable
     {
-        public Extensions playerExtensions;
+        public BaseEnemy enemy;
         void Awake()
         {
             _collider = GetComponent<Collider>();
-
         }
 
         override
@@ -21,14 +20,14 @@ namespace F3PS.Damage.Take
             if (projectile && !projectile.Hit)
             {
                 projectile.SetHit();
-                playerExtensions.Hit((int)(damageMultiplier * projectile.damage));
+                enemy.Hit((int)(damageMultiplier * projectile.damage));
             }
-
-            // Hit by rush
+            
+            // Hit by projectile
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {
-                playerExtensions.Hit((int)(damageMultiplier * rush.damage));
+                enemy.Hit((int)(damageMultiplier * rush.damage));
                 rush.wasEarlyHit = true;
             }
         }

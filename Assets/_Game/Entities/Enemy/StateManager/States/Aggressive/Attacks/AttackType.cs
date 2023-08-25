@@ -1,5 +1,8 @@
-public enum AttackType
+namespace F3PS.AI.States.Action
 {
-    RUSH,
-    SHOOT
+    public enum AttackType
+    {
+        RUSH,
+        SHOOT
+    }
 }

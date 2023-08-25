@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Enemy.States
+namespace F3PS.AI.States
 {
     public class Idle : State
     {

@@ -16,9 +16,9 @@ TagManager:
   - Enemy
   - Character
   - Ground
-  - 
-  - 
-  - 
+  - HitBox
+  - Hittable
+  - Sensors
   - 
   - 
   - 

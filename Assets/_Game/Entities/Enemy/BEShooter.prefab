@@ -44,11 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616684378d524364599b543a1e991d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 0
   navMeshAgent: {fileID: 4952389365779374431}
   enemy: {fileID: 4952389365779374429}
   stateManager: {fileID: 8309016465684768510}
-  defaultVision: {fileID: 500810890801186903}
+  stateType: 0
   enemySpeed: 0
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 69473110e898fa54f83a37b5893e2016, type: 2}
@@ -96,11 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d206ac8ab77db546bf3c39c0a98fb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 2
   navMeshAgent: {fileID: 4952389365779374431}
   enemy: {fileID: 4952389365779374429}
   stateManager: {fileID: 8309016465684768510}
-  defaultVision: {fileID: 500810890801186903}
+  stateType: 2
   enemySpeed: 4
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 82da787c7758d8446914cc3ad5ca52f5, type: 2}
@@ -149,20 +147,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f58796fbeca0c4785fb0c93df90222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 1
   navMeshAgent: {fileID: 4952389365779374431}
   enemy: {fileID: 4952389365779374429}
   stateManager: {fileID: 8309016465684768510}
-  defaultVision: {fileID: 500810890801186903}
+  stateType: 1
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
-  target: {fileID: 0}
-  aggressiveVision: {fileID: 500810892701307493}
-  aggressiveSensor: {fileID: 500810891481181004}
   attacks:
   - {fileID: 8110245502038941602}
-  nextAttack: {fileID: 0}
+  _selectedTarget: {fileID: 0}
 --- !u!1 &500810891440708900
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,15 +201,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308eb05a8c8fd094a9e0ad654d0da8bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 3
   navMeshAgent: {fileID: 4952389365779374431}
   enemy: {fileID: 4952389365779374429}
   stateManager: {fileID: 8309016465684768510}
-  defaultVision: {fileID: 500810890801186903}
+  stateType: 3
   enemySpeed: 0
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 98e00788c2b74b247b7dc4202dc2878c, type: 2}
-  isSuspiciousTimer: 2
 --- !u!1 &500810891735512476
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,8 +258,8 @@ GameObject:
   - component: {fileID: 500810892701307491}
   - component: {fileID: 500810892701307492}
   - component: {fileID: 500810892701307493}
-  m_Layer: 7
-  m_Name: AggressiveVision
+  m_Layer: 12
+  m_Name: SearchingVision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,10 +371,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d09e55c226c8d4d8e40b8ede36c6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 0}
+  _targetCandidates: []
   eyes: {fileID: 2928200454577406111}
-  target: {fileID: 0}
-  triggerCount: 0
-  canTargetBeDetected: 0
 --- !u!1 &1714462031103637910
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,11 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360d067754119b34687146712176e824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateType: 4
   navMeshAgent: {fileID: 4952389365779374431}
   enemy: {fileID: 4952389365779374429}
   stateManager: {fileID: 8309016465684768510}
-  defaultVision: {fileID: 500810890801186903}
+  stateType: 4
   enemySpeed: 3
   enemyStoppingDistance: 0
   material: {fileID: 2100000, guid: 5e4b77c8fc73a59429b54198a3a14128, type: 2}
@@ -449,7 +439,7 @@ GameObject:
   - component: {fileID: 966157938899794450}
   - component: {fileID: 500810890801186856}
   - component: {fileID: 500810890801186903}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: DefaultVision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,10 +552,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d09e55c226c8d4d8e40b8ede36c6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 0}
+  _targetCandidates: []
   eyes: {fileID: 2928200454577406111}
-  target: {fileID: 0}
-  triggerCount: 0
-  canTargetBeDetected: 0
 --- !u!1 &4168941538157528887
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,7 +564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2928200454577406111}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -610,9 +599,12 @@ GameObject:
   - component: {fileID: 4952389365128643917}
   - component: {fileID: 4952389365128643916}
   - component: {fileID: 4952389365128643906}
-  - component: {fileID: 4952389365128643907}
-  m_Layer: 7
-  m_Name: Head
+  - component: {fileID: 2685162148504176987}
+  - component: {fileID: 1638100357904529706}
+  - component: {fileID: 1992113233}
+  - component: {fileID: 1992113232}
+  m_Layer: 11
+  m_Name: Hittable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -684,7 +676,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4952389365128643907
+--- !u!114 &2685162148504176987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389365128643905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 2
+  enemy: {fileID: 4952389365779374429}
+--- !u!65 &1638100357904529706
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -697,6 +703,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1992113233
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389365128643905}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
+--- !u!114 &1992113232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389365128643905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 2
+  enemy: {fileID: 4952389365779374429}
 --- !u!1 &4952389365779374419
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,7 +825,6 @@ MonoBehaviour:
   navMeshAgent: {fileID: 4952389365779374431}
   maxHealth: 100
   health: 0
-  isRushing: 0
 --- !u!1 &4952389366034112524
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,7 +837,9 @@ GameObject:
   - component: {fileID: 4952389366034112520}
   - component: {fileID: 4952389366034112527}
   - component: {fileID: 4952389366034112526}
-  m_Layer: 7
+  - component: {fileID: 455374537}
+  - component: {fileID: 455374538}
+  m_Layer: 11
   m_Name: LeftEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -887,6 +924,36 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &455374537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389366034112524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 50
+  enemy: {fileID: 4952389365779374429}
+--- !u!54 &455374538
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389366034112524}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
 --- !u!1 &4952389366665302922
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +966,9 @@ GameObject:
   - component: {fileID: 4952389366665302966}
   - component: {fileID: 4952389366665302965}
   - component: {fileID: 4952389366665302964}
-  m_Layer: 7
+  - component: {fileID: 2050244004}
+  - component: {fileID: 2050244005}
+  m_Layer: 11
   m_Name: RightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -984,6 +1053,36 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2050244004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389366665302922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 50
+  enemy: {fileID: 4952389365779374429}
+--- !u!54 &2050244005
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4952389366665302922}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
 --- !u!1 &5100494737830033085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1128,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
+  isCharging: 0
+  isHitting: 0
+  isRecovering: 0
+  chargeMaterial: {fileID: 2100000, guid: 140a6908b25135347b310b1b7eda2984, type: 2}
+  hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
+  recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
   type: 1
   enemy: {fileID: 4952389365779374429}
   navMeshAgent: {fileID: 4952389365779374431}
@@ -1036,21 +1141,15 @@ MonoBehaviour:
   stoppingDistanceFollow: 5
   coolDownTime: 0
   coolDownTimer: 1
-  chargeMaterial: {fileID: 2100000, guid: 140a6908b25135347b310b1b7eda2984, type: 2}
-  isCharging: 0
-  hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
-  isHitting: 0
-  recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
-  isRecovering: 0
   attackDistance: 50
   damage: 0
   gun: {fileID: 1148091551482030991}
-  chargeTime: 0
   chargeTimer: 1
-  hitTime: 0
   hitTimer: 1
-  recoverTime: 0
   recoverTimer: 1
+  chargeTime: 0
+  hitTime: 0
+  recoverTime: 0
 --- !u!1 &5217215617725607487
 GameObject:
   m_ObjectHideFlags: 0
@@ -1065,7 +1164,7 @@ GameObject:
   - component: {fileID: 6125637874003574808}
   - component: {fileID: 500810891481181003}
   - component: {fileID: 500810891481181004}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: AggressiveSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1178,9 +1277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a291656140da1b742b91e00efdb33094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTargetDetected: 0
-  target: {fileID: 0}
-  triggerCount: 0
+  _meshRenderer: {fileID: 0}
+  _targetCandidates: []
 --- !u!1 &5401981238614805260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,13 +1325,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6114c7b9d49387459e903d4deb2b9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: {fileID: 0}
+  _currentState: {fileID: 0}
   states:
   - {fileID: 500810890692974270}
   - {fileID: 500810891062533076}
   - {fileID: 500810890988182824}
   - {fileID: 500810891440708898}
   - {fileID: 3631537520440402098}
+  sensorController: {fileID: 1758483787}
 --- !u!54 &500810891906202011
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1259,8 +1358,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4941884990466282070}
-  m_Layer: 7
-  m_Name: Detection
+  - component: {fileID: 1758483787}
+  m_Layer: 12
+  m_Name: SensorController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1284,6 +1384,22 @@ Transform:
   m_Father: {fileID: 4952389365779374430}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1758483787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7866530124445108011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 907abac457ae78840b7a927ff4bff22a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  defaultVision: {fileID: 500810890801186903}
+  searchingVision: {fileID: 500810892701307493}
+  aggressiveMovement: {fileID: 500810891481181004}
 --- !u!1001 &5728317818453250742
 PrefabInstance:
   m_ObjectHideFlags: 0

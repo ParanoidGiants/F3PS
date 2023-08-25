@@ -1,33 +1,36 @@
-using Enemy;
 using UnityEngine;
+using F3PS.AI;
 
-public class EnemyHealthUIPool : MonoBehaviour
+namespace F3PS.Enemy.UI
 {
-    public EnemyHealthUI enemyHealthUI;
-
-    private void Start()
+    public class EnemyHealthUIPool : MonoBehaviour
     {
-        enemyHealthUI.gameObject.SetActive(false);
-    }
+        public EnemyHealthUI enemyHealthUI;
 
-    public void OnHitTarget(BaseEnemy target)
-    {
-        if (enemyHealthUI.target != target.transform)
+        private void Start()
         {
-            enemyHealthUI.gameObject.SetActive(true);
-            enemyHealthUI.SetTarget(target.transform);
+            enemyHealthUI.gameObject.SetActive(false);
+        }
+
+        public void OnHitTarget(BaseEnemy target)
+        {
+            if (enemyHealthUI.target != target.transform)
+            {
+                enemyHealthUI.gameObject.SetActive(true);
+                enemyHealthUI.SetTarget(target.transform);
+            }
+            
+            enemyHealthUI.SetFill(target.health/ (float) target.maxHealth);
         }
         
-        enemyHealthUI.SetFill(target.health/ (float) target.maxHealth);
-    }
-    
-    public void OnKillTarget(Transform target)
-    {
-        if (enemyHealthUI.target != target) return;
-        
-        
-        enemyHealthUI.SetFill(1);
-        enemyHealthUI.SetTarget(null);
-        enemyHealthUI.gameObject.SetActive(false);
+        public void OnKillTarget(Transform target)
+        {
+            if (enemyHealthUI.target != target) return;
+            
+            
+            enemyHealthUI.SetFill(1);
+            enemyHealthUI.SetTarget(null);
+            enemyHealthUI.gameObject.SetActive(false);
+        }
     }
 }
