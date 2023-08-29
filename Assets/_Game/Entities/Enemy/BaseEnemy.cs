@@ -36,7 +36,6 @@ namespace F3PS.Enemy
         public void Hit(int damage)
         {
             health -= damage;
-            Debug.Log("Hit by projectile");
             Debug.Log("Took " + damage + " damage");
             MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", transform);
             if (health <= 0)

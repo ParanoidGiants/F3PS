@@ -31,11 +31,10 @@ namespace Player
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
 
-        private void Start()
+        public void Init(int attackerId)
         {
-            projectilePool.Init(projectilePrefab);
+            projectilePool.Init(projectilePrefab, attackerId);
             projectilePool.transform.parent = null;
-
             totalAmount = maxAmmo;
         }
         

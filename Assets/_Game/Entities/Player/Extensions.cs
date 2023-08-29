@@ -72,6 +72,7 @@ namespace Player
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
+            baseGun.Init(GetInstanceID());
         }
 
         private void Start()
@@ -126,25 +127,14 @@ namespace Player
 
         public float GetLookRotation(Transform transform, float movementYaw, float cameraYaw)
         {
-
-            if (!isSprinting && !isDodging)
-            {
-                return Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    cameraYaw,
-                    ref rotationVelocity,
-                    AmingRotationSmoothTime
-                );
-            }
-            else
-            {
-                return Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    movementYaw,
-                    ref rotationVelocity,
-                    RotationSmoothTime
-                );
-            }
+            float timeMultiplier = _timeManager.isActive ? _timeManager.lookRotationSpeed : 1;
+            float smoothTime = isAiming ? AmingRotationSmoothTime : RotationSmoothTime;
+            return Mathf.SmoothDampAngle(
+                transform.eulerAngles.y,
+                cameraYaw,
+                ref rotationVelocity,
+                timeMultiplier * smoothTime * Time.unscaledDeltaTime
+            );
         }
 
         private void Dodging(bool dodgeInput)

@@ -1,21 +1,31 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 0f;
     public int damage = 50;
-    private Rigidbody _rb;
-    private TrailRenderer _trailRenderer;
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
+    
+    private HitBox _hitBox;
+    private Rigidbody _rb;
+    private TrailRenderer _trailRenderer;
+    private float _speed;
     public bool Hit { get; private set; }
 
     private void Awake()
     {
         _trailRenderer = GetComponent<TrailRenderer>();
+        _hitBox = GetComponent<HitBox>();
+        _rb = GetComponent<Rigidbody>();
     }
 
+    public void Init(int attackerId)
+    {
+        _hitBox.attackerId = attackerId;
+    }
+    
     private void Update()
     {
         lifeTime += Time.deltaTime;
@@ -29,15 +39,14 @@ public class Projectile : MonoBehaviour
     {
         transform.position = position;
         transform.rotation = rotation;
-        speed = shootSpeed;
+        _speed = shootSpeed;
         Hit = false;
     }
     
     private void OnEnable()
     {
         _trailRenderer.Clear();
-        _rb = GetComponent<Rigidbody>();
-        _rb.velocity = transform.forward * speed;
+        _rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
     }
 

@@ -124,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slowdownFactor: 0.2
   isActive: 0
+  lookRotationSpeed: 1
 --- !u!1 &1494138339
 GameObject:
   m_ObjectHideFlags: 0
@@ -2466,7 +2467,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
   JumpHeight: 10
-  Gravity: -50
+  Gravity: -100
   JumpTimeout: 0.3
   FallTimeout: 0.15
   CinemachineCameraTarget: {fileID: 1204151532081024994}

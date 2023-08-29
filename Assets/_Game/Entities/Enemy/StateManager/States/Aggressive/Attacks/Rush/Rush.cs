@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace F3PS.AI.States.Action
@@ -12,8 +11,9 @@ namespace F3PS.AI.States.Action
         private Vector3 _recoverEndPosition;
         private Vector3 _recoverForward;
         
-        private Collider _collider;
+        private Collider _hitCollider;
         private Transform _enemyTransform;
+        private HitBox _hitBox;
         
         [Space(10)]
         [Header("Rush Settings")]
@@ -21,6 +21,7 @@ namespace F3PS.AI.States.Action
         public float chargeTimer;
         public float hitTimer;
         public float recoverTimer;
+        public Collider bodyCollider;
         
         [Space(10)]
         [Header("Rush Watchers")]
@@ -32,8 +33,10 @@ namespace F3PS.AI.States.Action
         private void Start()
         {
             _enemyTransform = enemy.transform;
-            _collider = GetComponent<Collider>();
-            _collider.enabled = false;
+            _hitCollider = GetComponent<Collider>();
+            _hitCollider.enabled = false;
+            _hitBox = GetComponent<HitBox>();
+            _hitBox.attackerId = enemy.GetInstanceID();
         }
         
         override
@@ -63,7 +66,8 @@ namespace F3PS.AI.States.Action
         override
         protected void OnHit()
         {
-            _collider.enabled = true;
+            _hitCollider.enabled = true;
+            bodyCollider.enabled = false;
             enemy.Rush(rushStrength);
             base.OnHit();
         }
@@ -87,18 +91,18 @@ namespace F3PS.AI.States.Action
         {
             base.OnRecover();
             enemy.StopRush();
-            _collider.enabled = false;
+            _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            _recoverEndPosition = _recoverStartPosition - _recoverForward * 0.2f;
+            _recoverEndPosition = _recoverStartPosition - _recoverForward;
         }
         
         override
         protected void HandleRecovering()
         {
             recoverTime += Time.deltaTime;
-            var newPositioon = Vector3.Lerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
-            _enemyTransform.position = newPositioon;
+            var newPosition = Vector3.Lerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
+            _enemyTransform.position = newPosition;
             _recoverStartPosition = _enemyTransform.position;
             isRecovering = recoverTime < recoverTimer;
             base.HandleRecovering();
@@ -107,13 +111,9 @@ namespace F3PS.AI.States.Action
         override
         protected void OnStopAttacking()
         {
-            _collider.enabled = false;
+            bodyCollider.enabled = true;
+            _hitCollider.enabled = false;
             base.OnStopAttacking();
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            Debug.Log(other.gameObject.name);
         }
     }
 }

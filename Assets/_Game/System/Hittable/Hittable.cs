@@ -6,6 +6,7 @@ namespace F3PS.Damage.Take
     {
         protected Collider _collider;
         public float damageMultiplier;
+        public int hittableId;
         
         void Awake()
         {
@@ -17,11 +18,14 @@ namespace F3PS.Damage.Take
             return _collider.bounds.center;
         }
 
-        protected virtual void OnHit(Collider hitBy) {}
+        protected virtual void OnHit(HitBox hitBy) {}
         
         private void OnCollisionEnter(Collision other)
         {
-            OnHit(other.collider);
+            var hitBox = other.gameObject.GetComponent<HitBox>();
+            if (hitBox == null || hitBox.attackerId == hittableId) return;
+            
+            OnHit(hitBox);
         }
     }
 }

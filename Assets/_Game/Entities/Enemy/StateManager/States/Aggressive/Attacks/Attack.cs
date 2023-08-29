@@ -2,12 +2,14 @@ using F3PS.Damage.Take;
 using F3PS.Enemy;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
 
 namespace F3PS.AI.States.Action
 {
     public abstract class Attack : MonoBehaviour
     {
         protected Hittable _target;
+        
         [Header("General Watchers")]
         public bool isActive;
         public bool isCharging;
@@ -15,21 +17,22 @@ namespace F3PS.AI.States.Action
         public bool isRecovering;
         
         [Header("General References")]
+        public BaseEnemy enemy;
         public Material chargeMaterial;
         public Material hitMaterial;
         public Material recoverMaterial;
 
         [Header("General Attack Settings")]
         public AttackType type;
-        public BaseEnemy enemy;
-        public NavMeshAgent navMeshAgent;
         public float stoppingDistanceStay;
         public float stoppingDistanceFollow;
         public float coolDownTime;
         public float coolDownTimer;
         public float attackDistance;
         public int damage;
-
+        
+        public virtual void Init() {}
+        
         public void CoolDown()
         {
             coolDownTime += Time.deltaTime;
@@ -112,7 +115,7 @@ namespace F3PS.AI.States.Action
 
         public virtual bool IsInAttackDistance(Vector3 targetPosition)
         {
-            var position = navMeshAgent.transform.position;
+            var position = enemy.transform.position;
             var direction1 = (targetPosition - position).normalized;
             
             if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))

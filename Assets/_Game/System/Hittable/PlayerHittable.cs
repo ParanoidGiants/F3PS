@@ -10,11 +10,11 @@ namespace F3PS.Damage.Take
         void Awake()
         {
             _collider = GetComponent<Collider>();
-
+            hittableId = playerExtensions.GetInstanceID();
         }
 
         override
-        protected void OnHit(Collider hitBy)
+        protected void OnHit(HitBox hitBy)
         {
             // Hit by projectile
             var projectile = hitBy.gameObject.GetComponent<Projectile>();
@@ -22,12 +22,14 @@ namespace F3PS.Damage.Take
             {
                 projectile.SetHit();
                 playerExtensions.Hit((int)(damageMultiplier * projectile.damage));
+                return;
             }
 
             // Hit by rush
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {
+                Debug.Log("With rush");
                 playerExtensions.Hit((int)(damageMultiplier * rush.damage));
                 rush.wasEarlyHit = true;
             }
