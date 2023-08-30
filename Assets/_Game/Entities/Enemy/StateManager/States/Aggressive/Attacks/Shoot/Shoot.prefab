@@ -54,8 +54,8 @@ MonoBehaviour:
   hitMaterial: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
   recoverMaterial: {fileID: 2100000, guid: eeb07ecfc4f240247b2d0af7d3efe84b, type: 2}
   type: 1
-  stoppingDistanceStay: 2
-  stoppingDistanceFollow: 5
+  stoppingDistanceStay: 20
+  stoppingDistanceFollow: 50
   coolDownTime: 0
   coolDownTimer: 1
   attackDistance: 50

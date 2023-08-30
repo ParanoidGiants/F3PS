@@ -9,6 +9,7 @@ namespace TimeBending
         public bool isActive = false;
 
         private float _fps = 60f;
+        public float lookRotationSpeed = 0.6f;
 
         public void StartSlowMotion ()
         { 

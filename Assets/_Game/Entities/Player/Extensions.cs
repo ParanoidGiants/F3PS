@@ -127,13 +127,13 @@ namespace Player
 
         public float GetLookRotation(Transform transform, float movementYaw, float cameraYaw)
         {
-            float timeMultiplier = _timeManager.isActive ? _timeManager.lookRotationSpeed : 1;
             float smoothTime = isAiming ? AmingRotationSmoothTime : RotationSmoothTime;
+            float yaw = isSprinting ? movementYaw : cameraYaw;
             return Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
-                cameraYaw,
+                yaw,
                 ref rotationVelocity,
-                timeMultiplier * smoothTime * Time.unscaledDeltaTime
+                smoothTime * Time.unscaledDeltaTime
             );
         }
 

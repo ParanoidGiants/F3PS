@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headMeshRenderer: {fileID: 7874501508904201011}
   navMeshAgent: {fileID: 7874501509564256046}
-  maxHealth: 10000
+  maxHealth: 100
   health: 0
 --- !u!1 &7874501509676519037
 GameObject:

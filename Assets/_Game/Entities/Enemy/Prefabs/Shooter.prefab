@@ -72,16 +72,6 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 6657852236725048464}
-    - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: stoppingDistanceStay
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: stoppingDistanceFollow
-      value: 50
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 254f23c32ab05454fb2532a3b6f7366a, type: 3}
 --- !u!114 &8367039056624811670 stripped
@@ -131,12 +121,7 @@ PrefabInstance:
     - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Name
-      value: Shooter0 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
-        type: 3}
-      propertyPath: maxHealth
-      value: 100
+      value: Shooter
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256046, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
@@ -152,11 +137,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7874501509564256047, guid: 543d14d0acc738d4295f4068dbb9cef2,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256047, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
