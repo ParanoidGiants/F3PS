@@ -1,9 +1,11 @@
 using UnityEngine;
 
-namespace Enemy.States
+namespace F3PS.AI.States
 {
     public class Idle : State
     {
+        [Space(10)]
+        [Header("Specific Settings")]
         private Transform _transform;
         private Quaternion _originalRotation;
         private Quaternion _startRotation;

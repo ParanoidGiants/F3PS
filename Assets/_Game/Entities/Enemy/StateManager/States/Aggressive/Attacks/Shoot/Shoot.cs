@@ -1,30 +1,30 @@
 using UnityEngine;
 using Player;
 
-namespace Enemy.States
+namespace F3PS.AI.States.Action
 {
     public class Shoot : Attack
     {
         [Space(10)]
-        [Header("Shoot Settings")]
+        [Header("Shoot References")]
         public BaseGun gun;
-        public float chargeTime;
+        
+        [Space(10)]
+        [Header("Shoot Settings")]
         public float chargeTimer;
-        
-        public float hitTime;
         public float hitTimer;
-        
-        public float recoverTime;
         public float recoverTimer;
         
-        private void Start()
+        [Space(10)]
+        [Header("Shoot Watchers")]
+        public float chargeTime;
+        public float hitTime;
+        public float recoverTime;
+
+        override
+        public void Init()
         {
-            enemy = navMeshAgent.GetComponent<BaseEnemy>();
-        }
-        
-        private void EarlyHit()
-        {
-            OnRecover();
+            gun.Init(enemy.GetInstanceID());            
         }
 
         override
@@ -37,7 +37,42 @@ namespace Enemy.States
             base.OnCharge();
         }
         
-        private void UpdateGunRotation()
+        override
+        protected void OnRecover()
+        {
+            gun.Reload();
+            base.OnRecover();
+        }
+
+        override
+        protected void HandleCharging()
+        {
+            UpdateGunAndEnemyRotation();
+            chargeTime += Time.deltaTime;
+            isCharging = chargeTime < chargeTimer;
+            base.HandleCharging();
+        }
+
+        override
+        protected void HandleHitting()
+        {
+            UpdateGunAndEnemyRotation();
+            hitTime += Time.deltaTime;
+            isHitting = hitTime < hitTimer;
+            gun.Shoot();
+            base.HandleHitting();
+        }
+        
+        override
+        protected void HandleRecovering()
+        {
+            UpdateGunAndEnemyRotation();
+            recoverTime += Time.deltaTime;
+            isRecovering = recoverTime < recoverTimer;
+            base.HandleRecovering();
+        }
+        
+        private void UpdateGunAndEnemyRotation()
         {
             var targetPosition = _target.Center();
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
@@ -49,43 +84,6 @@ namespace Enemy.States
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
             var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
             enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
-        }
-
-        override
-        protected void HandleCharging()
-        {
-            UpdateGunRotation();
-            chargeTime += Time.deltaTime;
-            isCharging = chargeTime < chargeTimer;
-            base.HandleCharging();
-        }
-
-        override
-        protected void HandleHitting()
-        {
-            UpdateGunRotation();
-            hitTime += Time.deltaTime;
-            isHitting = hitTime < hitTimer;
-            gun.Shoot();
-            base.HandleHitting();
-        }
-
-        private Vector3 _recoverStartPosition;
-        private Vector3 _recoverEndPosition;
-        private Vector3 _recoverForward;
-        override
-        protected void OnRecover()
-        {
-            gun.Reload();
-            base.OnRecover();
-        }
-        
-        override
-        protected void HandleRecovering()
-        {
-            recoverTime += Time.deltaTime;
-            isRecovering = recoverTime < recoverTimer;
-            base.HandleRecovering();
         }
         
         override

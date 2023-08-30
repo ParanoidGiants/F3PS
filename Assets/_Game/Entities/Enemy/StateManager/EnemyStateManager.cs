@@ -1,30 +1,35 @@
 using System.Linq;
 using UnityEngine;
-using Enemy.States;
+using F3PS.AI.Sensors;
 
-namespace Enemy
+namespace F3PS.AI.States
 {
     public class EnemyStateManager : MonoBehaviour
     {
-        public State currentState;
-        public State[] states;
+        [Header("Watchers")]
+        [SerializeField]
+        private State _currentState;
 
+        [Space(10)]
+        [Header("Settings")]
+        public State[] states;
+        public SensorController sensorController;
         private void Start()
         {
-            currentState = GetState(StateType.IDLE);
-            currentState.OnEnter();
+            _currentState = GetState(StateType.IDLE);
+            _currentState.OnEnter();
         }
 
         void FixedUpdate()
         {
-            currentState.OnUpdate();
+            _currentState.OnUpdate();
         }
         
         public void SwitchState(StateType stateType)
         {
-            currentState.OnExit();
-            currentState = GetState(stateType);
-            currentState.OnEnter();
+            _currentState.OnExit();
+            _currentState = GetState(stateType);
+            _currentState.OnEnter();
         }
 
         private State GetState(StateType stateType)

@@ -1,20 +1,35 @@
+using System;
+using F3PS.AI.States.Action;
+using F3PS.Damage.Take;
 using UnityEngine;
 
-namespace Enemy.States
+namespace F3PS.AI.States
 {
     public class Aggressive : State
     {
-        private bool _isAttacking;
-        public Hittable target;
-        
-        public Vision aggressiveVision;
-        public AggressiveSensor aggressiveSensor;
-        public Attack[] attacks;
-        public Attack nextAttack;
-        
+        private Attack _nextAttack;
+        private Attack[] _attacks;
+
+        [Space(10)]
+        [Header("Specific Watchers")]
+        [SerializeField] private Hittable _selectedTarget;
+
+        private void Awake()
+        {
+            _attacks = GetComponentsInChildren<Attack>();
+        }
+
+        private void Start()
+        {
+            foreach (var attack in _attacks)
+            {
+                attack.Init();
+            }
+        }
+
         private void Update()
         {
-            foreach (var attack in attacks)
+            foreach (var attack in _attacks)
             {
                 if (attack.HasCooledDown()) continue;
                 attack.CoolDown();
@@ -25,121 +40,88 @@ namespace Enemy.States
         public void OnEnter()
         {
             base.OnEnter();
-            aggressiveVision.gameObject.SetActive(true);
-            aggressiveSensor.gameObject.SetActive(true);
-            target = GetTargetFromSensors();
-            // set default vision to false after getting the target from the sensors
-            defaultVision.gameObject.SetActive(false);
-            
-            nextAttack = NextAttack();
-            HandlePositionAndRotation(false, false);
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+            _nextAttack = NextAttack();
+            HandlePositionAndRotation();
+            HandleStoppingDistance();
         }
 
 
         public bool IsTargetDetected()
         {
-            return defaultVision.canTargetBeDetected 
-                   || aggressiveVision.canTargetBeDetected
-                   || aggressiveVision.triggerCount > 0;
+            return stateManager.sensorController.IsTargetDetected();
         }
 
         override
         public void OnUpdate()
         {
+            bool isAttacking = _nextAttack.isActive;
+            bool isTargetDetected = IsTargetDetected();
             
-            if (!_isAttacking && !IsTargetDetected())
+            if (isTargetDetected)
+            {
+                navMeshAgent.destination = _selectedTarget.Center();
+            }
+            navMeshAgent.isStopped = isAttacking;
+            
+            if (!isAttacking && !isTargetDetected)
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
 
-            bool hasReachedDestination = Helper.HasReachedDestination(navMeshAgent);
-            bool attackHasCooledDown = nextAttack.HasCooledDown();
-            bool isInAttackDistance = nextAttack.IsInAttackDistance(target.Center());
-            bool canAttack = attackHasCooledDown && isInAttackDistance;
-            bool isAttacking = nextAttack.isActive;
 
-            navMeshAgent.isStopped = isInAttackDistance;
             
-            if (!isAttacking && canAttack)
+            if (isAttacking)
             {
-                _isAttacking = true;
-                nextAttack.OnStartAttack(target);
-            }
-            else if (_isAttacking && attackHasCooledDown)
-            {
-                nextAttack.OnUpdate();
-                
-            }
-            else if (_isAttacking)
-            {
-                _isAttacking = false;
-                enemy.SetMaterial(material);
-            }
-            else
-            {
-                HandlePositionAndRotation(isInAttackDistance, hasReachedDestination);
-            }
-        }
-
-        private void HandlePositionAndRotation(bool isInAttackDistance, bool hasReachedDestination)
-        {
-            if (isInAttackDistance && !nextAttack.isActive)
-            {
-                var enemyTransform = enemy.transform;
-                var position = enemyTransform.position;
-                var lookDirection = target.Center() - position;
-                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
+                _nextAttack.OnUpdate();
                 return;
             }
             
-            navMeshAgent.isStopped = false;
-            navMeshAgent.destination = target.Center();
-            if (hasReachedDestination)
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+            bool attackHasCooledDown = _nextAttack.HasCooledDown();
+            if (attackHasCooledDown && _nextAttack.IsInAttackDistance(_selectedTarget.Center()))
             {
-                navMeshAgent.stoppingDistance = nextAttack.stoppingDistanceStay;
+                _nextAttack.OnStartAttack(_selectedTarget);
             }
             else
             {
-                navMeshAgent.stoppingDistance = nextAttack.stoppingDistanceFollow;
+                HandlePositionAndRotation();
+            }
+            HandleStoppingDistance();
+        }
+
+        private void HandlePositionAndRotation()
+        {
+            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
+            if (isInAttackDistance)
+            {
+                var enemyTransform = enemy.transform;
+                var position = enemyTransform.position;
+                var lookDirection = _selectedTarget.Center() - position;
+                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
+            }
+        }
+
+        private void HandleStoppingDistance()
+        {
+            if (Helper.HasReachedDestination(navMeshAgent))
+            {
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
+            }
+            else
+            {
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
             }
         }
         
         private Attack NextAttack()
         {
-            var attack = attacks[0];
+            var attack = _attacks[0];
             navMeshAgent.stoppingDistance = attack.stoppingDistanceFollow;
             return attack;
-        }
-
-        override
-        public void OnExit()
-        {
-            aggressiveVision.gameObject.SetActive(false);
-            aggressiveSensor.gameObject.SetActive(false);
-            defaultVision.gameObject.SetActive(true);
-
-            target = null;
-        }
-        
-        private Hittable GetTargetFromSensors()
-        {
-            if (defaultVision.canTargetBeDetected)
-            {
-                return defaultVision.target;
-            }
-            if (aggressiveVision.canTargetBeDetected)
-            {
-                return aggressiveVision.target;
-            }
-            if (aggressiveSensor.triggerCount > 0)
-            {
-                return  aggressiveSensor.target;
-            }
-
-            return null;
         }
     }
 }

@@ -53,7 +53,7 @@ MonoBehaviour:
   meshHolder: {fileID: 5204241600584662912}
   maxAmmo: 1000
   maxMagazineAmmo: 10
-  shotSpeed: 100
+  shotSpeed: 500
   shootCoolDownTimer: 0.2
   reloadMagazineTimer: 1
   isShooting: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aff6148274c5274f9cf7c0c70f6d7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfPooledObjects: 20
+  numberOfPooledObjects: 100
 --- !u!1001 &5283200843875942329
 PrefabInstance:
   m_ObjectHideFlags: 0
