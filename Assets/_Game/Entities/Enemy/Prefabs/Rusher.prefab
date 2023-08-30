@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: m_Mass
-      value: 0.0000001
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Name
-      value: Rusher0 (1)
+      value: Rusher0
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}

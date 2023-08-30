@@ -67,7 +67,6 @@ namespace F3PS.AI.States.Action
         protected void OnHit()
         {
             _hitCollider.enabled = true;
-            bodyCollider.enabled = false;
             enemy.Rush(rushStrength);
             base.OnHit();
         }

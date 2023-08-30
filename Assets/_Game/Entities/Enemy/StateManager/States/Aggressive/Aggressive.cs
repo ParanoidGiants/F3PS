@@ -42,14 +42,8 @@ namespace F3PS.AI.States
             base.OnEnter();
             _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             _nextAttack = NextAttack();
-            if (Helper.HasReachedDestination(navMeshAgent))
-            {
-                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
-            }
-            else
-            {
-                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
-            }
+            HandlePositionAndRotation();
+            HandleStoppingDistance();
         }
 
 
@@ -86,37 +80,41 @@ namespace F3PS.AI.States
             
             _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
-
-            if (attackHasCooledDown && isInAttackDistance)
+            if (attackHasCooledDown && _nextAttack.IsInAttackDistance(_selectedTarget.Center()))
             {
                 _nextAttack.OnStartAttack(_selectedTarget);
             }
             else
             {
-                if (isInAttackDistance)
-                {
-                    var enemyTransform = enemy.transform;
-                    var position = enemyTransform.position;
-                    var lookDirection = _selectedTarget.Center() - position;
-                    var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-                    var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                    enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
-                }
-            
-                if (Helper.HasReachedDestination(navMeshAgent))
-                {
-                    navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
-                }
-                else
-                {
-                    navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
-                }
+                HandlePositionAndRotation();
+            }
+            HandleStoppingDistance();
+        }
+
+        private void HandlePositionAndRotation()
+        {
+            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
+            if (isInAttackDistance)
+            {
+                var enemyTransform = enemy.transform;
+                var position = enemyTransform.position;
+                var lookDirection = _selectedTarget.Center() - position;
+                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
             }
         }
 
-        private void HandlePositionAndRotation(bool isInAttackDistance)
+        private void HandleStoppingDistance()
         {
+            if (Helper.HasReachedDestination(navMeshAgent))
+            {
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
+            }
+            else
+            {
+                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
+            }
         }
         
         private Attack NextAttack()

@@ -3160,6 +3160,11 @@ PrefabInstance:
       propertyPath: shootCoolDownTimer
       value: 0.08
       objectReference: {fileID: 0}
+    - target: {fileID: 4652717156856035641, guid: 961cf1379f54b3148a33ef308d4eb4dd,
+        type: 3}
+      propertyPath: currentMagazineAmount
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_RootOrder
