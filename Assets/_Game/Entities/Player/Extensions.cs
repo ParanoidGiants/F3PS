@@ -39,6 +39,7 @@ namespace Player
         public Animator _animator;
         public float aimingRotationSpeed;
         public float defaultRotationSpeed;
+        private Crosshair _crosshair;
 
         [Space(10)]
         [Header("Settings")]
@@ -72,6 +73,7 @@ namespace Player
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
+            _crosshair = FindObjectOfType<Crosshair>();
             baseGun.Init(GetInstanceID());
         }
 
@@ -146,10 +148,17 @@ namespace Player
 
         private void ShootAndReload()
         {
-            if (isShooting) baseGun.Shoot(_ammoUI);
+            var targetPosition = _crosshair.GetTargetPosition();
+            var gunForward = targetPosition - baseGun.transform.position;
+            Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
+            baseGun.UpdateRotation(gunRotation);
+            if (isShooting)
+            {
+                Debug.Log("Shoot");
+                baseGun.Shoot(_ammoUI);
+            }
             if (isReloading) baseGun.Reload(_ammoUI);
 
-            baseGun.UpdateRotation(_mainCamera.transform.rotation);
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)
