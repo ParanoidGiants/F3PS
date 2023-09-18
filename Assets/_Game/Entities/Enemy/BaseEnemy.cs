@@ -13,6 +13,9 @@ namespace F3PS.Enemy
         public MeshRenderer headMeshRenderer;
         public NavMeshAgent navMeshAgent;
         private EnemyHealthUIPool _healthUIPool;
+        private PatrolManager _patrolManager;
+        public PatrolManager PatrolManager => _patrolManager;
+        public bool HasPatrolRoute { get; private set; }
 
         [Space(10)]
         [Header("Settings")]
@@ -22,10 +25,17 @@ namespace F3PS.Enemy
         [Header("Watchers")]
         public int health;
 
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+            _patrolManager = GetComponentInChildren<PatrolManager>();
+            HasPatrolRoute = _patrolManager != null;
+            if (HasPatrolRoute)
+            {
+                _patrolManager.Init();
+            }
         }
 
         private void Start()

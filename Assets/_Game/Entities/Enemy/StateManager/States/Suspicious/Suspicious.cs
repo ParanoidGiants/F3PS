@@ -6,8 +6,9 @@ namespace F3PS.AI.States.Action
     [Serializable]
     public class Suspicious : State
     {
-        private float _isSuspiciousTime;
-        private float _isSuspiciousTimer = 2f;
+        [Header("Watchers")]
+        [SerializeField] private float _isSuspiciousTime;
+        [SerializeField] private float _isSuspiciousTimer = 2f;
         private Quaternion _suspiciousRotation;
 
         public override void OnEnter()
@@ -25,11 +26,9 @@ namespace F3PS.AI.States.Action
             float isSuspiciousAnimateTime = Mathf.Sin(isSuspiciousPercenatge * (2f * Mathf.PI));
             enemy.transform.rotation = _suspiciousRotation * Quaternion.Euler(0, 30 * isSuspiciousAnimateTime, 0f);
 
-            if (_isSuspiciousTime <= 0f)
-            {
-                _isSuspiciousTime = 0;
-                stateManager.SwitchState(StateType.RETURN_TO_IDLE);
-            }
+            if (_isSuspiciousTime > 0f) return;
+            
+            stateManager.SwitchState(StateType.IDLE);
         }
     }
 }

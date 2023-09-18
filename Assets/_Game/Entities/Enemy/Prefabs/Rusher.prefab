@@ -138,8 +138,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
+        type: 0}
+    - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
+        type: 3}
       propertyPath: m_Name
-      value: Rusher0
+      value: Rusher
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}

@@ -12,12 +12,6 @@ namespace F3PS.AI.States.Action
             _originalPosition = enemy.transform.position;
             enemy.navMeshAgent.destination = _originalPosition;
         }
-        
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            enemy.navMeshAgent.destination = _originalPosition;
-        }
 
         public override void OnUpdate()
         {

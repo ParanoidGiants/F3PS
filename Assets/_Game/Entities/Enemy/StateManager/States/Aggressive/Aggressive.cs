@@ -45,7 +45,12 @@ namespace F3PS.AI.States
             HandlePositionAndRotation();
             HandleStoppingDistance();
         }
-
+        
+        override
+        public void OnExit()
+        {
+            base.OnExit();
+        }
 
         public bool IsTargetDetected()
         {

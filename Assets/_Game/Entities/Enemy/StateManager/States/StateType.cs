@@ -4,5 +4,6 @@ public enum StateType
     AGGRESSIVE,
     CHECKING,
     SUSPICIOUS,
-    RETURN_TO_IDLE
+    RETURN_TO_IDLE,
+    PATROLLING
 }
