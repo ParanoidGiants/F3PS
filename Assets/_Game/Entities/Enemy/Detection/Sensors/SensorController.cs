@@ -13,24 +13,30 @@ namespace F3PS.AI.Sensors
         public void SetState(SensorState state)
         {
             this.state = state;
-
-            if (state == SensorState.IDLE)
+            defaultVision.SetAggressive(state);
+            searchingVision.SetAggressive(state);
+            aggressiveMovement.SetAggressive(state);
+            
+            if (state == SensorState.AGGRESSIVE)
             {
-                defaultVision.SetActive(true);
-                searchingVision.SetActive(false);
-                aggressiveMovement.SetActive(false);
+                defaultVision.SetActive(false);
+                
+                searchingVision.SetActive(true);
+                aggressiveMovement.SetActive(true);
             }
             else if (state == SensorState.SEARCHING)
             {
-                searchingVision.SetActive(true);
                 defaultVision.SetActive(false);
                 aggressiveMovement.SetActive(false);
+                
+                searchingVision.SetActive(true);
             }
             else
             {
-                defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
-                aggressiveMovement.SetActive(true);
+                searchingVision.SetActive(false);
+                aggressiveMovement.SetActive(false);
+                
+                defaultVision.SetActive(true);
             }
         }
         

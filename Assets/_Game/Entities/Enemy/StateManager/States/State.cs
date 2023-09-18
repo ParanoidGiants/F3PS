@@ -29,17 +29,17 @@ namespace F3PS.AI.States
 
         private void SetSensorState()
         {
-            if (stateType == StateType.IDLE)
-            {
-                stateManager.sensorController.SetState(SensorState.IDLE);
-            }
-            else if (stateType == StateType.AGGRESSIVE)
+            if (stateType == StateType.AGGRESSIVE)
             {
                 stateManager.sensorController.SetState(SensorState.AGGRESSIVE);
             }
-            else
+            else if (stateType is StateType.CHECKING or StateType.SUSPICIOUS)
             {
                 stateManager.sensorController.SetState(SensorState.SEARCHING);
+            }
+            else
+            {
+                stateManager.sensorController.SetState(SensorState.IDLE);
             }
         }
 
