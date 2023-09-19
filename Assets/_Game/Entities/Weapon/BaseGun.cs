@@ -48,23 +48,9 @@ namespace Player
             
         }
 
-        private IEnumerator Shoot()
+        protected virtual IEnumerator Shoot()
         {
-            isShooting = true;
-            shootCoolDownTime = shootCoolDownTimer;
-            currentMagazineAmount--;
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                meshHolder.rotation,
-                shotSpeed
-            );
-            MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
-            while (shootCoolDownTime > 0f && !isReloadingMagazine)
-            {
-                shootCoolDownTime -= Time.deltaTime;
-                yield return null;
-            }
-            isShooting = false;
+            yield return null;
         }
         
         private void OnReload(Action<float> updateCallback)
