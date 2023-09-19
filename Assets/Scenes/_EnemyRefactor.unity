@@ -3430,6 +3430,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputs: {fileID: 0}
+  timeManager: {fileID: 0}
+  _fps: 60
 --- !u!1 &1533405568
 GameObject:
   m_ObjectHideFlags: 0

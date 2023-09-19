@@ -5,7 +5,7 @@ namespace F3PS.AI.States.Action
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (Helper.HasReachedDestination(navMeshAgent))
+            if (Helper.HasReachedDestination(_navMeshAgent))
             {
                 stateManager.SwitchState(StateType.SUSPICIOUS);
             }

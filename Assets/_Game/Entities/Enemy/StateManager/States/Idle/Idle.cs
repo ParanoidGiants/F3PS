@@ -14,7 +14,7 @@ namespace F3PS.AI.States
 
         private void Awake()
         {
-            _transform = enemy.transform;
+            _transform = enemy.body.transform;
         }
         
         override
@@ -22,13 +22,13 @@ namespace F3PS.AI.States
         {
             base.OnEnter();
             _idleTime = 0f;
-            navMeshAgent.isStopped = true;
+            _navMeshAgent.isStopped = true;
         }
         
         override
         public void OnExit()
         {
-            navMeshAgent.isStopped = false;
+            _navMeshAgent.isStopped = false;
         }
 
         override

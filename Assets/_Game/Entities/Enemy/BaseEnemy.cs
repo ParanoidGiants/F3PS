@@ -7,14 +7,13 @@ namespace F3PS.Enemy
 {
     public class BaseEnemy : MonoBehaviour
     {
-        private Rigidbody _rigidbody;
+        public Rigidbody body;
         
         [Header("References")]
-        public MeshRenderer headMeshRenderer;
+        public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
+        public PatrolManager patrolManager;
         private EnemyHealthUIPool _healthUIPool;
-        private PatrolManager _patrolManager;
-        public PatrolManager PatrolManager => _patrolManager;
         public bool HasPatrolRoute { get; private set; }
 
         [Space(10)]
@@ -28,13 +27,11 @@ namespace F3PS.Enemy
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
-            _patrolManager = GetComponentInChildren<PatrolManager>();
-            HasPatrolRoute = _patrolManager != null;
+            HasPatrolRoute = patrolManager != null;
             if (HasPatrolRoute)
             {
-                _patrolManager.Init();
+                patrolManager.Init();
             }
         }
 
@@ -46,11 +43,10 @@ namespace F3PS.Enemy
         public void Hit(int damage)
         {
             health -= damage;
-            Debug.Log("Took " + damage + " damage");
-            MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", transform);
+            MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", body.transform);
             if (health <= 0)
             {
-                _healthUIPool.OnKillTarget(transform);
+                _healthUIPool.OnKillTarget(body.transform);
                 Destroy(gameObject);
                 return;
             }
@@ -59,18 +55,18 @@ namespace F3PS.Enemy
         
         public void Rush(float strength)
         {
-            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            _rigidbody.AddForce(strength * transform.forward, ForceMode.Impulse);
+            body.constraints = RigidbodyConstraints.FreezeRotation;
+            body.AddForce(strength * body.transform.forward, ForceMode.Impulse);
         }
         
         public void StopRush()
         {
-            _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            body.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         public void SetMaterial(Material material)
         {
-            headMeshRenderer.sharedMaterial = material;
+            meshRenderer.sharedMaterial = material;
         }
     }
 }

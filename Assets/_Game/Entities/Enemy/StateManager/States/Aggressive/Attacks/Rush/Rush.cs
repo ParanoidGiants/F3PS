@@ -32,7 +32,7 @@ namespace F3PS.AI.States.Action
 
         private void Start()
         {
-            _enemyTransform = enemy.transform;
+            _enemyTransform = enemy.body.transform;
             _hitCollider = GetComponent<Collider>();
             _hitCollider.enabled = false;
             _hitBox = GetComponent<HitBox>();

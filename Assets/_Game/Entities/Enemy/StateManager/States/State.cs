@@ -1,3 +1,4 @@
+using System;
 using F3PS.AI.Sensors;
 using F3PS.Enemy;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace F3PS.AI.States
     public class State : MonoBehaviour
     {
         [Header("Base References")]
-        public NavMeshAgent navMeshAgent;
+        protected NavMeshAgent _navMeshAgent;
         public BaseEnemy enemy;
         public EnemyStateManager stateManager;
         
@@ -21,8 +22,12 @@ namespace F3PS.AI.States
 
         public virtual void OnEnter()
         {
-            navMeshAgent.speed = enemySpeed;
-            navMeshAgent.stoppingDistance = enemyStoppingDistance;
+            if (_navMeshAgent == null)
+            {
+                _navMeshAgent = enemy.navMeshAgent;
+            }
+            _navMeshAgent.speed = enemySpeed;
+            _navMeshAgent.stoppingDistance = enemyStoppingDistance;
             SetSensorState();
             enemy.SetMaterial(material);
         }

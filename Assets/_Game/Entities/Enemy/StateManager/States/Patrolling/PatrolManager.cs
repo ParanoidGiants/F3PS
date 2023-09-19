@@ -19,7 +19,6 @@ public class PatrolManager : MonoBehaviour
         _patrolPointParent = transform;
         
         gameObject.name = transform.parent.name + " " + gameObject.name;
-        transform.parent = null;
         
         ResetPatrolPoints();
         

@@ -33,10 +33,11 @@ namespace Player
 
         [Space(10)]
         [Header("References")]
+        public Transform playerSpace;
         public StaminaManager staminaManager;
         public TimeManager _timeManager;
         public BaseGun baseGun;
-        public Animator _animator;
+        public new Animator animator;
         public float aimingRotationSpeed;
         public float defaultRotationSpeed;
 
@@ -72,7 +73,7 @@ namespace Player
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
-            baseGun.Init(GetInstanceID());
+            baseGun.Init(playerSpace);
         }
 
         private void Start()
@@ -140,7 +141,7 @@ namespace Player
         private void Dodging(bool dodgeInput)
         {
             var dodge = Grounded && dodgeInput;
-            _animator.SetBool(Dodge, dodge);
+            animator.SetBool(Dodge, dodge);
         }
 
 

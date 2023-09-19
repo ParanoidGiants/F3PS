@@ -24,7 +24,7 @@ namespace F3PS.AI.States.Action
         override
         public void Init()
         {
-            gun.Init(enemy.GetInstanceID());            
+            gun.Init(enemy.body.transform);            
         }
 
         override
@@ -78,7 +78,7 @@ namespace F3PS.AI.States.Action
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
             gun.UpdateRotation(gunRotation);
             
-            var enemyTransform = enemy.transform;
+            var enemyTransform = enemy.body.transform;
             var position = enemyTransform.position;
             var lookDirection = targetPosition - position;
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);

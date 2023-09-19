@@ -57,6 +57,16 @@ PrefabInstance:
       propertyPath: bodyCollider
       value: 
       objectReference: {fileID: 6168195356199230450}
+    - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
+        type: 3}
+      propertyPath: coolDownTimer
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
+        type: 3}
+      propertyPath: attackDistance
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991289, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: m_RootOrder

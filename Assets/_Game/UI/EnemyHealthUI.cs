@@ -11,6 +11,7 @@ public class EnemyHealthUI : MonoBehaviour
     public Transform target;
     public Image fillImage;
     public Vector2 offset;
+    public bool isTargetSet = false;
 
     private void Start()
     {
@@ -31,7 +32,7 @@ public class EnemyHealthUI : MonoBehaviour
 
     private void UpdateUI(CinemachineBrain brain)
     {
-        if (brain == _cinemachineBrain) 
+        if (brain == _cinemachineBrain && isTargetSet) 
         {
             _rectTransform.anchoredPosition = GetCanvasAnchoredPosition(target.position) + offset;
         }
@@ -49,6 +50,7 @@ public class EnemyHealthUI : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
+        isTargetSet = target != null;
         this.target = target;
     }
 

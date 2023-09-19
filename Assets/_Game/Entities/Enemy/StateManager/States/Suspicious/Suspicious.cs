@@ -15,7 +15,7 @@ namespace F3PS.AI.States.Action
         {
             base.OnEnter();
             _isSuspiciousTime = _isSuspiciousTimer;
-            _suspiciousRotation = enemy.transform.rotation;
+            _suspiciousRotation = enemy.body.transform.rotation;
         }
         
         public override void OnUpdate()
@@ -24,7 +24,7 @@ namespace F3PS.AI.States.Action
                 
             float isSuspiciousPercenatge = _isSuspiciousTime / _isSuspiciousTimer;
             float isSuspiciousAnimateTime = Mathf.Sin(isSuspiciousPercenatge * (2f * Mathf.PI));
-            enemy.transform.rotation = _suspiciousRotation * Quaternion.Euler(0, 30 * isSuspiciousAnimateTime, 0f);
+            enemy.body.transform.rotation = _suspiciousRotation * Quaternion.Euler(0, 30 * isSuspiciousAnimateTime, 0f);
 
             if (_isSuspiciousTime > 0f) return;
             

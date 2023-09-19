@@ -115,7 +115,7 @@ namespace F3PS.AI.States.Action
 
         public virtual bool IsInAttackDistance(Vector3 targetPosition)
         {
-            var position = enemy.transform.position;
+            var position = enemy.body.transform.position;
             var direction1 = (targetPosition - position).normalized;
             
             if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))
