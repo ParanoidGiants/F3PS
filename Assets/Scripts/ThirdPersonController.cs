@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using F3PS;
+using Player;
 using TimeBending;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -116,12 +117,6 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-        }
-
-        private void Start()
-        {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -132,7 +127,11 @@ namespace StarterAssets
 #endif
 
             AssignAnimationIDs();
+        }
 
+        private void Start()
+        {
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
@@ -140,6 +139,7 @@ namespace StarterAssets
 
         private void Update()
         {
+            if (GameManager.Instance.IsPaused) return;
             extensions.OnUpdate(_input);
             _hasAnimator = TryGetComponent(out _animator);
 
