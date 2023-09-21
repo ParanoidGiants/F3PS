@@ -3367,7 +3367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1475034395
 Transform:
   m_ObjectHideFlags: 0
@@ -5505,26 +5505,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerArmature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8932012228475927414, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: maxAmmo
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8932012228475927414, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: totalAmount
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8932012228475927414, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: maxMagazineAmmo
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 8932012228475927414, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: currentMagazineAmount
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4db73df165e4d40aed90ef571a18f0, type: 3}

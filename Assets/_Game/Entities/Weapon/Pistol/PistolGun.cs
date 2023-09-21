@@ -2,7 +2,7 @@ using DarkTonic.MasterAudio;
 using System.Collections;
 using UnityEngine;
 
-namespace Player
+namespace Weapon
 {
     public class PistolGun : BaseGun
     {

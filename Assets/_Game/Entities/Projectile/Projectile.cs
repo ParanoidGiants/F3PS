@@ -12,7 +12,8 @@ public class Projectile : MonoBehaviour
     private Rigidbody _rb;
     private TrailRenderer _trailRenderer;
     private float _speed;
-    public bool Hit { get; private set; }
+    [SerializeField] private bool _isHit = false;
+    public bool Hit => _isHit;
 
     private void Awake()
     {
@@ -33,6 +34,11 @@ public class Projectile : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+
+        if (!Hit)
+        {
+            transform.forward = _rb.velocity;
+        }
     }
 
     public void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
@@ -40,7 +46,7 @@ public class Projectile : MonoBehaviour
         transform.position = position;
         transform.rotation = rotation;
         _speed = shootSpeed;
-        Hit = false;
+        _isHit = false;
     }
     
     private void OnEnable()
@@ -59,7 +65,7 @@ public class Projectile : MonoBehaviour
     {
         if (Hit) return;
         
-        Hit = true;
+        _isHit = true;
         _rb.velocity *= 0.1f;
         StartCoroutine(SetInactiveAfterSeconds(2));
     }

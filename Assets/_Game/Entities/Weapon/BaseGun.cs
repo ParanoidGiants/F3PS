@@ -1,9 +1,8 @@
-using DarkTonic.MasterAudio;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Player
+namespace Weapon
 {
     public class BaseGun : MonoBehaviour
     {
@@ -15,7 +14,7 @@ namespace Player
         
         [Space(10)]
         [Header("Settings")]
-        
+        public Sprite icon;
         public int maxAmmo = 100;
         public int maxMagazineAmmo = 10;
         public float shotSpeed = 100f;

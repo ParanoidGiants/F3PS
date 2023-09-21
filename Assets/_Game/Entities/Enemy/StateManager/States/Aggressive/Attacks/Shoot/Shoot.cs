@@ -1,5 +1,5 @@
 using UnityEngine;
-using Player;
+using Weapon;
 
 namespace F3PS.AI.States.Action
 {

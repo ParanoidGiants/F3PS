@@ -1,7 +1,8 @@
-using System;
 using TimeBending;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Weapon;
 
 namespace Player
 {
@@ -36,7 +37,7 @@ namespace Player
         public Transform playerSpace;
         public StaminaManager staminaManager;
         public TimeManager _timeManager;
-        public BaseGun baseGun;
+        public WeaponManager weaponManager;
         public new Animator animator;
         public float aimingRotationSpeed;
         public float defaultRotationSpeed;
@@ -73,12 +74,15 @@ namespace Player
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
-            baseGun.Init(playerSpace);
         }
 
         private void Start()
         {
-            _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
+            weaponManager.Init(playerSpace);
+            _ammoUI.UpdateAmmoText(
+                weaponManager.ActiveWeapon.currentMagazineAmount, 
+                weaponManager.ActiveWeapon.totalAmount
+            );
         }
 
         // Update is called once per frame
@@ -147,10 +151,7 @@ namespace Player
 
         private void ShootAndReload()
         {
-            if (isShooting) baseGun.Shoot(_ammoUI);
-            if (isReloading) baseGun.Reload(_ammoUI);
-
-            baseGun.UpdateRotation(_mainCamera.transform.rotation);
+            weaponManager.ShootAndReload(isShooting, isReloading, _ammoUI, _mainCamera.transform.rotation);
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)
