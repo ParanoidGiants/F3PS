@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AmmoUI : MonoBehaviour
+public class WeaponUI : MonoBehaviour
 {
     private RectTransform _rectTransform;
     private int _magazineAmount;
@@ -16,6 +16,7 @@ public class AmmoUI : MonoBehaviour
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
     public Image ReloadCircle;
+    public Image WeaponIcon;
     private static readonly int Pulsate = Animator.StringToHash("pulsate");
 
     private void Awake()
@@ -49,5 +50,10 @@ public class AmmoUI : MonoBehaviour
         _magazineAmount = baseGunCurrentMagazineAmmo;
         _totalAmount = baseGunCurrentAmmo;
         StartCoroutine(Helper.UpdateLayoutGroups(_rectTransform));
+    }
+
+    public void UpdateImage(Sprite activeWeaponIcon)
+    {
+        WeaponIcon.sprite = activeWeaponIcon;
     }
 }

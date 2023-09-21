@@ -13,7 +13,8 @@ namespace F3PS
         public StarterAssetsInputs inputs;
         
         public TimeManager timeManager;
-        public bool IsPaused { get; private set; }
+        [SerializeField] private bool _isGamePaused;
+        public bool IsGamePaused => _isGamePaused;
         [SerializeField] private int _fps = 60;
         public int Fps => _fps;
 
@@ -36,24 +37,44 @@ namespace F3PS
             timeManager = FindObjectOfType<TimeManager>();
         }
         
-        bool wasPausedLastFrame = false;
         private void Update()
         {
-            // Handle pause game
+            HandlePauseGameSwitch();
+        }
+
+        private bool _wasPausedLastFrame = false;
+        private void HandlePauseGameSwitch()
+        {
             bool isPausedThisFrame = inputs.pause;
-            bool isKeyDown = !wasPausedLastFrame && isPausedThisFrame;
-            wasPausedLastFrame = isPausedThisFrame;
-            if (isKeyDown && !IsPaused)
+            bool isKeyDown = !_wasPausedLastFrame && isPausedThisFrame;
+            _wasPausedLastFrame = isPausedThisFrame;
+            if (isKeyDown && !_isGamePaused)
             {
-                Debug.Log("PAUSE");
-                timeManager.PauseTime();
-                IsPaused = true;
+                PauseTime();
+                _isGamePaused = true;
             }
-            else if (isKeyDown &&  IsPaused)
+            else if (isKeyDown && _isGamePaused)
             {
-                Debug.Log("RESUME");
+                ResumeTime();
+                _isGamePaused = false;
+            }
+        }
+
+        public void ResumeTime()
+        {
+            Debug.Log("Try Resume");
+            if (timeManager.IsPaused)
+            {
                 timeManager.ResumeTime();
-                IsPaused = false;
+            }
+        }
+
+        public void PauseTime()
+        {
+            Debug.Log("Try Pause");
+            if (!timeManager.IsPaused)
+            {
+                timeManager.PauseTime();
             }
         }
     }

@@ -18,6 +18,7 @@ namespace StarterAssets
 		public bool slowmo;
 		public bool dodge;
 		public bool pause;
+		public bool switchWeapon;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -79,6 +80,11 @@ namespace StarterAssets
 		{
 			PauseInput(value.isPressed);
 		}
+
+		public void OnSwitchWeapon(InputValue value)
+		{
+			SwitchWeaponInput(value.isPressed);
+		}
 #endif
 
 
@@ -131,6 +137,11 @@ namespace StarterAssets
 		{
 			pause = valueIsPressed;
 		}
+		private void SwitchWeaponInput(bool valueIsPressed)
+		{
+			switchWeapon = valueIsPressed;
+		}
+
 
 		private void OnApplicationFocus(bool hasFocus)
 		{

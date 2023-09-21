@@ -8,8 +8,8 @@ namespace TimeBending
         public float slowdownFactor = 0.05f;
         public bool isActive = false;
 
-        public float lookRotationSpeed = 0.6f;
-        private bool _isPaused;
+        [SerializeField] private bool _isPaused;
+        public bool IsPaused => _isPaused;
 
         public void StartSlowMotion ()
         {
@@ -18,7 +18,7 @@ namespace TimeBending
             int fps = F3PS.GameManager.Instance.Fps;
             Time.timeScale = slowdownFactor;
             Time.fixedDeltaTime = Time.timeScale /fps; // timeScale divided by 60fps
-            Debug.Log($"Slow motion initiated by a factor of {1/slowdownFactor}");
+            Debug.Log($"Slow motion initiated by a factor of {(1f/slowdownFactor).ToString("0.001")}");
             isActive = true;
         }
         
@@ -35,6 +35,7 @@ namespace TimeBending
 
         public void PauseTime()
         {
+            Debug.Log("PAUSE");
             Time.timeScale = 0f;
             Time.fixedDeltaTime = 0f;
             _isPaused = true;
@@ -42,9 +43,9 @@ namespace TimeBending
         
         public void ResumeTime()
         {
-            int fps = F3PS.GameManager.Instance.Fps;
+            Debug.Log("RESUME");
             Time.timeScale = isActive ? slowdownFactor : 1f;
-            Time.fixedDeltaTime = Time.timeScale / fps;
+            Time.fixedDeltaTime = Time.timeScale / F3PS.GameManager.Instance.Fps;
             _isPaused = false;
         }
     }

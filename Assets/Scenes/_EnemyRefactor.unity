@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 485990223}
   - component: {fileID: 485990224}
   m_Layer: 5
-  m_Name: Ammo
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -955,6 +955,7 @@ MonoBehaviour:
   magazineAmountTextDuplicate: {fileID: 1316475047}
   totalAmountText: {fileID: 1212060727}
   ReloadCircle: {fileID: 1352206042}
+  WeaponIcon: {fileID: 807692154}
 --- !u!95 &485990224
 Animator:
   serializedVersion: 5
@@ -3367,7 +3368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1475034395
 Transform:
   m_ObjectHideFlags: 0
@@ -3431,6 +3432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputs: {fileID: 0}
   timeManager: {fileID: 0}
+  _isGamePaused: 0
   _fps: 60
 --- !u!1 &1533405568
 GameObject:

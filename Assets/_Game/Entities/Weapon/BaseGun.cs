@@ -85,33 +85,33 @@ namespace Weapon
             isReloadingMagazine = false;
         }
 
-        public void Shoot(AmmoUI _ammoUI = null)
+        public void Shoot(WeaponUI weaponUI = null)
         {
             if (isShooting || isReloadingMagazine) return;
             
             if (currentMagazineAmount <= 0)
             {
                 // TODO: Play empty clip sound
-                _ammoUI?.OnShootEmptyClip();
+                weaponUI?.OnShootEmptyClip();
             }
             else
             {
                 StartCoroutine(Shoot());
-                _ammoUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
             }
         }
 
-        public void Reload(AmmoUI _ammoUI = null)
+        public void Reload(WeaponUI weaponUI = null)
         {
             if (isReloadingMagazine) return;
             
             OnReload(x =>
             {
-                _ammoUI?.UpdateReload(x);
+                weaponUI?.UpdateReload(x);
                     
                 if (x <= 0f)
                 {
-                    _ammoUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                 }
             });
         }

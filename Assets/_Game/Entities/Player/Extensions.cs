@@ -1,3 +1,4 @@
+using F3PS;
 using TimeBending;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Player
         public bool isSprinting;
         public bool isShooting;
         public bool isReloading;
+        public bool isSwitchingWeapon;
         public bool isDodging;
         public bool isSlowMoToggle;
         public bool isSlowMoStarted;
@@ -64,7 +66,6 @@ namespace Player
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
-        private AmmoUI _ammoUI;
         private PlayerHealthUI _playerHealthUI;
         private Camera _mainCamera;
         private readonly int Dodge = Animator.StringToHash("Dodge");
@@ -72,27 +73,27 @@ namespace Player
         private void Awake()
         {
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
-            _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
         }
 
         private void Start()
         {
             weaponManager.Init(playerSpace);
-            _ammoUI.UpdateAmmoText(
-                weaponManager.ActiveWeapon.currentMagazineAmount, 
-                weaponManager.ActiveWeapon.totalAmount
-            );
         }
 
         // Update is called once per frame
         public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
         {
+            weaponManager.HandleSwitchWeapon(_input.switchWeapon);
+
+            if (GameManager.Instance.timeManager.IsPaused) return;
+            
             GroundedCheck();
             isShooting = _input.shoot && !isSprinting;
+            isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
             Dodging(_input.dodge);
-            ShootAndReload();
+            weaponManager.ShootAndReload(isShooting, isReloading, _mainCamera.transform.rotation);
             UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }
@@ -151,7 +152,6 @@ namespace Player
 
         private void ShootAndReload()
         {
-            weaponManager.ShootAndReload(isShooting, isReloading, _ammoUI, _mainCamera.transform.rotation);
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)

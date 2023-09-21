@@ -14,7 +14,7 @@ namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-    [RequireComponent(typeof(PlayerInput))]
+    // [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
@@ -81,11 +81,11 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-        private PlayerInput _playerInput;
+        [SerializeField] private PlayerInput _playerInput;
 #endif
         private Animator _animator;
         private CharacterController _controller;
-        private StarterAssetsInputs _input;
+        [SerializeField] private StarterAssetsInputs _input;
         public StarterAssetsInputs Input => _input;
         private GameObject _mainCamera;
 
@@ -119,9 +119,9 @@ namespace StarterAssets
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
+            // _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-            _playerInput = GetComponent<PlayerInput>();
+            // _playerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
@@ -139,8 +139,11 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (GameManager.Instance.IsPaused) return;
+            if (GameManager.Instance.IsGamePaused) return;
+            
             extensions.OnUpdate(_input);
+            
+            if (GameManager.Instance.timeManager.IsPaused) return;
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
