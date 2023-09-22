@@ -153,6 +153,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
             CameraRotation();
         }
 

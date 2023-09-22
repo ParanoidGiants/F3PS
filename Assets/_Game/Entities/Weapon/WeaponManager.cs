@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using F3PS;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Weapon
@@ -12,11 +13,14 @@ namespace Weapon
         public BaseGun ActiveWeapon => _activeWeapon;
         [SerializeField] private int _activeWeaponIndex = -1;
         private bool _wasSwitchingWeaponsLastFrame = false;
+        private bool _wasSelectingAWeaponLastFrame = false;
         private WeaponUI _weaponUI;
+        private SwitchWeaponsPanel _switchWeaponsPanel;
         private void Awake()
         {
             weapons = GetComponentsInChildren<BaseGun>().ToList();
             _weaponUI = FindObjectOfType<WeaponUI>();
+            _switchWeaponsPanel = FindObjectOfType<SwitchWeaponsPanel>();
         }
 
         public void Init(Transform playerSpace)
@@ -27,6 +31,7 @@ namespace Weapon
                 weapon.gameObject.SetActive(false);
             }
             ChooseWeapon(0);
+            _switchWeaponsPanel.Init(this);
         }
 
         private void ChooseWeapon(int i)
@@ -51,20 +56,44 @@ namespace Weapon
             ActiveWeapon.UpdateRotation(transformRotation);
         }
 
-        public void HandleSwitchWeapon(bool isSwitchingWeapon)
+        public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)
         {
             if (isSwitchingWeapon && !_wasSwitchingWeaponsLastFrame)
             {
                 GameManager.Instance.PauseTime();
-                int nextWeaponIndex = (_activeWeaponIndex + 1) % weapons.Count;
-                ChooseWeapon(nextWeaponIndex);
+                // int nextWeaponIndex = (_activeWeaponIndex + 1) % weapons.Count;
+                _switchWeaponsPanel.SetActive(_activeWeaponIndex);
                 _wasSwitchingWeaponsLastFrame = true;
             }
             else if (!isSwitchingWeapon && _wasSwitchingWeaponsLastFrame)
             {
                 GameManager.Instance.ResumeTime();
+                ChooseWeapon(_switchWeaponsPanel.RetrieveSelection());
+                _switchWeaponsPanel.SetInactive();
                 _wasSwitchingWeaponsLastFrame = false;
             }
+            else if (_wasSwitchingWeaponsLastFrame && !_wasSelectingAWeaponLastFrame)
+            {
+                if (lookX > 10f)
+                {
+                    _switchWeaponsPanel.SelectNextWeapon();
+                    _wasSelectingAWeaponLastFrame = true;
+                }
+                else if (lookX < -10f)
+                {
+                    _switchWeaponsPanel.SelectPreviousWeapon();
+                    _wasSelectingAWeaponLastFrame = true;
+                }
+            }
+            else if (_wasSelectingAWeaponLastFrame && lookX == 0f)
+            {
+                _wasSelectingAWeaponLastFrame = false;
+            }
+        }
+        
+        public void SwitchWeapon()
+        {
+            _switchWeaponsPanel.SelectNextWeapon();
         }
     }
 }

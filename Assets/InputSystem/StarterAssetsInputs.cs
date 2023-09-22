@@ -137,6 +137,7 @@ namespace StarterAssets
 		{
 			pause = valueIsPressed;
 		}
+		
 		private void SwitchWeaponInput(bool valueIsPressed)
 		{
 			switchWeapon = valueIsPressed;

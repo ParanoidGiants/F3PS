@@ -11,7 +11,7 @@ public class WeaponUI : MonoBehaviour
     private int _totalAmount;
     private float _reloadPercentage;
     private Animator _animator;
-    
+
     public TextMeshProUGUI magazineAmountText;
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
