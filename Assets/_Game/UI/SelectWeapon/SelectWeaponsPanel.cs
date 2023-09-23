@@ -2,22 +2,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Weapon;
 
-public class SwitchWeaponsPanel : MonoBehaviour
+public class SelectWeaponsPanel : MonoBehaviour
 {
     public GameObject selectableWeaponsParent;
     public GameObject selectableWeaponUIPrefab;
-    public List<SelectableWeaponUI> selectableWeaponUIs;
+    public List<SelectableWeaponEntry> selectableWeaponUIs;
     [SerializeField] private WeaponManager _weaponManager;
     [SerializeField] private int _activeWeaponIndex = 0;
     [SerializeField] private int _selectedWeaponIndex = -1;
-
+    public Color activeWeaponColor;
+    
     public void Init(WeaponManager weaponManager)
     {
         _weaponManager = weaponManager;
         for (int i = 0; i < _weaponManager.weapons.Count; i++)
         {
             var weapon = _weaponManager.weapons[i];
-            var selectableWeaponUI = Instantiate(selectableWeaponUIPrefab, selectableWeaponsParent.transform).GetComponent<SelectableWeaponUI>();
+            var selectableWeaponUI = Instantiate(selectableWeaponUIPrefab, selectableWeaponsParent.transform).GetComponent<SelectableWeaponEntry>();
             selectableWeaponUI.Setup(weapon);
             selectableWeaponUIs.Add(selectableWeaponUI);
             if (weapon == _weaponManager.ActiveWeapon)
@@ -32,6 +33,9 @@ public class SwitchWeaponsPanel : MonoBehaviour
     public void SetActive(int activeWeaponIndex_)
     {
         _activeWeaponIndex = activeWeaponIndex_;
+        Color active = activeWeaponColor;
+        Color inactive = activeWeaponColor;
+        inactive.a = 0f;
         for (int i = 0; i < selectableWeaponUIs.Count; i++)
         {
             var selectableWeaponUI = selectableWeaponUIs[i];
@@ -39,10 +43,12 @@ public class SwitchWeaponsPanel : MonoBehaviour
             if (i == _activeWeaponIndex)
             {
                 selectableWeaponUI.Select();
+                selectableWeaponUI.Highlight(activeWeaponColor);
             }
             else
             {
                 selectableWeaponUI.Unselect();
+                selectableWeaponUI.Highlight(inactive);
             }
         }
         selectableWeaponsParent.SetActive(true);

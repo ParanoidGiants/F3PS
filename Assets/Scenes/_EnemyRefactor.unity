@@ -3334,6 +3334,8 @@ MonoBehaviour:
   _weaponManager: {fileID: 0}
   _activeWeaponIndex: -1
   _selectedWeaponIndex: -1
+  selectedWeaponColor: {r: 0, g: 0, b: 0, a: 0}
+  activeWeaponColor: {r: 0, g: 0.6657615, b: 1, a: 1}
 --- !u!1 &1352206040
 GameObject:
   m_ObjectHideFlags: 0

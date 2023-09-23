@@ -12,15 +12,15 @@ namespace Weapon
         private BaseGun _activeWeapon;
         public BaseGun ActiveWeapon => _activeWeapon;
         [SerializeField] private int _activeWeaponIndex = -1;
-        private bool _wasSwitchingWeaponsLastFrame = false;
-        private bool _wasSelectingAWeaponLastFrame = false;
+        private bool isInSwitchWeaponMode = false;
+        private bool isSelecting = false;
         private WeaponUI _weaponUI;
-        private SwitchWeaponsPanel _switchWeaponsPanel;
+        private SelectWeaponsPanel _selectWeaponsPanel;
         private void Awake()
         {
             weapons = GetComponentsInChildren<BaseGun>().ToList();
             _weaponUI = FindObjectOfType<WeaponUI>();
-            _switchWeaponsPanel = FindObjectOfType<SwitchWeaponsPanel>();
+            _selectWeaponsPanel = FindObjectOfType<SelectWeaponsPanel>();
         }
 
         public void Init(Transform playerSpace)
@@ -31,7 +31,7 @@ namespace Weapon
                 weapon.gameObject.SetActive(false);
             }
             ChooseWeapon(0);
-            _switchWeaponsPanel.Init(this);
+            _selectWeaponsPanel.Init(this);
         }
 
         private void ChooseWeapon(int i)
@@ -58,42 +58,43 @@ namespace Weapon
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)
         {
-            if (isSwitchingWeapon && !_wasSwitchingWeaponsLastFrame)
+            if (isSwitchingWeapon && !isInSwitchWeaponMode)
             {
                 GameManager.Instance.PauseTime();
                 // int nextWeaponIndex = (_activeWeaponIndex + 1) % weapons.Count;
-                _switchWeaponsPanel.SetActive(_activeWeaponIndex);
-                _wasSwitchingWeaponsLastFrame = true;
+                _selectWeaponsPanel.SetActive(_activeWeaponIndex);
+                isInSwitchWeaponMode = true;
             }
-            else if (!isSwitchingWeapon && _wasSwitchingWeaponsLastFrame)
+            else if (!isSwitchingWeapon && isInSwitchWeaponMode)
             {
                 GameManager.Instance.ResumeTime();
-                ChooseWeapon(_switchWeaponsPanel.RetrieveSelection());
-                _switchWeaponsPanel.SetInactive();
-                _wasSwitchingWeaponsLastFrame = false;
+                ChooseWeapon(_selectWeaponsPanel.RetrieveSelection());
+                _selectWeaponsPanel.SetInactive();
+                isInSwitchWeaponMode = false;
+                isSelecting = false;
             }
-            else if (_wasSwitchingWeaponsLastFrame && !_wasSelectingAWeaponLastFrame)
+            else if (isInSwitchWeaponMode && !isSelecting)
             {
                 if (lookX > 10f)
                 {
-                    _switchWeaponsPanel.SelectNextWeapon();
-                    _wasSelectingAWeaponLastFrame = true;
+                    _selectWeaponsPanel.SelectNextWeapon();
+                    isSelecting = true;
                 }
                 else if (lookX < -10f)
                 {
-                    _switchWeaponsPanel.SelectPreviousWeapon();
-                    _wasSelectingAWeaponLastFrame = true;
+                    _selectWeaponsPanel.SelectPreviousWeapon();
+                    isSelecting = true;
                 }
             }
-            else if (_wasSelectingAWeaponLastFrame && lookX == 0f)
+            else if (isSelecting && lookX == 0f)
             {
-                _wasSelectingAWeaponLastFrame = false;
+                isSelecting = false;
             }
         }
         
         public void SwitchWeapon()
         {
-            _switchWeaponsPanel.SelectNextWeapon();
+            _selectWeaponsPanel.SelectNextWeapon();
         }
     }
 }
