@@ -92,7 +92,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6657352484182213049}
-  - component: {fileID: 7171400950424549712}
   m_Layer: 8
   m_Name: BaseGun
   m_TagString: Untagged
@@ -117,34 +116,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7171400950424549712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3861706144474456395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47d5aa6f18c6084d9aa6e264bf8f244, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 8541015354598396513, guid: a36c6daf78556364a922cf45d7d6cf2f,
-    type: 3}
-  projectileSpawn: {fileID: 1041052903905260205}
-  projectilePool: {fileID: 4652717157334889740}
-  meshHolder: {fileID: 0}
-  maxAmmo: 9999
-  maxMagazineAmmo: 99
-  shotSpeed: 100
-  shootCoolDownTimer: 0.08
-  reloadMagazineTimer: 1
-  isShooting: 0
-  totalAmount: 100
-  currentMagazineAmount: 100
-  shootCoolDownTime: 0
-  reloadMagazineTime: 0
-  isReloadingMagazine: 0
 --- !u!1 &4652717157334889778
 GameObject:
   m_ObjectHideFlags: 0

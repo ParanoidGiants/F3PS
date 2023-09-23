@@ -6,6 +6,33 @@ namespace Weapon
 {
     public class GravityGun : BaseGun
     {
+        
+        [SerializeField] private bool _wasShootingPressedLastFrame = false;
+
+        override
+        public void HandleShoot(bool isShootingPressed)
+        {
+            if (!_wasShootingPressedLastFrame && isShootingPressed)
+            {
+                if (currentMagazineAmount <= 0)
+                {
+                    // TODO: Play empty clip sound
+                    weaponUI?.OnShootEmptyClip();
+                }
+                else
+                {
+                    StartCoroutine(Shoot());
+                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                }
+                _wasShootingPressedLastFrame = true;
+            }
+            else if (_wasShootingPressedLastFrame && !isShootingPressed && !isShooting)
+            {
+                _wasShootingPressedLastFrame = false;
+            }
+        }
+        
+        
         override
         protected IEnumerator Shoot()
         {

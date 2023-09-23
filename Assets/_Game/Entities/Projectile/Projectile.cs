@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using F3PS.Damage.Take;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -7,6 +8,8 @@ public class Projectile : MonoBehaviour
     public int damage = 50;
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
+    public float removeAfterSeconds = .2f;
+    public float collisionDamping = .1f;
     
     private HitBox _hitBox;
     private Rigidbody _rb;
@@ -35,10 +38,7 @@ public class Projectile : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        if (!Hit)
-        {
-            transform.forward = _rb.velocity;
-        }
+        transform.forward = _rb.velocity;
     }
 
     public void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
@@ -66,13 +66,18 @@ public class Projectile : MonoBehaviour
         if (Hit) return;
         
         _isHit = true;
-        _rb.velocity *= 0.1f;
-        StartCoroutine(SetInactiveAfterSeconds(2));
+        _rb.velocity *= collisionDamping;
+        StartCoroutine(SetInactiveAfterSeconds(removeAfterSeconds));
     }
 
     private IEnumerator SetInactiveAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         gameObject.SetActive(false);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        SetHit();
     }
 }

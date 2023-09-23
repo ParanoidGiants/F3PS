@@ -550,7 +550,7 @@ PrefabInstance:
     - target: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.458
+      value: 0.708
       objectReference: {fileID: 0}
     - target: {fileID: 3861706144474456395, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
@@ -692,6 +692,8 @@ MonoBehaviour:
   shootCoolDownTime: 0
   reloadMagazineTime: 0
   isReloadingMagazine: 0
+  weaponUI: {fileID: 0}
+  _wasShootingPressedLastFrame: 0
 --- !u!114 &4652817300301136794 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4652717157334889740, guid: 961cf1379f54b3148a33ef308d4eb4dd,

@@ -29,7 +29,14 @@ namespace Weapon
         public float shootCoolDownTime = 0.0f;
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
-
+        public WeaponUI weaponUI;
+        
+        public void InitForPlayer(Transform user, WeaponUI weaponUI_ = null)
+        {
+            Init(user);
+            weaponUI = weaponUI_;
+        }
+        
         public void Init(Transform user)
         {
             projectilePool.Init(projectilePrefab, user);
@@ -47,17 +54,17 @@ namespace Weapon
             
         }
 
-        protected virtual IEnumerator Shoot()
+        protected virtual IEnumerator HandleShoot()
         {
             yield return null;
         }
         
         private void OnReload(Action<float> updateCallback)
         {
-            StartCoroutine(Reload(updateCallback));
+            StartCoroutine(HandleReload(updateCallback));
         }
         
-        private IEnumerator Reload(Action<float> updateCallback)
+        private IEnumerator HandleReload(Action<float> updateCallback)
         {
             if (isReloadingMagazine) yield break;
             
@@ -85,7 +92,8 @@ namespace Weapon
             isReloadingMagazine = false;
         }
 
-        public void Shoot(WeaponUI weaponUI = null)
+        private bool _wasShootingLastFrame = false;
+        public virtual void HandleShoot(bool isShootingPressed)
         {
             if (isShooting || isReloadingMagazine) return;
             
@@ -96,12 +104,12 @@ namespace Weapon
             }
             else
             {
-                StartCoroutine(Shoot());
+                StartCoroutine(HandleShoot());
                 weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
             }
         }
 
-        public void Reload(WeaponUI weaponUI = null)
+        public void HandleReload()
         {
             if (isReloadingMagazine) return;
             
@@ -114,6 +122,10 @@ namespace Weapon
                     weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                 }
             });
+        }
+        protected virtual IEnumerator Shoot()
+        {
+            yield return null;
         }
     }
 }

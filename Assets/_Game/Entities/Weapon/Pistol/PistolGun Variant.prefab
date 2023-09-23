@@ -693,9 +693,61 @@ PrefabInstance:
       objectReference: {fileID: 626120072056480866}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 961cf1379f54b3148a33ef308d4eb4dd, type: 3}
+--- !u!114 &2891245280591940539 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4652717157334889740, guid: 961cf1379f54b3148a33ef308d4eb4dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7533961261906312887}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aff6148274c5274f9cf7c0c70f6d7bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3813892571290435342 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7533961261906312887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6708543336009785340 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3861706144474456395, guid: 961cf1379f54b3148a33ef308d4eb4dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7533961261906312887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2770743858279051450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6708543336009785340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a47d5aa6f18c6084d9aa6e264bf8f244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 0}
+  projectileSpawn: {fileID: 7420966541678857242}
+  projectilePool: {fileID: 2891245280591940539}
+  meshHolder: {fileID: 626120072056480866}
+  icon: {fileID: 21300000, guid: 1266335f95495904b900c02c6308ed4f, type: 3}
+  maxAmmo: 100
+  maxMagazineAmmo: 100
+  shotSpeed: 100
+  shootCoolDownTimer: 0.2
+  reloadMagazineTimer: 0.5
+  isShooting: 0
+  totalAmount: 100
+  currentMagazineAmount: 10
+  shootCoolDownTime: 0
+  reloadMagazineTime: 0
+  isReloadingMagazine: 0
+--- !u!4 &7420966541678857242 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,
     type: 3}
   m_PrefabInstance: {fileID: 7533961261906312887}
   m_PrefabAsset: {fileID: 0}

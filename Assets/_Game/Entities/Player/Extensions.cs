@@ -84,7 +84,10 @@ namespace Player
         // Update is called once per frame
         public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
         {
-            weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
+            if (!weaponManager.ActiveWeapon.isReloadingMagazine)
+            {
+                weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
+            }
 
             if (GameManager.Instance.timeManager.IsPaused) return;
             

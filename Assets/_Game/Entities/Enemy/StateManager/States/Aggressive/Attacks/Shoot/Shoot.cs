@@ -40,7 +40,7 @@ namespace F3PS.AI.States.Action
         override
         protected void OnRecover()
         {
-            gun.Reload();
+            gun.HandleReload();
             base.OnRecover();
         }
 
@@ -59,7 +59,7 @@ namespace F3PS.AI.States.Action
             UpdateGunAndEnemyRotation();
             hitTime += Time.deltaTime;
             isHitting = hitTime < hitTimer;
-            gun.Shoot();
+            gun.HandleShoot(true);
             base.HandleHitting();
         }
         

@@ -27,7 +27,7 @@ namespace Weapon
         {
             foreach (var weapon in weapons)
             {
-                weapon.Init(playerSpace);
+                weapon.InitForPlayer(playerSpace, _weaponUI);
                 weapon.gameObject.SetActive(false);
             }
             ChooseWeapon(0);
@@ -50,8 +50,8 @@ namespace Weapon
 
         public void ShootAndReload(bool isShooting, bool isReloading, Quaternion transformRotation)
         {
-            if (isShooting) ActiveWeapon.Shoot(_weaponUI);
-            if (isReloading) ActiveWeapon.Reload(_weaponUI);
+            ActiveWeapon.HandleShoot(isShooting);
+            if (isReloading) ActiveWeapon.HandleReload();
             
             ActiveWeapon.UpdateRotation(transformRotation);
         }
@@ -90,11 +90,6 @@ namespace Weapon
             {
                 isSelecting = false;
             }
-        }
-        
-        public void SwitchWeapon()
-        {
-            _selectWeaponsPanel.SelectNextWeapon();
         }
     }
 }
