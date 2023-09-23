@@ -59,7 +59,7 @@ namespace Player
                 meshHolder.rotation,
                 shotSpeed
             );
-            MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
+            MasterAudio.PlaySound3DAtTransformAndForget("SciFiWeapon_shoot", transform);
             while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {
                 shootCoolDownTime -= Time.deltaTime;
@@ -81,9 +81,9 @@ namespace Player
             reloadAmount = Mathf.Min(reloadAmount, totalAmount);
             if (reloadAmount <= 0) yield break;
 
-            // TODO: Play reload sound
+            MasterAudio.PlaySound3DAtTransformAndForget("SciFiWeapon_reload", transform);
             // TODO: Play reload animation
-            
+
             isReloadingMagazine = true;
             reloadMagazineTime = reloadMagazineTimer;
             while (reloadMagazineTime > 0f)

@@ -37,7 +37,7 @@ namespace F3PS.Enemy
         {
             health -= damage;
             Debug.Log("Took " + damage + " damage");
-            MasterAudio.PlaySound3DAtTransformAndForget("EnemyHit", transform);
+            MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
             if (health <= 0)
             {
                 _healthUIPool.OnKillTarget(transform);
@@ -51,6 +51,7 @@ namespace F3PS.Enemy
         {
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             _rigidbody.AddForce(strength * transform.forward, ForceMode.Impulse);
+            MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", transform);
         }
         
         public void StopRush()

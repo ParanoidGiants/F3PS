@@ -2,6 +2,7 @@ using System;
 using TimeBending;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DarkTonic.MasterAudio;
 
 namespace Player
 {
@@ -183,7 +184,8 @@ namespace Player
 
         public void Hit(int damage)
         {
-            health -= damage;
+            health -= damage; 
+            MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
             _playerHealthUI.UpdateHealth((float)health / maxHealth);
             if (health <= 0)
             {
