@@ -3055,16 +3055,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
-        type: 3}
-      propertyPath: field of view
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
-        type: 3}
-      propertyPath: near clip plane
-      value: 29
-      objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409498, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_Name
@@ -3334,7 +3324,6 @@ MonoBehaviour:
   _weaponManager: {fileID: 0}
   _activeWeaponIndex: -1
   _selectedWeaponIndex: -1
-  selectedWeaponColor: {r: 0, g: 0, b: 0, a: 0}
   activeWeaponColor: {r: 0, g: 0.6657615, b: 1, a: 1}
 --- !u!1 &1352206040
 GameObject:

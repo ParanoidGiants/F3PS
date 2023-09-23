@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slowdownFactor: 0.2
   isActive: 0
-  lookRotationSpeed: 1
+  _isPaused: 0
 --- !u!1 &1494138339
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +888,7 @@ MonoBehaviour:
   isSprinting: 0
   isShooting: 0
   isReloading: 0
+  isSwitchingWeapon: 0
   isDodging: 0
   isSlowMoToggle: 0
   isSlowMoStarted: 0
@@ -1055,6 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapons: []
+  _activeWeaponIndex: 0
 --- !u!1 &2167650760141567663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1327,8 +1329,8 @@ MonoBehaviour:
   JumpTimeout: 0.3
   FallTimeout: 0.15
   CinemachineCameraTarget: {fileID: 1204151532081024994}
-  CameraTopClamp: 70
-  CameraBottomClamp: -30
+  CameraTopClamp: 89
+  CameraBottomClamp: -89
   CameraAngleOverride: 0
   LockCameraPosition: 0
   _playerInput: {fileID: 1967781540}
@@ -2600,6 +2602,7 @@ MonoBehaviour:
   slowmo: 0
   dodge: 0
   pause: 0
+  switchWeapon: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
