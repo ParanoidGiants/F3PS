@@ -3,7 +3,7 @@ using System.Collections;
 using F3PS.Damage.Take;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class BaseProjectile : MonoBehaviour
 {
     public int damage = 50;
     public float lifeTime = 0f;

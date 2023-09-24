@@ -17,7 +17,7 @@ namespace F3PS.Damage.Take
         protected void OnHit(HitBox hitBy)
         {
             // Hit by projectile
-            var projectile = hitBy.gameObject.GetComponent<Projectile>();
+            var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
                 projectile.SetHit();

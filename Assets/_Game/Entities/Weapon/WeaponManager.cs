@@ -48,7 +48,7 @@ namespace Weapon
             _weaponUI.UpdateImage(ActiveWeapon.icon);
         }
 
-        public void ShootAndReload(bool isShooting, bool isReloading, Quaternion transformRotation)
+        public void Update(bool isShooting, bool isReloading, Quaternion transformRotation)
         {
             ActiveWeapon.HandleShoot(isShooting);
             if (isReloading) ActiveWeapon.HandleReload();

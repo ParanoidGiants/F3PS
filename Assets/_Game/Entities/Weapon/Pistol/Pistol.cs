@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class PistolGun : BaseGun
+    public class Pistol : BaseGun
     {
         [SerializeField] private bool _wasShootingPressedLastFrame = false;
 

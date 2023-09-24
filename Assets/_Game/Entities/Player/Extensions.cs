@@ -96,7 +96,7 @@ namespace Player
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
             Dodging(_input.dodge);
-            weaponManager.ShootAndReload(isShooting, isReloading, _mainCamera.transform.rotation);
+            weaponManager.Update(isShooting, isReloading, _mainCamera.transform.rotation);
             UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }
@@ -150,11 +150,6 @@ namespace Player
         {
             var dodge = Grounded && dodgeInput;
             animator.SetBool(Dodge, dodge);
-        }
-
-
-        private void ShootAndReload()
-        {
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)

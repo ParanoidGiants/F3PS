@@ -4,25 +4,25 @@ using UnityEngine;
 public class ProjectilePool : MonoBehaviour
 {
     public int numberOfPooledObjects = 20;
-    private List<Projectile> _projectiles;
+    private List<BaseProjectile> _projectiles;
 
     public void Init(GameObject projectilePrefab, Transform user)
     {
-        _projectiles = new List<Projectile>();
+        _projectiles = new List<BaseProjectile>();
         Transform parent = new GameObject("Projectiles").transform;
         parent.transform.SetParent(user);
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
             GameObject obj = Instantiate(projectilePrefab, parent);
-            obj.GetComponent<Projectile>().Init(user.GetInstanceID());
+            obj.GetComponent<BaseProjectile>().Init(user.GetInstanceID());
             obj.SetActive(false);
-            _projectiles.Add(obj.GetComponent<Projectile>());
+            _projectiles.Add(obj.GetComponent<BaseProjectile>());
         }
     }
 
     public void ShootBullet(Vector3 fromPosition, Quaternion orientation, float shootSpeed)
     {
-        foreach (Projectile projectile in _projectiles)
+        foreach (BaseProjectile projectile in _projectiles)
         {
             if (!projectile.gameObject.activeInHierarchy)
             {
@@ -37,7 +37,7 @@ public class ProjectilePool : MonoBehaviour
     
     public GameObject GetBullet()
     {
-        foreach (Projectile projectile in _projectiles)
+        foreach (BaseProjectile projectile in _projectiles)
         {
             if (!projectile.gameObject.activeInHierarchy)
             {
