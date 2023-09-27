@@ -129,9 +129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f730b930e8891041a39f403c7a54678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
+  damage: 3
   lifeTime: 0
   maximumLifeTime: 5
+  removeAfterSeconds: 0.2
+  collisionDamping: 0.1
+  _isHit: 0
 --- !u!96 &5561095795434186493
 TrailRenderer:
   serializedVersion: 2

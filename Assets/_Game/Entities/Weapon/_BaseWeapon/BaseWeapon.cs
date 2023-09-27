@@ -93,21 +93,7 @@ namespace Weapon
         }
 
         private bool _wasShootingLastFrame = false;
-        public virtual void HandleShoot(bool isShootingPressed)
-        {
-            if (isShooting || isReloadingMagazine) return;
-            
-            if (currentMagazineAmount <= 0)
-            {
-                // TODO: Play empty clip sound
-                weaponUI?.OnShootEmptyClip();
-            }
-            else
-            {
-                StartCoroutine(HandleShoot());
-                weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
-            }
-        }
+        public virtual void HandleShoot(bool isShootingPressed) {}
 
         public void HandleReload()
         {

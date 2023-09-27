@@ -6,10 +6,6 @@ namespace F3PS.AI.States.Action
     public class Shoot : Attack
     {
         [Space(10)]
-        [Header("Shoot References")]
-        public BaseGun gun;
-        
-        [Space(10)]
         [Header("Shoot Settings")]
         public float chargeTimer;
         public float hitTimer;
@@ -17,6 +13,7 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Shoot Watchers")]
+        public BaseGun gun;
         public float chargeTime;
         public float hitTime;
         public float recoverTime;
@@ -24,7 +21,8 @@ namespace F3PS.AI.States.Action
         override
         public void Init()
         {
-            gun.Init(enemy.body.transform);            
+            gun = GetComponentInChildren<BaseGun>();
+            gun.Init(enemy.body.transform.parent);            
         }
 
         override
@@ -50,16 +48,20 @@ namespace F3PS.AI.States.Action
             UpdateGunAndEnemyRotation();
             chargeTime += Time.deltaTime;
             isCharging = chargeTime < chargeTimer;
+            
             base.HandleCharging();
         }
 
+        private bool isShootingPressed = false;
         override
         protected void HandleHitting()
         {
             UpdateGunAndEnemyRotation();
             hitTime += Time.deltaTime;
             isHitting = hitTime < hitTimer;
-            gun.HandleShoot(true);
+            isShootingPressed = !isShootingPressed;
+            gun.HandleShoot(isShootingPressed);
+            
             base.HandleHitting();
         }
         
@@ -69,6 +71,7 @@ namespace F3PS.AI.States.Action
             UpdateGunAndEnemyRotation();
             recoverTime += Time.deltaTime;
             isRecovering = recoverTime < recoverTimer;
+            
             base.HandleRecovering();
         }
         

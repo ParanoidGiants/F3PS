@@ -78,6 +78,11 @@ public class BaseProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        var hittable = other.gameObject.GetComponent<Hittable>();
+        if (hittable != null && hittable.hittableId != _hitBox.attackerId)
+        {
+            hittable.OnHit(_hitBox);
+        }
         SetHit();
     }
 }

@@ -60,10 +60,10 @@ MonoBehaviour:
   coolDownTimer: 1
   attackDistance: 50
   damage: 0
-  gun: {fileID: 8863105448139580737}
   chargeTimer: 1
   hitTimer: 1
   recoverTimer: 1
+  gun: {fileID: 0}
   chargeTime: 0
   hitTime: 0
   recoverTime: 0
@@ -74,6 +74,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3886453621705137868}
     m_Modifications:
+    - target: {fileID: 2770743858279051450, guid: 806106cbf8c59cd4a8c4dd6dded31343,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2770743858279051450, guid: 806106cbf8c59cd4a8c4dd6dded31343,
+        type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 8541015354598396513, guid: a36c6daf78556364a922cf45d7d6cf2f,
+        type: 3}
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_RootOrder
@@ -87,7 +98,7 @@ PrefabInstance:
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.347
+      value: 1.678
       objectReference: {fileID: 0}
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
@@ -142,15 +153,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8073825486205018790}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8863105448139580737 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 795992486346393575, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-    type: 3}
-  m_PrefabInstance: {fileID: 8073825486205018790}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47d5aa6f18c6084d9aa6e264bf8f244, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

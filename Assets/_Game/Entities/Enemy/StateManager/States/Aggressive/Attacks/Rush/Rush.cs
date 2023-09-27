@@ -1,3 +1,5 @@
+using System;
+using F3PS.Damage.Take;
 using UnityEngine;
 
 namespace F3PS.AI.States.Action
@@ -113,6 +115,15 @@ namespace F3PS.AI.States.Action
             bodyCollider.enabled = true;
             _hitCollider.enabled = false;
             base.OnStopAttacking();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            var hittable = other.gameObject.GetComponent<Hittable>();
+            if (hittable != null && hittable.hittableId != _hitBox.attackerId)
+            {
+                hittable.OnHit(_hitBox);
+            }
         }
     }
 }

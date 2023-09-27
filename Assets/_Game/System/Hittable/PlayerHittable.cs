@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using F3PS.AI.States.Action;
 using Player;
 using UnityEngine;
@@ -14,17 +15,19 @@ namespace F3PS.Damage.Take
         }
 
         override
-        protected void OnHit(HitBox hitBy)
+        public void OnHit(HitBox hitBy)
         {
             // Hit by projectile
             var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
+                Debug.Log("Hit by projectile: " + hitBy.name);
                 projectile.SetHit();
                 playerExtensions.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
 
+            Debug.Log("HIT");
             // Hit by rush
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
