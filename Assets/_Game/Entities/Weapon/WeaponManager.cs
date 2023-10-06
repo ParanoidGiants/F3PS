@@ -75,7 +75,6 @@ namespace Weapon
             }
             else if (isInSwitchWeaponMode && !isSelecting)
             {
-                Debug.Log(lookX);
                 if (lookX > 0.1f)
                 {
                     _selectWeaponsPanel.SelectNextWeapon();

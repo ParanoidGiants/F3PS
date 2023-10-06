@@ -3754,7 +3754,7 @@ PrefabInstance:
     - target: {fileID: 6708543336009785340, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 806106cbf8c59cd4a8c4dd6dded31343, type: 3}
@@ -3773,13 +3773,28 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
+      propertyPath: maxAmmo
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
+        type: 3}
       propertyPath: meshHolder
       value: 
       objectReference: {fileID: 123824025274252373}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
+      propertyPath: maxMagazineAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
+        type: 3}
+      propertyPath: shootCoolDownTimer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
+        type: 3}
       propertyPath: reloadMagazineTimer
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3860830024259442653, guid: 44039d663aa003247a93628d13c02462,
         type: 3}

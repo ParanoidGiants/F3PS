@@ -9,14 +9,14 @@ public class ProjectilePool : MonoBehaviour
     public void Init(GameObject projectilePrefab, Transform user)
     {
         _projectiles = new List<BaseProjectile>();
-        Transform parent = new GameObject("Projectiles").transform;
+        Transform parent = new GameObject("Projectiles" + projectilePrefab.name).transform;
         parent.transform.SetParent(user);
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
-            BaseProjectile obj = Instantiate(projectilePrefab, parent).GetComponent<BaseProjectile>();
-            obj.Init(user.GetInstanceID());
-            obj.gameObject.SetActive(false);
-            _projectiles.Add(obj.GetComponent<BaseProjectile>());
+            BaseProjectile projectile = Instantiate(projectilePrefab, parent).GetComponent<BaseProjectile>();
+            projectile.Init(user.GetInstanceID());
+            projectile.gameObject.SetActive(false);
+            _projectiles.Add(projectile.GetComponent<BaseProjectile>());
         }
     }
 

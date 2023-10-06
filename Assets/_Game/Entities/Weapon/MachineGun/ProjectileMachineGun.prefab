@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6739350904307419869}
   - component: {fileID: 5561095795434186493}
   - component: {fileID: 5004514709375848286}
+  - component: {fileID: 3526839696804536644}
   m_Layer: 6
   m_Name: ProjectileMachineGun
   m_TagString: Untagged
@@ -103,7 +104,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &6863931835482500036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,9 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 2
   lifeTime: 0
-  maximumLifeTime: 5
-  removeAfterSeconds: 0.2
-  collisionDamping: 0.000000001
+  maximumLifeTime: 10
+  removeAfterSeconds: 10
   _isHit: 0
 --- !u!96 &5561095795434186493
 TrailRenderer:
@@ -250,9 +250,24 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8541015354598396513}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4ffd2050bcbcf3a4bb68b6e4638a6cf2, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3526839696804536644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541015354598396513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfTimeZones: 0
+  currentTimeScale: 1
+  modifier: 2

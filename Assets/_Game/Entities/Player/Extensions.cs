@@ -20,6 +20,8 @@ namespace Player
         public bool isSlowMoStarted;
         public float rotationVelocity;
 
+        public float deltaTime;
+
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;

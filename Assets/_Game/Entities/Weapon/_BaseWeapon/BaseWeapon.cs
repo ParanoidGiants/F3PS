@@ -41,6 +41,7 @@ namespace Weapon
         {
             projectilePool.Init(projectilePrefab, user);
             totalAmount = maxAmmo;
+            currentMagazineAmount = maxMagazineAmmo;
         }
         
         public void UpdateRotation(Quaternion rotation)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using F3PS.Damage.Take;
 using UnityEngine;
@@ -9,13 +8,13 @@ public class BaseProjectile : MonoBehaviour
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
     public float removeAfterSeconds = .2f;
-    public float collisionDamping = .1f;
     
     private HitBox _hitBox;
-    private Rigidbody _rb;
+    protected Rigidbody _rb;
+    protected TimeObject _timeObject;
     private TrailRenderer _trailRenderer;
     private float _speed;
-    [SerializeField] private bool _isHit = false;
+    [SerializeField] protected bool _isHit = false;
     public bool Hit => _isHit;
 
     private void Awake()
@@ -37,11 +36,9 @@ public class BaseProjectile : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-
-        transform.forward = _rb.velocity;
     }
 
-    public void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
+    public virtual void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
     {
         transform.position = position;
         transform.rotation = rotation;
@@ -61,16 +58,15 @@ public class BaseProjectile : MonoBehaviour
         _rb.velocity = Vector3.zero;
     }
 
-    public void SetHit()
+    public virtual void SetHit()
     {
         if (Hit) return;
         
         _isHit = true;
-        _rb.velocity *= collisionDamping;
         StartCoroutine(SetInactiveAfterSeconds(removeAfterSeconds));
     }
 
-    private IEnumerator SetInactiveAfterSeconds(float seconds)
+    protected IEnumerator SetInactiveAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
         gameObject.SetActive(false);
