@@ -1,5 +1,3 @@
-using System;
-using StarterAssets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,16 +5,14 @@ using UnityEngine.UI;
 public class WeaponUI : MonoBehaviour
 {
     private RectTransform _rectTransform;
-    private int _magazineAmount;
-    private int _totalAmount;
     private float _reloadPercentage;
     private Animator _animator;
 
     public TextMeshProUGUI magazineAmountText;
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
-    public Image ReloadCircle;
-    public Image WeaponIcon;
+    public Image reloadCircle;
+    public Image weaponIcon;
     private static readonly int Pulsate = Animator.StringToHash("pulsate");
 
     private void Awake()
@@ -29,11 +25,11 @@ public class WeaponUI : MonoBehaviour
     {
         if (percentage == 0f)
         {
-            ReloadCircle.fillAmount = 0f;
+            reloadCircle.fillAmount = 0f;
         }
         else
         {
-            ReloadCircle.fillAmount = 1f - percentage;
+            reloadCircle.fillAmount = 1f - percentage;
         }
     }
 
@@ -44,17 +40,14 @@ public class WeaponUI : MonoBehaviour
 
     public void UpdateAmmoText(int baseGunCurrentMagazineAmmo, int baseGunCurrentAmmo)
     {
-        Debug.Log("Passioert");
         magazineAmountText.text = baseGunCurrentMagazineAmmo.ToString();
         magazineAmountTextDuplicate.text = baseGunCurrentMagazineAmmo.ToString();
         totalAmountText.text = baseGunCurrentAmmo.ToString();
-        _magazineAmount = baseGunCurrentMagazineAmmo;
-        _totalAmount = baseGunCurrentAmmo;
         StartCoroutine(Helper.UpdateLayoutGroups(_rectTransform));
     }
 
     public void UpdateImage(Sprite activeWeaponIcon)
     {
-        WeaponIcon.sprite = activeWeaponIcon;
+        weaponIcon.sprite = activeWeaponIcon;
     }
 }

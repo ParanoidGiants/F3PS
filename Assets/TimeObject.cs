@@ -46,7 +46,6 @@ public class TimeObject : MonoBehaviour
         
         if (newTimeScale > TOLERANCE)
         {
-            var scaledVelocity = _rb.velocity * relation;
             _rb.isKinematic = false;
             _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
             _rb.velocity *= relation;
