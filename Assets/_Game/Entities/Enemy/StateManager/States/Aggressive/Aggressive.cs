@@ -45,7 +45,12 @@ namespace F3PS.AI.States
             HandlePositionAndRotation();
             HandleStoppingDistance();
         }
-
+        
+        override
+        public void OnExit()
+        {
+            base.OnExit();
+        }
 
         public bool IsTargetDetected()
         {
@@ -60,9 +65,9 @@ namespace F3PS.AI.States
             
             if (isTargetDetected)
             {
-                navMeshAgent.destination = _selectedTarget.Center();
+                _navMeshAgent.destination = _selectedTarget.Center();
             }
-            navMeshAgent.isStopped = isAttacking;
+            _navMeshAgent.isStopped = isAttacking;
             
             if (!isAttacking && !isTargetDetected)
             {
@@ -96,7 +101,7 @@ namespace F3PS.AI.States
             bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
             if (isInAttackDistance)
             {
-                var enemyTransform = enemy.transform;
+                var enemyTransform = enemy.body.transform;
                 var position = enemyTransform.position;
                 var lookDirection = _selectedTarget.Center() - position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
@@ -107,20 +112,20 @@ namespace F3PS.AI.States
 
         private void HandleStoppingDistance()
         {
-            if (Helper.HasReachedDestination(navMeshAgent))
+            if (Helper.HasReachedDestination(_navMeshAgent))
             {
-                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
+                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
             }
             else
             {
-                navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
+                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
             }
         }
         
         private Attack NextAttack()
         {
             var attack = _attacks[0];
-            navMeshAgent.stoppingDistance = attack.stoppingDistanceFollow;
+            _navMeshAgent.stoppingDistance = attack.stoppingDistanceFollow;
             return attack;
         }
     }

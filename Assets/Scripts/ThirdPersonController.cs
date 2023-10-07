@@ -1,5 +1,7 @@
-﻿using Player;
+﻿using F3PS;
+using Player;
 using TimeBending;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -14,7 +16,7 @@ namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-    [RequireComponent(typeof(PlayerInput))]
+    // [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
@@ -81,11 +83,11 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-        private PlayerInput _playerInput;
+        [SerializeField] private PlayerInput _playerInput;
 #endif
         private Animator _animator;
         private CharacterController _controller;
-        private StarterAssetsInputs _input;
+        [SerializeField] private StarterAssetsInputs _input;
         public StarterAssetsInputs Input => _input;
         private GameObject _mainCamera;
 
@@ -117,23 +119,21 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
+            _hasAnimator = TryGetComponent(out _animator);
+            _controller = GetComponent<CharacterController>();
+            // _input = GetComponent<StarterAssetsInputs>();
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+            // _playerInput = GetComponent<PlayerInput>();
+#else
+			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+#endif
+            AssignAnimationIDs();
+            extensions.Init(_animator);
         }
 
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-            _playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
-
-            AssignAnimationIDs();
-
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
@@ -141,7 +141,11 @@ namespace StarterAssets
 
         private void Update()
         {
+            if (GameManager.Instance.IsGamePaused) return;
+            
             extensions.OnUpdate(_input);
+            
+            if (GameManager.Instance.timeManager.IsPaused) return;
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
@@ -151,6 +155,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
             CameraRotation();
         }
 

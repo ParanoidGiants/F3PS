@@ -18,14 +18,6 @@ namespace F3PS.Damage.Take
             return _collider.bounds.center;
         }
 
-        protected virtual void OnHit(HitBox hitBy) {}
-        
-        private void OnCollisionEnter(Collision other)
-        {
-            var hitBox = other.gameObject.GetComponent<HitBox>();
-            if (hitBox == null || hitBox.attackerId == hittableId) return;
-            
-            OnHit(hitBox);
-        }
+        public virtual void OnHit(HitBox hitBy) {}
     }
 }

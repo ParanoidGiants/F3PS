@@ -13,24 +13,31 @@ namespace F3PS.AI.Sensors
         public void SetState(SensorState state)
         {
             this.state = state;
-
-            if (state == SensorState.IDLE)
+            defaultVision.SetSensorState(state);
+            searchingVision.SetSensorState(state);
+            
+            aggressiveMovement.SetSensorState(state);
+            
+            if (state == SensorState.AGGRESSIVE)
             {
-                defaultVision.SetActive(true);
-                searchingVision.SetActive(false);
-                aggressiveMovement.SetActive(false);
+                defaultVision.SetActive(false);
+                searchingVision.SetActive(true);
+                
+                aggressiveMovement.SetActive(true);
             }
             else if (state == SensorState.SEARCHING)
             {
-                searchingVision.SetActive(true);
                 defaultVision.SetActive(false);
+                searchingVision.SetActive(true);
+                
                 aggressiveMovement.SetActive(false);
             }
             else
             {
-                defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
-                aggressiveMovement.SetActive(true);
+                defaultVision.SetActive(true);
+                searchingVision.SetActive(false);
+                
+                aggressiveMovement.SetActive(false);
             }
         }
         
@@ -55,26 +62,23 @@ namespace F3PS.AI.Sensors
             {
                 return defaultVision.SelectedTarget;
             }
-            else if (state == SensorState.SEARCHING)
+            if (state == SensorState.SEARCHING)
             {
                 return searchingVision.SelectedTarget;
             }
-            else // state is aggressive
+            // else state is aggressive
             if (searchingVision.HasTarget)
             {
-                if (
-                    aggressiveMovement.HasTarget
-                    && aggressiveMovement.SelectedTarget.damageMultiplier > searchingVision.SelectedTarget.damageMultiplier
-                )
+                if (aggressiveMovement.HasTarget)
                 {
                     return aggressiveMovement.SelectedTarget;
                 }
-                else
-                {
-                    return searchingVision.SelectedTarget;
-                }
+                
+                // else work with what you see
+                return searchingVision.SelectedTarget;
             }
-            else return aggressiveMovement.SelectedTarget;
+            
+            return aggressiveMovement.SelectedTarget;
         }
     }
 }

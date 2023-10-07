@@ -7,30 +7,28 @@ namespace F3PS.AI.States
         [Space(10)]
         [Header("Specific Settings")]
         private Transform _transform;
-        private Quaternion _originalRotation;
-        private Quaternion _startRotation;
-        private float _rotateTime;
-        private readonly float _rotateTimer = 1f;
+        
+        
+        public float idleTimer = 0f;
+        [SerializeField] private float _idleTime = 0f;
 
         private void Awake()
         {
-            _transform = enemy.transform;
-            _originalRotation = _transform.rotation;
+            _transform = enemy.body.transform;
         }
         
         override
         public void OnEnter()
         {
             base.OnEnter();
-            _startRotation = _transform.rotation;
-            _rotateTime = 0f;
-            navMeshAgent.isStopped = true;
+            _idleTime = 0f;
+            _navMeshAgent.isStopped = true;
         }
         
         override
         public void OnExit()
         {
-            navMeshAgent.isStopped = false;
+            _navMeshAgent.isStopped = false;
         }
 
         override
@@ -38,10 +36,10 @@ namespace F3PS.AI.States
         {
             base.OnUpdate();
             
-            if (_rotateTime >= _rotateTimer) return;
+            _idleTime += Time.deltaTime;
+            if (idleTimer > _idleTime) return;
             
-            _transform.rotation = Quaternion.Slerp(_startRotation, _originalRotation, _rotateTime);
-            _rotateTime += Time.deltaTime;
+            stateManager.SwitchState(StateType.PATROLLING);
         }
     }
 }

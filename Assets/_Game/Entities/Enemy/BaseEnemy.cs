@@ -7,12 +7,14 @@ namespace F3PS.Enemy
 {
     public class BaseEnemy : MonoBehaviour
     {
-        private Rigidbody _rigidbody;
+        public Rigidbody body;
         
         [Header("References")]
-        public MeshRenderer headMeshRenderer;
+        public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
+        public PatrolManager patrolManager;
         private EnemyHealthUIPool _healthUIPool;
+        public bool HasPatrolRoute { get; private set; }
 
         [Space(10)]
         [Header("Settings")]
@@ -22,10 +24,15 @@ namespace F3PS.Enemy
         [Header("Watchers")]
         public int health;
 
+
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+            HasPatrolRoute = patrolManager != null;
+            if (HasPatrolRoute)
+            {
+                patrolManager.Init();
+            }
         }
 
         private void Start()
@@ -37,10 +44,10 @@ namespace F3PS.Enemy
         {
             health -= damage;
             Debug.Log("Took " + damage + " damage");
-            MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
+            MasterAudio.PlaySound3DAtTransformAndForget("Hit", body.transform);
             if (health <= 0)
             {
-                _healthUIPool.OnKillTarget(transform);
+                _healthUIPool.OnKillTarget(body.transform);
                 Destroy(gameObject);
                 return;
             }
@@ -49,19 +56,19 @@ namespace F3PS.Enemy
         
         public void Rush(float strength)
         {
-            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            _rigidbody.AddForce(strength * transform.forward, ForceMode.Impulse);
-            MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", transform);
+            body.constraints = RigidbodyConstraints.FreezeRotation;
+            body.AddForce(strength * body.transform.forward, ForceMode.Impulse);
+            MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", body.transform);
         }
         
         public void StopRush()
         {
-            _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            body.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         public void SetMaterial(Material material)
         {
-            headMeshRenderer.sharedMaterial = material;
+            meshRenderer.sharedMaterial = material;
         }
     }
 }

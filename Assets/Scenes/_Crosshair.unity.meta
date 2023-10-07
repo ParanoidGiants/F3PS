@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/_Crosshair.unity.meta
 guid: 9c65a8867036d8643b2480d6c567618d
+========
+guid: 240e51904a995104f87d174c6dd50cc4
+>>>>>>>> locojoetive/enemy-patroling:Assets/Scenes/New Scene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

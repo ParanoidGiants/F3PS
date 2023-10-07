@@ -1,8 +1,11 @@
 using System;
+using F3PS;
 using TimeBending;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DarkTonic.MasterAudio;
+using Weapon;
 
 namespace Player
 {
@@ -13,10 +16,13 @@ namespace Player
         public bool isSprinting;
         public bool isShooting;
         public bool isReloading;
+        public bool isSwitchingWeapon;
         public bool isDodging;
         public bool isSlowMoToggle;
         public bool isSlowMoStarted;
         public float rotationVelocity;
+
+        public float deltaTime;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -34,10 +40,11 @@ namespace Player
 
         [Space(10)]
         [Header("References")]
+        public Transform playerSpace;
         public StaminaManager staminaManager;
         public TimeManager _timeManager;
-        public BaseGun baseGun;
-        public Animator _animator;
+        public WeaponManager weaponManager;
+        private Animator _animator;
         public float aimingRotationSpeed;
         public float defaultRotationSpeed;
         private Crosshair _crosshair;
@@ -64,33 +71,41 @@ namespace Player
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
-        private AmmoUI _ammoUI;
         private PlayerHealthUI _playerHealthUI;
         private Camera _mainCamera;
         private readonly int Dodge = Animator.StringToHash("Dodge");
         public float RotationSpeed => isAiming ? aimingRotationSpeed : defaultRotationSpeed;
-        private void Awake()
+        
+        public void Init(Animator animator)
         {
+            _animator = animator;
+            
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
-            _ammoUI = FindObjectOfType<AmmoUI>();
             _mainCamera = Camera.main;
             _crosshair = FindObjectOfType<Crosshair>();
-            baseGun.Init(GetInstanceID());
         }
 
         private void Start()
         {
-            _ammoUI.UpdateAmmoText(baseGun.currentMagazineAmount, baseGun.totalAmount);
+            weaponManager.Init(playerSpace);
         }
 
         // Update is called once per frame
         public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
         {
+            if (!weaponManager.ActiveWeapon.isReloadingMagazine)
+            {
+                weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
+            }
+
+            if (GameManager.Instance.timeManager.IsPaused) return;
+            
             GroundedCheck();
             isShooting = _input.shoot && !isSprinting;
+            isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
             Dodging(_input.dodge);
-            ShootAndReload();
+            weaponManager.OnUpdate(isShooting, isReloading, _crosshair.GetTargetPosition());
             UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }
@@ -144,22 +159,6 @@ namespace Player
         {
             var dodge = Grounded && dodgeInput;
             _animator.SetBool(Dodge, dodge);
-        }
-
-
-        private void ShootAndReload()
-        {
-            var targetPosition = _crosshair.GetTargetPosition();
-            var gunForward = targetPosition - baseGun.transform.position;
-            Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
-            baseGun.UpdateRotation(gunRotation);
-            if (isShooting)
-            {
-                Debug.Log("Shoot");
-                baseGun.Shoot(_ammoUI);
-            }
-            if (isReloading) baseGun.Reload(_ammoUI);
-
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)

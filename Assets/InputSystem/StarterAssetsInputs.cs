@@ -17,6 +17,8 @@ namespace StarterAssets
 		public bool reload;
 		public bool slowmo;
 		public bool dodge;
+		public bool pause;
+		public bool switchWeapon;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -61,7 +63,7 @@ namespace StarterAssets
 
 		public void OnReload(InputValue value)
 		{
-			ReloadValue(value.isPressed);
+			ReloadInput(value.isPressed);
 		}
 
 		public void OnSlowMo(InputValue value)
@@ -72,6 +74,16 @@ namespace StarterAssets
 		public void OnDodge(InputValue value)
 		{
 			DodgeInput(value.isPressed);
+		}
+
+		public void OnPause(InputValue value)
+		{
+			PauseInput(value.isPressed);
+		}
+
+		public void OnSwitchWeapon(InputValue value)
+		{
+			SwitchWeaponInput(value.isPressed);
 		}
 #endif
 
@@ -106,7 +118,7 @@ namespace StarterAssets
 			aim = newAimState;
 		}
 		
-		private void ReloadValue(bool valueIsPressed)
+		private void ReloadInput(bool valueIsPressed)
 		{
 			reload = valueIsPressed;
 		}
@@ -120,6 +132,17 @@ namespace StarterAssets
 		{
 			dodge = valueIsPressed;
 		}
+		
+		private void PauseInput(bool valueIsPressed)
+		{
+			pause = valueIsPressed;
+		}
+		
+		private void SwitchWeaponInput(bool valueIsPressed)
+		{
+			switchWeapon = valueIsPressed;
+		}
+
 
 		private void OnApplicationFocus(bool hasFocus)
 		{

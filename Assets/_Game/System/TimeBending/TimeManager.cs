@@ -12,13 +12,18 @@ namespace TimeBending
         public float duration = 0.5f;
         private float _pitchTime = 0f;
 
+        [SerializeField] private bool _isPaused;
+        public bool IsPaused => _isPaused;
         private float _fps = 60f;
         public float lookRotationSpeed = 0.6f;  
 
         public void StartSlowMotion ()
-        { 
+        {
+            if (_isPaused) return;
+            
+            int fps = F3PS.GameManager.Instance.Fps;
             Time.timeScale = slowdownFactor;
-            Time.fixedDeltaTime = Time.timeScale * (float)(1f/_fps); // timeScale divided by 60fps
+            Time.fixedDeltaTime = Time.timeScale /_fps; // timeScale divided by 60fps
             MasterAudio.PlaySoundAndForget("SlowMo_init");
             Debug.Log($"Slow motion initiated by a factor of {1/slowdownFactor}");
             isActive = true;
@@ -41,8 +46,11 @@ namespace TimeBending
 
         public void StopSlowMotion ()
         {
+            if (_isPaused) return;
+
+            int fps = F3PS.GameManager.Instance.Fps;
             Time.timeScale = 1f;
-            Time.fixedDeltaTime = (1f / _fps);
+            Time.fixedDeltaTime = (1f / fps);
             Debug.Log("Slow motion is stopped");
             MasterAudio.PlaySoundAndForget("SlowMo_init");
             isActive = false;
@@ -68,8 +76,20 @@ namespace TimeBending
             _pitchTime = 0f;
         }
 
+        public void PauseTime()
+        {
+            Debug.Log("PAUSE");
+            Time.timeScale = 0f;
+            Time.fixedDeltaTime = 0f;
+            _isPaused = true;
+        }
+        
+        public void ResumeTime()
+        {
+            Debug.Log("RESUME");
+            Time.timeScale = isActive ? slowdownFactor : 1f;
+            Time.fixedDeltaTime = Time.timeScale / F3PS.GameManager.Instance.Fps;
+            _isPaused = false;
+        }
     }
-
-
-
 }

@@ -1,0 +1,84 @@
+using System.Collections;
+using F3PS.Damage.Take;
+using UnityEngine;
+
+public class BaseProjectile : MonoBehaviour
+{
+    public int damage = 50;
+    public float lifeTime = 0f;
+    public float maximumLifeTime = 5f;
+    public float removeAfterSeconds = .2f;
+    
+    private HitBox _hitBox;
+    protected Rigidbody _rb;
+    protected TimeObject _timeObject;
+    private TrailRenderer _trailRenderer;
+    private float _speed;
+    [SerializeField] protected bool _isHit = false;
+    public bool Hit => _isHit;
+
+    private void Awake()
+    {
+        _trailRenderer = GetComponent<TrailRenderer>();
+        _hitBox = GetComponent<HitBox>();
+        _rb = GetComponent<Rigidbody>();
+    }
+
+    public void Init(int attackerId)
+    {
+        _hitBox.attackerId = attackerId;
+    }
+    
+    private void Update()
+    {
+        lifeTime += Time.deltaTime;
+        if (lifeTime > maximumLifeTime)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public virtual void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+        _speed = shootSpeed;
+        _isHit = false;
+    }
+    
+    private void OnEnable()
+    {
+        _trailRenderer.Clear();
+        _rb.velocity = transform.forward * _speed;
+        lifeTime = 0f;
+    }
+
+    private void OnDisable()
+    {
+        _rb.velocity = Vector3.zero;
+    }
+
+    public virtual void SetHit()
+    {
+        if (Hit) return;
+        
+        _isHit = true;
+        StartCoroutine(SetInactiveAfterSeconds(removeAfterSeconds));
+    }
+
+    protected IEnumerator SetInactiveAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        gameObject.SetActive(false);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        var hittable = other.gameObject.GetComponent<Hittable>();
+        if (hittable != null && hittable.hittableId != _hitBox.attackerId)
+        {
+            hittable.OnHit(_hitBox);
+        }
+        SetHit();
+    }
+}

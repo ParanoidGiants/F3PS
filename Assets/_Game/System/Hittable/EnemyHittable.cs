@@ -14,18 +14,18 @@ namespace F3PS.Damage.Take
         }
 
         override
-        protected void OnHit(HitBox hitBy)
+        public void OnHit(HitBox hitBy)
         {
             // Hit by projectile
-            var projectile = hitBy.gameObject.GetComponent<Projectile>();
+            var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
-                projectile.SetHit();
+                Debug.Log("Hit by projectile: " + hitBy.name);
                 enemy.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
             
-            // Hit by projectile
+            // Hit by rush
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {

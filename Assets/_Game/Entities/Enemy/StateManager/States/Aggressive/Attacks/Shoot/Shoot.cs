@@ -1,14 +1,10 @@
 using UnityEngine;
-using Player;
+using Weapon;
 
 namespace F3PS.AI.States.Action
 {
     public class Shoot : Attack
     {
-        [Space(10)]
-        [Header("Shoot References")]
-        public BaseGun gun;
-        
         [Space(10)]
         [Header("Shoot Settings")]
         public float chargeTimer;
@@ -17,6 +13,7 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Shoot Watchers")]
+        public BaseGun gun;
         public float chargeTime;
         public float hitTime;
         public float recoverTime;
@@ -24,7 +21,8 @@ namespace F3PS.AI.States.Action
         override
         public void Init()
         {
-            gun.Init(enemy.GetInstanceID());            
+            gun = GetComponentInChildren<BaseGun>();
+            gun.Init(enemy.body.transform.parent);            
         }
 
         override
@@ -40,7 +38,7 @@ namespace F3PS.AI.States.Action
         override
         protected void OnRecover()
         {
-            gun.Reload();
+            gun.HandleReload();
             base.OnRecover();
         }
 
@@ -50,16 +48,20 @@ namespace F3PS.AI.States.Action
             UpdateGunAndEnemyRotation();
             chargeTime += Time.deltaTime;
             isCharging = chargeTime < chargeTimer;
+            
             base.HandleCharging();
         }
 
+        private bool isShootingPressed = false;
         override
         protected void HandleHitting()
         {
             UpdateGunAndEnemyRotation();
             hitTime += Time.deltaTime;
             isHitting = hitTime < hitTimer;
-            gun.Shoot();
+            isShootingPressed = !isShootingPressed;
+            gun.HandleShoot(isShootingPressed);
+            
             base.HandleHitting();
         }
         
@@ -69,6 +71,7 @@ namespace F3PS.AI.States.Action
             UpdateGunAndEnemyRotation();
             recoverTime += Time.deltaTime;
             isRecovering = recoverTime < recoverTimer;
+            
             base.HandleRecovering();
         }
         
@@ -78,7 +81,7 @@ namespace F3PS.AI.States.Action
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
             gun.UpdateRotation(gunRotation);
             
-            var enemyTransform = enemy.transform;
+            var enemyTransform = enemy.body.transform;
             var position = enemyTransform.position;
             var lookDirection = targetPosition - position;
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
