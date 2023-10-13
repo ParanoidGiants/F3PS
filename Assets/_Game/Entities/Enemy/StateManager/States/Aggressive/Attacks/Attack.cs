@@ -13,7 +13,7 @@ namespace F3PS.AI.States.Action
         [Header("General Watchers")]
         public bool isActive;
         public bool isCharging;
-        public bool isHitting;
+        public bool isAttacking;
         public bool isRecovering;
         
         [Header("General References")]
@@ -21,6 +21,7 @@ namespace F3PS.AI.States.Action
         public Material chargeMaterial;
         public Material hitMaterial;
         public Material recoverMaterial;
+        private Material _aggressiveMaterial;
 
         [Header("General Attack Settings")]
         public AttackType type;
@@ -30,8 +31,11 @@ namespace F3PS.AI.States.Action
         public float coolDownTimer;
         public float attackDistance;
         public int damage;
-        
-        public virtual void Init() {}
+
+        public virtual void Init(Material aggressiveMaterial)
+        {
+            _aggressiveMaterial = aggressiveMaterial;
+        }
         
         public void CoolDown()
         {
@@ -54,26 +58,26 @@ namespace F3PS.AI.States.Action
         protected virtual void HandleCharging()
         {
             if (isCharging) return; 
-            OnHit();
+            OnAttack();
         }
 
-        protected virtual void OnHit()
+        protected virtual void OnAttack()
         {
             enemy.SetMaterial(hitMaterial);
             isCharging = false;
-            isHitting = true;
+            isAttacking = true;
         }
 
-        protected virtual void HandleHitting()
+        protected virtual void HandleAttack()
         {
-            if (isHitting) return;
+            if (isAttacking) return;
             
             OnRecover();
         }
         protected virtual void OnRecover()
         {
             enemy.SetMaterial(recoverMaterial);
-            isHitting = false;
+            isAttacking = false;
             isRecovering = true;
         }
 
@@ -95,9 +99,9 @@ namespace F3PS.AI.States.Action
             {
                 HandleCharging();
             }
-            else if (isHitting)
+            else if (isAttacking)
             {
-                HandleHitting();
+                HandleAttack();
             }
             else if (isRecovering)
             {
@@ -109,8 +113,9 @@ namespace F3PS.AI.States.Action
         {
             coolDownTime = 0f;
             isActive = false;
-            _target = null;
             isRecovering = false;
+            enemy.SetMaterial(_aggressiveMaterial);
+            _target = null;
         }
 
         public virtual bool IsInAttackDistance(Vector3 targetPosition)

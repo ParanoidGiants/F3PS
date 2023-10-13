@@ -18,11 +18,14 @@ namespace F3PS.AI.States.Action
         public float hitTime;
         public float recoverTime;
 
+        private bool _isShootingPressed = false;
+        
         override
-        public void Init()
+        public void Init(Material aggressiveMaterial)
         {
             gun = GetComponentInChildren<BaseGun>();
-            gun.Init(enemy.body.transform.parent);            
+            gun.Init(enemy.body.transform.parent);        
+            base.Init(aggressiveMaterial);
         }
 
         override
@@ -34,16 +37,9 @@ namespace F3PS.AI.States.Action
 
             base.OnCharge();
         }
-        
-        override
-        protected void OnRecover()
-        {
-            gun.HandleReload();
-            base.OnRecover();
-        }
 
         override
-        protected void HandleCharging()
+            protected void HandleCharging()
         {
             UpdateGunAndEnemyRotation();
             chargeTime += Time.deltaTime;
@@ -52,17 +48,23 @@ namespace F3PS.AI.States.Action
             base.HandleCharging();
         }
 
-        private bool isShootingPressed = false;
         override
-        protected void HandleHitting()
+        protected void OnRecover()
+        {
+            gun.HandleReload();
+            base.OnRecover();
+        }
+        
+        override
+        protected void HandleAttack()
         {
             UpdateGunAndEnemyRotation();
             hitTime += Time.deltaTime;
-            isHitting = hitTime < hitTimer;
-            isShootingPressed = !isShootingPressed;
-            gun.HandleShoot(isShootingPressed);
+            isAttacking = hitTime < hitTimer;
+            _isShootingPressed = !_isShootingPressed;
+            gun.HandleShoot(_isShootingPressed);
             
-            base.HandleHitting();
+            base.HandleAttack();
         }
         
         override

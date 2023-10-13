@@ -4,33 +4,29 @@ using UnityEngine;
 public class TimeObject : MonoBehaviour
 {
     private const double TOLERANCE = 0.001f;
-    private Rigidbody _rb;
+    public Rigidbody rb;
     private float _defaultMass;
     public int amountOfTimeZones = 0;
-
-    public float currentTimeScale;
+    public float currentTimeScale = 1;
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
-        _rb.useGravity = false;
-        _defaultMass = _rb.mass;
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        _defaultMass = rb.mass;
     }
 
     void Start()
     {
         PitchTimeScale(currentTimeScale);
     }
-    
-    public float normalModifier = 0f;
-    public float scaledModifier = 0f;
 
     void FixedUpdate()
     {
-        if (!_rb.isKinematic)
+        if (!rb.isKinematic)
         {
             var force = currentTimeScale * currentTimeScale * Physics.gravity;
-            _rb.AddForce(
+            rb.AddForce(
                 force,
                 ForceMode.Acceleration
             );
@@ -39,22 +35,22 @@ public class TimeObject : MonoBehaviour
 
     public void PitchTimeScale(float newTimeScale)
     {
-        if (_rb == null) return;
+        if (rb == null) return;
         
         float relation = newTimeScale / currentTimeScale;
         currentTimeScale = newTimeScale;
         
         if (newTimeScale > TOLERANCE)
         {
-            _rb.isKinematic = false;
-            _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
-            _rb.velocity *= relation;
-            _rb.angularVelocity *= relation;
+            rb.isKinematic = false;
+            rb.mass = _defaultMass / (newTimeScale*newTimeScale);
+            rb.velocity *= relation;
+            rb.angularVelocity *= relation;
         }
         else
         {
-            _rb.isKinematic = true;
-            _rb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
 

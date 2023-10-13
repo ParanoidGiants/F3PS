@@ -13,6 +13,7 @@ namespace F3PS.Enemy
         public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
+        public TimeObject timeObject;
         private EnemyHealthUIPool _healthUIPool;
         public bool HasPatrolRoute { get; private set; }
 
@@ -52,13 +53,6 @@ namespace F3PS.Enemy
                 return;
             }
             _healthUIPool.OnHitTarget(this);
-        }
-        
-        public void Rush(float strength)
-        {
-            body.constraints = RigidbodyConstraints.FreezeRotation;
-            body.AddForce(strength * body.transform.forward, ForceMode.Impulse);
-            MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", body.transform);
         }
         
         public void StopRush()

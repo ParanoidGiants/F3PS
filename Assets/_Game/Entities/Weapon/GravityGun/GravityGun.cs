@@ -17,12 +17,12 @@ namespace Weapon
                 if (currentMagazineAmount <= 0)
                 {
                     // TODO: Play empty clip sound
-                    weaponUI?.OnShootEmptyClip();
+                    weaponUI.OnShootEmptyClip();
                 }
                 else
                 {
                     StartCoroutine(Shoot());
-                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    weaponUI.UpdateAmmoText(currentMagazineAmount, totalAmount);
                 }
                 _wasShootingPressedLastFrame = true;
             }

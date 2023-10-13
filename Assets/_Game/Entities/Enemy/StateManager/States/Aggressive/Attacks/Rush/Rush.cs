@@ -1,4 +1,5 @@
 using System;
+using DarkTonic.MasterAudio;
 using F3PS.Damage.Take;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace F3PS.AI.States.Action
         private Vector3 _chargeStartPosition;
         private Vector3 _chargeEndPosition;
         private Vector3 _chargeForward;
+        private Vector3 _attackStartPosition;
+        private Vector3 _attackEndPosition;
+        private Vector3 _attackForward;
         private Vector3 _recoverStartPosition;
         private Vector3 _recoverEndPosition;
         private Vector3 _recoverForward;
@@ -19,17 +23,19 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Rush Settings")]
-        public float rushStrength;
         public float chargeTimer;
-        public float hitTimer;
+        public float attackTimer;
         public float recoverTimer;
+        
+        public float chargeStrength;
+        public float recoverStrength;
         public Collider bodyCollider;
         
         [Space(10)]
         [Header("Rush Watchers")]
         public bool wasEarlyHit;
         public float chargeTime;
-        public float hitTime;
+        public float attackTime;
         public float recoverTime;
 
         private void Start()
@@ -46,12 +52,12 @@ namespace F3PS.AI.States.Action
         {
             wasEarlyHit = false;
             chargeTime = 0f;
-            hitTime = 0f;
+            attackTime = 0f;
             recoverTime = 0f;
             
             _chargeStartPosition = _enemyTransform.position;
             _chargeForward = _enemyTransform.forward;
-            _chargeEndPosition = _chargeStartPosition - _chargeForward * 0.5f;
+            _chargeEndPosition = _chargeStartPosition - _chargeForward * chargeStrength;
             
             base.OnCharge();
         }
@@ -66,25 +72,31 @@ namespace F3PS.AI.States.Action
         }
         
         override
-        protected void OnHit()
+        protected void OnAttack()
         {
             _hitCollider.enabled = true;
-            enemy.Rush(rushStrength);
-            base.OnHit();
+            _attackStartPosition = _enemyTransform.position;
+            _attackForward = _enemyTransform.forward;
+            _attackEndPosition = _attackStartPosition + _attackForward * attackDistance;
+            
+            MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", _enemyTransform);
+            base.OnAttack();
         }
 
         override
-        protected void HandleHitting()
+        protected void HandleAttack()
         {
             if (wasEarlyHit)
             {
-                hitTime = hitTimer;
+                Debug.Log("EARLY HIT!");
+                attackTime = attackTimer;
                 OnRecover();
                 return;
             }
-            hitTime += Time.deltaTime;
-            isHitting = hitTime < hitTimer;
-            base.HandleHitting();
+            attackTime += Time.deltaTime;
+            isAttacking = attackTime < attackTimer;
+            _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
+            base.HandleAttack();
         }
         
         override
@@ -95,17 +107,16 @@ namespace F3PS.AI.States.Action
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            _recoverEndPosition = _recoverStartPosition - _recoverForward;
+            var _recoverStrength = (wasEarlyHit ? 1f : 0.5f) * recoverStrength;
+            _recoverEndPosition = _recoverStartPosition - _recoverForward * _recoverStrength;
         }
         
         override
         protected void HandleRecovering()
         {
             recoverTime += Time.deltaTime;
-            var newPosition = Vector3.Lerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
-            _enemyTransform.position = newPosition;
-            _recoverStartPosition = _enemyTransform.position;
             isRecovering = recoverTime < recoverTimer;
+            _enemyTransform.position = Vector3.Slerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
             base.HandleRecovering();
         }
 

@@ -31,7 +31,6 @@ namespace F3PS.Damage.Take
             {
                 enemy.Hit((int)(damageMultiplier * rush.damage));
                 rush.wasEarlyHit = true;
-                return;
             }
         }
     }

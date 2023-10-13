@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78079e2aa41d2d74c8b3a7a881e07c04, type: 2}
+  - {fileID: 2100000, guid: 9424064f90153194d92e3598e12b2830, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -363,11 +363,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8985127288dd1fa4aae2e23be98fd45a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 0
   lifeTime: 2
   maximumLifeTime: 60
   removeAfterSeconds: 60
-  collisionDamping: 0.1
   _isHit: 0
   _timeZone: {fileID: 3480544596247256642}
 --- !u!114 &2770884572257880509
@@ -382,5 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amoountOfTimeZones: 0
+  rb: {fileID: 0}
+  amountOfTimeZones: 0
   currentTimeScale: 1
