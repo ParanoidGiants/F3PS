@@ -1,4 +1,3 @@
-using System;
 using F3PS.AI.States.Action;
 using F3PS.Damage.Take;
 using UnityEngine;
@@ -79,10 +78,18 @@ namespace F3PS.AI.States
 
         private void HandleNextAttack()
         {
+            Transform transform1 = enemy.body.transform;
+            var targetForward = (_selectedTarget.Center() - transform1.position).normalized;
+            var actualForward = transform1.forward;
+            if (
+                !Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f)
+                && !Helper.IsOnSameY(transform1.position, _selectedTarget.Center(), 0.1f)
+            ) return;
+            
             _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             _navMeshAgent.destination = _selectedTarget.Center();
             bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            if (attackHasCooledDown && _nextAttack.IsInAttackDistance(_selectedTarget.Center()))
+            if (attackHasCooledDown && Helper.HasReachedDestination(_navMeshAgent))
             {
                 _nextAttack.OnStartAttack(_selectedTarget);
             }
@@ -90,7 +97,7 @@ namespace F3PS.AI.States
 
         private void HandlePositionAndRotation()
         {
-            bool isInAttackDistance = _nextAttack.IsInAttackDistance(_selectedTarget.Center());
+            bool isInAttackDistance = Helper.HasReachedDestination(_navMeshAgent);
             if (isInAttackDistance)
             {
                 var enemyTransform = enemy.body.transform;
@@ -98,7 +105,7 @@ namespace F3PS.AI.States
                 var lookDirection = _selectedTarget.Center() - position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
                 var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * rotationSpeed);
+                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * rotationSpeed);
             }
         }
 

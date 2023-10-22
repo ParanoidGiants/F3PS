@@ -105,7 +105,7 @@ namespace Player
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
             Dodging(_input.dodge);
-            weaponManager.OnUpdate(isShooting, isReloading, _crosshair.GetTargetPosition());
+            weaponManager.OnUpdate(isSprinting, isShooting, isReloading, _crosshair.GetTargetPosition());
             UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }

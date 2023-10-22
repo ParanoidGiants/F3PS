@@ -26,7 +26,7 @@ namespace F3PS.AI.States
             {
                 _navMeshAgent = enemy.navMeshAgent;
             }
-            _navMeshAgent.speed = enemySpeed;
+            _navMeshAgent.speed = enemySpeed * enemy.TimeScale;
             _navMeshAgent.stoppingDistance = enemyStoppingDistance;
             SetSensorState();
             enemy.SetMaterial(material);

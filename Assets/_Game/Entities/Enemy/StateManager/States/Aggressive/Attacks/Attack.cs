@@ -1,8 +1,6 @@
 using F3PS.Damage.Take;
 using F3PS.Enemy;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.PlayerLoop;
 
 namespace F3PS.AI.States.Action
 {
@@ -39,7 +37,7 @@ namespace F3PS.AI.States.Action
         
         public void CoolDown()
         {
-            coolDownTime += Time.deltaTime;
+            coolDownTime += enemy.ScaledDeltaTime;
         }
         
         public virtual void OnStartAttack(Hittable hittable)
@@ -118,19 +116,8 @@ namespace F3PS.AI.States.Action
             _target = null;
         }
 
-        public virtual bool IsInAttackDistance(Vector3 targetPosition)
+        public virtual bool CanAttack(Vector3 targetPosition)
         {
-            var position = enemy.body.transform.position;
-            var direction1 = (targetPosition - position).normalized;
-            
-            if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))
-            {
-                if (Physics.Raycast(position, direction1, hit.distance, Helper.DefaultLayer))
-                {
-                    return false;                
-                } 
-                return true;
-            }
             return false;
         }
     }

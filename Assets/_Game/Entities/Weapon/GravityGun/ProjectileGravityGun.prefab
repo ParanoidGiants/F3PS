@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90bcc42fa97bf514ebcab9eaa70684d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeScale: 0.05
+  timeScale: 0.5
 --- !u!135 &4706125494382470933
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 5561095795434186493}
   - component: {fileID: 5004514709375848286}
   - component: {fileID: 610204712817018096}
-  - component: {fileID: 2770884572257880509}
+  - component: {fileID: 8677801731790617712}
   m_Layer: 6
   m_Name: ProjectileGravityGun
   m_TagString: Untagged
@@ -369,7 +369,7 @@ MonoBehaviour:
   removeAfterSeconds: 60
   _isHit: 0
   _timeZone: {fileID: 3480544596247256642}
---- !u!114 &2770884572257880509
+--- !u!114 &8677801731790617712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -378,9 +378,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8541015354598396513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Script: {fileID: 11500000, guid: 6067893fbf782f64d8e687a19a8a8b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   amountOfTimeZones: 0
   currentTimeScale: 1
+  rb: {fileID: 0}

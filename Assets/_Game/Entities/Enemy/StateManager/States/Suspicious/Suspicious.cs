@@ -20,7 +20,7 @@ namespace F3PS.AI.States.Action
         
         public override void OnUpdate()
         {
-            _isSuspiciousTime -= Time.deltaTime;
+            _isSuspiciousTime -= enemy.ScaledDeltaTime;
                 
             float isSuspiciousPercenatge = _isSuspiciousTime / _isSuspiciousTimer;
             float isSuspiciousAnimateTime = Mathf.Sin(isSuspiciousPercenatge * (2f * Mathf.PI));

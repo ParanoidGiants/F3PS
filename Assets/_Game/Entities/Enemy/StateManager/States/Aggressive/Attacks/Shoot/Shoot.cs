@@ -42,7 +42,7 @@ namespace F3PS.AI.States.Action
             protected void HandleCharging()
         {
             UpdateGunAndEnemyRotation();
-            chargeTime += Time.deltaTime;
+            chargeTime += enemy.ScaledDeltaTime;
             isCharging = chargeTime < chargeTimer;
             
             base.HandleCharging();
@@ -59,7 +59,7 @@ namespace F3PS.AI.States.Action
         protected void HandleAttack()
         {
             UpdateGunAndEnemyRotation();
-            hitTime += Time.deltaTime;
+            hitTime += enemy.ScaledDeltaTime;
             isAttacking = hitTime < hitTimer;
             _isShootingPressed = !_isShootingPressed;
             gun.HandleShoot(_isShootingPressed);
@@ -71,7 +71,7 @@ namespace F3PS.AI.States.Action
         protected void HandleRecovering()
         {
             UpdateGunAndEnemyRotation();
-            recoverTime += Time.deltaTime;
+            recoverTime += enemy.ScaledDeltaTime;
             isRecovering = recoverTime < recoverTimer;
             
             base.HandleRecovering();
@@ -88,11 +88,11 @@ namespace F3PS.AI.States.Action
             var lookDirection = targetPosition - position;
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
             var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, Time.deltaTime * 5f);
+            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * 5f);
         }
         
         override
-        public bool IsInAttackDistance(Vector3 targetPosition)
+        public bool CanAttack(Vector3 targetPosition)
         {
             var position = gun.transform.position;
             var direction1 = (targetPosition - position).normalized;

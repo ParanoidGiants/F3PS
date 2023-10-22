@@ -36,7 +36,7 @@ namespace F3PS.AI.States
         {
             base.OnUpdate();
             
-            _idleTime += Time.deltaTime;
+            _idleTime += enemy.ScaledDeltaTime;
             if (idleTimer > _idleTime) return;
             
             stateManager.SwitchState(StateType.PATROLLING);

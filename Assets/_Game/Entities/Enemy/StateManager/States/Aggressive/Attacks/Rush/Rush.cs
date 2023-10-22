@@ -1,4 +1,3 @@
-using System;
 using DarkTonic.MasterAudio;
 using F3PS.Damage.Take;
 using UnityEngine;
@@ -65,7 +64,7 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleCharging()
         {
-            chargeTime += Time.deltaTime;
+            chargeTime += enemy.ScaledDeltaTime;
             isCharging = chargeTime < chargeTimer;
             _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
             base.HandleCharging();
@@ -93,7 +92,7 @@ namespace F3PS.AI.States.Action
                 OnRecover();
                 return;
             }
-            attackTime += Time.deltaTime;
+            attackTime += enemy.ScaledDeltaTime;
             isAttacking = attackTime < attackTimer;
             _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
             base.HandleAttack();
@@ -103,7 +102,6 @@ namespace F3PS.AI.States.Action
         protected void OnRecover()
         {
             base.OnRecover();
-            enemy.StopRush();
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
@@ -114,7 +112,7 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleRecovering()
         {
-            recoverTime += Time.deltaTime;
+            recoverTime += enemy.ScaledDeltaTime;
             isRecovering = recoverTime < recoverTimer;
             _enemyTransform.position = Vector3.Slerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
             base.HandleRecovering();

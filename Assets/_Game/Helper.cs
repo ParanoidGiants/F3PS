@@ -56,4 +56,17 @@ public static class Helper
                && agent.remainingDistance <= stoppingDistance + threshold 
                && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
     }
+
+    public static bool IsOrientedOnXZ(Vector3 vec1, Vector3 vec2, float tolerance = 0f)
+    {
+        var vec1XZ = new Vector2(vec1.x, vec1.z);
+        var vec2XZ = new Vector2(vec2.x, vec2.z);
+        
+        return Vector2.Dot(vec1XZ, vec2XZ) > tolerance;
+    }
+
+    public static bool IsOnSameY(Vector3 pos1, Vector3 pos2, float tolerance = 0f)
+    {
+        return Mathf.Abs(pos1.y - pos2.y) < tolerance;
+    }
 }

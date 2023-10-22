@@ -62,7 +62,6 @@ namespace F3PS
 
         public void ResumeTime()
         {
-            Debug.Log("Try Resume");
             if (timeManager.IsPaused)
             {
                 timeManager.ResumeTime();
@@ -71,7 +70,6 @@ namespace F3PS
 
         public void PauseTime()
         {
-            Debug.Log("Try Pause");
             if (!timeManager.IsPaused)
             {
                 timeManager.PauseTime();

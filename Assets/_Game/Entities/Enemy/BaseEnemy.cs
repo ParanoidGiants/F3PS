@@ -14,6 +14,8 @@ namespace F3PS.Enemy
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
         public TimeObject timeObject;
+        public float ScaledDeltaTime => timeObject.currentTimeScale * Time.deltaTime;
+        public float TimeScale => timeObject.currentTimeScale;
         private EnemyHealthUIPool _healthUIPool;
         public bool HasPatrolRoute { get; private set; }
 
@@ -53,11 +55,6 @@ namespace F3PS.Enemy
                 return;
             }
             _healthUIPool.OnHitTarget(this);
-        }
-        
-        public void StopRush()
-        {
-            body.constraints = RigidbodyConstraints.FreezeAll;
         }
 
         public void SetMaterial(Material material)

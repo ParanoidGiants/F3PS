@@ -48,14 +48,17 @@ namespace Weapon
             _weaponUI.UpdateImage(ActiveWeapon.icon);
         }
 
-        public void OnUpdate(bool isShooting, bool isReloading, Vector3 targetPosition)
+        public void OnUpdate(bool isSprinting, bool isShooting, bool isReloading, Vector3 targetPosition)
         {
             ActiveWeapon.HandleShoot(isShooting);
             if (isReloading) ActiveWeapon.HandleReload();
             
             var gunForward = targetPosition - ActiveWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
-            ActiveWeapon.UpdateRotation(gunRotation);
+            if (!isSprinting)
+            {
+                ActiveWeapon.UpdateRotation(gunRotation);
+            }
         }
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)

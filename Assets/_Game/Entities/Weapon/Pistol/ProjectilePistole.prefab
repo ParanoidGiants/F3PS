@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6739350904307419869}
   - component: {fileID: 5561095795434186493}
   - component: {fileID: 5004514709375848286}
-  - component: {fileID: 7759179841768975233}
+  - component: {fileID: -5224004156025271538}
   m_Layer: 6
   m_Name: ProjectilePistole
   m_TagString: Untagged
@@ -256,7 +256,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.002
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7759179841768975233
+--- !u!114 &-5224004156025271538
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,10 +265,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8541015354598396513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Script: {fileID: 11500000, guid: 6067893fbf782f64d8e687a19a8a8b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   amountOfTimeZones: 0
   currentTimeScale: 1
-  normalModifier: 0
-  scaledModifier: 0
+  rb: {fileID: 0}
