@@ -39,7 +39,7 @@ namespace F3PS.AI.States.Action
         }
 
         override
-            protected void HandleCharging()
+        protected void HandleCharging()
         {
             UpdateGunAndEnemyRotation();
             chargeTime += enemy.ScaledDeltaTime;

@@ -6,7 +6,7 @@ namespace F3PS.AI.States.Action
 {
     public abstract class Attack : MonoBehaviour
     {
-        protected Hittable _target;
+        [SerializeField] protected Hittable _target;
         
         [Header("General Watchers")]
         public bool isActive;

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PhysicsTimeObject : TimeObject
@@ -6,6 +5,7 @@ public class PhysicsTimeObject : TimeObject
     private const double TOLERANCE = 0.001f;
     public Rigidbody rb;
     private float _defaultMass;
+    public float gravityScale = 1f;
 
     private void Awake()
     {
@@ -18,7 +18,7 @@ public class PhysicsTimeObject : TimeObject
     {
         if (rb.isKinematic) return;
         
-        var force = currentTimeScale * currentTimeScale * Physics.gravity;
+        var force = currentTimeScale * currentTimeScale * Physics.gravity * gravityScale;
         rb.AddForce(
             force,
             ForceMode.Acceleration
@@ -28,6 +28,8 @@ public class PhysicsTimeObject : TimeObject
     override
     public void PitchTimeScale(float newTimeScale)
     {
+        if (rb == null) return;
+        
         float relation = newTimeScale / currentTimeScale;
         base.PitchTimeScale(newTimeScale);
         

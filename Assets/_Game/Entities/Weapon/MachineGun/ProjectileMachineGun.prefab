@@ -133,7 +133,7 @@ MonoBehaviour:
   damage: 2
   lifeTime: 0
   maximumLifeTime: 10
-  removeAfterSeconds: 10
+  removeAfterSeconds: 0.5
   _isHit: 0
 --- !u!96 &5561095795434186493
 TrailRenderer:

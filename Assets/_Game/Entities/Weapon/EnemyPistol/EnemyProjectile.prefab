@@ -12,13 +12,13 @@ GameObject:
   - component: {fileID: 8541015354598396517}
   - component: {fileID: 8541015354598396516}
   - component: {fileID: 8541015354598396514}
+  - component: {fileID: 5004514709375848286}
+  - component: {fileID: 5561095795434186493}
   - component: {fileID: 6863931835482500036}
   - component: {fileID: 6739350904307419869}
-  - component: {fileID: 5561095795434186493}
-  - component: {fileID: 5004514709375848286}
   - component: {fileID: -5224004156025271538}
   m_Layer: 6
-  m_Name: ProjectilePistole
+  m_Name: EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,36 +105,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &6863931835482500036
-MonoBehaviour:
+--- !u!135 &5004514709375848286
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8541015354598396513}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 428ae0cd26a7b66468b69e88534889da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackerId: 0
---- !u!114 &6739350904307419869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8541015354598396513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f730b930e8891041a39f403c7a54678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 3
-  lifeTime: 0
-  maximumLifeTime: 5
-  removeAfterSeconds: 0.2
-  _isHit: 0
+  serializedVersion: 2
+  m_Radius: 0.002
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &5561095795434186493
 TrailRenderer:
   serializedVersion: 2
@@ -243,19 +226,36 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!135 &5004514709375848286
-SphereCollider:
+--- !u!114 &6863931835482500036
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8541015354598396513}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.002
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 428ae0cd26a7b66468b69e88534889da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackerId: 0
+--- !u!114 &6739350904307419869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541015354598396513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f730b930e8891041a39f403c7a54678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 3
+  lifeTime: 0
+  maximumLifeTime: 5
+  removeAfterSeconds: 0.2
+  _isHit: 0
 --- !u!114 &-5224004156025271538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,3 +271,4 @@ MonoBehaviour:
   amountOfTimeZones: 0
   currentTimeScale: 1
   rb: {fileID: 0}
+  gravityScale: 0.25

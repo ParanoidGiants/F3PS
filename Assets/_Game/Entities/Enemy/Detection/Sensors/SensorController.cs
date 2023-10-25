@@ -67,13 +67,12 @@ namespace F3PS.AI.Sensors
                 return searchingVision.SelectedTarget;
             }
             // else state is aggressive
+            if (searchingVision.HasTarget && aggressiveMovement.HasTarget)
+            {
+                return aggressiveMovement.SelectedTarget;
+            }
             if (searchingVision.HasTarget)
             {
-                if (aggressiveMovement.HasTarget)
-                {
-                    return aggressiveMovement.SelectedTarget;
-                }
-                
                 // else work with what you see
                 return searchingVision.SelectedTarget;
             }

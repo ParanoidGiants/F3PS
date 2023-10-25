@@ -629,7 +629,7 @@ PrefabInstance:
     - target: {fileID: 3861706144474456395, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_Name
-      value: PistolGun Variant
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
@@ -729,7 +729,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47d5aa6f18c6084d9aa6e264bf8f244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8541015354598396513, guid: a36c6daf78556364a922cf45d7d6cf2f,
+    type: 3}
   projectileSpawn: {fileID: 7420966541678857242}
   projectilePool: {fileID: 2891245280591940539}
   meshHolder: {fileID: 626120072056480866}
@@ -745,6 +746,8 @@ MonoBehaviour:
   shootCoolDownTime: 0
   reloadMagazineTime: 0
   isReloadingMagazine: 0
+  weaponUI: {fileID: 0}
+  _wasShootingPressedLastFrame: 0
 --- !u!4 &7420966541678857242 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,

@@ -67,6 +67,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shoot
       objectReference: {fileID: 0}
+    - target: {fileID: 6230823935407002140, guid: 254f23c32ab05454fb2532a3b6f7366a,
+        type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 8541015354598396513, guid: 47f1d6677033e3c448ce04d5a50ac5b5,
+        type: 3}
     - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
         type: 3}
       propertyPath: gun
@@ -156,6 +162,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shooter0 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
+        type: 3}
+      propertyPath: timeObject
+      value: 
+      objectReference: {fileID: 2070891688}
     - target: {fileID: 7874501509564256046, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Height
@@ -179,7 +190,7 @@ PrefabInstance:
     - target: {fileID: 7874501509564256047, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.556439
+      value: -6.98
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256047, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
@@ -229,6 +240,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3540577195369143228}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5529652370495688770 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9052215167061412862, guid: 543d14d0acc738d4295f4068dbb9cef2,
+    type: 3}
+  m_PrefabInstance: {fileID: 3540577195369143228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2070891688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5529652370495688770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfTimeZones: 0
+  currentTimeScale: 1
 --- !u!114 &6657852236725048464 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,

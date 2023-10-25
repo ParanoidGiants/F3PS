@@ -29,6 +29,12 @@ namespace F3PS.AI.Sensors
             
             // AddHittableCandidate(hittable)
             _targetCandidates.Add(hittable);
+            _targetCandidates.Sort((x, y) =>
+            {
+                if (x.damageMultiplier > y.damageMultiplier) return -1;
+                if (x.damageMultiplier < y.damageMultiplier) return 1;
+                return 0;
+            });
         }
 
         private void OnTriggerExit(Collider other)
