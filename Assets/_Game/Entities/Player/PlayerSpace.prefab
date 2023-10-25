@@ -1121,9 +1121,9 @@ MonoBehaviour:
   maxHealth: 100
   RotationSmoothTime: 0.12
   AmingRotationSmoothTime: 0.3
-  FocusSpeed: 5
+  FocusSpeed: 3
   MoveSpeed: 8
-  SprintSpeed: 15
+  SprintSpeed: 20
 --- !u!1 &2070925442004104931
 GameObject:
   m_ObjectHideFlags: 0
@@ -3968,6 +3968,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MachineGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708543336009785340, guid: 9fc755f69d075ab46a07a662b1418eb9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc755f69d075ab46a07a662b1418eb9, type: 3}

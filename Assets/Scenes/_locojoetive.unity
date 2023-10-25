@@ -5251,6 +5251,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &978292376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1898592192382853202, guid: 4d4db73df165e4d40aed90ef571a18f0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7137088972954229242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &978292379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978292376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe0d1dfb71cdb04da3ecec28bd16b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _frames: 0
 --- !u!1 &981401012
 GameObject:
   m_ObjectHideFlags: 0
@@ -5535,7 +5554,7 @@ MonoBehaviour:
     IsEditing: 0
     IsTemporary: 0
     ProspectiveName: '[Uncategorized]'
-  frames: 54
+  frames: 884
   showUnityMixerGroupAssignment: 1
 --- !u!4 &981401014
 Transform:
@@ -7978,7 +7997,7 @@ MonoBehaviour:
   fadeMaxVolume: 0
   curFadeMode: 0
   curPitchMode: 0
-  curDetectEndMode: 0
+  curDetectEndMode: 1
   frames: 0
 --- !u!82 &1023080391
 AudioSource:
@@ -9697,11 +9716,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
-        type: 3}
-      propertyPath: field of view
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: near clip plane
@@ -11674,7 +11688,7 @@ MonoBehaviour:
   playlistStartedCustomEvent: 
   playlistEndedEventExpanded: 0
   playlistEndedCustomEvent: 
-  _frames: 8042050
+  _frames: 8042934
 --- !u!82 &1513793261
 AudioSource:
   m_ObjectHideFlags: 0
@@ -13395,6 +13409,25 @@ Transform:
   m_Father: {fileID: 2121790071}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1579425257 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 690318467157581653, guid: 184d27f2080bf054996857787640303e,
+    type: 3}
+  m_PrefabInstance: {fileID: 808647186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1579425261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579425257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe0d1dfb71cdb04da3ecec28bd16b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _frames: 0
 --- !u!1 &1584205648
 GameObject:
   m_ObjectHideFlags: 0
@@ -14961,7 +14994,7 @@ MonoBehaviour:
   fadeMaxVolume: 0
   curFadeMode: 0
   curPitchMode: 0
-  curDetectEndMode: 0
+  curDetectEndMode: 1
   frames: 0
 --- !u!82 &1837875874
 AudioSource:
@@ -32429,26 +32462,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 519437979198283079, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: FocusSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 519437979198283079, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: SprintSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1588156886137979279, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4473622566383276541, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6128214820260621315, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_RootOrder
