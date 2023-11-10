@@ -15,7 +15,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2993
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -74,7 +74,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: f46b6e249a01f5a47af061511215edf3, type: 3}
+        m_Texture: {fileID: 2800000, guid: a6bc8f7b255e14345834ee6df2b84f4e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -94,7 +94,11 @@ Material:
     - _Alpha: 0.5
     - _AlphaClip: 0
     - _Blend: 0
-    - _Brightness: 1
+    - _BrackeysFresnelPoewr: 1.38
+    - _BrackeysFresnelPower: 4.49
+    - _BrackeysMoveSpeed: 0.01
+    - _BrackeysOffset: -0.27
+    - _Brightness: 8
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -102,10 +106,10 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DistortionSpeed: 0.01
+    - _DistortionSpeed: 0.1
     - _DstBlend: 10
     - _EnvironmentReflections: 1
-    - _FresnelPower: 1
+    - _FresnelPower: 4.1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -113,7 +117,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
-    - _QueueOffset: 0
+    - _QueueOffset: -7
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -125,16 +129,17 @@ Material:
     m_Colors:
     - _Albedo: {r: 0, g: 1, b: 0.76733255, a: 0}
     - _BaseColor: {r: 0, g: 0.9902975, b: 1, a: 0.11764706}
+    - _BrackeysEmission: {r: 0, g: 5.656854, b: 5.656854, a: 0}
     - _Color: {r: 0, g: 0.9902975, b: 1, a: 0.11764706}
     - _Direction: {r: 0, g: 0.1, b: 0, a: 0}
-    - _DistortionStrength: {r: 0.1, g: 0.1, b: 0, a: 0}
-    - _DistortionTiling: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _DistortionStrength: {r: 10, g: 10, b: 0, a: 0}
+    - _DistortionTiling: {r: 1, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MaxRemap: {r: -0.57, g: 1.12, b: 0, a: 0}
     - _MinRemap: {r: 0.01, g: 1, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tiling: {r: 10, g: 10, b: 0, a: 0}
-    - _Tint: {r: 0, g: 1, b: 0.8556881, a: 0}
+    - _Tiling: {r: 20, g: 20, b: 0, a: 0}
+    - _Tint: {r: 0.82685477, g: 0.7164471, b: 0.9433962, a: 0}
     - _albedo: {r: 0, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &5656975424568704959

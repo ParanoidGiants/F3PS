@@ -3710,18 +3710,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8579149676361870591}
     m_Modifications:
-    - target: {fileID: 795992486346393575, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: icon
-      value: 
-      objectReference: {fileID: 21300000, guid: 1266335f95495904b900c02c6308ed4f,
-        type: 3}
-    - target: {fileID: 2770743858279051450, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 8541015354598396513, guid: a36c6daf78556364a922cf45d7d6cf2f,
-        type: 3}
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_RootOrder
@@ -3782,11 +3770,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
-    - target: {fileID: 6708543336009785340, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 806106cbf8c59cd4a8c4dd6dded31343, type: 3}
 --- !u!4 &9222923224880341373 stripped
@@ -3802,31 +3785,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8579149676361870591}
     m_Modifications:
-    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: maxAmmo
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: meshHolder
-      value: 
-      objectReference: {fileID: 123824025274252373}
-    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: maxMagazineAmmo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: shootCoolDownTimer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: reloadMagazineTimer
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3860830024259442653, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: m_Name
@@ -3957,36 +3915,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4243331448926635191, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: shotSpeed
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243331448926635191, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 8541015354598396513, guid: 9daf1c2b1d40b194282ddbf6d8655b68,
-        type: 3}
-    - target: {fileID: 4243331448926635191, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: shootCoolDownTimer
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243331448926635191, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: reloadMagazineTimer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6708543336009785340, guid: 9fc755f69d075ab46a07a662b1418eb9,
         type: 3}
       propertyPath: m_Name
       value: MachineGun
-      objectReference: {fileID: 0}
-    - target: {fileID: 6708543336009785340, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc755f69d075ab46a07a662b1418eb9, type: 3}

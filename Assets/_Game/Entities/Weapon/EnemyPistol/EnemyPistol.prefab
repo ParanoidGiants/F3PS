@@ -12,6 +12,12 @@ PrefabInstance:
       propertyPath: maxAmmo
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 2770743858279051450, guid: 806106cbf8c59cd4a8c4dd6dded31343,
+        type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 8128536680954430882, guid: 15b805e54a6417b468c56e95474813ed,
+        type: 3}
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_RootOrder
@@ -70,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 6708543336009785340, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_Name
-      value: PistolGun
+      value: EnemyPistol
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 806106cbf8c59cd4a8c4dd6dded31343, type: 3}

@@ -67,46 +67,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shoot
       objectReference: {fileID: 0}
-    - target: {fileID: 6230823935407002140, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 8541015354598396513, guid: 47f1d6677033e3c448ce04d5a50ac5b5,
-        type: 3}
-    - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: gun
-      value: 
-      objectReference: {fileID: 6563555750321411340}
     - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
         type: 3}
       propertyPath: enemy
       value: 
       objectReference: {fileID: 6657852236725048464}
-    - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: chargeTimer
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
-        type: 3}
-      propertyPath: recoverTimer
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 254f23c32ab05454fb2532a3b6f7366a, type: 3}
---- !u!114 &6563555750321411340 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6230823935407002140, guid: 254f23c32ab05454fb2532a3b6f7366a,
-    type: 3}
-  m_PrefabInstance: {fileID: 967775245703235344}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47d5aa6f18c6084d9aa6e264bf8f244, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8367039056624811670 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
@@ -160,7 +127,7 @@ PrefabInstance:
     - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Name
-      value: Shooter0 (1)
+      value: Shooter
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}

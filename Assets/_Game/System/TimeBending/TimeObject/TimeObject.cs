@@ -16,7 +16,7 @@ public class TimeObject : MonoBehaviour
         currentTimeScale = newTimeScale;
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         PitchTimeScale(1f);
         amountOfTimeZones = 0;

@@ -115,7 +115,7 @@ PrefabInstance:
     - target: {fileID: 3861706144474456395, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_Name
-      value: MachineGun Variant
+      value: MachineGun
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb4d28895432e24084bc54a496c7ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 8541015354598396513, guid: a36c6daf78556364a922cf45d7d6cf2f,
+  projectilePrefab: {fileID: 5610734431637848881, guid: 6f0d66b28379db448b3bbdd64f8b7586,
     type: 3}
   projectileSpawn: {fileID: 7420966541678857242}
   projectilePool: {fileID: 2891245280591940539}
