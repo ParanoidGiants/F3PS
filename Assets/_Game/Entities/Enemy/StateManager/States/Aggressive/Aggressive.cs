@@ -83,7 +83,7 @@ namespace F3PS.AI.States
             
             _navMeshAgent.destination = _selectedTarget.Center();
             bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            if (attackHasCooledDown && Helper.HasReachedDestination(_navMeshAgent))
+            if (attackHasCooledDown && _isStaying && _nextAttack.CanAttack(_selectedTarget.Center()))
             {
                 _nextAttack.OnStartAttack(_selectedTarget);
             }

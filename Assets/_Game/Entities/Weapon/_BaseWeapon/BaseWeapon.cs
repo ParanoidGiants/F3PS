@@ -56,7 +56,7 @@ namespace Weapon
             
         }
 
-        protected virtual IEnumerator HandleShoot()
+        protected IEnumerator HandleShoot()
         {
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
@@ -108,7 +108,6 @@ namespace Weapon
             isReloadingMagazine = false;
         }
 
-        private bool _wasShootingLastFrame = false;
         public virtual void HandleShoot(bool isShootingPressed) {}
 
         public void HandleReload()

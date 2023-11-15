@@ -339,7 +339,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1641290580}
   - component: {fileID: 1641290583}
-  - component: {fileID: 1641290582}
   - component: {fileID: 1641290581}
   m_Layer: 0
   m_Name: cm
@@ -375,23 +374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1641290582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641290579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 1}
-  m_AmplitudeGain: 0.5
-  m_FrequencyGain: 0.3
-  mNoiseOffsets: {x: -451.37964, y: 684.7062, z: 648.0488}
 --- !u!114 &1641290581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,7 +1102,7 @@ MonoBehaviour:
   defaultRotationSpeed: 0.7
   health: 100
   maxHealth: 100
-  RotationSmoothTime: 0.12
+  RotationSmoothTime: 0.3
   AmingRotationSmoothTime: 0.3
   FocusSpeed: 3
   MoveSpeed: 8
@@ -1148,7 +1130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2070925442004104932}
   - component: {fileID: 2070925442004104933}
-  - component: {fileID: 2070925442004104929}
   - component: {fileID: 2070925442004104928}
   m_Layer: 0
   m_Name: cm
@@ -1184,23 +1165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2070925442004104929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070925442004104931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 1}
-  m_AmplitudeGain: 0.5
-  m_FrequencyGain: 0.3
-  mNoiseOffsets: {x: -451.37964, y: 684.7062, z: 648.0488}
 --- !u!114 &2070925442004104928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,7 +1214,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070925442478606047}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.79, y: 1.6659999, z: 11.4}
+  m_LocalPosition: {x: -11.79, y: 1.6660001, z: 11.400001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1377,7 +1341,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2070925443526839471}
   - component: {fileID: 2070925443526839470}
-  - component: {fileID: 2070925443526839466}
   - component: {fileID: 2070925443526839467}
   m_Layer: 0
   m_Name: cm
@@ -1413,23 +1376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2070925443526839466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070925443526839464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 1}
-  m_AmplitudeGain: 0.5
-  m_FrequencyGain: 0.3
-  mNoiseOffsets: {x: -451.37964, y: 684.7062, z: 648.0488}
 --- !u!114 &2070925443526839467
 MonoBehaviour:
   m_ObjectHideFlags: 0

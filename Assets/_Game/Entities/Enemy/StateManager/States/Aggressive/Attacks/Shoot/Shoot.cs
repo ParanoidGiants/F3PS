@@ -18,6 +18,7 @@ namespace F3PS.AI.States.Action
         public float chargeTime;
         public float hitTime;
         public float recoverTime;
+        public float requiredAngle;
 
         private bool _isShootingPressed = false;
         
@@ -91,27 +92,37 @@ namespace F3PS.AI.States.Action
             var position = enemyTransform.position;
             var lookDirection = targetPosition - position;
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-            var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * rotationSpeed);
+            var targetRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            
+            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, targetRotation, enemy.ScaledDeltaTime * rotationSpeed);
         }
 
         override
         public bool CanAttack(Vector3 targetPosition)
         {
             var position = gun.transform.position;
-            var direction1 = (targetPosition - position).normalized;
+            var direction = (targetPosition - position).normalized;
             
-            Debug.DrawRay(position, direction1 * attackDistance, Color.red);
-            if (Physics.Raycast(position, direction1, out var hit, attackDistance, Helper.PlayerLayer))
+            Debug.DrawRay(position, direction * attackDistance, Color.red);
+            if (!Physics.Raycast(position, direction, out var hit, attackDistance, Helper.PlayerLayer))
             {
-                if (Physics.Raycast(position, direction1, out hit, hit.distance, Helper.DefaultLayer))
-                {
-                    Debug.DrawRay(position, direction1 * hit.distance, Color.green);
-                    return false;                
-                } 
-                return true;
+                return false;
             }
-            return false;
+            
+            if (Physics.Raycast(position, direction, out hit, hit.distance, Helper.DefaultLayer))
+            {
+                return false;                
+            }
+
+            var bodyTransform = enemy.body.transform;
+            var enemyPosition = bodyTransform.position;
+            var enemyDirection = targetPosition - enemyPosition;
+            var enemyForwardOnXZ = Vector3.ProjectOnPlane(bodyTransform.forward, Vector3.up);
+            var enemyDirectionOnXZ = Vector3.ProjectOnPlane(enemyDirection, Vector3.up);
+            var angle = Vector3.Angle(enemyForwardOnXZ, enemyDirectionOnXZ);
+            Debug.Log(angle);
+
+            return angle < requiredAngle;
         }
     }
 }
