@@ -7,35 +7,35 @@ namespace F3PS.AI.Sensors
     {
         public SensorState state;
         public VisionSensor defaultVision;
-        public VisionSensor searchingVision;
+        public VisionSensor aggressiveVision;
         public MovementSensor aggressiveMovement;
 
         public void SetState(SensorState state)
         {
             this.state = state;
             defaultVision.SetSensorState(state);
-            searchingVision.SetSensorState(state);
+            aggressiveVision.SetSensorState(state);
             
             aggressiveMovement.SetSensorState(state);
             
             if (state == SensorState.AGGRESSIVE)
             {
                 defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
+                aggressiveVision.SetActive(true);
                 
                 aggressiveMovement.SetActive(true);
             }
             else if (state == SensorState.SEARCHING)
             {
                 defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
+                aggressiveVision.SetActive(true);
                 
                 aggressiveMovement.SetActive(false);
             }
             else
             {
                 defaultVision.SetActive(true);
-                searchingVision.SetActive(false);
+                aggressiveVision.SetActive(false);
                 
                 aggressiveMovement.SetActive(false);
             }
@@ -53,7 +53,7 @@ namespace F3PS.AI.Sensors
                 return true;
             }
 
-            return searchingVision.IsTargetInSight();
+            return aggressiveVision.IsTargetInSight();
         }
 
         public Hittable GetTargetFromSensors()
@@ -64,17 +64,16 @@ namespace F3PS.AI.Sensors
             }
             if (state == SensorState.SEARCHING)
             {
-                return searchingVision.SelectedTarget;
+                return aggressiveVision.SelectedTarget;
             }
             // else state is aggressive
-            if (searchingVision.HasTarget && aggressiveMovement.HasTarget)
+            if (aggressiveMovement.HasTarget)
             {
                 return aggressiveMovement.SelectedTarget;
             }
-            if (searchingVision.HasTarget)
+            if (aggressiveVision.HasTarget)
             {
-                // else work with what you see
-                return searchingVision.SelectedTarget;
+                return aggressiveVision.SelectedTarget;
             }
             
             return aggressiveMovement.SelectedTarget;

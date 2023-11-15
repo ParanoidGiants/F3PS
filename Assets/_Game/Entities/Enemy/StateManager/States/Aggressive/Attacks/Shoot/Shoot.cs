@@ -10,6 +10,7 @@ namespace F3PS.AI.States.Action
         public float chargeTimer;
         public float hitTimer;
         public float recoverTimer;
+        public float rotationSpeed;
         
         [Space(10)]
         [Header("Shoot Watchers")]
@@ -41,7 +42,7 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleCharging()
         {
-            UpdateGunAndEnemyRotation();
+            UpdateGunAndEnemyRotation(_target.Center());
             chargeTime += enemy.ScaledDeltaTime;
             isCharging = chargeTime < chargeTimer;
             
@@ -58,7 +59,7 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleAttack()
         {
-            UpdateGunAndEnemyRotation();
+            UpdateGunAndEnemyRotation(_target.Center());
             hitTime += enemy.ScaledDeltaTime;
             isAttacking = hitTime < hitTimer;
             _isShootingPressed = !_isShootingPressed;
@@ -70,27 +71,30 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleRecovering()
         {
-            UpdateGunAndEnemyRotation();
+            UpdateEnemyRotation(_target.Center());
             recoverTime += enemy.ScaledDeltaTime;
             isRecovering = recoverTime < recoverTimer;
             
             base.HandleRecovering();
         }
         
-        private void UpdateGunAndEnemyRotation()
+        private void UpdateGunAndEnemyRotation(Vector3 targetPosition)
         {
-            var targetPosition = _target.Center();
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
             gun.UpdateRotation(gunRotation);
-            
+            UpdateEnemyRotation(targetPosition);
+        }
+
+        private void UpdateEnemyRotation(Vector3 targetPosition)
+        {
             var enemyTransform = enemy.body.transform;
             var position = enemyTransform.position;
             var lookDirection = targetPosition - position;
             var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
             var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * 5f);
+            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * rotationSpeed);
         }
-        
+
         override
         public bool CanAttack(Vector3 targetPosition)
         {

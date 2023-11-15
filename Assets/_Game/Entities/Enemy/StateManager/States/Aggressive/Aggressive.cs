@@ -8,6 +8,7 @@ namespace F3PS.AI.States
     {
         private Attack _nextAttack;
         private Attack[] _attacks;
+        public bool _isStaying;
 
         [Space(10)]
         [Header("Specific Settings")]
@@ -43,35 +44,29 @@ namespace F3PS.AI.States
         public void OnEnter()
         {
             base.OnEnter();
-            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             _nextAttack = NextAttack();
-            HandlePositionAndRotation();
-            HandleStoppingDistance();
-        }
-        
-        public bool IsTargetDetected()
-        {
-            return stateManager.sensorController.IsTargetDetected();
         }
 
         override
         public void OnUpdate()
         {
+            HandleStoppingDistance();
+            _isStaying = Helper.HasReachedDestination(_navMeshAgent);
+            
             bool isAttacking = _nextAttack.isActive;
-            _navMeshAgent.isStopped = _nextAttack.isAttacking;
             if (isAttacking)
             {
                 _nextAttack.OnUpdate();
                 return;
             }
             
-            if (!IsTargetDetected())
+            if (!stateManager.sensorController.IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             HandlePositionAndRotation();
-            HandleStoppingDistance();
             HandleNextAttack();
             
         }
@@ -86,7 +81,6 @@ namespace F3PS.AI.States
                 && !Helper.IsOnSameY(transform1.position, _selectedTarget.Center(), 0.1f)
             ) return;
             
-            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             _navMeshAgent.destination = _selectedTarget.Center();
             bool attackHasCooledDown = _nextAttack.HasCooledDown();
             if (attackHasCooledDown && Helper.HasReachedDestination(_navMeshAgent))
@@ -111,20 +105,20 @@ namespace F3PS.AI.States
 
         private void HandleStoppingDistance()
         {
-            if (Helper.HasReachedDestination(_navMeshAgent))
+            if (_isStaying)
             {
-                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
+                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
             }
             else
             {
-                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
+                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
             }
         }
         
         private Attack NextAttack()
         {
             var attack = _attacks[0];
-            _navMeshAgent.stoppingDistance = attack.stoppingDistanceFollow;
+            _navMeshAgent.stoppingDistance = attack.stoppingDistanceStay;
             return attack;
         }
     }

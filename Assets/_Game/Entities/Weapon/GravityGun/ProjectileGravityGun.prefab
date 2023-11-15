@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1257127040946674366, guid: dc7e38466251dad4589960b9ce76a946,
         type: 3}
       propertyPath: timeScale
-      value: 0.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8764724595077223640, guid: dc7e38466251dad4589960b9ce76a946,
         type: 3}
@@ -181,8 +181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   lifeTime: 0
-  maximumLifeTime: 60
-  removeAfterSeconds: 60
+  maximumLifeTime: 10
+  removeAfterSeconds: 10
   _isHit: 0
   _timeZone: {fileID: 313518837271188002}
 --- !u!4 &8541015354598396518 stripped
