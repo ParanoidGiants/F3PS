@@ -103,7 +103,6 @@ namespace F3PS.AI.States.Action
             var position = gun.transform.position;
             var direction = (targetPosition - position).normalized;
             
-            Debug.DrawRay(position, direction * attackDistance, Color.red);
             if (!Physics.Raycast(position, direction, out var hit, attackDistance, Helper.PlayerLayer))
             {
                 return false;
@@ -113,15 +112,13 @@ namespace F3PS.AI.States.Action
             {
                 return false;                
             }
-
+    
             var bodyTransform = enemy.body.transform;
             var enemyPosition = bodyTransform.position;
             var enemyDirection = targetPosition - enemyPosition;
             var enemyForwardOnXZ = Vector3.ProjectOnPlane(bodyTransform.forward, Vector3.up);
             var enemyDirectionOnXZ = Vector3.ProjectOnPlane(enemyDirection, Vector3.up);
             var angle = Vector3.Angle(enemyForwardOnXZ, enemyDirectionOnXZ);
-            Debug.Log(angle);
-
             return angle < requiredAngle;
         }
     }
