@@ -73,7 +73,6 @@ namespace Player
 
         private PlayerHealthUI _playerHealthUI;
         private Camera _mainCamera;
-        private readonly int Dodge = Animator.StringToHash("Dodge");
         public float RotationSpeed => isAiming ? aimingRotationSpeed : defaultRotationSpeed;
         
         public void Init(Animator animator)
@@ -104,7 +103,6 @@ namespace Player
             isShooting = _input.shoot && !isSprinting;
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
-            Dodging(_input.dodge);
             weaponManager.OnUpdate(isSprinting, isShooting, isReloading, _crosshair.GetTargetPosition());
             UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
             UpdateTimeManager(_input.slowmo);
@@ -143,22 +141,16 @@ namespace Player
             staminaManager.UpdateAiming(isAiming);
         }
 
-        public float GetLookRotation(Transform transform, float movementYaw, float cameraYaw)
+        public float GetLookYaw(Transform transform, float movementYaw, float cameraYaw)
         {
             float smoothTime = isAiming ? AmingRotationSmoothTime : RotationSmoothTime;
-            float yaw = isSprinting ? movementYaw : cameraYaw;
+            float yaw = isDodging || isSprinting ? movementYaw : cameraYaw;
             return Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
                 yaw,
                 ref rotationVelocity,
                 smoothTime * Time.unscaledDeltaTime
             );
-        }
-
-        private void Dodging(bool dodgeInput)
-        {
-            var dodge = Grounded && dodgeInput;
-            _animator.SetBool(Dodge, dodge);
         }
 
         internal float GetTargetSpeed(Vector2 moveVector)

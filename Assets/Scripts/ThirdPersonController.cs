@@ -32,6 +32,12 @@ namespace StarterAssets
         [Space(10)]
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
+        
+        [Tooltip("The jump height of the player while dodging")]
+        public float DodgeHeight = 1.2f;
+        
+        [Tooltip("The jump length of the player while dodging")]
+        public float DodgeSpeed = 60f; 
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -66,8 +72,8 @@ namespace StarterAssets
         // player
         private float _speed;
         private float _animationBlend;
-        private float _targetRotation = 0.0f;
-        private float _lookRotation = 0.0f;
+        private float _targetYaw = 0.0f;
+        private float _lookYaw = 0.0f;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
@@ -76,11 +82,14 @@ namespace StarterAssets
         private float _fallTimeoutDelta;
 
         // animation IDs
-        private int _animIDSpeed;
-        private int _animIDGrounded;
-        private int _animIDJump;
-        private int _animIDFreeFall;
-        private int _animIDMotionSpeed;
+        private readonly int _animIDSpeed = Animator.StringToHash("Speed");
+        private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
+        private readonly int _animIDJump = Animator.StringToHash("Jump");
+        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
+        private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        private readonly int _animIDDodge = Animator.StringToHash("Dodge");
+        
+        private Vector3 _lastInputDirection;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         [SerializeField] private PlayerInput _playerInput;
@@ -127,7 +136,6 @@ namespace StarterAssets
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
-            AssignAnimationIDs();
             extensions.Init(_animator);
         }
 
@@ -159,15 +167,6 @@ namespace StarterAssets
             CameraRotation();
         }
 
-        private void AssignAnimationIDs()
-        {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-        }
-
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
@@ -190,6 +189,26 @@ namespace StarterAssets
 
         private void Move()
         {
+            Vector3 lookDirection;
+            if (extensions.isDodging)
+            {
+                _speed = DodgeSpeed;
+                _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
+                             + _mainCamera.transform.eulerAngles.y;
+                _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
+            
+                // rotate to face input direction relative to camera position
+                transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+                lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+
+                // move the player
+                _controller.Move(
+                    lookDirection.normalized * (_speed * Time.deltaTime)
+                    + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+                );
+                return;
+            }
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
             float targetSpeed = extensions.GetTargetSpeed(_input.move);
 
@@ -220,21 +239,20 @@ namespace StarterAssets
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                              _mainCamera.transform.eulerAngles.y;
-            _lookRotation = extensions.GetLookRotation(transform, _targetRotation, _cinemachineTargetYaw);
+            _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
+                         + _mainCamera.transform.eulerAngles.y;
+            _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
             
             // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, _lookRotation, 0.0f);
-
-
-            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(
+                lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+            );
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
@@ -254,6 +272,7 @@ namespace StarterAssets
                 {
                     _animator.SetBool(_animIDJump, false);
                     _animator.SetBool(_animIDFreeFall, false);
+                    _animator.SetBool(_animIDDodge, false);
                 }
 
                 // stop our velocity dropping infinitely when grounded
@@ -274,10 +293,25 @@ namespace StarterAssets
                         MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                     }
                 }
+                
+                // Dodge
+                if (_input.dodge && _jumpTimeoutDelta <= 0.0f)
+                {
+                    // the square root of H * -2 * G = how much velocity needed to reach desired height
+                    _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
+                    extensions.isDodging = true; 
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDDodge, true);
+                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+                    }
+                }
 
                 // jump timeout
                 if (_jumpTimeoutDelta >= 0.0f)
                 {
+                    extensions.isDodging = false;
                     _jumpTimeoutDelta -= Time.deltaTime;
                 }
             }
@@ -302,6 +336,8 @@ namespace StarterAssets
 
                 // if we are not grounded, do not jump
                 _input.jump = false;
+                // if we are not grounded, do not jump
+                _input.dodge = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
