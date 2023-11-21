@@ -38,6 +38,10 @@ namespace StarterAssets
         
         [Tooltip("The jump length of the player while dodging")]
         public float DodgeSpeed = 60f; 
+        
+        [Tooltip("The time it takes for the dodge speed to cool off")]
+        public float DodgeTimer = 0.5f;
+        private float _dodgeTime;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -192,7 +196,9 @@ namespace StarterAssets
             Vector3 lookDirection;
             if (extensions.isDodging)
             {
-                _speed = DodgeSpeed;
+                _dodgeTime -= Time.deltaTime;
+                _dodgeTime = Mathf.Max(_dodgeTime, 0f);
+                _speed = Mathf.Lerp(0f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
                 _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
                              + _mainCamera.transform.eulerAngles.y;
                 _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
@@ -299,7 +305,8 @@ namespace StarterAssets
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
-                    extensions.isDodging = true; 
+                    extensions.isDodging = true;
+                    _dodgeTime = DodgeTimer;
                     // update animator if using character
                     if (_hasAnimator)
                     {
