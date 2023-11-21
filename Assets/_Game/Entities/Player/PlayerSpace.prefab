@@ -1816,8 +1816,10 @@ MonoBehaviour:
   JumpHeight: 6
   DodgeHeight: 3
   DodgeSpeed: 60
+  DodgeTimer: 1
   Gravity: -100
-  JumpTimeout: 0.3
+  DodgeCoolDownTimer: 0.25
+  JumpCoolDownTimer: 0.5
   FallTimeout: 0.15
   CinemachineCameraTarget: {fileID: 1204151532081024994}
   CameraTopClamp: 89

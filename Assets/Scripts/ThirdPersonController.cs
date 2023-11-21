@@ -47,12 +47,18 @@ namespace StarterAssets
         public float Gravity = -15.0f;
 
         [Space(10)]
+        [Tooltip("The time it takes to dodge again after landing from a dodge")]
+        public float DodgeCoolDownTimer = 0.25f;
+        private float _dodgeCoolDownTime;
+
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-        public float JumpTimeout = 0.50f;
+        public float JumpCoolDownTimer = 0.50f;
+        private float _jumpCoolDownTime;
 
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
-
+        private float _fallTimeoutDelta;
+        
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -80,10 +86,6 @@ namespace StarterAssets
         private float _lookYaw = 0.0f;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
-
-        // timeout deltatime
-        private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
 
         // animation IDs
         private readonly int _animIDSpeed = Animator.StringToHash("Speed");
@@ -147,8 +149,9 @@ namespace StarterAssets
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             // reset our timeouts on start
-            _jumpTimeoutDelta = JumpTimeout;
+            _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
+            _dodgeCoolDownTime = DodgeCoolDownTimer;
         }
 
         private void Update()
@@ -160,9 +163,9 @@ namespace StarterAssets
             if (GameManager.Instance.timeManager.IsPaused) return;
             _hasAnimator = TryGetComponent(out _animator);
 
+            _animator.SetBool(_animIDGrounded, extensions.Grounded);
             JumpAndGravity();
             Move();
-            _animator.SetBool(_animIDGrounded, extensions.Grounded);
         }
 
         private void LateUpdate()
@@ -288,8 +291,9 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
+                    Debug.Log(_dodgeCoolDownTime);
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                     // update animator if using character
@@ -301,7 +305,7 @@ namespace StarterAssets
                 }
                 
                 // Dodge
-                if (_input.dodge && _jumpTimeoutDelta <= 0.0f)
+                else if (_input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
@@ -316,29 +320,37 @@ namespace StarterAssets
                 }
 
                 // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
+                if (_jumpCoolDownTime >= 0.0f)
+                {
+                    _jumpCoolDownTime -= Time.deltaTime;
+                }
+                if (_dodgeCoolDownTime >= 0.0f)
                 {
                     extensions.isDodging = false;
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    _dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
             else
             {
                 // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
+                if (extensions.isDodging)
+                {
+                    _dodgeCoolDownTime = DodgeCoolDownTimer;
+                }
+                else
+                {
+                    _jumpCoolDownTime = JumpCoolDownTimer;
+                }
+                
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
                     _fallTimeoutDelta -= Time.deltaTime;
                 }
-                else
+                else if (_hasAnimator)
                 {
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDFreeFall, true);
-                    }
+                    _animator.SetBool(_animIDFreeFall, true);
                 }
 
                 // if we are not grounded, do not jump
