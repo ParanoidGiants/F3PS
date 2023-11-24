@@ -21,8 +21,7 @@ namespace Player
         public bool isSlowMoToggle;
         public bool isSlowMoStarted;
         public float rotationVelocity;
-
-        public float deltaTime;
+        public bool isAimingGrenade;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -103,8 +102,16 @@ namespace Player
             isShooting = _input.shoot && !isSprinting;
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
-            weaponManager.OnUpdate(isSprinting, isShooting, isReloading, _crosshair.GetTargetPosition());
-            UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
+            isAimingGrenade = _input.aimGrenade; 
+            isAiming = _input.aim || isAimingGrenade;
+            weaponManager.OnUpdate(
+                isSprinting,
+                isAimingGrenade,
+                isShooting,
+                isReloading,
+                _crosshair.GetTargetPosition()
+            );
+            UpdateStaminaManager(_input.move.magnitude, isAiming, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }
 
@@ -159,18 +166,15 @@ namespace Player
             {
                 return 0.0f;
             }
-            else if (isAiming)
+            if (isAiming)
             {
                 return FocusSpeed;
             }
-            else if (isSprinting)
+            if (isSprinting)
             {
                 return SprintSpeed;
             }
-            else
-            {
-                return MoveSpeed;
-            }
+            return MoveSpeed;
         }
 
         public void Hit(int damage)

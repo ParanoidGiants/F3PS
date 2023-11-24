@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeZone : MonoBehaviour
+public class TimeBubble : MonoBehaviour
 {
-    private List<TimeObject> _timeObjects = new List<TimeObject>();
+    private readonly List<TimeObject> _timeObjects = new List<TimeObject>();
     public float timeScale = 0.05f;
     void OnTriggerEnter(Collider other)
     {

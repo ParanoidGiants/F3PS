@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class BaseProjectile : MonoBehaviour
 {
+    [Header("Settings")]
     public int damage = 50;
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
     public float removeAfterSeconds = .2f;
     
-    private HitBox _hitBox;
-    protected Rigidbody _rb;
-    protected TimeObject _timeObject;
-    private TrailRenderer _trailRenderer;
     private float _speed;
-    [SerializeField] protected bool _isHit = false;
+    private HitBox _hitBox;
+    private TrailRenderer _trailRenderer;
+    protected Rigidbody _rb;
+    protected ProjectileTimeObject _timeObject;
+    protected bool _isHit = false;
     public bool Hit => _isHit;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class BaseProjectile : MonoBehaviour
         _trailRenderer = GetComponent<TrailRenderer>();
         _hitBox = GetComponent<HitBox>();
         _rb = GetComponent<Rigidbody>();
+        _timeObject = GetComponent<ProjectileTimeObject>();
     }
 
     public void Init(int attackerId)

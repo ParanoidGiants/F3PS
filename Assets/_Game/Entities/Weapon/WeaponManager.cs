@@ -8,6 +8,7 @@ namespace Weapon
 {
     public class WeaponManager : MonoBehaviour
     {
+        public ThrowTimeBubbleGrenade grenade;
         public List<BaseGun> weapons;
         private BaseGun _activeWeapon;
         public BaseGun ActiveWeapon => _activeWeapon;
@@ -48,8 +49,13 @@ namespace Weapon
             _weaponUI.UpdateImage(ActiveWeapon.icon);
         }
 
-        public void OnUpdate(bool isSprinting, bool isShooting, bool isReloading, Vector3 targetPosition)
+        public void OnUpdate(bool isSprinting, bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
         {
+            if (grenade.HandleThrow(isAimingGrenade, targetPosition))
+            {
+                return;
+            }
+            
             ActiveWeapon.HandleShoot(isShooting);
             if (isReloading) ActiveWeapon.HandleReload();
             

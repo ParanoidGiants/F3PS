@@ -196,25 +196,9 @@ namespace StarterAssets
 
         private void Move()
         {
-            Vector3 lookDirection;
             if (extensions.isDodging)
             {
-                _dodgeTime -= Time.deltaTime;
-                _dodgeTime = Mathf.Max(_dodgeTime, 0f);
-                _speed = Mathf.Lerp(0f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
-                _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
-                             + _mainCamera.transform.eulerAngles.y;
-                _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
-            
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
-                lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-
-                // move the player
-                _controller.Move(
-                    lookDirection.normalized * (_speed * Time.deltaTime)
-                    + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
-                );
+                Dodge();
                 return;
             }
             
@@ -249,13 +233,13 @@ namespace StarterAssets
 
             // normalise input direction
             _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-            _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
-                         + _mainCamera.transform.eulerAngles.y;
+            _targetYaw = _mainCamera.transform.eulerAngles.y
+                         + Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z);
             _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
             
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
-            lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
             // move the player
             _controller.Move(
@@ -267,6 +251,26 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+        }
+
+        private void Dodge()
+        {
+            _dodgeTime -= Time.deltaTime;
+            _dodgeTime = Mathf.Max(_dodgeTime, 0f);
+            _speed = Mathf.Lerp(0f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
+            _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
+                         + _mainCamera.transform.eulerAngles.y;
+            _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
+            
+            // rotate to face input direction relative to camera position
+            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+
+            // move the player
+            _controller.Move(
+                lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+            );
         }
 
         private void JumpAndGravity()
@@ -293,7 +297,6 @@ namespace StarterAssets
                 // Jump
                 if (_input.jump && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
-                    Debug.Log(_dodgeCoolDownTime);
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                     // update animator if using character
