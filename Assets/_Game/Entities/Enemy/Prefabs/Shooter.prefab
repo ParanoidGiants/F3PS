@@ -138,7 +138,7 @@ PrefabInstance:
         type: 3}
       propertyPath: timeObject
       value: 
-      objectReference: {fileID: 2070891688}
+      objectReference: {fileID: 1398381768733281271}
     - target: {fileID: 7874501509564256046, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Height
@@ -206,32 +206,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 543d14d0acc738d4295f4068dbb9cef2, type: 3}
+--- !u!114 &1398381768733281271 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2470968747878862923, guid: 543d14d0acc738d4295f4068dbb9cef2,
+    type: 3}
+  m_PrefabInstance: {fileID: 3540577195369143228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2174154965761076760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3390804109623080356, guid: 543d14d0acc738d4295f4068dbb9cef2,
     type: 3}
   m_PrefabInstance: {fileID: 3540577195369143228}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5529652370495688770 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9052215167061412862, guid: 543d14d0acc738d4295f4068dbb9cef2,
-    type: 3}
-  m_PrefabInstance: {fileID: 3540577195369143228}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2070891688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5529652370495688770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountOfTimeZones: 0
-  currentTimeScale: 1
 --- !u!114 &6657852236725048464 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,

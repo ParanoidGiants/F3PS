@@ -1258,7 +1258,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 7874501508904201011}
   navMeshAgent: {fileID: 8818509671935900350}
   patrolManager: {fileID: 3205364303430771451}
-  timeObject: {fileID: 0}
+  timeObject: {fileID: 2470968747878862923}
   _enemyStateManager: {fileID: 6535353038984071311}
   maxHealth: 100
   health: 0
@@ -1453,6 +1453,7 @@ GameObject:
   - component: {fileID: 7355257768631384466}
   - component: {fileID: 3104978382532382767}
   - component: {fileID: 8818509671935900350}
+  - component: {fileID: 2470968747878862923}
   m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
@@ -1516,3 +1517,17 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!114 &2470968747878862923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9052215167061412862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfTimeZones: 0
+  currentTimeScale: 1
