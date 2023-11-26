@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using DarkTonic.MasterAudio;
 using F3PS.Enemy.UI;
+using F3PS.AI.States;
 
 namespace F3PS.Enemy
 {
@@ -19,6 +20,11 @@ namespace F3PS.Enemy
         private EnemyHealthUIPool _healthUIPool;
         public bool HasPatrolRoute { get; private set; }
 
+        [SerializeField]
+        private EnemyStateManager _enemyStateManager;
+        public EnemyStateManager enemyStateManager => _enemyStateManager;
+
+
         [Space(10)]
         [Header("Settings")]
         public int maxHealth = 100;
@@ -26,7 +32,6 @@ namespace F3PS.Enemy
         [Space(10)]
         [Header("Watchers")]
         public int health;
-
 
         private void Awake()
         {
