@@ -542,6 +542,7 @@ MonoBehaviour:
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
+  _isStaying: 0
   rotationSpeed: 0
   _selectedTarget: {fileID: 0}
 --- !u!1 &3390804109682946907
@@ -1258,6 +1259,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 8818509671935900350}
   patrolManager: {fileID: 3205364303430771451}
   timeObject: {fileID: 0}
+  _enemyStateManager: {fileID: 6535353038984071311}
   maxHealth: 100
   health: 0
 --- !u!1 &7874501509676519037
