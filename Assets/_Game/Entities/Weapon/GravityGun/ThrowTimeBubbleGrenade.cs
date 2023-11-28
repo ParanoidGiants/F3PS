@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Weapon
@@ -30,8 +31,9 @@ namespace Weapon
         public Vector3 throwDirection;
         public float throwPower;
 
-        private void Start()
+        private void Awake()
         {
+            timeBubbleGrenadeProjectile.InitReferences();
             throwLine.positionCount = lineResolution;
             
             var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
@@ -39,6 +41,11 @@ namespace Weapon
             {
                 Physics.IgnoreCollision(projectileCollider, collider);
             }
+        }
+
+        private void Update()
+        {
+            
         }
 
         public bool HandleThrow(bool isAiming, Vector3 targetPosition)

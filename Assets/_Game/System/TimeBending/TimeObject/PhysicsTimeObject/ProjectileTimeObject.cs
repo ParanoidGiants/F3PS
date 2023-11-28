@@ -36,6 +36,11 @@ public class ProjectileTimeObject : PhysicsTimeObject
     private void OnDisable()
     {
         base.OnDisable();
+        ClearTrail();
+    }
+
+    public void ClearTrail()
+    {
         _trail.Clear();
         _slowMoTrail.Clear();
     }

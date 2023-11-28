@@ -12,7 +12,6 @@ public class BaseProjectile : MonoBehaviour
     
     private float _speed;
     private HitBox _hitBox;
-    private TrailRenderer _trailRenderer;
     protected Rigidbody _rb;
     protected ProjectileTimeObject _timeObject;
     protected bool _isHit = false;
@@ -20,7 +19,11 @@ public class BaseProjectile : MonoBehaviour
 
     private void Awake()
     {
-        _trailRenderer = GetComponent<TrailRenderer>();
+        InitReferences();
+    }
+
+    public virtual void InitReferences()
+    {
         _hitBox = GetComponent<HitBox>();
         _rb = GetComponent<Rigidbody>();
         _timeObject = GetComponent<ProjectileTimeObject>();
@@ -50,7 +53,7 @@ public class BaseProjectile : MonoBehaviour
     
     private void OnEnable()
     {
-        _trailRenderer.Clear();
+        _timeObject.ClearTrail();
         _rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
     }

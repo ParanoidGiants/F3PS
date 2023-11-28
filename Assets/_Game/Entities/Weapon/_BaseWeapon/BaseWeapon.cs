@@ -116,7 +116,7 @@ namespace Weapon
             
             OnReload(x =>
             {
-                weaponUI?.UpdateReload(x);
+                weaponUI?.UpdateWeaponReload(x);
                     
                 if (x <= 0f)
                 {

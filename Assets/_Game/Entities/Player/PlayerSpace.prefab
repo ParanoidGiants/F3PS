@@ -3773,16 +3773,16 @@ PrefabInstance:
       objectReference: {fileID: 7220091951998239524}
     - target: {fileID: 2406442726296628, guid: 44039d663aa003247a93628d13c02462, type: 3}
       propertyPath: maximumLifeTime
-      value: 300
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2406442726296628, guid: 44039d663aa003247a93628d13c02462, type: 3}
       propertyPath: removeAfterSeconds
-      value: 300
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1080593552923030184, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: timeScale
-      value: 0.5
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
@@ -3949,7 +3949,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5154975113224472183, guid: 44039d663aa003247a93628d13c02462, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 44039d663aa003247a93628d13c02462, type: 3}
 --- !u!4 &123824025274252373 stripped
 Transform:

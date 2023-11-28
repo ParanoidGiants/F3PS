@@ -8,11 +8,18 @@ public class WeaponUI : MonoBehaviour
     private float _reloadPercentage;
     private Animator _animator;
 
+    [Header("Time Grenade")]
+    public Image grenadeEffectCircle;
+    public Image grenadeIcon;
+
+    [Space(10)]
+    [Header("Primary Weapon")]
     public TextMeshProUGUI magazineAmountText;
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
-    public Image reloadCircle;
+    public Image weaponReloadCircle;
     public Image weaponIcon;
+    
     private static readonly int Pulsate = Animator.StringToHash("pulsate");
 
     private void Awake()
@@ -21,15 +28,27 @@ public class WeaponUI : MonoBehaviour
         _rectTransform = GetComponent<RectTransform>();
     }
     
-    public void UpdateReload(float percentage)
+    public void UpdateWeaponReload(float percentage)
     {
         if (percentage == 0f)
         {
-            reloadCircle.fillAmount = 0f;
+            weaponReloadCircle.fillAmount = 0f;
         }
         else
         {
-            reloadCircle.fillAmount = 1f - percentage;
+            weaponReloadCircle.fillAmount = 1f - percentage;
+        }
+    }
+    
+    public void UpdateGrenadeEffect(float percentage)
+    {
+        if (percentage == 0f)
+        {
+            grenadeEffectCircle.fillAmount = 0f;
+        }
+        else
+        {
+            grenadeEffectCircle.fillAmount = 1f - percentage;
         }
     }
 

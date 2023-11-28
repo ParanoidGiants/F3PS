@@ -1,3 +1,4 @@
+using StarterAssets;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : BaseProjectile
@@ -5,21 +6,38 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     [Header("References")]
     public TimeBubble timeBubble;
     public new Collider collider;
-    public new Renderer renderer;
+    public WeaponUI _weaponUI;
 
     public float Gravity => _timeObject.gravityScale * Physics.gravity.magnitude;
+    
+    private void Update()
+    {
+        if (!_isHit) return;
+        
+        lifeTime += Time.deltaTime;
+        if (lifeTime > maximumLifeTime)
+        {
+            gameObject.SetActive(false);
+        }
+        _weaponUI.UpdateGrenadeEffect(lifeTime/maximumLifeTime);
+    }
 
+    override
+    public void InitReferences()
+    {
+        base.InitReferences();
+        _weaponUI = FindObjectOfType<WeaponUI>();
+        transform.parent = FindObjectOfType<StarterAssetsInputs>().transform;
+    }
+    
     override
     public void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
     {
-        if (!_rb) _rb = GetComponent<Rigidbody>();
-        GetComponent<TimeObject>().enabled = true;
+        _timeObject.enabled = true;
 
         base.BeforeSetActive(position, rotation, shootSpeed);
         _rb.isKinematic = false;
         _rb.constraints = RigidbodyConstraints.None;
-        transform.parent = null;
-        renderer.enabled = true;
         collider.enabled = true;
         timeBubble.gameObject.SetActive(false);
     }
@@ -32,7 +50,6 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         _isHit = true;
         _rb.isKinematic = true;
         _rb.constraints = RigidbodyConstraints.FreezeAll;
-        renderer.enabled = false;
         collider.enabled = false;
         GetComponent<TimeObject>().enabled = false;
         timeBubble.gameObject.SetActive(true);

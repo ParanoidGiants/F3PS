@@ -95,9 +95,9 @@ Material:
     - _AlphaClip: 0
     - _Blend: 0
     - _BrackeysFresnelPoewr: 1.38
-    - _BrackeysFresnelPower: 4.49
-    - _BrackeysMoveSpeed: 0.01
-    - _BrackeysOffset: -0.27
+    - _BrackeysFresnelPower: 4
+    - _BrackeysMoveSpeed: 0.1
+    - _BrackeysOffset: 7.2
     - _Brightness: 8
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -129,7 +129,7 @@ Material:
     m_Colors:
     - _Albedo: {r: 0, g: 1, b: 0.76733255, a: 0}
     - _BaseColor: {r: 0, g: 0.9902975, b: 1, a: 0.11764706}
-    - _BrackeysEmission: {r: 0, g: 5.656854, b: 5.656854, a: 0}
+    - _BrackeysEmission: {r: 0, g: 2.8284268, b: 2.8284268, a: 0}
     - _Color: {r: 0, g: 0.9902975, b: 1, a: 0.11764706}
     - _Direction: {r: 0, g: 0.1, b: 0, a: 0}
     - _DistortionStrength: {r: 10, g: 10, b: 0, a: 0}
