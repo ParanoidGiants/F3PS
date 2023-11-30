@@ -93,8 +93,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6656408189821302575}
   - component: {fileID: 2748118797753610252}
+  - component: {fileID: 2115599412}
   m_Layer: 8
-  m_Name: GravityGun
+  m_Name: ThrowTimeGrenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,7 +108,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3860830024259442653}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.067, y: 1.347, z: 0.485}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -129,9 +130,119 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba63fdf16aac2459bf7204ae782632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wasShootingPressedLastFrame: 0
+  hittableManager: {fileID: 0}
+  timeBubbleGrenadeProjectile: {fileID: 2406442726296628}
+  timeBubble: {fileID: 1080593552923030184}
+  throwLine: {fileID: 2115599412}
+  spawnTransform: {fileID: 1040741825567720507}
+  lineResolution: 200
+  lineStepSize: 0.05
+  whatCanCollide:
+    serializedVersion: 2
+    m_Bits: 4033
+  isTimeBubbleActive: 0
   state: 0
-  activeTimeBubble: 0
+  throwDirection: {x: 0, y: 0, z: 0}
+  throwPower: 50
+--- !u!120 &2115599412
+LineRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3860830024259442653}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.15662575
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
 --- !u!1001 &767544486606446730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,10 +250,60 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6656408189821302575}
     m_Modifications:
+    - target: {fileID: 313518837271188002, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: timeScale
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 769641652181740734, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 5752581306121465812}
+    - target: {fileID: 769641652181740734, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: timeBubble
+      value: 
+      objectReference: {fileID: 1080593552923030184}
+    - target: {fileID: 3693954949253851348, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: gravityScale
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820904610304777284, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820904610304777284, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820904610304777284, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975042441579020184, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_Name
+      value: TimeBubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975042441579020184, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396513, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_Name
-      value: ProjectileGravityGun
+      value: TimeGrenadeProjectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541015354598396513, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
@@ -152,17 +313,17 @@ PrefabInstance:
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0050000004
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0050000004
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.0050000004
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
@@ -214,8 +375,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5561095795434186493, guid: 77b35e315e8ce234e9ba19b08a1dde29, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 77b35e315e8ce234e9ba19b08a1dde29, type: 3}
+--- !u!114 &2406442726296628 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 769641652181740734, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+    type: 3}
+  m_PrefabInstance: {fileID: 767544486606446730}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8985127288dd1fa4aae2e23be98fd45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1080593552923030184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 313518837271188002, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+    type: 3}
+  m_PrefabInstance: {fileID: 767544486606446730}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bcc42fa97bf514ebcab9eaa70684d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &5752581306121465812 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 5004514709375848286, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+    type: 3}
+  m_PrefabInstance: {fileID: 767544486606446730}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8944454054671692524 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,

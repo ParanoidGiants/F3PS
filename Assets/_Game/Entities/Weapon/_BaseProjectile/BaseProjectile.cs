@@ -36,7 +36,7 @@ public class BaseProjectile : MonoBehaviour
     
     private void Update()
     {
-        lifeTime += Time.deltaTime;
+        lifeTime += _timeObject.ScaledDeltaTime;
         if (lifeTime > maximumLifeTime)
         {
             gameObject.SetActive(false);
