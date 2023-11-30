@@ -5,6 +5,7 @@ public class TimeObject : MonoBehaviour
 {
     public int amountOfTimeZones = 0;
     public float currentTimeScale = 1;
+    public float ScaledDeltaTime => currentTimeScale * Time.deltaTime;
 
     void Start()
     {

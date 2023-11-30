@@ -14,7 +14,7 @@ namespace F3PS.Enemy
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
         public TimeObject timeObject;
-        public float ScaledDeltaTime => timeObject.currentTimeScale * Time.deltaTime;
+        public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
         public float TimeScale => timeObject.currentTimeScale;
         private EnemyHealthUIPool _healthUIPool;
         public bool HasPatrolRoute { get; private set; }
