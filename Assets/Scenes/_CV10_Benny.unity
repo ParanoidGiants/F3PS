@@ -193,6 +193,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rusher1
       objectReference: {fileID: 0}
+    - target: {fileID: 1823029999567002505, guid: 184d27f2080bf054996857787640303e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 184d27f2080bf054996857787640303e, type: 3}
 --- !u!4 &106076492 stripped
@@ -19114,6 +19119,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rusher3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823029999567002505, guid: 184d27f2080bf054996857787640303e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 184d27f2080bf054996857787640303e, type: 3}
@@ -68776,6 +68786,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rusher2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823029999567002505, guid: 184d27f2080bf054996857787640303e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 184d27f2080bf054996857787640303e, type: 3}
