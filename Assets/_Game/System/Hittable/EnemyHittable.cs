@@ -40,6 +40,7 @@ namespace F3PS.Damage.Take
         {
             OnHit(hitBy);
             enemy.enemyStateManager.SwitchState(StateType.AGGRESSIVE);
+            enemy.body.AddForce(hitDirection);
         }
     }
 }
