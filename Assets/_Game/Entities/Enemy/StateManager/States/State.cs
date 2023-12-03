@@ -22,11 +22,7 @@ namespace F3PS.AI.States
 
         private void Awake()
         {
-            if (_navMeshAgent == null)
-            {
-                _navMeshAgent = enemy.navMeshAgent;
-            }
-
+            _navMeshAgent = enemy.navMeshAgent;   
         }
         public virtual void OnEnter()
         {
