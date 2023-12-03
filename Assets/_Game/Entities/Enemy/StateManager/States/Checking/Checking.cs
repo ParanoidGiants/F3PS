@@ -1,8 +1,17 @@
+using System.Numerics;
+
 namespace F3PS.AI.States.Action
 {
     public class Checking : State
     {
-        public override void OnUpdate()
+        override
+        public void OnEnter()
+        {
+            base.OnEnter(); 
+        }
+
+        override
+        public void OnUpdate()
         {
             base.OnUpdate();
             if (Helper.HasReachedDestination(_navMeshAgent))

@@ -39,7 +39,9 @@ namespace F3PS.Damage.Take
         internal void OnHitDirection(HitBox hitBy, Vector3 hitDirection)
         {
             OnHit(hitBy);
-            enemy.enemyStateManager.SwitchState(StateType.AGGRESSIVE);
+            enemy.enemyStateManager.SwitchState(StateType.CHECKING);
+            Debug.Log(hitDirection);
+            Debug.DrawRay(transform.position, hitDirection, Color.red, 3f);
         }
     }
 }
