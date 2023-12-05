@@ -17,7 +17,7 @@ namespace F3PS.AI.States.Action
         [Header("General References")]
         public BaseEnemy enemy;
         public Material chargeMaterial;
-        public Material hitMaterial;
+        public Material attackMaterial;
         public Material recoverMaterial;
         private Material _aggressiveMaterial;
 
@@ -30,9 +30,45 @@ namespace F3PS.AI.States.Action
         public float attackDistance;
         public int damage;
 
-        public virtual void Init(Material aggressiveMaterial)
+
+        protected virtual void Initialize() { }
+
+        public virtual void OnStartAttack(Hittable hittable)
+        {
+            isActive = true;
+            _target = hittable;
+            OnCharge();
+        }
+        protected virtual void OnCharge()
+        {
+            enemy.SetMaterial(chargeMaterial);
+        }
+        protected virtual void OnAttack()
+        {
+            enemy.SetMaterial(attackMaterial);
+        }
+        protected virtual void OnRecover()
+        {
+            enemy.SetMaterial(recoverMaterial);
+        }
+        
+        public virtual void OnUpdate() { }
+        protected virtual void HandleCharging() { }
+        protected virtual void HandleAttack() { }
+        protected virtual void HandleRecovering() { }
+        
+        public virtual void Initialize(Material aggressiveMaterial)
         {
             _aggressiveMaterial = aggressiveMaterial;
+            Initialize();
+        }
+        
+        protected virtual void OnStopAttacking()
+        {
+            _target = null;
+            isActive = false;
+            coolDownTime = 0f;
+            enemy.SetMaterial(_aggressiveMaterial);
         }
         
         public void CoolDown()
@@ -40,85 +76,15 @@ namespace F3PS.AI.States.Action
             coolDownTime += enemy.ScaledDeltaTime;
         }
         
-        public virtual void OnStartAttack(Hittable hittable)
-        {
-            isActive = true;
-            _target = hittable;
-            OnCharge();
-        }
         
-        protected virtual void OnCharge()
-        {
-            enemy.SetMaterial(chargeMaterial);
-            isCharging = true;
-        }
-
-        protected virtual void HandleCharging()
-        {
-            if (isCharging) return; 
-            OnAttack();
-        }
-
-        protected virtual void OnAttack()
-        {
-            enemy.SetMaterial(hitMaterial);
-            isCharging = false;
-            isAttacking = true;
-        }
-
-        protected virtual void HandleAttack()
-        {
-            if (isAttacking) return;
-            
-            OnRecover();
-        }
-        protected virtual void OnRecover()
-        {
-            enemy.SetMaterial(recoverMaterial);
-            isAttacking = false;
-            isRecovering = true;
-        }
-
-        protected virtual void HandleRecovering()
-        {
-            if (isRecovering) return;
-            
-            OnStopAttacking();
-        }
-
         public bool HasCooledDown()
         {
             return coolDownTime >= coolDownTimer;
         }
 
-        public void OnUpdate()
-        {
-            if (isCharging)
-            {
-                HandleCharging();
-            }
-            else if (isAttacking)
-            {
-                HandleAttack();
-            }
-            else if (isRecovering)
-            {
-                HandleRecovering();
-            }
-        }
-
-        protected virtual void OnStopAttacking()
-        {
-            coolDownTime = 0f;
-            isActive = false;
-            isRecovering = false;
-            enemy.SetMaterial(_aggressiveMaterial);
-            _target = null;
-        }
-
         public virtual bool CanAttack(Vector3 targetPosition)
         {
-            return false;
+            return HasCooledDown();
         }
     }
 }

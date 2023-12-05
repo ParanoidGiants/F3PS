@@ -13,9 +13,9 @@ namespace F3PS.AI.States.Action
             enemy.navMeshAgent.destination = _originalPosition;
         }
 
-        public override void OnUpdate()
+        public override void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             if (Helper.HasReachedDestination(_navMeshAgent))
             {
                 stateManager.SwitchState(StateType.IDLE);

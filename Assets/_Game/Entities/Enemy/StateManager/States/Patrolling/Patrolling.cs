@@ -20,9 +20,9 @@ namespace F3PS.AI.States
         }
 
         override
-        public void OnUpdate()
+        public void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             if (!Helper.HasReachedDestination(_navMeshAgent)) return;
             
             stateManager.SwitchState(StateType.IDLE);

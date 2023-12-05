@@ -19,9 +19,9 @@ namespace F3PS.AI.States.Action
             _startRotation = enemy.body.transform.rotation;
         }
         
-        public override void OnUpdate()
+        public override void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             _isSuspiciousTime -= enemy.ScaledDeltaTime;
                 
             float isSuspiciousPercenatge = _isSuspiciousTime / _isSuspiciousTimer;

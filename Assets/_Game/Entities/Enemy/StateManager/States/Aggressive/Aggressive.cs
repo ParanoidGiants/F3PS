@@ -6,10 +6,6 @@ namespace F3PS.AI.States
 {
     public class Aggressive : State
     {
-        private Attack _currentAttack;
-        private Attack[] _attacks;
-        public bool _isStaying;
-
         [Space(10)]
         [Header("Specific Settings")]
         public float rotationSpeed;
@@ -17,22 +13,18 @@ namespace F3PS.AI.States
         [Space(10)]
         [Header("Specific Watchers")]
         [SerializeField] private Hittable _selectedTarget;
+        [SerializeField] private bool _isStaying;
+        [SerializeField] private Attack _currentAttack;
+        [SerializeField] private Attack[] _attacks;
 
-        private void Awake()
+        override
+        public void Initialize()
         {
+            base.Initialize();
             _attacks = GetComponentsInChildren<Attack>();
             foreach (var attack in _attacks)
             {
-                attack.Init(material);
-            }
-        }
-
-        private void Update()
-        {
-            foreach (var attack in _attacks)
-            {
-                if (attack.HasCooledDown()) continue;
-                attack.CoolDown();
+                attack.Initialize(material);
             }
         }
         
@@ -40,54 +32,50 @@ namespace F3PS.AI.States
         public void OnEnter()
         {
             base.OnEnter();
+            _navMeshAgent.isStopped = false;
             _currentAttack = NextAttack();
         }
 
         override
-        public void OnUpdate()
+        public void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
+            if (!stateManager.sensorController.IsTargetDetected())
+            {
+                stateManager.SwitchState(StateType.CHECKING);
+                return;
+            }
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+            
+            if (!_currentAttack.isActive
+                && _isStaying
+                && _currentAttack.CanAttack(_selectedTarget.Center())
+            ) {
+                _currentAttack.OnStartAttack(_selectedTarget);
+                return;
+            }
             if (_currentAttack.isActive)
             {
                 _currentAttack.OnUpdate();
                 return;
             }
 
-            if (!stateManager.sensorController.IsTargetDetected())
-            {
-                stateManager.SwitchState(StateType.CHECKING);
-                return;
-            }
-            HandleStoppingDistance();
-            _isStaying = Helper.HasReachedDestination(_navMeshAgent);          
-            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
-            HandlePositionAndRotation();
-            HandleNextAttack();
-            
-        }
-
-        private void HandleNextAttack()
-        {
-            Transform transform1 = enemy.body.transform;
-            var targetForward = (_selectedTarget.Center() - transform1.position).normalized;
-            var actualForward = transform1.forward;
-            if (
-                !Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f)
-                && !Helper.IsOnSameY(transform1.position, _selectedTarget.Center(), 0.1f)
-            ) return;
-            
             _navMeshAgent.destination = _selectedTarget.Center();
-            if (
-                _currentAttack.HasCooledDown() 
-                && 
-                _isStaying 
-                && 
-                _currentAttack.CanAttack(_selectedTarget.Center())
-            ) {
-                _currentAttack.OnStartAttack(_selectedTarget);
-            }
+            HandleStoppingDistance();
+            HandlePositionAndRotation();
         }
 
+        override
+        public void OnFrameUpdate()
+        {
+            foreach (var attack in _attacks)
+            {
+                if (attack.HasCooledDown())
+                    continue;
+                attack.CoolDown();
+            }
+        }
+        
         private void HandlePositionAndRotation()
         {
             bool isInAttackDistance = Helper.HasReachedDestination(_navMeshAgent);
@@ -98,12 +86,17 @@ namespace F3PS.AI.States
                 var lookDirection = _selectedTarget.Center() - position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
                 var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, newRotation, enemy.ScaledDeltaTime * rotationSpeed);
+                enemyTransform.rotation = Quaternion.RotateTowards(
+                    enemyTransform.rotation,
+                    newRotation,
+                    enemy.ScaledDeltaTime * rotationSpeed
+                );
             }
         }
 
         private void HandleStoppingDistance()
         {
+            _isStaying = Helper.HasReachedDestination(_navMeshAgent);
             if (_isStaying)
             {
                 _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceFollow;

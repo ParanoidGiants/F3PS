@@ -22,9 +22,9 @@ namespace F3PS.AI.States
             base.OnEnter();
         }
 
-        public override void OnUpdate()
+        public override void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             _physicsEnabledTime -= enemy.ScaledDeltaTime;
 
         }

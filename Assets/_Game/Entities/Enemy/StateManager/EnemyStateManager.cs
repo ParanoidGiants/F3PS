@@ -16,13 +16,23 @@ namespace F3PS.AI.States
         public SensorController sensorController;
         private void Start()
         {
+            foreach (var state in states)
+            {
+                state.Initialize();
+            }
+            
             _currentState = GetState(StateType.IDLE);
             _currentState.OnEnter();
         }
 
         void FixedUpdate()
         {
-            _currentState.OnUpdate();
+            _currentState.OnPhysicsUpdate();
+        }
+
+        void Update()
+        {
+            _currentState.OnFrameUpdate();
         }
         
         public void SwitchState(StateType stateType)

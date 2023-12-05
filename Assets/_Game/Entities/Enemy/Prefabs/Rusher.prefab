@@ -60,7 +60,7 @@ PrefabInstance:
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: attackTimer
-      value: 0.25
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
@@ -75,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: recoverTimer
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
@@ -89,6 +89,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
+      propertyPath: attackMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b499924e0a834f048aa70a8217eb9c88, type: 2}
+    - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
+        type: 3}
       propertyPath: chargeStrength
       value: 1
       objectReference: {fileID: 0}
@@ -100,12 +105,12 @@ PrefabInstance:
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: stoppingDistanceStay
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991288, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: stoppingDistanceFollow
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4736824179108991289, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
@@ -199,7 +204,7 @@ PrefabInstance:
     - target: {fileID: 3390804109623080357, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: rotationSpeed
-      value: 10
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7659666505408586674, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
@@ -220,7 +225,7 @@ PrefabInstance:
     - target: {fileID: 7874501509564256034, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_Name
-      value: Rusher
+      value: Rusher0 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 7874501509564256044, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}

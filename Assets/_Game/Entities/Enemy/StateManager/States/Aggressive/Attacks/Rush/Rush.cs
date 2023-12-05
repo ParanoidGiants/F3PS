@@ -1,3 +1,4 @@
+using System;
 using DarkTonic.MasterAudio;
 using F3PS.Damage.Take;
 using UnityEngine;
@@ -28,7 +29,6 @@ namespace F3PS.AI.States.Action
         
         public float chargeStrength;
         public float recoverStrength;
-        public Collider bodyCollider;
         
         [Space(10)]
         [Header("Rush Watchers")]
@@ -37,7 +37,8 @@ namespace F3PS.AI.States.Action
         public float attackTime;
         public float recoverTime;
 
-        private void Start()
+        override 
+        protected void Initialize()
         {
             _enemyTransform = enemy.body.transform;
             _hitCollider = GetComponent<Collider>();
@@ -45,10 +46,57 @@ namespace F3PS.AI.States.Action
             _hitBox = GetComponent<HitBox>();
             _hitBox.attackerId = enemy.GetInstanceID();
         }
+
+        public override bool CanAttack(Vector3 targetPosition)
+        {
+            Transform enemyTransform = enemy.body.transform;
+            var targetForward = (targetPosition - enemyTransform.position).normalized;
+            var actualForward = enemyTransform.forward;
+            bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f);
+            return isAlignedWithTarget && HasCooledDown();
+        }
+        
+        override
+        public void OnUpdate()
+        {
+            if (isCharging)
+            {
+                HandleCharging();
+            }
+            else if (isAttacking)
+            {
+                HandleAttack();
+            }
+            else if (isRecovering)
+            {
+                HandleRecovering();
+            }
+        }
+        
+        override
+        public void OnStartAttack(Hittable hittable)
+        {
+            _hitCollider.enabled = true;
+            enemy.navMeshAgent.enabled = false;
+            
+            base.OnStartAttack(hittable);
+        }
+
+        override
+        protected void OnStopAttacking()
+        {
+            _hitCollider.enabled = false;
+            enemy.navMeshAgent.enabled = true;
+            
+            base.OnStopAttacking();
+        }
         
         override
         protected void OnCharge()
         {
+            base.OnCharge();
+            
+            isCharging = true;
             wasEarlyHit = false;
             chargeTime = 0f;
             attackTime = 0f;
@@ -57,56 +105,66 @@ namespace F3PS.AI.States.Action
             _chargeStartPosition = _enemyTransform.position;
             _chargeForward = _enemyTransform.forward;
             _chargeEndPosition = _chargeStartPosition - _chargeForward * chargeStrength;
-            
-            base.OnCharge();
-        }
-
-        override
-        protected void HandleCharging()
-        {
-            chargeTime += enemy.ScaledDeltaTime;
-            isCharging = chargeTime < chargeTimer;
-            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
-            base.HandleCharging();
         }
         
         override
         protected void OnAttack()
         {
+            base.OnAttack();
+
+            isAttacking = true;
             _hitCollider.enabled = true;
             _attackStartPosition = _enemyTransform.position;
             _attackForward = _enemyTransform.forward;
             _attackEndPosition = _attackStartPosition + _attackForward * attackDistance;
             
             MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", _enemyTransform);
-            base.OnAttack();
-        }
-
-        override
-        protected void HandleAttack()
-        {
-            if (wasEarlyHit)
-            {
-                Debug.Log("EARLY HIT!");
-                attackTime = attackTimer;
-                OnRecover();
-                return;
-            }
-            attackTime += enemy.ScaledDeltaTime;
-            isAttacking = attackTime < attackTimer;
-            _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
-            base.HandleAttack();
         }
         
         override
         protected void OnRecover()
         {
             base.OnRecover();
+            
+            isRecovering = true;
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            var _recoverStrength = (wasEarlyHit ? 1f : 0.5f) * recoverStrength;
-            _recoverEndPosition = _recoverStartPosition - _recoverForward * _recoverStrength;
+            var strength = (wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
+            _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
+        }
+        
+        override
+        protected void HandleCharging()
+        {
+            chargeTime += enemy.ScaledDeltaTime;
+            isCharging = chargeTime < chargeTimer;
+            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
+            isCharging = chargeTime < chargeTimer;
+
+            if (!isCharging)
+            {
+                OnAttack();
+            }
+        }
+        override
+        protected void HandleAttack()
+        {
+            if (wasEarlyHit)
+            {
+                isAttacking = false;
+            }
+            else
+            {
+                attackTime += enemy.ScaledDeltaTime;
+                isAttacking = attackTime < attackTimer;
+                _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
+            }
+            
+            if (!isAttacking)
+            {
+                OnRecover();
+            }
         }
         
         override
@@ -115,17 +173,14 @@ namespace F3PS.AI.States.Action
             recoverTime += enemy.ScaledDeltaTime;
             isRecovering = recoverTime < recoverTimer;
             _enemyTransform.position = Vector3.Slerp(_recoverStartPosition, _recoverEndPosition, recoverTime / recoverTimer);
-            base.HandleRecovering();
+            isRecovering = recoverTime < recoverTimer;
+            
+            if (!isRecovering)
+            {
+                OnStopAttacking();
+            }
         }
-
-        override
-        protected void OnStopAttacking()
-        {
-            bodyCollider.enabled = true;
-            _hitCollider.enabled = false;
-            base.OnStopAttacking();
-        }
-
+        
         private void OnTriggerEnter(Collider other)
         {
             var hittable = other.gameObject.GetComponent<Hittable>();

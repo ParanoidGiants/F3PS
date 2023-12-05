@@ -59,10 +59,11 @@ public static class Helper
 
     public static bool IsOrientedOnXZ(Vector3 vec1, Vector3 vec2, float tolerance = 0f)
     {
-        var vec1XZ = new Vector2(vec1.x, vec1.z);
-        var vec2XZ = new Vector2(vec2.x, vec2.z);
+        var vec1XZ = (new Vector2(vec1.x, vec1.z)).normalized;
+        var vec2XZ = (new Vector2(vec2.x, vec2.z)).normalized;
         
-        return Vector2.Dot(vec1XZ, vec2XZ) > tolerance;
+        var dot = Vector2.Dot(vec1XZ, vec2XZ);
+        return (1f-dot) < tolerance;
     }
 
     public static bool IsOnSameY(Vector3 pos1, Vector3 pos2, float tolerance = 0f)

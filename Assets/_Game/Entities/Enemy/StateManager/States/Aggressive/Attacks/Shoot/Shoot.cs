@@ -23,11 +23,11 @@ namespace F3PS.AI.States.Action
         private bool _isShootingPressed = false;
         
         override
-        public void Init(Material aggressiveMaterial)
+        public void Initialize(Material aggressiveMaterial)
         {
             gun = GetComponentInChildren<BaseGun>();
             gun.Init(enemy.body.transform.parent);        
-            base.Init(aggressiveMaterial);
+            base.Initialize(aggressiveMaterial);
         }
 
         override

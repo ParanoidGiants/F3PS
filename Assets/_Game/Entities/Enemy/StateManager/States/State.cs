@@ -20,7 +20,7 @@ namespace F3PS.AI.States
         public float enemyStoppingDistance;
         public Material material;
 
-        private void Awake()
+        public virtual void Initialize()
         {
             _navMeshAgent = enemy.navMeshAgent;   
         }
@@ -31,6 +31,18 @@ namespace F3PS.AI.States
             UpdateSensorState();
             enemy.SetMaterial(material);
         }
+
+        public virtual void OnPhysicsUpdate()
+        {
+            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
+            {
+                stateManager.SwitchState(StateType.AGGRESSIVE);
+            }
+        }
+
+        public virtual void OnFrameUpdate() {}
+
+        public virtual void OnExit() {}
 
         private void UpdateSensorState()
         {
@@ -47,14 +59,5 @@ namespace F3PS.AI.States
                 stateManager.sensorController.SetState(SensorState.IDLE);
             }
         }
-
-        public virtual void OnUpdate()
-        {
-            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
-            {
-                stateManager.SwitchState(StateType.AGGRESSIVE);
-            }
-        }
-        public virtual void OnExit() {}
     }
 }
