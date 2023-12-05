@@ -7,7 +7,8 @@ namespace F3PS.AI.States
         override
         public void OnEnter()
         {
-            base.OnEnter();
+            base.OnEnter(); 
+            _navMeshAgent.isStopped = false;
             enemy.patrolManager.SetNextPatrolPoint();
             _navMeshAgent.destination = enemy.patrolManager.CurrentPatrolPoint;
         }

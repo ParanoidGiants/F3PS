@@ -1,5 +1,7 @@
+using F3PS.AI.States;
 using F3PS.AI.States.Action;
 using F3PS.Enemy;
+using System;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
@@ -32,6 +34,14 @@ namespace F3PS.Damage.Take
                 enemy.Hit((int)(damageMultiplier * rush.damage));
                 rush.wasEarlyHit = true;
             }
+        }
+
+        internal void OnHitDirection(HitBox hitBy, Vector3 hitDirection)
+        {
+            OnHit(hitBy);
+            enemy.enemyStateManager.SwitchState(StateType.CHECKING);
+            Debug.Log(hitDirection);
+            Debug.DrawRay(transform.position, hitDirection, Color.red, 3f);
         }
     }
 }

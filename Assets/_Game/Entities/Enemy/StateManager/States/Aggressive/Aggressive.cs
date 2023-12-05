@@ -6,7 +6,7 @@ namespace F3PS.AI.States
 {
     public class Aggressive : State
     {
-        private Attack _nextAttack;
+        private Attack _currentAttack;
         private Attack[] _attacks;
         public bool _isStaying;
 
@@ -21,10 +21,6 @@ namespace F3PS.AI.States
         private void Awake()
         {
             _attacks = GetComponentsInChildren<Attack>();
-        }
-
-        private void Start()
-        {
             foreach (var attack in _attacks)
             {
                 attack.Init(material);
@@ -44,27 +40,26 @@ namespace F3PS.AI.States
         public void OnEnter()
         {
             base.OnEnter();
-            _nextAttack = NextAttack();
+            _currentAttack = NextAttack();
         }
 
         override
         public void OnUpdate()
         {
-            HandleStoppingDistance();
-            _isStaying = Helper.HasReachedDestination(_navMeshAgent);
-            
-            bool isAttacking = _nextAttack.isActive;
-            if (isAttacking)
+            base.OnUpdate();
+            if (_currentAttack.isActive)
             {
-                _nextAttack.OnUpdate();
+                _currentAttack.OnUpdate();
                 return;
             }
-            
+
             if (!stateManager.sensorController.IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
+            HandleStoppingDistance();
+            _isStaying = Helper.HasReachedDestination(_navMeshAgent);          
             _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             HandlePositionAndRotation();
             HandleNextAttack();
@@ -82,10 +77,14 @@ namespace F3PS.AI.States
             ) return;
             
             _navMeshAgent.destination = _selectedTarget.Center();
-            bool attackHasCooledDown = _nextAttack.HasCooledDown();
-            if (attackHasCooledDown && _isStaying && _nextAttack.CanAttack(_selectedTarget.Center()))
-            {
-                _nextAttack.OnStartAttack(_selectedTarget);
+            if (
+                _currentAttack.HasCooledDown() 
+                && 
+                _isStaying 
+                && 
+                _currentAttack.CanAttack(_selectedTarget.Center())
+            ) {
+                _currentAttack.OnStartAttack(_selectedTarget);
             }
         }
 
@@ -107,11 +106,11 @@ namespace F3PS.AI.States
         {
             if (_isStaying)
             {
-                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceFollow;
+                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceFollow;
             }
             else
             {
-                _navMeshAgent.stoppingDistance = _nextAttack.stoppingDistanceStay;
+                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceStay;
             }
         }
         
