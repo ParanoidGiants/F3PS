@@ -55,9 +55,18 @@ namespace Weapon
             {
                 return;
             }
-            
-            ActiveWeapon.HandleShoot(isShooting);
-            if (isReloading) ActiveWeapon.HandleReload();
+
+            if (!ActiveWeapon.isReloadingMagazine)
+            {
+                if (isReloading)
+                {
+                    ActiveWeapon.StartReloading();
+                }
+                else
+                {
+                    ActiveWeapon.HandleShoot(isShooting);
+                }
+            }
             
             var gunForward = targetPosition - ActiveWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);

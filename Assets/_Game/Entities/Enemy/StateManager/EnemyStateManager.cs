@@ -46,5 +46,10 @@ namespace F3PS.AI.States
         {
             return states.FirstOrDefault(x => x.stateType == stateType);
         }
+
+        public bool IsAggressive()
+        {
+            return _currentState.stateType is StateType.AGGRESSIVE;
+        }
     }
 }

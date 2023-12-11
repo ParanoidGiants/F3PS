@@ -10,13 +10,11 @@ namespace F3PS.AI.States.Action
         
         [Header("General Watchers")]
         public bool isActive;
-        public bool isCharging;
         public bool isAttacking;
         public bool isRecovering;
         
         [Header("General References")]
         public BaseEnemy enemy;
-        public Material chargeMaterial;
         public Material attackMaterial;
         public Material recoverMaterial;
         private Material _aggressiveMaterial;
@@ -27,7 +25,6 @@ namespace F3PS.AI.States.Action
         public float stoppingDistanceFollow;
         public float coolDownTime;
         public float coolDownTimer;
-        public float attackDistance;
         public int damage;
 
 
@@ -35,13 +32,9 @@ namespace F3PS.AI.States.Action
 
         public virtual void OnStartAttack(Hittable hittable)
         {
-            isActive = true;
             _target = hittable;
-            OnCharge();
-        }
-        protected virtual void OnCharge()
-        {
-            enemy.SetMaterial(chargeMaterial);
+            isActive = true;
+            enemy.navMeshAgent.isStopped = true;
         }
         protected virtual void OnAttack()
         {
@@ -51,9 +44,27 @@ namespace F3PS.AI.States.Action
         {
             enemy.SetMaterial(recoverMaterial);
         }
+
+        public virtual void OnPhysicsUpdate()
+        {
+            if (isAttacking)
+            {
+                HandleAttack();
+            }
+            else if (isRecovering)
+            {
+                HandleRecovering();
+            }
+        }
+
+        public void OnFrameUpdate()
+        {
+            if (!HasCooledDown())
+            {
+                CoolDown();
+            }
+        }
         
-        public virtual void OnUpdate() { }
-        protected virtual void HandleCharging() { }
         protected virtual void HandleAttack() { }
         protected virtual void HandleRecovering() { }
         
@@ -68,6 +79,7 @@ namespace F3PS.AI.States.Action
             _target = null;
             isActive = false;
             coolDownTime = 0f;
+            enemy.navMeshAgent.isStopped = false;
             enemy.SetMaterial(_aggressiveMaterial);
         }
         
@@ -82,9 +94,9 @@ namespace F3PS.AI.States.Action
             return coolDownTime >= coolDownTimer;
         }
 
-        public virtual bool CanAttack(Vector3 targetPosition)
+        public virtual bool CanAttack(Hittable hittable)
         {
-            return HasCooledDown();
+            return !isActive && HasCooledDown();
         }
     }
 }

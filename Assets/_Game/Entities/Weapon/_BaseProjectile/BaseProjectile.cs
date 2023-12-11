@@ -15,6 +15,10 @@ public class BaseProjectile : MonoBehaviour
     protected Rigidbody _rb;
     protected ProjectileTimeObject _timeObject;
     protected bool _isHit = false;
+    
+    [Header("Watchers")]
+    public bool isPlayer;
+    
     public bool Hit => _isHit;
 
     private void Awake()
@@ -29,8 +33,9 @@ public class BaseProjectile : MonoBehaviour
         _timeObject = GetComponent<ProjectileTimeObject>();
     }
 
-    public void Init(int attackerId)
+    public void Init(int attackerId, bool isPlayer = false)
     {
+        this.isPlayer = isPlayer;
         _hitBox.attackerId = attackerId;
     }
     
@@ -83,11 +88,11 @@ public class BaseProjectile : MonoBehaviour
         if (hittable != null 
             && hittable.hittableId != _hitBox.attackerId
         ) {
-            if (hittable is EnemyHittable)
-            {
-                ((EnemyHittable)hittable).OnHitDirection(this._hitBox, (-1) * other.impulse);
-            }
             hittable.OnHit(_hitBox);
+            if (isPlayer && hittable is EnemyHittable)
+            {
+                ((EnemyHittable)hittable).OnHitByPlayer((-1) * other.impulse);
+            }
         }
         SetHit();
     }

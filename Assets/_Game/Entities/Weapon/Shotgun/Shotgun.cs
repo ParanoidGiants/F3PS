@@ -19,7 +19,7 @@ namespace Weapon
                 if (currentMagazineAmount <= 0)
                 {
                     // TODO: Play empty clip sound
-                    weaponUI?.OnShootEmptyClip();
+                    weaponUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {

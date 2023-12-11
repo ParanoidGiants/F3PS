@@ -23,6 +23,8 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Rush Settings")]
+        public bool isCharging;
+        public Material chargeMaterial;
         public float chargeTimer;
         public float attackTimer;
         public float recoverTimer;
@@ -36,6 +38,7 @@ namespace F3PS.AI.States.Action
         public float chargeTime;
         public float attackTime;
         public float recoverTime;
+        public float attackDistance;
 
         override 
         protected void Initialize()
@@ -47,39 +50,31 @@ namespace F3PS.AI.States.Action
             _hitBox.attackerId = enemy.GetInstanceID();
         }
 
-        public override bool CanAttack(Vector3 targetPosition)
-        {
-            Transform enemyTransform = enemy.body.transform;
-            var targetForward = (targetPosition - enemyTransform.position).normalized;
-            var actualForward = enemyTransform.forward;
-            bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f);
-            return isAlignedWithTarget && HasCooledDown();
-        }
-        
         override
-        public void OnUpdate()
+        public void OnPhysicsUpdate()
         {
             if (isCharging)
             {
                 HandleCharging();
             }
-            else if (isAttacking)
-            {
-                HandleAttack();
-            }
-            else if (isRecovering)
-            {
-                HandleRecovering();
-            }
+            else  base.OnPhysicsUpdate();
         }
         
         override
         public void OnStartAttack(Hittable hittable)
         {
-            _hitCollider.enabled = true;
-            enemy.navMeshAgent.isStopped = true;
-            
             base.OnStartAttack(hittable);
+            _hitCollider.enabled = true;
+            OnCharge();
+        }
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            var hittable = other.gameObject.GetComponent<Hittable>();
+            if (hittable != null && hittable.hittableId != _hitBox.attackerId)
+            {
+                hittable.OnHit(_hitBox);
+            }
         }
 
         override
@@ -91,11 +86,9 @@ namespace F3PS.AI.States.Action
             base.OnStopAttacking();
         }
         
-        override
-        protected void OnCharge()
+        private void OnCharge()
         {
-            base.OnCharge();
-            
+            enemy.SetMaterial(chargeMaterial);
             isCharging = true;
             wasEarlyHit = false;
             chargeTime = 0f;
@@ -133,19 +126,17 @@ namespace F3PS.AI.States.Action
             var strength = (wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
             _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
         }
-        
-        override
-        protected void HandleCharging()
+            
+        private void HandleCharging()
         {
             chargeTime += enemy.ScaledDeltaTime;
             isCharging = chargeTime < chargeTimer;
-            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
-            isCharging = chargeTime < chargeTimer;
-
             if (!isCharging)
             {
                 OnAttack();
             }
+            
+            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
         }
         override
         protected void HandleAttack()
@@ -181,13 +172,16 @@ namespace F3PS.AI.States.Action
             }
         }
         
-        private void OnTriggerEnter(Collider other)
+        override
+        public bool CanAttack(Hittable hittable)
         {
-            var hittable = other.gameObject.GetComponent<Hittable>();
-            if (hittable != null && hittable.hittableId != _hitBox.attackerId)
-            {
-                hittable.OnHit(_hitBox);
-            }
+            if (!base.CanAttack(hittable)) return false;
+            
+            Transform enemyTransform = enemy.body.transform;
+            var targetForward = (_target.Center() - enemyTransform.position).normalized;
+            var actualForward = enemyTransform.forward;
+            bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f);
+            return isAlignedWithTarget;
         }
     }
 }

@@ -52,7 +52,7 @@ public class WeaponUI : MonoBehaviour
         }
     }
 
-    public void OnShootEmptyClip()
+    public void OnTryShootWithEmptyClip()
     {
         _animator.SetTrigger(Pulsate);
     }

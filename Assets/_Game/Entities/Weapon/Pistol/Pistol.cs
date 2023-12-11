@@ -13,15 +13,14 @@ namespace Weapon
         {
             if (!_wasShootingPressedLastFrame && isShootingPressed)
             {
-                if (currentMagazineAmount <= 0)
+                if (IsMagazineEmpty())
                 {
-                    // TODO: Play empty clip sound
-                    weaponUI?.OnShootEmptyClip();
+                    weaponUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {
                     StartCoroutine(Shoot());
-                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    UpdateWeaponUI();
                 }
                 _wasShootingPressedLastFrame = true;
             }
@@ -35,6 +34,7 @@ namespace Weapon
         override
         protected IEnumerator Shoot()
         {
+            Debug.Log("Shoot!!");
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;

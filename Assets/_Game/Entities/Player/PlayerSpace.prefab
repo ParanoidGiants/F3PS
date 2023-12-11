@@ -1830,8 +1830,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
   JumpHeight: 6
-  DodgeHeight: 3
-  DodgeSpeed: 60
+  DodgeHeight: 1.5
+  DodgeSpeed: 30
   DodgeTimer: 1
   Gravity: -100
   DodgeCoolDownTimer: 0.25

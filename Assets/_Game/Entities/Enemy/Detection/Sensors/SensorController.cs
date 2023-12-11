@@ -78,5 +78,10 @@ namespace F3PS.AI.Sensors
             
             return aggressiveMovement.SelectedTarget;
         }
+
+        public bool IsTargetInLineOfSight()
+        {
+            return aggressiveVision.IsTargetInSight() || defaultVision.IsTargetInSight();
+        }
     }
 }

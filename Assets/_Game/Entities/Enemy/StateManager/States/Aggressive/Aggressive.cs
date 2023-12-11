@@ -36,6 +36,13 @@ namespace F3PS.AI.States
             _currentAttack = NextAttack();
             HandleStoppingDistance();
         }
+        
+        override 
+        public void OnExit()
+        {
+            base.OnExit();
+            _navMeshAgent.isStopped = true;
+        }
 
         override
         public void OnPhysicsUpdate()
@@ -50,7 +57,7 @@ namespace F3PS.AI.States
             
             if (_currentAttack.isActive)
             {
-                _currentAttack.OnUpdate();
+                _currentAttack.OnPhysicsUpdate();
                 return;
             }
             
@@ -60,10 +67,8 @@ namespace F3PS.AI.States
                 return;
             }
             
-            if (!_currentAttack.isActive
-                && _isStaying
-                && _currentAttack.CanAttack(_selectedTarget.Center())
-            ) {
+            if (_isStaying && _currentAttack.CanAttack(_selectedTarget))
+            {
                 _currentAttack.OnStartAttack(_selectedTarget);
                 return;
             }
@@ -75,9 +80,7 @@ namespace F3PS.AI.States
         {
             foreach (var attack in _attacks)
             {
-                if (attack.HasCooledDown())
-                    continue;
-                attack.CoolDown();
+                attack.OnFrameUpdate();
             }
         }
         
@@ -102,13 +105,17 @@ namespace F3PS.AI.States
         private void HandleStoppingDistance()
         {
             _isStaying = Helper.HasReachedDestination(_navMeshAgent);
-            if (_isStaying)
+            if (!stateManager.sensorController.IsTargetInLineOfSight())
             {
-                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceFollow;
+                _navMeshAgent.stoppingDistance = 0;
+            }
+            else if (_isStaying)
+            {
+                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceStay;
             }
             else
             {
-                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceStay;
+                _navMeshAgent.stoppingDistance = _currentAttack.stoppingDistanceFollow;
             }
         }
         

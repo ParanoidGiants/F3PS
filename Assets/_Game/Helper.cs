@@ -9,6 +9,8 @@ public static class Helper
     public static LayerMask DefaultLayer => LayerMask.GetMask("Default");
     public static LayerMask ProjectileLayer => LayerMask.GetMask("Projectile");
     public static LayerMask EnemyLayer => LayerMask.GetMask("Enemy");
+    public static LayerMask HittableLayer => LayerMask.GetMask("Hittable");
+
     public static IEnumerator UpdateLayoutGroups(RectTransform rectTransform)
     {
         yield return null;

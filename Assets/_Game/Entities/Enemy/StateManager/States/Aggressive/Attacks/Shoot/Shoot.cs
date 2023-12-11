@@ -1,3 +1,4 @@
+using F3PS.Damage.Take;
 using UnityEngine;
 using Weapon;
 
@@ -7,17 +8,11 @@ namespace F3PS.AI.States.Action
     {
         [Space(10)]
         [Header("Shoot Settings")]
-        public float chargeTimer;
-        public float hitTimer;
-        public float recoverTimer;
         public float rotationSpeed;
         
         [Space(10)]
         [Header("Shoot Watchers")]
         public BaseGun gun;
-        public float chargeTime;
-        public float hitTime;
-        public float recoverTime;
         public float requiredAngle;
 
         private bool _isShootingPressed = false;
@@ -31,56 +26,54 @@ namespace F3PS.AI.States.Action
         }
 
         override
-        protected void OnCharge()
+        public void OnStartAttack(Hittable hittable)
         {
-            chargeTime = 0f;
-            hitTime = 0f;
-            recoverTime = 0f;
-
-            base.OnCharge();
+            base.OnStartAttack(hittable);
+            OnAttack();
         }
 
         override
-        protected void HandleCharging()
+        protected void OnAttack()
         {
-            UpdateGunAndEnemyRotation(_target.Center());
-            chargeTime += enemy.ScaledDeltaTime;
-            isCharging = chargeTime < chargeTimer;
-            
-            base.HandleCharging();
+            isAttacking = true;
         }
 
-        override
-        protected void OnRecover()
-        {
-            gun.HandleReload();
-            base.OnRecover();
-        }
-        
         override
         protected void HandleAttack()
         {
-            UpdateGunAndEnemyRotation(_target.Center());
-            hitTime += enemy.ScaledDeltaTime;
-            isAttacking = hitTime < hitTimer;
+            UpdateGunAndEnemyRotation();
             _isShootingPressed = !_isShootingPressed;
             gun.HandleShoot(_isShootingPressed);
             
-            base.HandleAttack();
+            
+            if (gun.IsMagazineEmpty() || !IsTargetInLineOfSight(_target.Center()))
+            {
+                OnRecover();
+            }
         }
+        
+        override
+        protected void OnRecover()
+        {
+            isAttacking = false;
+            isRecovering = true;
+            gun.StartReloading();
+            base.OnRecover();
+        }
+
         
         override
         protected void HandleRecovering()
         {
-            UpdateEnemyRotation(_target.Center());
-            recoverTime += enemy.ScaledDeltaTime;
-            isRecovering = recoverTime < recoverTimer;
+            isRecovering = gun.isReloadingMagazine;
+            if (isRecovering) return;
             
-            base.HandleRecovering();
+            OnStopAttacking();
         }
         
-        private void UpdateGunAndEnemyRotation(Vector3 targetPosition)
+        private void UpdateGunAndEnemyRotation()
         {
+            var targetPosition = _target.Center();
             var gunRotation = Quaternion.LookRotation(targetPosition - gun.transform.position);
             gun.UpdateRotation(gunRotation);
             UpdateEnemyRotation(targetPosition);
@@ -89,30 +82,40 @@ namespace F3PS.AI.States.Action
         private void UpdateEnemyRotation(Vector3 targetPosition)
         {
             var enemyTransform = enemy.body.transform;
+            var enemyUp = enemyTransform.up;
             var position = enemyTransform.position;
             var lookDirection = targetPosition - position;
-            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-            var targetRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyUp);
+            var targetRotation = Quaternion.LookRotation(newForward, enemyUp);
             
-            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, targetRotation, enemy.ScaledDeltaTime * rotationSpeed);
+            enemyTransform.rotation = Quaternion.RotateTowards(
+                enemyTransform.rotation,
+                targetRotation,
+                enemy.ScaledDeltaTime * rotationSpeed
+            );
         }
 
         override
-        public bool CanAttack(Vector3 targetPosition)
+        public bool CanAttack(Hittable hittable)
+        {
+            return base.CanAttack(hittable) && IsTargetInLineOfSight(hittable.Center());
+        }
+
+        private bool IsTargetInLineOfSight(Vector3 targetPosition)
         {
             var position = gun.transform.position;
             var direction = (targetPosition - position).normalized;
             
-            if (!Physics.Raycast(position, direction, out var hit, attackDistance, Helper.PlayerLayer))
+            if (!Physics.Raycast(position, direction, out var hit, stoppingDistanceFollow, Helper.HittableLayer))
             {
                 return false;
             }
             
             if (Physics.Raycast(position, direction, out hit, hit.distance, Helper.DefaultLayer))
             {
-                return false;                
+                return false;
             }
-    
+
             var bodyTransform = enemy.body.transform;
             var enemyPosition = bodyTransform.position;
             var enemyDirection = targetPosition - enemyPosition;

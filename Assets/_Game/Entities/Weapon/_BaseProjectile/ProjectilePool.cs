@@ -3,18 +3,23 @@ using UnityEngine;
 
 public class ProjectilePool : MonoBehaviour
 {
+    [Header("Settings")]
     public int numberOfPooledObjects = 20;
     private List<BaseProjectile> _projectiles;
 
-    public void Init(GameObject projectilePrefab, Transform user)
+    [Header("Watchers")]
+    public bool isPlayer;
+
+    public void Init(GameObject projectilePrefab, Transform user, bool isPlayer = false)
     {
+        this.isPlayer = isPlayer;
         _projectiles = new List<BaseProjectile>();
         Transform parent = new GameObject("Projectiles" + projectilePrefab.name).transform;
         parent.transform.SetParent(user);
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
             BaseProjectile projectile = Instantiate(projectilePrefab, parent).GetComponent<BaseProjectile>();
-            projectile.Init(user.GetInstanceID());
+            projectile.Init(user.GetInstanceID(), isPlayer);
             projectile.gameObject.SetActive(false);
             _projectiles.Add(projectile.GetComponent<BaseProjectile>());
         }
