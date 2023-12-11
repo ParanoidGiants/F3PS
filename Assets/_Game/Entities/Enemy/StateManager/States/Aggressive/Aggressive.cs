@@ -34,18 +34,31 @@ namespace F3PS.AI.States
             base.OnEnter();
             _navMeshAgent.isStopped = false;
             _currentAttack = NextAttack();
+            HandleStoppingDistance();
         }
 
         override
         public void OnPhysicsUpdate()
         {
-            base.OnPhysicsUpdate();
-            if (!stateManager.sensorController.IsTargetDetected())
+            bool hasTarget = stateManager.sensorController.IsTargetDetected();
+            if (hasTarget)
+            {
+                _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+                _navMeshAgent.destination = _selectedTarget.Center();
+                HandleStoppingDistance();
+            }
+            
+            if (_currentAttack.isActive)
+            {
+                _currentAttack.OnUpdate();
+                return;
+            }
+            
+            if (!hasTarget)
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
-            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
             
             if (!_currentAttack.isActive
                 && _isStaying
@@ -54,14 +67,6 @@ namespace F3PS.AI.States
                 _currentAttack.OnStartAttack(_selectedTarget);
                 return;
             }
-            if (_currentAttack.isActive)
-            {
-                _currentAttack.OnUpdate();
-                return;
-            }
-
-            _navMeshAgent.destination = _selectedTarget.Center();
-            HandleStoppingDistance();
             HandlePositionAndRotation();
         }
 

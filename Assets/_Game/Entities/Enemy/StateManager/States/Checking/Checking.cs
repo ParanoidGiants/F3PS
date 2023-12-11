@@ -7,7 +7,8 @@ namespace F3PS.AI.States.Action
         override
         public void OnEnter()
         {
-            base.OnEnter(); 
+            base.OnEnter();
+            _navMeshAgent.isStopped = false;
         }
 
         override

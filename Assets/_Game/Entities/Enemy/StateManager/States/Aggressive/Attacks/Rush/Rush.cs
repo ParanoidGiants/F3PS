@@ -77,7 +77,7 @@ namespace F3PS.AI.States.Action
         public void OnStartAttack(Hittable hittable)
         {
             _hitCollider.enabled = true;
-            enemy.navMeshAgent.enabled = false;
+            enemy.navMeshAgent.isStopped = true;
             
             base.OnStartAttack(hittable);
         }
@@ -86,7 +86,7 @@ namespace F3PS.AI.States.Action
         protected void OnStopAttacking()
         {
             _hitCollider.enabled = false;
-            enemy.navMeshAgent.enabled = true;
+            enemy.navMeshAgent.isStopped = false;
             
             base.OnStopAttacking();
         }
