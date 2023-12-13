@@ -7,9 +7,10 @@ public class AgentTimeObject : TimeObject
     override
     public void PitchTimeScale(float newTimeScale)
     {
+        if (!agent) return;
+        
         float relation = newTimeScale / currentTimeScale;
         agent.speed *= relation;
-        
         base.PitchTimeScale(newTimeScale);
     }
 }

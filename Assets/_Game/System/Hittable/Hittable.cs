@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
@@ -5,8 +6,10 @@ namespace F3PS.Damage.Take
     public class Hittable : MonoBehaviour
     {
         protected Collider _collider;
+        public MeshRenderer meshRenderer;
         public float damageMultiplier;
         public int hittableId;
+        public float flashTimer;
         
         void Awake()
         {
@@ -18,6 +21,6 @@ namespace F3PS.Damage.Take
             return _collider.bounds.center;
         }
 
-        public virtual void OnHit(HitBox hitBy) {}
+        public virtual void OnHit(HitBox hitBy) { }
     }
 }

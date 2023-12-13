@@ -6,8 +6,10 @@ namespace F3PS.AI.Sensors
 {
     public class BaseSensor : MonoBehaviour
     {
-        [Header("General Watchers (can initially be null)")]
+        [Header("References")]
         [SerializeField] private MeshRenderer _meshRenderer;
+     
+        [Header("General Watchers (can initially be null)")] 
         [SerializeField] private List<Hittable> _targetCandidates;
         private readonly Color _defaultColor = new Color(1,1,1,0.1f);
         private readonly Color _searchingColor = new Color(0.5f,0,1f,0.1f);
@@ -16,11 +18,6 @@ namespace F3PS.AI.Sensors
         public bool HasTarget => _targetCandidates.Count > 0;
         public List<Hittable> TargetCandidates => _targetCandidates;
         public Hittable SelectedTarget => TargetCandidates.Count > 0 ? TargetCandidates[0] : null;
-        
-        private void Awake()
-        {
-            _meshRenderer = GetComponent<MeshRenderer>();
-        }
 
         private void OnTriggerEnter(Collider other)
         {

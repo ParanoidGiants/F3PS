@@ -36,10 +36,12 @@ namespace F3PS.AI.States.Action
             isActive = true;
             enemy.navMeshAgent.isStopped = true;
         }
+
         protected virtual void OnAttack()
         {
             enemy.SetMaterial(attackMaterial);
         }
+
         protected virtual void OnRecover()
         {
             enemy.SetMaterial(recoverMaterial);

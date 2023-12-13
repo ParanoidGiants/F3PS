@@ -19,7 +19,7 @@ TagManager:
   - HitBox
   - Hittable
   - Sensors
-  - 
+  - TimeBubble
   - 
   - 
   - 

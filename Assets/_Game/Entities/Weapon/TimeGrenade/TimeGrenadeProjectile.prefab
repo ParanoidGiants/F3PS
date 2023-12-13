@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1257127040946674366, guid: dc7e38466251dad4589960b9ce76a946,
         type: 3}
       propertyPath: timeScale
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8764724595077223640, guid: dc7e38466251dad4589960b9ce76a946,
         type: 3}
@@ -74,18 +74,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc7e38466251dad4589960b9ce76a946, type: 3}
---- !u!114 &313518837271188002 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1257127040946674366, guid: dc7e38466251dad4589960b9ce76a946,
-    type: 3}
-  m_PrefabInstance: {fileID: 1525561228248434844}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90bcc42fa97bf514ebcab9eaa70684d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1912948313852771380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 7785563140789300821, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
       propertyPath: m_Name
-      value: ProjectileGravityGun
+      value: TimeGrenadeProjectile
       objectReference: {fileID: 0}
     - target: {fileID: 7785563140789300822, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
@@ -183,8 +171,10 @@ MonoBehaviour:
   lifeTime: 0
   maximumLifeTime: 10
   removeAfterSeconds: 10
-  _isHit: 0
-  _timeZone: {fileID: 313518837271188002}
+  isPlayer: 0
+  timeBubble: {fileID: 0}
+  collider: {fileID: 0}
+  _weaponUI: {fileID: 0}
 --- !u!4 &8541015354598396518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7785563140789300818, guid: 540c7b130eeac7c4b89347aae834408b,

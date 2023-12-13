@@ -178,7 +178,7 @@ namespace F3PS.AI.States.Action
             if (!base.CanAttack(hittable)) return false;
             
             Transform enemyTransform = enemy.body.transform;
-            var targetForward = (_target.Center() - enemyTransform.position).normalized;
+            var targetForward = (hittable.Center() - enemyTransform.position).normalized;
             var actualForward = enemyTransform.forward;
             bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f);
             return isAlignedWithTarget;

@@ -8,15 +8,15 @@ public class TimeBubble : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         TimeObject o = other.GetComponent<TimeObject>();
-        if (o != null)
+        if (o == null) return;
+        
+        Debug.Log("SLOW DOWN " + other);
+        if (o.amountOfTimeZones == 0)
         {
-            if (o.amountOfTimeZones == 0)
-            {
-                o.PitchTimeScale(timeScale);
-            }
-            o.amountOfTimeZones++;
-            _timeObjects.Add(o);
+            o.PitchTimeScale(timeScale);
         }
+        o.amountOfTimeZones++;
+        _timeObjects.Add(o);
     }
     
     void OnTriggerExit(Collider other)

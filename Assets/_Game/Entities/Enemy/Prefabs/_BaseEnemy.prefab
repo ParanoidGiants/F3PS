@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d09e55c226c8d4d8e40b8ede36c6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 0}
+  _meshRenderer: {fileID: 1191832684826412002}
   _targetCandidates: []
   eyes: {fileID: 98723267095834350}
 --- !u!1 &3390804109126990870
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d09e55c226c8d4d8e40b8ede36c6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 0}
+  _meshRenderer: {fileID: 3390804109126990867}
   _targetCandidates: []
   eyes: {fileID: 98723267095834350}
 --- !u!1 &3390804109254703297
@@ -504,9 +504,11 @@ MonoBehaviour:
   enemySpeed: 5
   enemyStoppingDistance: 2
   material: {fileID: 2100000, guid: cf2c7e22b6da5254da2b48bb906ca7e7, type: 2}
-  _isStaying: 0
   rotationSpeed: 0
   _selectedTarget: {fileID: 0}
+  _isStaying: 0
+  _currentAttack: {fileID: 0}
+  _attacks: []
 --- !u!1 &3390804109682946907
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,7 +840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a291656140da1b742b91e00efdb33094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 0}
+  _meshRenderer: {fileID: 1396198977695657197}
   _targetCandidates: []
 --- !u!1 &7136520775277520253
 GameObject:
@@ -1010,8 +1012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 5
   hittableId: 0
+  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!54 &3025770810009539540
 Rigidbody:
@@ -1043,7 +1047,7 @@ GameObject:
   - component: {fileID: 918222201168324394}
   - component: {fileID: 4559332900973025115}
   - component: {fileID: 3025770809816011296}
-  - component: {fileID: 3025770809816011297}
+  - component: {fileID: 1075320918615787717}
   m_Layer: 11
   m_Name: Hittable
   m_TagString: Untagged
@@ -1129,8 +1133,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
+  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!65 &4559332900973025115
 BoxCollider:
@@ -1161,7 +1167,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 2
---- !u!114 &3025770809816011297
+--- !u!114 &1075320918615787717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1170,12 +1176,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7874501508904201008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ae30a622917ba041b4eaba0d8fcc777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 2
-  hittableId: 0
-  enemy: {fileID: 7874501509564256044}
+  amountOfTimeZones: 0
+  currentTimeScale: 1
+  agent: {fileID: 8818509671935900350}
 --- !u!1 &7874501509564256034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,7 +1232,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 7874501508904201011}
   navMeshAgent: {fileID: 8818509671935900350}
   patrolManager: {fileID: 3205364303430771451}
-  timeObject: {fileID: 2470968747878862923}
+  timeObject: {fileID: 0}
   _enemyStateManager: {fileID: 6535353038984071311}
   maxHealth: 100
   health: 0
@@ -1341,8 +1347,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 5
   hittableId: 0
+  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!54 &3025770810562123963
 Rigidbody:
@@ -1421,7 +1429,6 @@ GameObject:
   - component: {fileID: 7355257768631384466}
   - component: {fileID: 3104978382532382767}
   - component: {fileID: 8818509671935900350}
-  - component: {fileID: 2470968747878862923}
   m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
@@ -1485,17 +1492,3 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
---- !u!114 &2470968747878862923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9052215167061412862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountOfTimeZones: 0
-  currentTimeScale: 1

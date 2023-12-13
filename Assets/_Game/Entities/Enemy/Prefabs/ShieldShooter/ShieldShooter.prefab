@@ -104,11 +104,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2174154965761076761, guid: cd264fbbb3cd57042994addd53c44900,
-        type: 3}
-      propertyPath: rotationSpeed
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 5298604687546931896, guid: cd264fbbb3cd57042994addd53c44900,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -189,47 +184,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShieldShooter
       objectReference: {fileID: 0}
-    - target: {fileID: 8367039056624811670, guid: cd264fbbb3cd57042994addd53c44900,
-        type: 3}
-      propertyPath: requiredAngle
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8367039056624811670, guid: cd264fbbb3cd57042994addd53c44900,
-        type: 3}
-      propertyPath: rotationSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8367039056624811670, guid: cd264fbbb3cd57042994addd53c44900,
-        type: 3}
-      propertyPath: stoppingDistanceStay
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 8367039056624811670, guid: cd264fbbb3cd57042994addd53c44900,
-        type: 3}
-      propertyPath: stoppingDistanceFollow
-      value: 70
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd264fbbb3cd57042994addd53c44900, type: 3}
---- !u!1 &3898289318502091660 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2340833227475614282, guid: cd264fbbb3cd57042994addd53c44900,
-    type: 3}
-  m_PrefabInstance: {fileID: 1613922610252952006}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &81527390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3898289318502091660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe0d1dfb71cdb04da3ecec28bd16b98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _frames: 0
 --- !u!4 &4707521495914386408 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6283005041144439342, guid: cd264fbbb3cd57042994addd53c44900,

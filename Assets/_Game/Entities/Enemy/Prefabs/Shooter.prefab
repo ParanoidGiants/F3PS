@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 8751492176342301062, guid: 254f23c32ab05454fb2532a3b6f7366a,
         type: 3}
       propertyPath: stoppingDistanceFollow
-      value: 200
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 254f23c32ab05454fb2532a3b6f7366a, type: 3}
@@ -189,6 +189,11 @@ PrefabInstance:
       propertyPath: attacks.Array.data[0]
       value: 
       objectReference: {fileID: 8367039056624811670}
+    - target: {fileID: 3390804109682946905, guid: 543d14d0acc738d4295f4068dbb9cef2,
+        type: 3}
+      propertyPath: enemySpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7874501508904201020, guid: 543d14d0acc738d4295f4068dbb9cef2,
         type: 3}
       propertyPath: m_LocalScale.y
