@@ -5,11 +5,9 @@ namespace F3PS.Damage.Take
 {
     public class Hittable : MonoBehaviour
     {
-        protected Collider _collider;
-        public MeshRenderer meshRenderer;
+        [SerializeField] protected Collider _collider;
         public float damageMultiplier;
         public int hittableId;
-        public float flashTimer;
         
         void Awake()
         {

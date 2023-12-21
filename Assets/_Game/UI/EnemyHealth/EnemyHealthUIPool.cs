@@ -6,6 +6,7 @@ namespace F3PS.Enemy.UI
     public class EnemyHealthUIPool : MonoBehaviour
     {
         public EnemyHealthUI enemyHealthUI;
+        public BossHealthUI bossHealthUI;
 
         private void Start()
         {
@@ -32,6 +33,21 @@ namespace F3PS.Enemy.UI
             enemyHealthUI.SetFill(1);
             enemyHealthUI.SetTarget(null);
             enemyHealthUI.gameObject.SetActive(false);
+        }
+        
+        public void OnHitBoss(BossEnemy boss)
+        {
+            bossHealthUI.SetFill(boss.health/ (float) boss.maxHealth);
+        }
+        
+        public void EnableBossUI()
+        {
+            bossHealthUI.gameObject.SetActive(true);
+        }
+        
+        public void DisableBossUI()
+        {
+            bossHealthUI.gameObject.SetActive(false);
         }
     }
 }

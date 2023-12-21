@@ -54,7 +54,7 @@ namespace F3PS.Enemy
             Initialize();
         }
 
-        private void Initialize()
+        protected void Initialize()
         {
             health = maxHealth;
             HasPatrolRoute = patrolManager != null;
@@ -79,7 +79,7 @@ namespace F3PS.Enemy
             _stateManager.OnFrameUpdate();
         }
 
-        public void Hit(int damage)
+        public virtual void Hit(int damage)
         {
             health -= damage;
             Debug.Log("Took " + damage + " damage");
@@ -105,11 +105,9 @@ namespace F3PS.Enemy
             _stateManager.sensorController.gameObject.SetActive(false);
             _stateManager.enabled = false;
 
-            Debug.Log("-------------------");
             Debug.Log("Disable: " + gameObject.name);
             foreach (var hittable in _hittables)
             {
-                Debug.Log("Disable: " + hittable.name);
                 hittable.enabled = false;
             }
         }

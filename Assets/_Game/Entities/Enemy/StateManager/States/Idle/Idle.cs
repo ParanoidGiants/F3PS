@@ -28,6 +28,8 @@ namespace F3PS.AI.States
         {
             base.OnPhysicsUpdate();
             
+            if (_idleTimer < 0f) return;
+            
             _idleTime += enemy.ScaledDeltaTime;
             if (_idleTimer > _idleTime) return;
             

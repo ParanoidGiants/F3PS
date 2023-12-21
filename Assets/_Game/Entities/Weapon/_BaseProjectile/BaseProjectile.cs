@@ -89,11 +89,12 @@ public class BaseProjectile : MonoBehaviour
         if (hittable != null 
             && hittable.hittableId != _hitBox.attackerId
         ) {
-            hittable.OnHit(_hitBox);
             if (isPlayer && hittable is EnemyHittable enemyHittable)
             {
+                Debug.Log(enemyHittable.enemy.name);
                 enemyHittable.OnHitByPlayer((-1) * other.impulse);
             }
+            hittable.OnHit(_hitBox);
         }
         SetHit();
     }
