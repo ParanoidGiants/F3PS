@@ -31,7 +31,6 @@ namespace F3PS.Damage.Take
             if (rush)
             {
                 playerExtensions.Hit((int)(damageMultiplier * rush.damage));
-                rush.wasEarlyHit = true;
             }
         }
     }

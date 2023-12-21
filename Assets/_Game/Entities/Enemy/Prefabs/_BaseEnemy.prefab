@@ -1232,10 +1232,15 @@ MonoBehaviour:
   meshRenderer: {fileID: 7874501508904201011}
   navMeshAgent: {fileID: 8818509671935900350}
   patrolManager: {fileID: 3205364303430771451}
-  timeObject: {fileID: 0}
-  _enemyStateManager: {fileID: 6535353038984071311}
+  timeObject: {fileID: 1075320918615787717}
+  _stateManager: {fileID: 6535353038984071311}
   maxHealth: 100
+  isActive: 0
   health: 0
+  _hittables:
+  - {fileID: 918222201168324394}
+  - {fileID: 3025770810009539541}
+  - {fileID: 3025770810562123960}
 --- !u!1 &7874501509676519037
 GameObject:
   m_ObjectHideFlags: 0

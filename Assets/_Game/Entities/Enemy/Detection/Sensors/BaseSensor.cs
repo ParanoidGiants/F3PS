@@ -16,7 +16,7 @@ namespace F3PS.AI.Sensors
         private readonly Color _aggressiveColor = new Color(1,0,0,0.15f);
         
         public bool HasTarget => _targetCandidates.Count > 0;
-        public List<Hittable> TargetCandidates => _targetCandidates;
+        protected List<Hittable> TargetCandidates => _targetCandidates;
         public Hittable SelectedTarget => TargetCandidates.Count > 0 ? TargetCandidates[0] : null;
 
         private void OnTriggerEnter(Collider other)

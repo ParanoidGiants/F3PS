@@ -1,5 +1,6 @@
 using F3PS.Damage.Take;
 using F3PS.Enemy;
+using UnityEditor.AssetImporters;
 using UnityEngine;
 
 namespace F3PS.AI.States.Action
@@ -39,12 +40,22 @@ namespace F3PS.AI.States.Action
 
         protected virtual void OnAttack()
         {
-            enemy.SetMaterial(attackMaterial);
+            Debug.Log("Attack: " + enemy.name);
+            SetMaterial(attackMaterial);
+        }
+
+        private void SetMaterial(Material material)
+        {
+            if (enemy is BossEnemy bossEnemy)
+            {
+                bossEnemy.SetMaterial(material);
+            }
+            else enemy.SetMaterial(material);
         }
 
         protected virtual void OnRecover()
         {
-            enemy.SetMaterial(recoverMaterial);
+            SetMaterial(recoverMaterial);
         }
 
         public virtual void OnPhysicsUpdate()
@@ -82,7 +93,7 @@ namespace F3PS.AI.States.Action
             isActive = false;
             coolDownTime = 0f;
             enemy.navMeshAgent.isStopped = false;
-            enemy.SetMaterial(_aggressiveMaterial);
+            SetMaterial(_aggressiveMaterial);
         }
         
         public void CoolDown()

@@ -8,13 +8,13 @@ namespace F3PS.AI.States
     {
         [Header("Watchers")]
         [SerializeField]
-        private State _currentState;
+        protected State _currentState;
 
         [Space(10)]
         [Header("Settings")]
         public State[] states;
         public SensorController sensorController;
-        private void Start()
+        public virtual void Initialize()
         {
             foreach (var state in states)
             {
@@ -25,24 +25,24 @@ namespace F3PS.AI.States
             _currentState.OnEnter();
         }
 
-        void FixedUpdate()
+        public void OnPhysicsUpdate()
         {
             _currentState.OnPhysicsUpdate();
         }
 
-        void Update()
+        public void OnFrameUpdate()
         {
             _currentState.OnFrameUpdate();
         }
         
-        public void SwitchState(StateType stateType)
+        public virtual void SwitchState(StateType stateType)
         {
             _currentState.OnExit();
             _currentState = GetState(stateType);
             _currentState.OnEnter();
         }
 
-        private State GetState(StateType stateType)
+        protected State GetState(StateType stateType)
         {
             return states.FirstOrDefault(x => x.stateType == stateType);
         }

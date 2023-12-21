@@ -34,7 +34,7 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Rush Watchers")]
-        public bool wasEarlyHit;
+        private bool _wasEarlyHit;
         public float chargeTime;
         public float attackTime;
         public float recoverTime;
@@ -70,6 +70,9 @@ namespace F3PS.AI.States.Action
         
         private void OnTriggerEnter(Collider other)
         {
+            if (_wasEarlyHit) return;
+            
+            _wasEarlyHit = true;
             var hittable = other.gameObject.GetComponent<Hittable>();
             if (hittable != null && hittable.hittableId != _hitBox.attackerId)
             {
@@ -90,7 +93,7 @@ namespace F3PS.AI.States.Action
         {
             enemy.SetMaterial(chargeMaterial);
             isCharging = true;
-            wasEarlyHit = false;
+            _wasEarlyHit = false;
             chargeTime = 0f;
             attackTime = 0f;
             recoverTime = 0f;
@@ -123,7 +126,7 @@ namespace F3PS.AI.States.Action
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            var strength = (wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
+            var strength = (_wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
             _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
         }
             
@@ -141,7 +144,7 @@ namespace F3PS.AI.States.Action
         override
         protected void HandleAttack()
         {
-            if (wasEarlyHit)
+            if (_wasEarlyHit)
             {
                 isAttacking = false;
             }
@@ -180,7 +183,7 @@ namespace F3PS.AI.States.Action
             Transform enemyTransform = enemy.body.transform;
             var targetForward = (hittable.Center() - enemyTransform.position).normalized;
             var actualForward = enemyTransform.forward;
-            bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.1f);
+            bool isAlignedWithTarget = Helper.IsOrientedOnXZ(actualForward, targetForward, 0.01f);
             return isAlignedWithTarget;
         }
     }

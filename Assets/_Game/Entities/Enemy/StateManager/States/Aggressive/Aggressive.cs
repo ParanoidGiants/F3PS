@@ -47,32 +47,27 @@ namespace F3PS.AI.States
         override
         public void OnPhysicsUpdate()
         {
-            bool hasTarget = stateManager.sensorController.IsTargetDetected();
-            if (hasTarget)
-            {
-                _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
-                _navMeshAgent.destination = _selectedTarget.Center();
-                HandleStoppingDistance();
-            }
-            
             if (_currentAttack.isActive)
             {
                 _currentAttack.OnPhysicsUpdate();
                 return;
             }
             
+            bool hasTarget = stateManager.sensorController.IsTargetDetected();
             if (!hasTarget)
             {
                 stateManager.SwitchState(StateType.CHECKING);
                 return;
             }
+
+            _selectedTarget = stateManager.sensorController.GetTargetFromSensors();
+            _navMeshAgent.destination = _selectedTarget.Center();
+            HandleStoppingDistance();
             
             if (_isStaying && _currentAttack.CanAttack(_selectedTarget))
             {
                 _currentAttack.OnStartAttack(_selectedTarget);
-                return;
             }
-            HandlePositionAndRotation();
         }
 
         override
@@ -82,6 +77,14 @@ namespace F3PS.AI.States
             {
                 attack.OnFrameUpdate();
             }
+            
+            if (_currentAttack.isActive
+                || !stateManager.sensorController.IsTargetDetected()
+                || !_selectedTarget
+            )
+                return;
+            
+            HandlePositionAndRotation();
         }
         
         private void HandlePositionAndRotation()

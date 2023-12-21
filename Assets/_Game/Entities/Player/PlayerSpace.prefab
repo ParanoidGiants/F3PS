@@ -76,8 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 1
   hittableId: 0
+  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &810931643
 GameObject:
@@ -326,8 +328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
+  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &1641290579
 GameObject:
@@ -1525,9 +1529,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9222923224880341373}
   - {fileID: 419416748955625127}
   - {fileID: 6332522378322211087}
-  - {fileID: 9222923224880341373}
   - {fileID: 123824025274252373}
   m_Father: {fileID: 4028598924389062048}
   m_RootOrder: 0
@@ -2681,8 +2685,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
   damageMultiplier: 0.5
   hittableId: 0
+  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &5645447450462312790
 GameObject:
@@ -3156,7 +3162,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
+  m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
@@ -3680,7 +3686,7 @@ PrefabInstance:
     - target: {fileID: 929809372521219366, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 929809372521219366, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
         type: 3}
@@ -3755,7 +3761,7 @@ PrefabInstance:
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3813892571290435342, guid: 806106cbf8c59cd4a8c4dd6dded31343,
         type: 3}
@@ -3927,7 +3933,7 @@ PrefabInstance:
     - target: {fileID: 3813892571290435342, guid: 9fc755f69d075ab46a07a662b1418eb9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3813892571290435342, guid: 9fc755f69d075ab46a07a662b1418eb9,
         type: 3}
