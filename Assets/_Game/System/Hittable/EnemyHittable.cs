@@ -31,7 +31,7 @@ namespace F3PS.Damage.Take
             var projectile = hitBy.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
-                Debug.Log("Hit by projectile: " + hitBy.name);
+                Debug.Log(enemy.name + " hit by projectile from " + hitBy.name);
                 enemy.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
@@ -40,6 +40,7 @@ namespace F3PS.Damage.Take
             var rush = hitBy.GetComponent<Rush>();
             if (rush)
             {
+                Debug.Log(enemy.name + " hit by rush from " + hitBy.name);
                 enemy.Hit((int)(damageMultiplier * rush.damage));
             }
         }
@@ -47,7 +48,8 @@ namespace F3PS.Damage.Take
         internal void OnHitByPlayer(Vector3 hitDirection)
         {
             if (enemy.StateManager.IsAggressive()) return;
-            
+
+            Debug.Log(enemy.name + " hit by player");
             enemy.navMeshAgent.destination = enemy.transform.position - hitDirection;
             enemy.StateManager.SwitchState(StateType.CHECKING);
             Debug.Log(hitDirection);

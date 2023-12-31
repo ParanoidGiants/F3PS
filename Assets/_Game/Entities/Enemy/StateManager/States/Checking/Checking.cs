@@ -1,4 +1,5 @@
 using System.Numerics;
+using UnityEngine;
 
 namespace F3PS.AI.States.Action
 {
@@ -8,6 +9,8 @@ namespace F3PS.AI.States.Action
         public void OnEnter()
         {
             base.OnEnter();
+            
+            Debug.Log("ENTER CHECKING: " + enemy.name);
             _navMeshAgent.isStopped = false;
         }
 

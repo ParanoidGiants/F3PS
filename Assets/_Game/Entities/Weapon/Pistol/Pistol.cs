@@ -34,7 +34,6 @@ namespace Weapon
         override
         protected IEnumerator Shoot()
         {
-            Debug.Log("Shoot!!");
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;

@@ -45,11 +45,13 @@ namespace F3PS.AI.Sensors
 
         public void SetActive(bool active)
         {
-            _meshRenderer.enabled = active;
+            // _meshRenderer.enabled = active;
+            
         }
         
         public void SetSensorState(SensorState state)
         {
+            if (!_meshRenderer) return;
             switch (state)
             {
                 case SensorState.IDLE:

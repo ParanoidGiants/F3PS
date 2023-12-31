@@ -194,7 +194,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930765626554813044}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -324,7 +324,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3390804109126990870}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -764,7 +764,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7033205841911005262}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1012,10 +1012,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 5
   hittableId: 0
-  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!54 &3025770810009539540
 Rigidbody:
@@ -1133,10 +1132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
-  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!65 &4559332900973025115
 BoxCollider:
@@ -1352,10 +1350,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9ff2f8b977e2a48aa3a75797a56d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 5
   hittableId: 0
-  flashTimer: 0
   enemy: {fileID: 7874501509564256044}
 --- !u!54 &3025770810562123963
 Rigidbody:

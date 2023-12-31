@@ -26,6 +26,7 @@ namespace F3PS.AI.States
             {
                 attack.Initialize(material);
             }
+            _currentAttack = _attacks[0];
         }
         
         override
@@ -33,7 +34,7 @@ namespace F3PS.AI.States
         {
             base.OnEnter();
             _navMeshAgent.isStopped = false;
-            _currentAttack = NextAttack();
+            ChangeAttack(AttackType.RUSH);
             HandleStoppingDistance();
         }
         
@@ -122,11 +123,17 @@ namespace F3PS.AI.States
             }
         }
         
-        private Attack NextAttack()
+        public void ChangeAttack(AttackType attackType)
         {
-            var attack = _attacks[0];
-            _navMeshAgent.stoppingDistance = attack.stoppingDistanceStay;
-            return attack;
+            foreach (var attack in _attacks)
+            {
+                if (attack.type == attackType)
+                {
+                    _currentAttack = attack;
+                    _navMeshAgent.stoppingDistance = attack.stoppingDistanceStay;
+                    return;
+                }
+            }
         }
     }
 }

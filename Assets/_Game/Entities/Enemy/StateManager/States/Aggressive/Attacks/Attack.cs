@@ -40,7 +40,6 @@ namespace F3PS.AI.States.Action
 
         protected virtual void OnAttack()
         {
-            Debug.Log("Attack: " + enemy.name);
             SetMaterial(attackMaterial);
         }
 

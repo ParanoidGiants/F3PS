@@ -85,7 +85,7 @@ public class BaseProjectile : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         var hittable = other.gameObject.GetComponent<Hittable>();
-        Debug.Log("HIT: " + other.transform.name);
+        // Debug.Log("HIT: " + other.transform.name);
         if (hittable != null 
             && hittable.hittableId != _hitBox.attackerId
         ) {

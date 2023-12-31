@@ -124,6 +124,11 @@ PrefabInstance:
       propertyPath: m_BaseOffset
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6657852236725048464, guid: cd264fbbb3cd57042994addd53c44900,
+        type: 3}
+      propertyPath: shield
+      value: 
+      objectReference: {fileID: 223519916}
     - target: {fileID: 6657852236725048467, guid: cd264fbbb3cd57042994addd53c44900,
         type: 3}
       propertyPath: m_RootOrder

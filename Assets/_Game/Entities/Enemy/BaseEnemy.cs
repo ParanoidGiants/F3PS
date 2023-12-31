@@ -11,8 +11,8 @@ namespace F3PS.Enemy
     public class BaseEnemy : MonoBehaviour
     {
         public Rigidbody body;
-        
-        [Header("References")]
+
+        [Header("References")] public GameObject shield;
         public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
@@ -39,6 +39,14 @@ namespace F3PS.Enemy
         public void Activate()
         {
             isActive = true;
+            
+            navMeshAgent.enabled = true;
+            _stateManager.sensorController.gameObject.SetActive(true);
+            _stateManager.enabled = true;
+            foreach (var hittable in _hittables)
+            {
+                hittable.enabled = true;
+            }
             Initialize();
         }
         
@@ -104,8 +112,6 @@ namespace F3PS.Enemy
             navMeshAgent.enabled = false;
             _stateManager.sensorController.gameObject.SetActive(false);
             _stateManager.enabled = false;
-
-            Debug.Log("Disable: " + gameObject.name);
             foreach (var hittable in _hittables)
             {
                 hittable.enabled = false;

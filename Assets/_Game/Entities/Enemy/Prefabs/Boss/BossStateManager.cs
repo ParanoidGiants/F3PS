@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using F3PS.AI.States;
+using F3PS.AI.States.Action;
 using F3PS.Enemy;
-using UnityEngine;
 
 public class BossStateManager : EnemyStateManager
 {
@@ -20,11 +18,22 @@ public class BossStateManager : EnemyStateManager
     override
     public void SwitchState(StateType stateType)
     {
-        base.SwitchState(stateType);
+        BossEnemy boss = (BossEnemy)_currentState.enemy;
         if (stateType is StateType.AGGRESSIVE)
         {
-            BossEnemy boss = (BossEnemy)_currentState.enemy;
             boss.EnableHealthUI();
         }
+        else if (_currentState.stateType is StateType.AGGRESSIVE)
+        {
+            boss.DisableHealthUI();
+        }
+        base.SwitchState(stateType);
+    }
+    
+    public void SwitchAttack(AttackType attackType)
+    {
+        if (_currentState is not Aggressive aggressive) return;
+        
+        aggressive.ChangeAttack(attackType);
     }
 }

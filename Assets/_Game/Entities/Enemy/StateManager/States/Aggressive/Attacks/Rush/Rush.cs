@@ -72,8 +72,13 @@ namespace F3PS.AI.States.Action
         {
             if (_wasEarlyHit) return;
             
-            _wasEarlyHit = true;
             var hittable = other.gameObject.GetComponent<Hittable>();
+            if (hittable is EnemyHittable or BossHittable)
+            {
+                return;
+            }
+            
+            _wasEarlyHit = true;
             if (hittable != null && hittable.hittableId != _hitBox.attackerId)
             {
                 hittable.OnHit(_hitBox);
