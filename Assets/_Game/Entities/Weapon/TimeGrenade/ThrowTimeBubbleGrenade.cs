@@ -30,6 +30,7 @@ namespace Weapon
         public ThrowState state = ThrowState.IDLE;
         public Vector3 throwDirection;
         public float throwPower;
+        public WeaponUI weaponUI;
 
         private void Awake()
         {
@@ -43,14 +44,20 @@ namespace Weapon
             }
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            
+            weaponUI.gameObject.SetActive(true);
+        }
+        
+        private void OnDisable()
+        {
+            weaponUI.gameObject.SetActive(false);
         }
 
         public bool HandleThrow(bool isAiming, Vector3 targetPosition)
         {
             throwDirection = (targetPosition - spawnTransform.position).normalized;
+            weaponUI.UpdateGrenadeEffect(timeBubbleGrenadeProjectile.LifeTimePercentage);
 
             switch (state)
             {

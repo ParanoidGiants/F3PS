@@ -17,6 +17,7 @@ namespace Weapon
         private bool isSelecting = false;
         private WeaponUI _weaponUI;
         private SelectWeaponsPanel _selectWeaponsPanel;
+        
         private void Awake()
         {
             weapons = GetComponentsInChildren<BaseGun>().ToList();
@@ -33,6 +34,7 @@ namespace Weapon
             }
             ChooseWeapon(0);
             _selectWeaponsPanel.Init(this);
+            grenade.weaponUI.SetGrenadeUIActive(grenade.gameObject.activeSelf);
         }
 
         private void ChooseWeapon(int i)

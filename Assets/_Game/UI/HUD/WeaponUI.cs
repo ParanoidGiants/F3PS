@@ -69,4 +69,9 @@ public class WeaponUI : MonoBehaviour
     {
         weaponIcon.sprite = activeWeaponIcon;
     }
+
+    public void SetGrenadeUIActive(bool isGrenadeActive)
+    {
+        grenadeIcon.gameObject.SetActive(isGrenadeActive);
+    }
 }

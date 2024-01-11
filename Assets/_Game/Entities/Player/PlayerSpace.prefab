@@ -76,10 +76,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 1
   hittableId: 0
-  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &810931643
 GameObject:
@@ -106,7 +105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 810931643}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.99, y: 1.6959999, z: 7.5}
+  m_LocalPosition: {x: -8.07, y: 1.696, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -328,10 +327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
-  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &1641290579
 GameObject:
@@ -1109,8 +1107,8 @@ MonoBehaviour:
   RotationSmoothTime: 0.3
   AmingRotationSmoothTime: 0.3
   FocusSpeed: 3
-  MoveSpeed: 8
-  SprintSpeed: 20
+  MoveSpeed: 3
+  SprintSpeed: 8
 --- !u!114 &978292379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,7 +1216,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070925442478606047}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.79, y: 1.6660001, z: 11.400001}
+  m_LocalPosition: {x: -7.87, y: 1.6659999, z: 12.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1289,7 +1287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070925443028286612}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.99, y: 1.6959999, z: 7.5}
+  m_LocalPosition: {x: -8.07, y: 1.696, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1758,7 +1756,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2585070808375938922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.29, y: 0, z: 12.8}
+  m_LocalPosition: {x: -8.37, y: 0, z: 14.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1802,7 +1800,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.8
   m_Radius: 0.05
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -2653,10 +2651,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.23
+  m_Radius: 0.1
   m_Height: 0.88133717
   m_Direction: 1
-  m_Center: {x: -0.0034060478, y: 0.52287626, z: 0}
+  m_Center: {x: 0, y: 0.52287626, z: 0}
 --- !u!54 &7190970460023110499
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2685,10 +2683,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  _collider: {fileID: 0}
   damageMultiplier: 0.5
   hittableId: 0
-  flashTimer: 0
   playerExtensions: {fileID: 519437979198283079}
 --- !u!1 &5645447450462312790
 GameObject:
@@ -3162,7 +3159,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
+  m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
@@ -3743,6 +3740,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shotgun
       objectReference: {fileID: 0}
+    - target: {fileID: 7283300513466934740, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff35567ea24f23545bb4f0cc2fe33bdc, type: 3}
 --- !u!4 &419416748955625127 stripped
@@ -3838,6 +3840,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8579149676361870591}
     m_Modifications:
+    - target: {fileID: 1080593552923030184, guid: 44039d663aa003247a93628d13c02462,
+        type: 3}
+      propertyPath: timeScale
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: hittableManager
@@ -3847,6 +3854,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TimeBubbleGrenade
+      objectReference: {fileID: 0}
+    - target: {fileID: 3860830024259442653, guid: 44039d663aa003247a93628d13c02462,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6656408189821302575, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
@@ -3993,7 +4005,7 @@ PrefabInstance:
     - target: {fileID: 6708543336009785340, guid: 9fc755f69d075ab46a07a662b1418eb9,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc755f69d075ab46a07a662b1418eb9, type: 3}

@@ -6,10 +6,10 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     [Header("References")]
     public TimeBubble timeBubble;
     public new Collider collider;
-    public WeaponUI _weaponUI;
 
     public float Gravity => _timeObject.gravityScale * Physics.gravity.magnitude;
-    
+    public float LifeTimePercentage => lifeTime / maximumLifeTime;
+
     private void Update()
     {
         if (!_isHit) return;
@@ -19,14 +19,12 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         {
             gameObject.SetActive(false);
         }
-        _weaponUI.UpdateGrenadeEffect(lifeTime/maximumLifeTime);
     }
 
     override
     public void InitReferences()
     {
         base.InitReferences();
-        _weaponUI = FindObjectOfType<WeaponUI>();
         transform.parent = FindObjectOfType<StarterAssetsInputs>().transform;
     }
     

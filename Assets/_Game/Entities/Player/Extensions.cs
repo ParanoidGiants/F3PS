@@ -102,7 +102,7 @@ namespace Player
             isShooting = _input.shoot && !isSprinting;
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
-            isAimingGrenade = _input.aimGrenade; 
+            isAimingGrenade = weaponManager.grenade.gameObject.activeSelf && _input.aimGrenade; 
             isAiming = _input.aim || isAimingGrenade;
             weaponManager.OnUpdate(
                 isSprinting,

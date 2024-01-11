@@ -12,6 +12,12 @@ PrefabInstance:
       propertyPath: damage
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6917445223256748906, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 4ffd2050bcbcf3a4bb68b6e4638a6cf2,
+        type: 2}
     - target: {fileID: 7785563140789300818, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
       propertyPath: m_RootOrder
