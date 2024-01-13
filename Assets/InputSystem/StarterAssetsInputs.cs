@@ -20,6 +20,7 @@ namespace StarterAssets
 		public bool pause;
 		public bool switchWeapon;
 		public bool aimGrenade;
+		public bool restart;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -91,6 +92,11 @@ namespace StarterAssets
 		{
 			AimGrenadeInput(value.isPressed);
 		}
+		
+		public void OnRestart(InputValue value)
+		{
+			RestartInput(value.isPressed);
+		}
 #endif
 
 
@@ -152,6 +158,11 @@ namespace StarterAssets
 		private void AimGrenadeInput(bool valueIsPressed)
 		{
 			aimGrenade = valueIsPressed;
+		}
+		
+		private void RestartInput(bool valueIsPressed)
+		{
+			restart = valueIsPressed;
 		}
 
 		private void OnApplicationFocus(bool hasFocus)

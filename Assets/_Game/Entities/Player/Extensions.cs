@@ -22,6 +22,7 @@ namespace Player
         public bool isSlowMoStarted;
         public float rotationVelocity;
         public bool isAimingGrenade;
+        public bool isRestartingGame;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -91,6 +92,12 @@ namespace Player
         // Update is called once per frame
         public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
         {
+            if (_input.restart && !isRestartingGame)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                isRestartingGame = true;
+            }
+            
             if (!weaponManager.ActiveWeapon.isReloadingMagazine)
             {
                 weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
