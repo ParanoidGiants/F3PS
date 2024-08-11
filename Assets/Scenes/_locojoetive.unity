@@ -17759,7 +17759,7 @@ PrefabInstance:
     - target: {fileID: 3258596985672818640, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 159.6848
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3258596985672818640, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
@@ -17924,7 +17924,7 @@ PrefabInstance:
     - target: {fileID: 3258596986216235356, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 238.7048
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3258596986216235356, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
@@ -17954,7 +17954,7 @@ PrefabInstance:
     - target: {fileID: 3258596986437892787, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 193.61479
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3258596986437892787, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
@@ -18681,7 +18681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door: {fileID: 805407284}
   isOpen: 0
-  open: 0
+  open: 1
   close: 0
 --- !u!1 &1028513131
 GameObject:
