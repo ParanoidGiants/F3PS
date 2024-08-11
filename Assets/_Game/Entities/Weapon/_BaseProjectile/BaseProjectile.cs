@@ -4,34 +4,44 @@ using UnityEngine;
 
 public class BaseProjectile : MonoBehaviour
 {
+    [Header("Settings")]
     public int damage = 50;
     public float lifeTime = 0f;
     public float maximumLifeTime = 5f;
     public float removeAfterSeconds = .2f;
     
+    private float _speed;
     private HitBox _hitBox;
     protected Rigidbody _rb;
-    protected TimeObject _timeObject;
-    private TrailRenderer _trailRenderer;
-    private float _speed;
-    [SerializeField] protected bool _isHit = false;
+    protected ProjectileTimeObject _timeObject;
+    protected bool _isHit = false;
+    
+    [Header("Watchers")]
+    public bool isPlayer;
+    
     public bool Hit => _isHit;
 
     private void Awake()
     {
-        _trailRenderer = GetComponent<TrailRenderer>();
-        _hitBox = GetComponent<HitBox>();
-        _rb = GetComponent<Rigidbody>();
+        InitReferences();
     }
 
-    public void Init(int attackerId)
+    public virtual void InitReferences()
     {
+        _hitBox = GetComponent<HitBox>();
+        _rb = GetComponent<Rigidbody>();
+        _timeObject = GetComponent<ProjectileTimeObject>();
+    }
+
+    public void Init(int attackerId, bool isPlayer = false)
+    {
+        this.isPlayer = isPlayer;
         _hitBox.attackerId = attackerId;
     }
     
     private void Update()
     {
-        lifeTime += Time.deltaTime;
+        lifeTime += _timeObject.ScaledDeltaTime;
         if (lifeTime > maximumLifeTime)
         {
             gameObject.SetActive(false);
@@ -48,7 +58,7 @@ public class BaseProjectile : MonoBehaviour
     
     private void OnEnable()
     {
-        _trailRenderer.Clear();
+        _timeObject.ClearTrail();
         _rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
     }
@@ -75,8 +85,15 @@ public class BaseProjectile : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         var hittable = other.gameObject.GetComponent<Hittable>();
-        if (hittable != null && hittable.hittableId != _hitBox.attackerId)
-        {
+        // Debug.Log("HIT: " + other.transform.name);
+        if (hittable != null 
+            && hittable.hittableId != _hitBox.attackerId
+        ) {
+            if (isPlayer && hittable is EnemyHittable enemyHittable)
+            {
+                Debug.Log(enemyHittable.enemy.name);
+                enemyHittable.OnHitByPlayer((-1) * other.impulse);
+            }
             hittable.OnHit(_hitBox);
         }
         SetHit();

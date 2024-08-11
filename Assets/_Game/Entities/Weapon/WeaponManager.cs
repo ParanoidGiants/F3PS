@@ -8,6 +8,7 @@ namespace Weapon
 {
     public class WeaponManager : MonoBehaviour
     {
+        public ThrowTimeBubbleGrenade grenade;
         public List<BaseGun> weapons;
         private BaseGun _activeWeapon;
         public BaseGun ActiveWeapon => _activeWeapon;
@@ -16,6 +17,7 @@ namespace Weapon
         private bool isSelecting = false;
         private WeaponUI _weaponUI;
         private SelectWeaponsPanel _selectWeaponsPanel;
+        
         private void Awake()
         {
             weapons = GetComponentsInChildren<BaseGun>().ToList();
@@ -32,6 +34,7 @@ namespace Weapon
             }
             ChooseWeapon(0);
             _selectWeaponsPanel.Init(this);
+            grenade.weaponUI.SetGrenadeUIActive(grenade.gameObject.activeSelf);
         }
 
         private void ChooseWeapon(int i)
@@ -48,10 +51,24 @@ namespace Weapon
             _weaponUI.UpdateImage(ActiveWeapon.icon);
         }
 
-        public void OnUpdate(bool isSprinting, bool isShooting, bool isReloading, Vector3 targetPosition)
+        public void OnUpdate(bool isSprinting, bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
         {
-            ActiveWeapon.HandleShoot(isShooting);
-            if (isReloading) ActiveWeapon.HandleReload();
+            if (grenade.HandleThrow(isAimingGrenade, targetPosition))
+            {
+                return;
+            }
+
+            if (!ActiveWeapon.isReloadingMagazine)
+            {
+                if (isReloading)
+                {
+                    ActiveWeapon.StartReloading();
+                }
+                else
+                {
+                    ActiveWeapon.HandleShoot(isShooting);
+                }
+            }
             
             var gunForward = targetPosition - ActiveWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);

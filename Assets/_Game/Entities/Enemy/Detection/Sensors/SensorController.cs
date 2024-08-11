@@ -7,41 +7,41 @@ namespace F3PS.AI.Sensors
     {
         public SensorState state;
         public VisionSensor defaultVision;
-        public VisionSensor searchingVision;
+        public VisionSensor aggressiveVision;
         public MovementSensor aggressiveMovement;
 
-        public void SetState(SensorState state)
+        public virtual void SetState(SensorState state)
         {
             this.state = state;
             defaultVision.SetSensorState(state);
-            searchingVision.SetSensorState(state);
+            aggressiveVision.SetSensorState(state);
             
             aggressiveMovement.SetSensorState(state);
             
             if (state == SensorState.AGGRESSIVE)
             {
                 defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
+                aggressiveVision.SetActive(true);
                 
                 aggressiveMovement.SetActive(true);
             }
             else if (state == SensorState.SEARCHING)
             {
                 defaultVision.SetActive(false);
-                searchingVision.SetActive(true);
+                aggressiveVision.SetActive(true);
                 
                 aggressiveMovement.SetActive(false);
             }
             else
             {
                 defaultVision.SetActive(true);
-                searchingVision.SetActive(false);
+                aggressiveVision.SetActive(false);
                 
                 aggressiveMovement.SetActive(false);
             }
         }
         
-        public bool IsTargetDetected()
+        public virtual bool IsTargetDetected()
         {
             if (state == SensorState.IDLE)
             {
@@ -53,10 +53,10 @@ namespace F3PS.AI.Sensors
                 return true;
             }
 
-            return searchingVision.IsTargetInSight();
+            return aggressiveVision.IsTargetInSight();
         }
 
-        public Hittable GetTargetFromSensors()
+        public virtual Hittable GetTargetFromSensors()
         {
             if (state == SensorState.IDLE)
             {
@@ -64,21 +64,24 @@ namespace F3PS.AI.Sensors
             }
             if (state == SensorState.SEARCHING)
             {
-                return searchingVision.SelectedTarget;
+                return aggressiveVision.SelectedTarget;
             }
             // else state is aggressive
-            if (searchingVision.HasTarget)
+            if (aggressiveMovement.HasTarget)
             {
-                if (aggressiveMovement.HasTarget)
-                {
-                    return aggressiveMovement.SelectedTarget;
-                }
-                
-                // else work with what you see
-                return searchingVision.SelectedTarget;
+                return aggressiveMovement.SelectedTarget;
+            }
+            if (aggressiveVision.HasTarget)
+            {
+                return aggressiveVision.SelectedTarget;
             }
             
             return aggressiveMovement.SelectedTarget;
+        }
+
+        public virtual bool IsTargetInLineOfSight()
+        {
+            return aggressiveVision.IsTargetInSight() || defaultVision.IsTargetInSight();
         }
     }
 }

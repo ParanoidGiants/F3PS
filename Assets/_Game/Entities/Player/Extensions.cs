@@ -21,8 +21,8 @@ namespace Player
         public bool isSlowMoToggle;
         public bool isSlowMoStarted;
         public float rotationVelocity;
-
-        public float deltaTime;
+        public bool isAimingGrenade;
+        public bool isRestartingGame;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -73,7 +73,6 @@ namespace Player
 
         private PlayerHealthUI _playerHealthUI;
         private Camera _mainCamera;
-        private readonly int Dodge = Animator.StringToHash("Dodge");
         public float RotationSpeed => isAiming ? aimingRotationSpeed : defaultRotationSpeed;
         
         public void Init(Animator animator)
@@ -93,6 +92,12 @@ namespace Player
         // Update is called once per frame
         public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
         {
+            if (_input.restart && !isRestartingGame)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                isRestartingGame = true;
+            }
+            
             if (!weaponManager.ActiveWeapon.isReloadingMagazine)
             {
                 weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
@@ -104,9 +109,16 @@ namespace Player
             isShooting = _input.shoot && !isSprinting;
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
-            Dodging(_input.dodge);
-            weaponManager.OnUpdate(isSprinting, isShooting, isReloading, _crosshair.GetTargetPosition());
-            UpdateStaminaManager(_input.move.magnitude, _input.aim, _input.sprint);
+            isAimingGrenade = weaponManager.grenade.gameObject.activeSelf && _input.aimGrenade; 
+            isAiming = _input.aim || isAimingGrenade;
+            weaponManager.OnUpdate(
+                isSprinting,
+                isAimingGrenade,
+                isShooting,
+                isReloading,
+                _crosshair.GetTargetPosition()
+            );
+            UpdateStaminaManager(_input.move.magnitude, isAiming, _input.sprint);
             UpdateTimeManager(_input.slowmo);
         }
 
@@ -143,10 +155,10 @@ namespace Player
             staminaManager.UpdateAiming(isAiming);
         }
 
-        public float GetLookRotation(Transform transform, float movementYaw, float cameraYaw)
+        public float GetLookYaw(Transform transform, float movementYaw, float cameraYaw)
         {
             float smoothTime = isAiming ? AmingRotationSmoothTime : RotationSmoothTime;
-            float yaw = isSprinting ? movementYaw : cameraYaw;
+            float yaw = isDodging || isSprinting ? movementYaw : cameraYaw;
             return Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
                 yaw,
@@ -155,30 +167,21 @@ namespace Player
             );
         }
 
-        private void Dodging(bool dodgeInput)
-        {
-            var dodge = Grounded && dodgeInput;
-            _animator.SetBool(Dodge, dodge);
-        }
-
         internal float GetTargetSpeed(Vector2 moveVector)
         {
             if (moveVector == Vector2.zero)
             {
                 return 0.0f;
             }
-            else if (isAiming)
+            if (isAiming)
             {
                 return FocusSpeed;
             }
-            else if (isSprinting)
+            if (isSprinting)
             {
                 return SprintSpeed;
             }
-            else
-            {
-                return MoveSpeed;
-            }
+            return MoveSpeed;
         }
 
         public void Hit(int damage)

@@ -1,23 +1,30 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using DarkTonic.MasterAudio;
 using F3PS.Enemy.UI;
+using F3PS.AI.States;
+using F3PS.Damage.Take;
 
 namespace F3PS.Enemy
 {
     public class BaseEnemy : MonoBehaviour
     {
         public Rigidbody body;
-        
-        [Header("References")]
+
+        [Header("References")] public GameObject shield;
         public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
         public TimeObject timeObject;
-        public float ScaledDeltaTime => timeObject.currentTimeScale * Time.deltaTime;
+        public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
         public float TimeScale => timeObject.currentTimeScale;
-        private EnemyHealthUIPool _healthUIPool;
+        protected EnemyHealthUIPool _healthUIPool;
         public bool HasPatrolRoute { get; private set; }
+
+        [SerializeField] protected EnemyStateManager _stateManager;
+        public EnemyStateManager StateManager => _stateManager;
+
 
         [Space(10)]
         [Header("Settings")]
@@ -25,25 +32,62 @@ namespace F3PS.Enemy
         
         [Space(10)]
         [Header("Watchers")]
+        public bool isActive = true;
         public int health;
-
-
-        private void Awake()
+        [SerializeField] private Hittable[] _hittables;
+        
+        public void Activate()
+        {
+            isActive = true;
+            
+            navMeshAgent.enabled = true;
+            _stateManager.sensorController.gameObject.SetActive(true);
+            _stateManager.enabled = true;
+            foreach (var hittable in _hittables)
+            {
+                hittable.enabled = true;
+            }
+            Initialize();
+        }
+        
+        protected void Awake()
         {
             _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+        }
+
+        private void Start()
+        {
+            if (!isActive) return;
+            
+            Initialize();
+        }
+
+        protected void Initialize()
+        {
+            health = maxHealth;
             HasPatrolRoute = patrolManager != null;
             if (HasPatrolRoute)
             {
                 patrolManager.Init();
             }
+            _stateManager.Initialize();
         }
-
-        private void Start()
+        
+        private void FixedUpdate()
         {
-            health = maxHealth;
+            if (!isActive) return;
+            
+            _stateManager.OnPhysicsUpdate();
+        }
+        
+        private void Update()
+        {
+            if (!isActive) return;
+            
+            _stateManager.OnFrameUpdate();
         }
 
-        public void Hit(int damage)
+        public virtual void Hit(int damage)
         {
             health -= damage;
             Debug.Log("Took " + damage + " damage");
@@ -57,9 +101,21 @@ namespace F3PS.Enemy
             _healthUIPool.OnHitTarget(this);
         }
 
-        public void SetMaterial(Material material)
+        public virtual void SetMaterial(Material material)
         {
             meshRenderer.sharedMaterial = material;
+        }
+
+        public void Deactivate()
+        {
+            isActive = false;
+            navMeshAgent.enabled = false;
+            _stateManager.sensorController.gameObject.SetActive(false);
+            _stateManager.enabled = false;
+            foreach (var hittable in _hittables)
+            {
+                hittable.enabled = false;
+            }
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PatrolManager : MonoBehaviour
@@ -5,7 +7,7 @@ public class PatrolManager : MonoBehaviour
     private Transform _patrolPointParent;
     
     [Header("Watchers")]
-    [SerializeField] private Transform[] _patrolPoints;
+    [SerializeField] private List<Transform> _patrolPoints;
 
     [SerializeField] private int enemyId;
     public int EnemyId => enemyId;
@@ -27,28 +29,24 @@ public class PatrolManager : MonoBehaviour
 
     private void ResetPatrolPoints()
     {
-        _patrolPoints = new Transform[_patrolPointParent.childCount];
-        var patrolPoints = _patrolPointParent.GetComponentInChildren<Transform>();
-        for (var i = 0; i < patrolPoints.childCount; i++)
-        {
-            _patrolPoints[i] = patrolPoints.GetChild(i);
-        }
+        _patrolPoints = _patrolPointParent.GetComponentsInChildren<Transform>().ToList();
+        _patrolPoints.Remove(transform);
+        
     }
 
     public void SetNextPatrolPoint()
     {
         _currentPatrolPointIndex++;
-        if (_currentPatrolPointIndex >= _patrolPoints.Length)
+        if (_currentPatrolPointIndex >= _patrolPoints.Count)
         {
             _currentPatrolPointIndex = 0;
         }
-        ResetPatrolPoints();
     }
 
     public void SetNextPatrolPointToClosestPoint(Vector3 enemyPosition)
     {
         int closestPatrolPointIndex = 0;
-        for (int i = 1; i < _patrolPoints.Length; i++)
+        for (int i = 1; i < _patrolPoints.Count; i++)
         {
             if (Vector3.Distance(enemyPosition, _patrolPoints[i].position) < Vector3.Distance(enemyPosition, _patrolPoints[closestPatrolPointIndex].position))
             {

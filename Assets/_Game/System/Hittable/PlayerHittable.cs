@@ -21,20 +21,16 @@ namespace F3PS.Damage.Take
             var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
-                Debug.Log("Hit by projectile: " + hitBy.name);
                 projectile.SetHit();
                 playerExtensions.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
 
-            Debug.Log("HIT");
             // Hit by rush
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {
-                Debug.Log("With rush");
                 playerExtensions.Hit((int)(damageMultiplier * rush.damage));
-                rush.wasEarlyHit = true;
             }
         }
     }

@@ -5,5 +5,6 @@ public enum StateType
     CHECKING,
     SUSPICIOUS,
     RETURN_TO_IDLE,
-    PATROLLING
+    PATROLLING,
+    ENABLED_PHYSICS
 }

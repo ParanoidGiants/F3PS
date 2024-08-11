@@ -78,7 +78,6 @@ namespace TimeBending
 
         public void PauseTime()
         {
-            Debug.Log("PAUSE");
             Time.timeScale = 0f;
             Time.fixedDeltaTime = 0f;
             _isPaused = true;
@@ -86,7 +85,6 @@ namespace TimeBending
         
         public void ResumeTime()
         {
-            Debug.Log("RESUME");
             Time.timeScale = isActive ? slowdownFactor : 1f;
             Time.fixedDeltaTime = Time.timeScale / F3PS.GameManager.Instance.Fps;
             _isPaused = false;

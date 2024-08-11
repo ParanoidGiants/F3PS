@@ -7,15 +7,19 @@ namespace F3PS.AI.States.Action
     public class ReturnToIdle : State
     {
         private Vector3 _originalPosition;
-        public void Start()
+        public void Awake()
         {
             _originalPosition = enemy.body.transform.position;
+        }
+
+        public override void OnEnter()
+        {
             enemy.navMeshAgent.destination = _originalPosition;
         }
 
-        public override void OnUpdate()
+        public override void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             if (Helper.HasReachedDestination(_navMeshAgent))
             {
                 stateManager.SwitchState(StateType.IDLE);

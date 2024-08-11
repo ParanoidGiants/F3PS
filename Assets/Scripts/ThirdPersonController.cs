@@ -32,17 +32,33 @@ namespace StarterAssets
         [Space(10)]
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
+        
+        [Tooltip("The jump height of the player while dodging")]
+        public float DodgeHeight = 1.2f;
+        
+        [Tooltip("The jump length of the player while dodging")]
+        public float DodgeSpeed = 60f; 
+        
+        [Tooltip("The time it takes for the dodge speed to cool off")]
+        public float DodgeTimer = 0.5f;
+        private float _dodgeTime;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
 
         [Space(10)]
+        [Tooltip("The time it takes to dodge again after landing from a dodge")]
+        public float DodgeCoolDownTimer = 0.25f;
+        private float _dodgeCoolDownTime;
+
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-        public float JumpTimeout = 0.50f;
+        public float JumpCoolDownTimer = 0.50f;
+        private float _jumpCoolDownTime;
 
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
-
+        private float _fallTimeoutDelta;
+        
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -66,21 +82,20 @@ namespace StarterAssets
         // player
         private float _speed;
         private float _animationBlend;
-        private float _targetRotation = 0.0f;
-        private float _lookRotation = 0.0f;
+        private float _targetYaw = 0.0f;
+        private float _lookYaw = 0.0f;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
-        // timeout deltatime
-        private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
-
         // animation IDs
-        private int _animIDSpeed;
-        private int _animIDGrounded;
-        private int _animIDJump;
-        private int _animIDFreeFall;
-        private int _animIDMotionSpeed;
+        private readonly int _animIDSpeed = Animator.StringToHash("Speed");
+        private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
+        private readonly int _animIDJump = Animator.StringToHash("Jump");
+        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
+        private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        private readonly int _animIDDodge = Animator.StringToHash("Dodge");
+        
+        private Vector3 _lastInputDirection;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         [SerializeField] private PlayerInput _playerInput;
@@ -127,7 +142,6 @@ namespace StarterAssets
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
-            AssignAnimationIDs();
             extensions.Init(_animator);
         }
 
@@ -135,8 +149,9 @@ namespace StarterAssets
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             // reset our timeouts on start
-            _jumpTimeoutDelta = JumpTimeout;
+            _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
+            _dodgeCoolDownTime = DodgeCoolDownTimer;
         }
 
         private void Update()
@@ -148,24 +163,15 @@ namespace StarterAssets
             if (GameManager.Instance.timeManager.IsPaused) return;
             _hasAnimator = TryGetComponent(out _animator);
 
+            _animator.SetBool(_animIDGrounded, extensions.Grounded);
             JumpAndGravity();
             Move();
-            _animator.SetBool(_animIDGrounded, extensions.Grounded);
         }
 
         private void LateUpdate()
         {
             if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
             CameraRotation();
-        }
-
-        private void AssignAnimationIDs()
-        {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
 
         private void CameraRotation()
@@ -190,6 +196,12 @@ namespace StarterAssets
 
         private void Move()
         {
+            if (extensions.isDodging)
+            {
+                Dodge();
+                return;
+            }
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
             float targetSpeed = extensions.GetTargetSpeed(_input.move);
 
@@ -200,9 +212,9 @@ namespace StarterAssets
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
-            if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-                currentHorizontalSpeed > targetSpeed + speedOffset)
-            {
+            if (currentHorizontalSpeed < targetSpeed - speedOffset
+                || currentHorizontalSpeed > targetSpeed + speedOffset
+            ) {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
                 _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
@@ -220,26 +232,45 @@ namespace StarterAssets
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                              _mainCamera.transform.eulerAngles.y;
-            _lookRotation = extensions.GetLookRotation(transform, _targetRotation, _cinemachineTargetYaw);
+            _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            _targetYaw = _mainCamera.transform.eulerAngles.y
+                         + Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z);
+            _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
             
             // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, _lookRotation, 0.0f);
-
-
-            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(
+                lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+            );
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+        }
+
+        private void Dodge()
+        {
+            _dodgeTime -= Time.deltaTime;
+            _dodgeTime = Mathf.Max(_dodgeTime, 0f);
+            _speed = Mathf.Lerp(0f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
+            _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
+                         + _mainCamera.transform.eulerAngles.y;
+            _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
+            
+            // rotate to face input direction relative to camera position
+            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+
+            // move the player
+            _controller.Move(
+                lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+            );
         }
 
         private void JumpAndGravity()
@@ -254,6 +285,7 @@ namespace StarterAssets
                 {
                     _animator.SetBool(_animIDJump, false);
                     _animator.SetBool(_animIDFreeFall, false);
+                    _animator.SetBool(_animIDDodge, false);
                 }
 
                 // stop our velocity dropping infinitely when grounded
@@ -263,7 +295,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -274,34 +306,60 @@ namespace StarterAssets
                         MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                     }
                 }
+                
+                // Dodge
+                else if (_input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
+                {
+                    // the square root of H * -2 * G = how much velocity needed to reach desired height
+                    _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
+                    extensions.isDodging = true;
+                    _dodgeTime = DodgeTimer;
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDDodge, true);
+                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+                    }
+                }
 
                 // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
+                if (_jumpCoolDownTime >= 0.0f)
                 {
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    _jumpCoolDownTime -= Time.deltaTime;
+                }
+                if (_dodgeCoolDownTime >= 0.0f)
+                {
+                    extensions.isDodging = false;
+                    _dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
             else
             {
                 // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
+                if (extensions.isDodging)
+                {
+                    _dodgeCoolDownTime = DodgeCoolDownTimer;
+                }
+                else
+                {
+                    _jumpCoolDownTime = JumpCoolDownTimer;
+                }
+                
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
                     _fallTimeoutDelta -= Time.deltaTime;
                 }
-                else
+                else if (_hasAnimator)
                 {
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDFreeFall, true);
-                    }
+                    _animator.SetBool(_animIDFreeFall, true);
                 }
 
                 // if we are not grounded, do not jump
                 _input.jump = false;
+                // if we are not grounded, do not jump
+                _input.dodge = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)

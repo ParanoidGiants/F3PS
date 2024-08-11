@@ -20,25 +20,37 @@ namespace F3PS.AI.States
         public float enemyStoppingDistance;
         public Material material;
 
+        public virtual void Initialize()
+        {
+            _navMeshAgent = enemy.navMeshAgent;   
+        }
         public virtual void OnEnter()
         {
-            if (_navMeshAgent == null)
-            {
-                _navMeshAgent = enemy.navMeshAgent;
-            }
             _navMeshAgent.speed = enemySpeed * enemy.TimeScale;
             _navMeshAgent.stoppingDistance = enemyStoppingDistance;
-            SetSensorState();
+            UpdateSensorState();
             enemy.SetMaterial(material);
         }
 
-        private void SetSensorState()
+        public virtual void OnPhysicsUpdate()
+        {
+            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
+            {
+                stateManager.SwitchState(StateType.AGGRESSIVE);
+            }
+        }
+
+        public virtual void OnFrameUpdate() {}
+
+        public virtual void OnExit() {}
+
+        private void UpdateSensorState()
         {
             if (stateType == StateType.AGGRESSIVE)
             {
                 stateManager.sensorController.SetState(SensorState.AGGRESSIVE);
             }
-            else if (stateType is StateType.CHECKING or StateType.SUSPICIOUS)
+            else if (stateType is StateType.CHECKING or StateType.SUSPICIOUS or StateType.ENABLED_PHYSICS)
             {
                 stateManager.sensorController.SetState(SensorState.SEARCHING);
             }
@@ -47,14 +59,5 @@ namespace F3PS.AI.States
                 stateManager.sensorController.SetState(SensorState.IDLE);
             }
         }
-
-        public virtual void OnUpdate()
-        {
-            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
-            {
-                stateManager.SwitchState(StateType.AGGRESSIVE);
-            }
-        }
-        public virtual void OnExit() {}
     }
 }

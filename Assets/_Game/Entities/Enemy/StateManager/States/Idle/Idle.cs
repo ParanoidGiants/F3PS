@@ -6,17 +6,9 @@ namespace F3PS.AI.States
     {
         [Space(10)]
         [Header("Specific Settings")]
-        private Transform _transform;
-        
-        
-        public float idleTimer = 0f;
-        [SerializeField] private float _idleTime = 0f;
+        [SerializeField] private float _idleTimer = 0f;
+        private float _idleTime = 0f;
 
-        private void Awake()
-        {
-            _transform = enemy.body.transform;
-        }
-        
         override
         public void OnEnter()
         {
@@ -32,12 +24,14 @@ namespace F3PS.AI.States
         }
 
         override
-        public void OnUpdate()
+        public void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
+            
+            if (_idleTimer < 0f) return;
             
             _idleTime += enemy.ScaledDeltaTime;
-            if (idleTimer > _idleTime) return;
+            if (_idleTimer > _idleTime) return;
             
             stateManager.SwitchState(StateType.PATROLLING);
         }

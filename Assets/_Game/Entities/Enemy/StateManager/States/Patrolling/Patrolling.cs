@@ -8,6 +8,7 @@ namespace F3PS.AI.States
         public void OnEnter()
         {
             base.OnEnter();
+            _navMeshAgent.isStopped = false;
             enemy.patrolManager.SetNextPatrolPoint();
             _navMeshAgent.destination = enemy.patrolManager.CurrentPatrolPoint;
         }
@@ -15,13 +16,15 @@ namespace F3PS.AI.States
         override
         public void OnExit()
         {
+            
+            Debug.Log("EXIT PATROL: " + enemy.name);
             _navMeshAgent.isStopped = true;
         }
 
         override
-        public void OnUpdate()
+        public void OnPhysicsUpdate()
         {
-            base.OnUpdate();
+            base.OnPhysicsUpdate();
             if (!Helper.HasReachedDestination(_navMeshAgent)) return;
             
             stateManager.SwitchState(StateType.IDLE);

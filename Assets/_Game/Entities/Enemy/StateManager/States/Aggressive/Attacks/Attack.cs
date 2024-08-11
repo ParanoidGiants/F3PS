@@ -6,18 +6,16 @@ namespace F3PS.AI.States.Action
 {
     public abstract class Attack : MonoBehaviour
     {
-        protected Hittable _target;
+        [SerializeField] protected Hittable _target;
         
         [Header("General Watchers")]
         public bool isActive;
-        public bool isCharging;
         public bool isAttacking;
         public bool isRecovering;
         
         [Header("General References")]
         public BaseEnemy enemy;
-        public Material chargeMaterial;
-        public Material hitMaterial;
+        public Material attackMaterial;
         public Material recoverMaterial;
         private Material _aggressiveMaterial;
 
@@ -27,77 +25,40 @@ namespace F3PS.AI.States.Action
         public float stoppingDistanceFollow;
         public float coolDownTime;
         public float coolDownTimer;
-        public float attackDistance;
         public int damage;
 
-        public virtual void Init(Material aggressiveMaterial)
-        {
-            _aggressiveMaterial = aggressiveMaterial;
-        }
-        
-        public void CoolDown()
-        {
-            coolDownTime += enemy.ScaledDeltaTime;
-        }
-        
+
+        protected virtual void Initialize() { }
+
         public virtual void OnStartAttack(Hittable hittable)
         {
-            isActive = true;
             _target = hittable;
-            OnCharge();
-        }
-        
-        protected virtual void OnCharge()
-        {
-            enemy.SetMaterial(chargeMaterial);
-            isCharging = true;
-        }
-
-        protected virtual void HandleCharging()
-        {
-            if (isCharging) return; 
-            OnAttack();
+            isActive = true;
+            enemy.navMeshAgent.isStopped = true;
         }
 
         protected virtual void OnAttack()
         {
-            enemy.SetMaterial(hitMaterial);
-            isCharging = false;
-            isAttacking = true;
+            SetMaterial(attackMaterial);
         }
 
-        protected virtual void HandleAttack()
+        private void SetMaterial(Material material)
         {
-            if (isAttacking) return;
-            
-            OnRecover();
+            if (enemy is BossEnemy bossEnemy)
+            {
+                bossEnemy.SetMaterial(material);
+            }
+            else enemy.SetMaterial(material);
         }
+
         protected virtual void OnRecover()
         {
-            enemy.SetMaterial(recoverMaterial);
-            isAttacking = false;
-            isRecovering = true;
+            SetMaterial(recoverMaterial);
         }
 
-        protected virtual void HandleRecovering()
+        public virtual void OnPhysicsUpdate()
         {
-            if (isRecovering) return;
-            
-            OnStopAttacking();
-        }
-
-        public bool HasCooledDown()
-        {
-            return coolDownTime >= coolDownTimer;
-        }
-
-        public void OnUpdate()
-        {
-            if (isCharging)
-            {
-                HandleCharging();
-            }
-            else if (isAttacking)
+            if (isAttacking)
             {
                 HandleAttack();
             }
@@ -107,18 +68,46 @@ namespace F3PS.AI.States.Action
             }
         }
 
+        public void OnFrameUpdate()
+        {
+            if (!HasCooledDown())
+            {
+                CoolDown();
+            }
+        }
+        
+        protected virtual void HandleAttack() { }
+        protected virtual void HandleRecovering() { }
+        
+        public virtual void Initialize(Material aggressiveMaterial)
+        {
+            _aggressiveMaterial = aggressiveMaterial;
+            Initialize();
+        }
+        
         protected virtual void OnStopAttacking()
         {
-            coolDownTime = 0f;
-            isActive = false;
-            isRecovering = false;
-            enemy.SetMaterial(_aggressiveMaterial);
             _target = null;
+            isActive = false;
+            coolDownTime = 0f;
+            enemy.navMeshAgent.isStopped = false;
+            SetMaterial(_aggressiveMaterial);
+        }
+        
+        public void CoolDown()
+        {
+            coolDownTime += enemy.ScaledDeltaTime;
+        }
+        
+        
+        public bool HasCooledDown()
+        {
+            return coolDownTime >= coolDownTimer;
         }
 
-        public virtual bool CanAttack(Vector3 targetPosition)
+        public virtual bool CanAttack(Hittable hittable)
         {
-            return false;
+            return !isActive && HasCooledDown();
         }
     }
 }
