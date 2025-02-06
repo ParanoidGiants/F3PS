@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using F3PS;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -51,31 +53,28 @@ namespace Weapon
             _weaponUI.UpdateImage(ActiveWeapon.icon);
         }
 
-        public void OnUpdate(bool isSprinting, bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
+        public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
         {
-            if (grenade.HandleThrow(isAimingGrenade, targetPosition))
+            if (grenade.HandleThrow(isAimingGrenade, targetPosition) || ActiveWeapon.isReloadingMagazine)
             {
                 return;
             }
 
-            if (!ActiveWeapon.isReloadingMagazine)
+            if (isReloading)
             {
-                if (isReloading)
-                {
-                    ActiveWeapon.StartReloading();
-                }
-                else
-                {
-                    ActiveWeapon.HandleShoot(isShooting);
-                }
+                ActiveWeapon.StartReloading();
             }
-            
+            else
+            {
+                ActiveWeapon.HandleShoot(isShooting);
+            }
+        }
+
+        public void OnFixedUpdate(Vector3 targetPosition)
+        {
             var gunForward = targetPosition - ActiveWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
-            if (!isSprinting)
-            {
-                ActiveWeapon.UpdateRotation(gunRotation);
-            }
+            ActiveWeapon.UpdateRotation(gunRotation);
         }
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)

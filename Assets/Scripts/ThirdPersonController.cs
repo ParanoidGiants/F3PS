@@ -166,6 +166,14 @@ namespace StarterAssets
             Move();
         }
 
+        private void FixedUpdate()
+        {
+            if (GameManager.Instance.IsGamePaused) return;
+            if (GameManager.Instance.timeManager.IsPaused) return;
+
+            extensions.OnFixedUpdate(_input);
+        }
+
         private void LateUpdate()
         {
             if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
