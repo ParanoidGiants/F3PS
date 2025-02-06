@@ -1,9 +1,7 @@
 ﻿using F3PS;
 using Player;
-using TimeBending;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using DarkTonic.MasterAudio;
@@ -257,7 +255,7 @@ namespace StarterAssets
         {
             _dodgeTime -= Time.deltaTime;
             _dodgeTime = Mathf.Max(_dodgeTime, 0f);
-            _speed = Mathf.Lerp(0f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
+            _speed = Mathf.Lerp(DodgeSpeed/2f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
             _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
                          + _mainCamera.transform.eulerAngles.y;
             _lookYaw = extensions.GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
@@ -330,6 +328,7 @@ namespace StarterAssets
                 if (_dodgeCoolDownTime >= 0.0f)
                 {
                     extensions.isDodging = false;
+                    _verticalVelocity = Mathf.Max(_verticalVelocity, DodgeHeight);
                     _dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
@@ -363,7 +362,7 @@ namespace StarterAssets
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (_verticalVelocity < _terminalVelocity)
+            if (_verticalVelocity < _terminalVelocity && _dodgeTime <= 0f)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
