@@ -17,10 +17,10 @@ TagManager:
   - Character
   - Ground
   - HitBox
-  - Hittable
+  - HittableEnemy
   - Sensors
   - TimeBubble
-  - 
+  - HittablePlayer
   - 
   - 
   - 
