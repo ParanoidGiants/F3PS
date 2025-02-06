@@ -255,7 +255,7 @@ MonoBehaviour:
   amountOfTimeZones: 0
   currentTimeScale: 1
   rb: {fileID: 0}
-  gravityScale: 0.25
+  gravityScale: 0.1
   _trail: {fileID: 4917439815977826471}
   _slowMoTrail: {fileID: 5558975623774224086}
 --- !u!114 &5237609906146117335
