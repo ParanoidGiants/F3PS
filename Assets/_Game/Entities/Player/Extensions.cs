@@ -6,13 +6,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DarkTonic.MasterAudio;
 using Weapon;
+using StarterAssets;
 
 namespace Player
 {
     public class Extensions : MonoBehaviour
     {
         [Header("Watchers")]
-        public bool isAiming;
         public bool isSprinting;
         public bool isShooting;
         public bool isReloading;
@@ -63,24 +63,19 @@ namespace Player
         public float AmingRotationSmoothTime = 0.3f;
 
         [Tooltip("Move speed of the character in m/s")]
-        public float FocusSpeed = 1.0f;
-
-        [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
         private PlayerHealthUI _playerHealthUI;
-        private Camera _mainCamera;
-        public float RotationSpeed => isAiming ? aimingRotationSpeed : defaultRotationSpeed;
+        public float RotationSpeed => defaultRotationSpeed;
         
         public void Init(Animator animator)
         {
             _animator = animator;
             
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
-            _mainCamera = Camera.main;
             _crosshair = FindObjectOfType<Crosshair>();
         }
 
@@ -90,7 +85,7 @@ namespace Player
         }
 
         // Update is called once per frame
-        public void OnUpdate(StarterAssets.StarterAssetsInputs _input)
+        public void OnUpdate(StarterAssetsInputs _input)
         {
             if (_input.restart && !isRestartingGame)
             {
@@ -106,20 +101,25 @@ namespace Player
             if (GameManager.Instance.timeManager.IsPaused) return;
             
             GroundedCheck();
-            isShooting = _input.shoot && !isSprinting;
+            isShooting = _input.shoot;
             isSwitchingWeapon = _input.switchWeapon;
             isReloading = _input.reload;
             isAimingGrenade = weaponManager.grenade.gameObject.activeSelf && _input.aimGrenade; 
-            isAiming = _input.aim || isAimingGrenade;
             weaponManager.OnUpdate(
-                isSprinting,
                 isAimingGrenade,
                 isShooting,
                 isReloading,
                 _crosshair.GetTargetPosition()
             );
-            UpdateStaminaManager(_input.move.magnitude, isAiming, _input.sprint);
+            UpdateStaminaManager(_input.move.magnitude, isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
+        }
+
+        public void OnFixedUpdate(StarterAssetsInputs input)
+        {
+            weaponManager.OnFixedUpdate(
+                _crosshair.GetTargetPosition()
+            );
         }
 
         private void UpdateTimeManager(bool slowMoInput)
@@ -143,21 +143,21 @@ namespace Player
         {
             if (staminaManager._isRegenerating)
             {
-                isAiming = false;
+                isAimingGrenade = false;
                 isSprinting = false;
             }
             else
             {
-                isAiming = aimInput;
-                isSprinting = !isAiming && sprintInput;
+                isAimingGrenade = aimInput;
+                isSprinting = !isAimingGrenade && sprintInput;
             }
             staminaManager.UpdateSprinting(isSprinting && moveInput > 0.1f);
-            staminaManager.UpdateAiming(isAiming);
+            staminaManager.UpdateAiming(isAimingGrenade);
         }
 
         public float GetLookYaw(Transform transform, float movementYaw, float cameraYaw)
         {
-            float smoothTime = isAiming ? AmingRotationSmoothTime : RotationSmoothTime;
+            float smoothTime = isAimingGrenade ? AmingRotationSmoothTime : RotationSmoothTime;
             float yaw = isDodging || isSprinting ? movementYaw : cameraYaw;
             return Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
@@ -172,10 +172,6 @@ namespace Player
             if (moveVector == Vector2.zero)
             {
                 return 0.0f;
-            }
-            if (isAiming)
-            {
-                return FocusSpeed;
             }
             if (isSprinting)
             {
