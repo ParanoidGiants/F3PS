@@ -202,7 +202,7 @@ namespace StarterAssets
 
         private void Move()
         {
-            if (extensions.isDodging)
+            if (extensions.isDodging || _dodgeTime > 0f)
             {
                 Dodge();
                 return;
