@@ -79,7 +79,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 1
   hittableId: 0
-  playerExtensions: {fileID: 519437979198283079}
+  controller: {fileID: 0}
 --- !u!1 &387973775
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,8 +285,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4028598924389062048}
-  m_RootOrder: 1
+  m_Father: {fileID: 996414770088906478}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1453565625
 MonoBehaviour:
@@ -385,7 +385,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
-  playerExtensions: {fileID: 519437979198283079}
+  controller: {fileID: 0}
 --- !u!1 &63126234240739105
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,7 +766,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 996414770088906478}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1215213788766998558
 GameObject:
@@ -829,7 +829,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 865194495155087569}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &3359960145585209165
 SkinnedMeshRenderer:
@@ -1017,95 +1017,6 @@ Transform:
   m_Father: {fileID: 3525511652040446621}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1898592192382853202
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4028598924389062048}
-  - component: {fileID: 519437979198283079}
-  - component: {fileID: 978292379}
-  m_Layer: 8
-  m_Name: Extensions
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4028598924389062048
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898592192382853202}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8753443833285472442}
-  - {fileID: 1453565626}
-  - {fileID: 5358049144216984092}
-  m_Father: {fileID: 996414770088906478}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519437979198283079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898592192382853202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9644ae0ccfb2a37478b42067ec9a508c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSprinting: 0
-  isShooting: 0
-  isReloading: 0
-  isSwitchingWeapon: 0
-  isDodging: 0
-  isSlowMoToggle: 0
-  isSlowMoStarted: 0
-  rotationVelocity: 0
-  isAimingGrenade: 0
-  isRestartingGame: 0
-  Grounded: 1
-  GroundedOffset: 0.09
-  GroundedRadius: 0.05
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 513
-  playerSpace: {fileID: 6128214820260621315}
-  staminaManager: {fileID: 1308249554798671341}
-  _timeManager: {fileID: 1453565625}
-  weaponManager: {fileID: 8118315732927897910}
-  aimingRotationSpeed: 0.7
-  defaultRotationSpeed: 0.7
-  health: 100
-  maxHealth: 100
-  RotationSmoothTime: 0.3
-  AmingRotationSmoothTime: 0.3
-  MoveSpeed: 8
-  SprintSpeed: 15
---- !u!114 &978292379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898592192382853202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe0d1dfb71cdb04da3ecec28bd16b98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _frames: 0
 --- !u!1 &2070925443028286612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,8 +1435,8 @@ Transform:
   - {fileID: 1494138340}
   - {fileID: 353750832}
   - {fileID: 1857573808348014429}
-  m_Father: {fileID: 4028598924389062048}
-  m_RootOrder: 0
+  m_Father: {fileID: 996414770088906478}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1585131262
 MonoBehaviour:
@@ -1637,9 +1548,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 865194495155087569}
-  - {fileID: 6973214072508912282}
   - {fileID: 1204151532081024997}
-  - {fileID: 4028598924389062048}
+  - {fileID: 8753443833285472442}
+  - {fileID: 1453565626}
+  - {fileID: 5358049144216984092}
   m_Father: {fileID: 6128214820260621315}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1693,6 +1605,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSprinting: 0
+  isShooting: 0
+  isReloading: 0
+  isSwitchingWeapon: 0
+  isDodging: 0
+  isSlowMoToggle: 0
+  isSlowMoStarted: 0
+  isAimingGrenade: 0
+  isRestartingGame: 0
+  rotationSpeed: 0
+  rotationVelocity: 0
+  health: 100
+  playerSpace: {fileID: 6128214820260621315}
+  staminaManager: {fileID: 1308249554798671341}
+  timeManager: {fileID: 1453565625}
+  weaponManager: {fileID: 8118315732927897910}
+  Grounded: 1
+  GroundedOffset: -0.14
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 2049
+  maxHealth: 100
+  RotationSmoothTime: 0.12
+  AmingRotationSmoothTime: 0.3
+  MoveSpeed: 2
+  SprintSpeed: 5.335
   SpeedChangeRate: 22
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   FootstepAudioClips:
@@ -1722,7 +1661,6 @@ MonoBehaviour:
   LockCameraPosition: 0
   _playerInput: {fileID: 1967781540}
   _input: {fileID: 1967781539}
-  extensions: {fileID: 519437979198283079}
 --- !u!114 &8482234456506793290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,8 +1720,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4028598924389062048}
-  m_RootOrder: 2
+  m_Father: {fileID: 996414770088906478}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1308249554798671341
 MonoBehaviour:
@@ -2035,8 +1973,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1049599931307452082}
-  m_Father: {fileID: 996414770088906478}
-  m_RootOrder: 1
+  m_Father: {fileID: 865194495155087569}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3906026263506574883
 GameObject:
@@ -2562,7 +2500,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 0.5
   hittableId: 0
-  playerExtensions: {fileID: 519437979198283079}
+  controller: {fileID: 0}
 --- !u!1 &5645447450462312790
 GameObject:
   m_ObjectHideFlags: 0
@@ -2750,6 +2688,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6973214072508912282}
   - {fileID: 4304011833286156081}
   m_Father: {fileID: 996414770088906478}
   m_RootOrder: 0
@@ -3722,7 +3661,7 @@ PrefabInstance:
     - target: {fileID: 1080593552923030184, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: timeScale
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
