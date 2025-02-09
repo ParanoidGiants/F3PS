@@ -1,17 +1,17 @@
-using System.Runtime.CompilerServices;
 using F3PS.AI.States.Action;
-using Player;
+using StarterAssets;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
 {
     public class PlayerHittable : Hittable
     {
-        public Extensions playerExtensions;
+        private ThirdPersonController _controller;
         void Awake()
         {
+            _controller = FindObjectOfType<ThirdPersonController>();
             _collider = GetComponent<Collider>();
-            hittableId = playerExtensions.GetInstanceID();
+            hittableId = _controller.GetInstanceID();
         }
 
         override
@@ -22,7 +22,7 @@ namespace F3PS.Damage.Take
             if (projectile && !projectile.Hit)
             {
                 projectile.SetHit();
-                playerExtensions.Hit((int)(damageMultiplier * projectile.damage));
+                _controller.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace F3PS.Damage.Take
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {
-                playerExtensions.Hit((int)(damageMultiplier * rush.damage));
+                _controller.Hit((int)(damageMultiplier * rush.damage));
             }
         }
     }
