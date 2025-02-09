@@ -7,7 +7,7 @@ public class PhysicsTimeObject : TimeObject
     public Rigidbody rb;
     public float gravityScale = 1f;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;

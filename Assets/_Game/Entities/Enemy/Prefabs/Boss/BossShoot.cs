@@ -16,7 +16,6 @@ namespace F3PS.AI.States.Action
         public BaseGun[] guns;
         public float requiredAngle;
 
-        private bool _isShootingPressed = false;
         public float shootTime = 0f;
         public float shootTimer;
         private BossEnemy _boss;
