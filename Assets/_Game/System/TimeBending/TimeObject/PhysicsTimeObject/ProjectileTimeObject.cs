@@ -7,12 +7,20 @@ public class ProjectileTimeObject : PhysicsTimeObject
     [SerializeField] private TrailRenderer _slowMoTrail;
     private float _baseTrailTime; 
     
-    private void Awake()
+    override
+    protected void Awake()
     {
         _baseTrailTime = _trail.time;
         base.Awake();
     }
-    
+
+    override
+    protected void OnDisable()
+    {
+        base.OnDisable();
+        ClearTrail();
+    }
+
     override
     public void PitchTimeScale(float newTimeScale)
     {
@@ -32,13 +40,6 @@ public class ProjectileTimeObject : PhysicsTimeObject
         }
     }
     
-
-    private void OnDisable()
-    {
-        base.OnDisable();
-        ClearTrail();
-    }
-
     public void ClearTrail()
     {
         _trail.Clear();
