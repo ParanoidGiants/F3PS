@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BaseProjectile : MonoBehaviour
 {
+    [Header("Reference")]
+    public ParticleSystem hitParticleSystem;
+    public ParticleSystem noHitParticleSystem;
+    public GameObject mesh;
+
     [Header("Settings")]
     public int damage = 50;
     public float lifeTime = 0f;
@@ -65,7 +70,9 @@ public class BaseProjectile : MonoBehaviour
 
     private void OnDisable()
     {
-        _rb.velocity = Vector3.zero;
+        mesh.SetActive(true);
+        hitParticleSystem.gameObject.SetActive(false);
+        noHitParticleSystem.gameObject.SetActive(false);
     }
 
     public virtual void SetHit()
@@ -78,12 +85,14 @@ public class BaseProjectile : MonoBehaviour
 
     protected IEnumerator SetInactiveAfterSeconds(float seconds)
     {
-        yield return new WaitForSeconds(seconds);
+        yield return new WaitForSeconds(hitParticleSystem.main.duration);
         gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        _rb.velocity = Vector3.zero;
+        mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
         // Debug.Log("HIT: " + other.transform.name);
         if (hittable != null 
@@ -95,6 +104,11 @@ public class BaseProjectile : MonoBehaviour
                 enemyHittable.OnHitByPlayer((-1) * other.impulse);
             }
             hittable.OnHit(_hitBox);
+            hitParticleSystem.gameObject.SetActive(true);
+        }
+        else
+        {
+            noHitParticleSystem.gameObject.SetActive(true);
         }
         SetHit();
     }
