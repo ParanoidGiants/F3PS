@@ -131,7 +131,7 @@ namespace F3PS.AI.States.Action
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            var strength = (_wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
+            var strength = this.recoverStrength;
             _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
         }
             
@@ -143,8 +143,16 @@ namespace F3PS.AI.States.Action
             {
                 OnAttack();
             }
-            
-            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
+
+            var enemyTransform = enemy.body.transform;
+            var lookDirection = _target.Center() - enemyTransform.position;
+            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+            var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            enemyTransform.rotation = Quaternion.RotateTowards(
+                enemyTransform.rotation,
+                newRotation,
+                enemy.ScaledDeltaTime * 80
+            );
         }
         override
         protected void HandleAttack()
@@ -155,7 +163,7 @@ namespace F3PS.AI.States.Action
             }
             else
             {
-                attackTime += enemy.ScaledDeltaTime;
+                attackTime += Mathf.Pow(enemy.timeObject.currentTimeScale, 4) * Time.deltaTime;
                 isAttacking = attackTime < attackTimer;
                 _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
             }
