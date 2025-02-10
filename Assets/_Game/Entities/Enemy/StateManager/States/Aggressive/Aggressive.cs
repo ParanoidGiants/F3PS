@@ -91,19 +91,19 @@ namespace F3PS.AI.States
         private void HandlePositionAndRotation()
         {
             bool isInAttackDistance = Helper.HasReachedDestination(_navMeshAgent);
-            if (isInAttackDistance)
+            if (!isInAttackDistance)
             {
-                var enemyTransform = enemy.body.transform;
-                var position = enemyTransform.position;
-                var lookDirection = _selectedTarget.Center() - position;
-                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                enemyTransform.rotation = Quaternion.RotateTowards(
-                    enemyTransform.rotation,
-                    newRotation,
-                    enemy.ScaledDeltaTime * rotationSpeed
-                );
+                return;
             }
+            var enemyTransform = enemy.body.transform;
+            var lookDirection = _selectedTarget.Center() - enemyTransform.position;
+            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+            var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            enemyTransform.rotation = Quaternion.RotateTowards(
+                enemyTransform.rotation,
+                newRotation,
+                enemy.ScaledDeltaTime * rotationSpeed
+            );
         }
 
         private void HandleStoppingDistance()
