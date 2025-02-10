@@ -205,6 +205,8 @@ namespace StarterAssets
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
             _crosshair = FindObjectOfType<Crosshair>();
+
+            _health = maxHealth;
         }
 
         private void Start()
