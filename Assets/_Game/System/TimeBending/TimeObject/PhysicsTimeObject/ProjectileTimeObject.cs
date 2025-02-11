@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ProjectileTimeObject : PhysicsTimeObject
 {
+    [Space(10)]
+    [Header("Projectile References")]
     [SerializeField] private TrailRenderer _trail;
     [SerializeField] private TrailRenderer _slowMoTrail;
     private float _baseTrailTime; 

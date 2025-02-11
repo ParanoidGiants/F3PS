@@ -9945,8 +9945,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountOfTimeZones: 0
   currentTimeScale: 1
-  rb: {fileID: 0}
-  gravityScale: 0.1
+  additionalTimeScale: 0.125
+  animateTransform: {fileID: 6202579013478385693}
+  renderers:
+  - {fileID: 8294872423647169855}
+  scaleAnimationOffset: 0.8
+  animationDuration: 0.2
+  gravityScale: 0.5
   _trail: {fileID: 4917439815977826471}
   _slowMoTrail: {fileID: 5558975623774224086}
 --- !u!114 &5237609906146117335
