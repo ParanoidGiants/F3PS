@@ -8,63 +8,67 @@ public class BaseProjectile : MonoBehaviour
     public ParticleSystem hitParticleSystem;
     public ParticleSystem noHitParticleSystem;
     public GameObject mesh;
+    public ProjectileTimeObject timeObject;
+    public HitBox hitBox;
+    public Rigidbody rb;
+    public Collider col;
 
     [Header("Settings")]
     public int damage = 50;
     public float lifeTime = 0f;
-    public float maximumLifeTime = 5f;
-    public float removeAfterSeconds = .2f;
+    public float maximumLifeTimer = 5f;
+    public float enableCollisionsTimer = .2f;
+    private bool collisionsEnabled = false;
     
     private float _speed;
-    private HitBox _hitBox;
-    protected Rigidbody _rb;
-    protected ProjectileTimeObject _timeObject;
+
     protected bool _isHit = false;
-    
-    [Header("Watchers")]
-    public bool isPlayer;
-    
+    private HittableManager _hittableManager;
+
     public bool Hit => _isHit;
 
-    private void Awake()
+    public void Init(int userSpaceId, HittableManager hittableManager)
     {
-        InitReferences();
-    }
-
-    public virtual void InitReferences()
-    {
-        _hitBox = GetComponent<HitBox>();
-        _rb = GetComponent<Rigidbody>();
-        _timeObject = GetComponent<ProjectileTimeObject>();
-    }
-
-    public void Init(int attackerId, bool isPlayer = false)
-    {
-        this.isPlayer = isPlayer;
-        _hitBox.attackerId = attackerId;
+        hitBox.attackerId = userSpaceId;
+        _hittableManager = hittableManager;
     }
     
     private void Update()
     {
-        lifeTime += _timeObject.ScaledDeltaTime;
-        if (lifeTime > maximumLifeTime)
+        lifeTime += timeObject.ScaledDeltaTime;
+        if (lifeTime > maximumLifeTimer)
         {
             gameObject.SetActive(false);
         }
+
+        if (lifeTime > enableCollisionsTimer && !collisionsEnabled)
+        {
+            collisionsEnabled = true;
+            foreach (var hittableCollider in _hittableManager.colliders)
+            {
+                Physics.IgnoreCollision(col, hittableCollider);
+            }
+        }
     }
 
-    public virtual void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
+    public virtual void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
     {
         transform.position = position;
-        transform.rotation = rotation;
+        transform.forward = targetPosition - position;
         _speed = shootSpeed;
         _isHit = false;
+        collisionsEnabled = false;
+        foreach (var hittableCollider in _hittableManager.colliders)
+        {
+            Physics.IgnoreCollision(col, hittableCollider);
+        }
     }
     
     private void OnEnable()
     {
-        _timeObject.ClearTrail();
-        _rb.velocity = transform.forward * _speed;
+        timeObject.ClearTrail();
+        rb.isKinematic = false;
+        rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
     }
 
@@ -80,10 +84,10 @@ public class BaseProjectile : MonoBehaviour
         if (Hit) return;
         
         _isHit = true;
-        StartCoroutine(SetInactiveAfterSeconds(removeAfterSeconds));
+        StartCoroutine(SetInactiveAfterSeconds());
     }
 
-    protected IEnumerator SetInactiveAfterSeconds(float seconds)
+    protected IEnumerator SetInactiveAfterSeconds()
     {
         yield return new WaitForSeconds(hitParticleSystem.main.duration);
         gameObject.SetActive(false);
@@ -91,19 +95,19 @@ public class BaseProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        _rb.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+        timeObject.ClearTrail();
         mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
-        // Debug.Log("HIT: " + other.transform.name);
         if (hittable != null 
-            && hittable.hittableId != _hitBox.attackerId
+            && hittable.hittableId != hitBox.attackerId
         ) {
-            if (isPlayer && hittable is EnemyHittable enemyHittable)
+            if (hittable is EnemyHittable enemyHittable)
             {
-                Debug.Log(enemyHittable.enemy.name);
                 enemyHittable.OnHitByPlayer((-1) * other.impulse);
             }
-            hittable.OnHit(_hitBox);
+            hittable.OnHit(hitBox);
             hitParticleSystem.gameObject.SetActive(true);
         }
         else

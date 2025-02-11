@@ -6,13 +6,14 @@ namespace Weapon
 {
     public class MachineGun : BaseGun
     {
-        private Coroutine shootCoroutine;
+        private Vector3 _recentTargetPosition;
         override
-        public void HandleShoot(bool isShootingPressed)
+        public void HandleShoot(bool isShootingPressed, Vector3 targetPosition)
         {
+            _recentTargetPosition = targetPosition;
             if (!isShooting && isShootingPressed)
             {
-                shootCoroutine = StartCoroutine(Shoot());
+                StartCoroutine(Shoot(targetPosition));
             }
             else if (isShooting && !isShootingPressed)
             {
@@ -22,35 +23,29 @@ namespace Weapon
 
 
         override
-        protected IEnumerator Shoot()
+        protected IEnumerator Shoot(Vector3 targetPosition)
         {
             isShooting = true;
-            shootCoolDownTime = shootCoolDownTimer;
+            var waitForShootCoolDown = new WaitForSeconds(shootCoolDownTimer);
             while (isShooting && !isReloadingMagazine)
             {
-                shootCoolDownTime -= Time.deltaTime;
-                if (shootCoolDownTime < 0f)
+                if (currentMagazineAmount <= 0)
                 {
-                    shootCoolDownTime = shootCoolDownTimer;
-                    
-                    if (currentMagazineAmount <= 0)
-                    {
-                        // TODO: Play empty clip sound
-                        weaponUI?.OnTryShootWithEmptyClip();
-                    }
-                    else
-                    {
-                        currentMagazineAmount--;
-                        projectilePool.ShootBullet(
-                            projectileSpawn.position,
-                            meshHolder.rotation,
-                            shotSpeed
-                        );
-                        weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
-                        MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
-                    }
+                    // TODO: Play empty clip sound
+                    weaponUI?.OnTryShootWithEmptyClip();
                 }
-                yield return null;
+                else
+                {
+                    currentMagazineAmount--;
+                    projectilePool.ShootBullet(
+                        projectileSpawn.position,
+                        _recentTargetPosition,
+                        shotSpeed
+                    );
+                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
+                }
+                yield return waitForShootCoolDown;
             }
             isShooting = false;
         }

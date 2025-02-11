@@ -16,7 +16,7 @@ public class BossHittable : Hittable
     {
         // Hit by projectile
         var projectile = hitBy.GetComponent<BaseProjectile>();
-        if (projectile && projectile.isPlayer && !projectile.Hit)
+        if (projectile && !projectile.Hit)
         {
             Debug.Log("Boss' " + name + " hit by projectile from " + hitBy.name);
             boss.Hit((int)(damageMultiplier * projectile.damage));

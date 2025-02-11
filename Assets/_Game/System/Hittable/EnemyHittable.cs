@@ -31,7 +31,6 @@ namespace F3PS.Damage.Take
             var projectile = hitBy.GetComponent<BaseProjectile>();
             if (projectile && !projectile.Hit)
             {
-                Debug.Log(enemy.name + " hit by projectile from " + hitBy.name);
                 enemy.Hit((int)(damageMultiplier * projectile.damage));
                 return;
             }
