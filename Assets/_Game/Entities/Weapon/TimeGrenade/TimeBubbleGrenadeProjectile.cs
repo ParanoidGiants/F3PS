@@ -5,21 +5,21 @@ using UnityEngine;
 public class TimeBubbleGrenadeProjectile : BaseProjectile
 {
     [Header("References")]
+    public Transform userSpace;
     public TimeBubble timeBubble;
-    public new Collider collider;
     public float animationDuration = 0.5f;
     public float targetScale = 20f;
     private bool _isActive = false;
 
-    public float Gravity => _timeObject.gravityScale * Physics.gravity.magnitude;
-    public float LifeTimePercentage => lifeTime / maximumLifeTime;
+    public float Gravity => timeObject.gravityScale * Physics.gravity.magnitude;
+    public float LifeTimePercentage => lifeTime / maximumLifeTimer;
 
     private void Update()
     {
         if (!_isHit || !_isActive) return;
 
         lifeTime += Time.deltaTime;
-        if (lifeTime > maximumLifeTime)
+        if (lifeTime > maximumLifeTimer)
         {
             DeactivateTimeBubble();
         }
@@ -50,23 +50,16 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
                 gameObject.SetActive(false);
             });
     }
-
-    override
-    public void InitReferences()
-    {
-        base.InitReferences();
-        transform.parent = FindObjectOfType<StarterAssetsInputs>().transform;
-    }
     
     override
-    public void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
+    public void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
     {
-        _timeObject.enabled = true;
-
-        base.BeforeSetActive(position, rotation, shootSpeed);
-        _rb.isKinematic = false;
-        _rb.constraints = RigidbodyConstraints.None;
-        collider.enabled = true;
+        transform.SetParent(userSpace);
+        timeObject.enabled = true;
+        base.BeforeSetActive(position, targetPosition, shootSpeed);
+        rb.isKinematic = false;
+        rb.constraints = RigidbodyConstraints.None;
+        col.enabled = true;
         timeBubble.gameObject.SetActive(false);
     }
     
@@ -76,9 +69,9 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         if (Hit) return;
         
         _isHit = true;
-        _rb.isKinematic = true;
-        _rb.constraints = RigidbodyConstraints.FreezeAll;
-        collider.enabled = false;
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        col.enabled = false;
         GetComponent<TimeObject>().enabled = false;
         ActivateTimeBubble();
     }

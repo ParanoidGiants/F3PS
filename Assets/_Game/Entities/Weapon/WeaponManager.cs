@@ -31,7 +31,8 @@ namespace Weapon
         {
             foreach (var weapon in weapons)
             {
-                weapon.InitForPlayer(playerSpace, _weaponUI);
+                weapon.Init(playerSpace);
+                weapon.SetWeaponUI(_weaponUI);
                 weapon.gameObject.SetActive(false);
             }
             ChooseWeapon(0);
@@ -66,7 +67,7 @@ namespace Weapon
             }
             else
             {
-                ActiveWeapon.HandleShoot(isShooting);
+                ActiveWeapon.HandleShoot(isShooting, targetPosition);
             }
         }
 

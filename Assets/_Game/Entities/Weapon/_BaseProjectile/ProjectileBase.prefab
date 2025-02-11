@@ -9969,11 +9969,14 @@ MonoBehaviour:
   hitParticleSystem: {fileID: 3903986444325833803}
   noHitParticleSystem: {fileID: 6623682297467693661}
   mesh: {fileID: 8597723212833340393}
+  timeObject: {fileID: 3012829188919006432}
+  hitBox: {fileID: 5029885233580578800}
+  rb: {fileID: 7785563140789300822}
+  col: {fileID: 6917445223256748906}
   damage: 5
   lifeTime: 0
-  maximumLifeTime: 5
-  removeAfterSeconds: 0.2
-  isPlayer: 0
+  maximumLifeTimer: 5
+  enableCollisionsTimer: 0.2
 --- !u!1 &8597723212833340393
 GameObject:
   m_ObjectHideFlags: 0

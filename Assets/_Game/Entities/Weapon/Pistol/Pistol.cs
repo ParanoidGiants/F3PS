@@ -7,10 +7,12 @@ namespace Weapon
     public class Pistol : BaseGun
     {
         [SerializeField] private bool _wasShootingPressedLastFrame = false;
+        private Vector3 currentTargetPosition;
 
         override
-        public void HandleShoot(bool isShootingPressed)
+        public void HandleShoot(bool isShootingPressed, Vector3 targetPosition)
         {
+            currentTargetPosition = targetPosition;
             if (!_wasShootingPressedLastFrame && isShootingPressed)
             {
                 if (IsMagazineEmpty())
@@ -19,7 +21,7 @@ namespace Weapon
                 }
                 else
                 {
-                    StartCoroutine(Shoot());
+                    StartCoroutine(Shoot(targetPosition));
                     UpdateWeaponUI();
                 }
                 _wasShootingPressedLastFrame = true;
@@ -32,14 +34,14 @@ namespace Weapon
         
         
         override
-        protected IEnumerator Shoot()
+        protected IEnumerator Shoot(Vector3 targetPosition)
         {
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;
             projectilePool.ShootBullet(
                 projectileSpawn.position,
-                meshHolder.rotation,
+                targetPosition,
                 shotSpeed
             );
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);

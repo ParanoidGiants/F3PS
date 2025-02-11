@@ -1458,7 +1458,7 @@ MonoBehaviour:
     IsEditing: 0
     IsTemporary: 0
     ProspectiveName: '[Uncategorized]'
-  frames: 2562
+  frames: 1249
   showUnityMixerGroupAssignment: 1
 --- !u!4 &981401014
 Transform:
@@ -2105,7 +2105,7 @@ PrefabInstance:
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.026
+      value: 3.013
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
@@ -2206,7 +2206,7 @@ MonoBehaviour:
   playlistStartedCustomEvent: 
   playlistEndedEventExpanded: 0
   playlistEndedCustomEvent: 
-  _frames: 8190405
+  _frames: 8195726
 --- !u!82 &1513793261
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2706,7 +2706,7 @@ MonoBehaviour:
   fadeMaxVolume: 0
   curFadeMode: 0
   curPitchMode: 0
-  curDetectEndMode: 0
+  curDetectEndMode: 1
   frames: 406
 --- !u!82 &1761924837
 AudioSource:
@@ -3390,6 +3390,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: GroundedOffset
+      value: -0.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
+        type: 3}
+      propertyPath: GroundedRadius
+      value: 0.48
+      objectReference: {fileID: 0}
     - target: {fileID: 5635362313151117394, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_AnchorMax.y
