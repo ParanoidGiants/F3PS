@@ -14,7 +14,6 @@ namespace Weapon
         [Header("References")]
         public HittableManager hittableManager;
         public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
-        public TimeBubble timeBubble;
         public LineRenderer throwLine;
         public Transform spawnTransform;
         
