@@ -16,8 +16,6 @@ namespace F3PS.AI.States
         override
         public void OnExit()
         {
-            
-            Debug.Log("EXIT PATROL: " + enemy.name);
             _navMeshAgent.isStopped = true;
         }
 
