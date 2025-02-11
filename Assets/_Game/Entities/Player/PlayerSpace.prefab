@@ -1618,7 +1618,7 @@ MonoBehaviour:
   MoveSpeed: 10
   SprintSpeed: 18
   SpeedChangeRate: 22
-  RotationSpeed: 0.2
+  RotationSpeed: 1
   JumpHeight: 8
   JumpCoolDownTimer: 0.5
   DodgeHeight: 0.1
@@ -3660,6 +3660,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8579149676361870591}
     m_Modifications:
+    - target: {fileID: 2406442726296628, guid: 44039d663aa003247a93628d13c02462, type: 3}
+      propertyPath: targetScale
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: weaponUI
@@ -3757,6 +3761,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6128214820260621315}
     m_Modifications:
+    - target: {fileID: 3258596985672818640, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 159.6848
+      objectReference: {fileID: 0}
     - target: {fileID: 3258596985944699312, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
       propertyPath: m_Name
@@ -3866,6 +3875,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258596986216235356, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 238.7048
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258596986437892787, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 193.61479
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7537192896f845b4286408dd2133b2f8, type: 3}
