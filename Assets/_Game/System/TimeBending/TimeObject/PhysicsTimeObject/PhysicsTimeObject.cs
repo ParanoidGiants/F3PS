@@ -4,22 +4,25 @@ public class PhysicsTimeObject : TimeObject
 {
     protected const double TOLERANCE = 0.0001f;
     protected float _defaultMass;
-    public Rigidbody rb;
+    private Rigidbody _rb;
+
+    [Space(10)]
+    [Header("Physics Settings")]
     public float gravityScale = 1f;
 
     protected virtual void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.useGravity = false;
-        _defaultMass = rb.mass;
+        _rb = GetComponent<Rigidbody>();
+        _rb.useGravity = false;
+        _defaultMass = _rb.mass;
     }
 
     void FixedUpdate()
     {
-        if (rb.isKinematic) return;
+        if (_rb.isKinematic) return;
         
         var force = Physics.gravity * (currentTimeScale * currentTimeScale * gravityScale);
-        rb.AddForce(
+        _rb.AddForce(
             force,
             ForceMode.Acceleration
         );
@@ -28,22 +31,26 @@ public class PhysicsTimeObject : TimeObject
     override
     public void PitchTimeScale(float newTimeScale)
     {
-        if (rb == null) return;
-        
+        if (_rb == null) return;
+
+        if (newTimeScale != 1f)
+        {
+            newTimeScale *= additionalTimeScale;
+        }
         float relation = newTimeScale / currentTimeScale;
         base.PitchTimeScale(newTimeScale);
         
         if (newTimeScale > TOLERANCE)
         {
-            rb.isKinematic = false;
-            rb.mass = _defaultMass / (newTimeScale*newTimeScale);
-            rb.velocity *= relation;
-            rb.angularVelocity *= relation;
+            _rb.isKinematic = false;
+            _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
+            _rb.velocity *= relation;
+            _rb.angularVelocity *= relation;
         }
         else
         {
-            rb.isKinematic = true;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            _rb.isKinematic = true;
+            _rb.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
 }
