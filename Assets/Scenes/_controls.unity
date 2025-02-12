@@ -612,6 +612,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rusher
       objectReference: {fileID: 0}
+    - target: {fileID: 1823029999567002505, guid: 184d27f2080bf054996857787640303e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 184d27f2080bf054996857787640303e, type: 3}
 --- !u!1 &534095207
@@ -3390,16 +3395,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: GroundedOffset
-      value: -0.39
-      objectReference: {fileID: 0}
-    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: GroundedRadius
-      value: 0.48
-      objectReference: {fileID: 0}
     - target: {fileID: 5635362313151117394, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_AnchorMax.y
