@@ -91,8 +91,13 @@ namespace StarterAssets
         public float DodgeSpeed = 60f; 
         
         [Tooltip("The time it takes for the dodge speed to cool off")]
-        public float DodgeTimer = 0.5f;
-        private float _dodgeTime;
+        public float DodgeAscendTimer = 0.5f;
+        [SerializeField]
+        private float _dodgeAscendTime;
+        [Tooltip("The time it takes for the dodge roll landing animation speed to cool off")]
+        public float DodgeLandTimer = 0.5f;
+        [SerializeField]
+        private float _dodgeLandTime;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -254,7 +259,15 @@ namespace StarterAssets
 
             _animator.SetBool(_animIDGrounded, _isGrounded);
             JumpAndGravity();
-            Move();
+
+            if (_isDodging)
+            {
+                Dodge();
+            }
+            else
+            {
+                Move();
+            }
         }
 
         private void FixedUpdate()
@@ -294,12 +307,6 @@ namespace StarterAssets
 
         private void Move()
         {
-            if (_isDodging || _dodgeTime > 0f)
-            {
-                Dodge();
-                return;
-            }
-            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
             float targetSpeed = GetTargetSpeed(_input.move);
 
@@ -356,9 +363,28 @@ namespace StarterAssets
 
         private void Dodge()
         {
-            _dodgeTime -= Time.deltaTime;
-            _dodgeTime = Mathf.Max(_dodgeTime, 0f);
-            _speed = Mathf.Lerp(DodgeSpeed/2f, DodgeSpeed, _dodgeTime/DodgeTimer) ;
+            if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
+            {
+                _isDodging = false;
+                return;
+            }
+            else if (_isGrounded)
+            {
+                _dodgeAscendTime = 0;
+                _dodgeLandTime -= Time.deltaTime;
+            }
+            else if (_dodgeAscendTime > 0f)
+            {
+                _dodgeAscendTime -= Time.deltaTime;
+            }
+            else
+            {
+                _dodgeAscendTime = 0f;
+            }
+
+            var speedFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
+            speedFactor = Mathf.Max(speedFactor, 0f);
+            _speed = Mathf.Lerp(DodgeSpeed/2f, DodgeSpeed, Mathf.Pow(speedFactor,4f));
             _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
                          + _mainCamera.transform.eulerAngles.y;
             _lookYaw = GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
@@ -409,12 +435,13 @@ namespace StarterAssets
                 }
                 
                 // Dodge
-                else if (_input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
+                else if (!_isDodging && _input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
                     _isDodging = true;
-                    _dodgeTime = DodgeTimer;
+                    _dodgeAscendTime = DodgeAscendTimer;
+                    _dodgeLandTime = DodgeLandTimer;
                     // update animator if using character
                     if (_hasAnimator)
                     {
@@ -430,7 +457,6 @@ namespace StarterAssets
                 }
                 if (_dodgeCoolDownTime >= 0.0f)
                 {
-                    _isDodging = false;
                     _verticalVelocity = Mathf.Max(_verticalVelocity, DodgeHeight);
                     _dodgeCoolDownTime -= Time.deltaTime;
                 }
@@ -465,7 +491,7 @@ namespace StarterAssets
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (_verticalVelocity < _terminalVelocity && _dodgeTime <= 0f)
+            if (_verticalVelocity < _terminalVelocity && _dodgeAscendTime <= 0f)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
@@ -572,8 +598,12 @@ namespace StarterAssets
             // set sphere position, with offset
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
-            _isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
+            _isGrounded = Physics.CheckSphere(
+                spherePosition,
+                GroundedRadius,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
 
         }
 

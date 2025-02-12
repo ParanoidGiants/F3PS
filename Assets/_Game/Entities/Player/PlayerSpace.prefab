@@ -1586,7 +1586,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.8
   m_Radius: 0.55
-  m_SlopeLimit: 60
+  m_SlopeLimit: 80
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -1611,7 +1611,7 @@ MonoBehaviour:
   GroundedRadius: 0.54
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 2049
+    m_Bits: 1
   maxHealth: 100
   RotationSmoothTime: 0.12
   AimingRotationSmoothTime: 0.038
@@ -1621,9 +1621,12 @@ MonoBehaviour:
   RotationSpeed: 1
   JumpHeight: 8
   JumpCoolDownTimer: 0.5
-  DodgeHeight: 0.1
-  DodgeSpeed: 50
-  DodgeTimer: 0.2
+  DodgeHeight: 1
+  DodgeSpeed: 70
+  DodgeAscendTimer: 0.3
+  _dodgeAscendTime: 0
+  DodgeLandTimer: 0.3
+  _dodgeLandTime: 0
   Gravity: -100
   DodgeCoolDownTimer: 0.25
   FallTimeout: 0.15
