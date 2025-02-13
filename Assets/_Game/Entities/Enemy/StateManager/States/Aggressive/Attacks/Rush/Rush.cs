@@ -20,7 +20,11 @@ namespace F3PS.AI.States.Action
         private Collider _hitCollider;
         private Transform _enemyTransform;
         private HitBox _hitBox;
-        
+
+        [Space(10)]
+        [Header("Rush References")]
+        public GameObject chargeFlare;
+
         [Space(10)]
         [Header("Rush Settings")]
         public bool isCharging;
@@ -106,12 +110,14 @@ namespace F3PS.AI.States.Action
             _chargeStartPosition = _enemyTransform.position;
             _chargeForward = _enemyTransform.forward;
             _chargeEndPosition = _chargeStartPosition - _chargeForward * chargeStrength;
+            chargeFlare.SetActive(true);
             animator.SetTrigger("Charge");
         }
         
         override
         protected void OnAttack()
         {
+            chargeFlare.SetActive(false);
             base.OnAttack();
 
             isAttacking = true;
