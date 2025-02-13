@@ -241,11 +241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e3ae162d7593d43a69bad4352f796e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshHolder: {fileID: 3495405824415620088}
   projectilePrefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
     type: 3}
   projectileSpawn: {fileID: 6842764869505349170}
   projectilePool: {fileID: 1158893945376584083}
-  meshHolder: {fileID: 3495405824415620088}
   icon: {fileID: 21300000, guid: c6e0f2fd19dc6414f8ec59b286eed54b, type: 3}
   maxAmmo: 100
   maxMagazineAmmo: 10
@@ -259,5 +259,5 @@ MonoBehaviour:
   reloadMagazineTime: 0
   isReloadingMagazine: 0
   weaponUI: {fileID: 0}
-  _numberOfProjectiles: 10
-  _spreadAngle: 5
+  _numberOfProjectiles: 20
+  _spreadAngle: 10

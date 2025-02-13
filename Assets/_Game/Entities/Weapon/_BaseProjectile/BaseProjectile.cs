@@ -17,9 +17,10 @@ public class BaseProjectile : MonoBehaviour
     public int damage = 50;
     public float lifeTime = 0f;
     public float maximumLifeTimer = 5f;
+    public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
     private bool collisionsEnabled = false;
-    
+
     private float _speed;
 
     protected bool _isHit = false;
@@ -35,18 +36,21 @@ public class BaseProjectile : MonoBehaviour
     
     private void Update()
     {
+        if (Hit) return;
+
         lifeTime += timeObject.ScaledDeltaTime;
         if (lifeTime > maximumLifeTimer)
         {
             gameObject.SetActive(false);
         }
 
-        if (lifeTime > enableCollisionsTimer && !collisionsEnabled)
+        enableCollisionsTime += Time.deltaTime;
+        if (enableCollisionsTime > enableCollisionsTimer && !collisionsEnabled)
         {
             collisionsEnabled = true;
             foreach (var hittableCollider in _hittableManager.colliders)
             {
-                Physics.IgnoreCollision(col, hittableCollider);
+                Physics.IgnoreCollision(col, hittableCollider, false);
             }
         }
     }
@@ -70,6 +74,7 @@ public class BaseProjectile : MonoBehaviour
         rb.isKinematic = false;
         rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
+        enableCollisionsTime = 0f;
     }
 
     private void OnDisable()
