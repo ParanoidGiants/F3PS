@@ -12,7 +12,8 @@ namespace F3PS.AI.States
         protected NavMeshAgent _navMeshAgent;
         public BaseEnemy enemy;
         public EnemyStateManager stateManager;
-        
+        public Animator animator;
+
         [Space(10)]
         [Header("Base Settings")]
         public StateType stateType;
