@@ -17,6 +17,7 @@ namespace F3PS.AI.States.Action
             base.OnEnter();
             _isSuspiciousTime = _isSuspiciousTimer;
             _startRotation = enemy.body.transform.rotation;
+            animator.SetFloat("Speed", 1f);
         }
         
         public override void OnPhysicsUpdate()

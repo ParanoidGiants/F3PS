@@ -106,6 +106,7 @@ namespace F3PS.AI.States.Action
             _chargeStartPosition = _enemyTransform.position;
             _chargeForward = _enemyTransform.forward;
             _chargeEndPosition = _chargeStartPosition - _chargeForward * chargeStrength;
+            animator.SetTrigger("Charge");
         }
         
         override
@@ -120,6 +121,7 @@ namespace F3PS.AI.States.Action
             _attackEndPosition = _attackStartPosition + _attackForward * attackDistance;
             
             MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", _enemyTransform);
+            animator.SetTrigger("Attack");
         }
         
         override
@@ -133,6 +135,7 @@ namespace F3PS.AI.States.Action
             _recoverForward = _enemyTransform.forward;
             var strength = this.recoverStrength;
             _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
+            animator.SetTrigger("Recover");
         }
             
         private void HandleCharging()

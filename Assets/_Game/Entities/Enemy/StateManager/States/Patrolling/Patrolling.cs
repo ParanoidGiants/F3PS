@@ -11,6 +11,7 @@ namespace F3PS.AI.States
             _navMeshAgent.isStopped = false;
             enemy.patrolManager.SetNextPatrolPoint();
             _navMeshAgent.destination = enemy.patrolManager.CurrentPatrolPoint;
+            animator.SetFloat("Speed", 1f);
         }
         
         override
