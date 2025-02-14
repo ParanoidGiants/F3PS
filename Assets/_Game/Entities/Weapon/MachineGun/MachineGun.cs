@@ -42,7 +42,9 @@ namespace Weapon
                         _recentTargetPosition,
                         shotSpeed
                     );
+                    var shootDirection = _recentTargetPosition - projectileSpawn.position;
                     weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    Shake(-shootDirection);
                     MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
                 }
                 yield return waitForShootCoolDown;

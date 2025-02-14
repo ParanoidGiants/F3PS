@@ -79,6 +79,8 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 1
   hittableId: 0
+  shakeSource: {fileID: 1338031965}
+  shakePower: 0.4
 --- !u!1 &387973775
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,6 +386,8 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
+  shakeSource: {fileID: 1338031965}
+  shakePower: 0.4
 --- !u!1 &63126234240739105
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1030,7 @@ GameObject:
   - component: {fileID: 2070925443028286827}
   - component: {fileID: 2070925443028286826}
   - component: {fileID: 7137088972954229244}
+  - component: {fileID: 7137088972954229246}
   m_Layer: 0
   m_Name: StandardCamera
   m_TagString: Untagged
@@ -1118,6 +1123,29 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &7137088972954229246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070925443028286612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ApplyAfter: 2
+  m_ChannelMask: 1
+  m_Gain: 1
+  m_Use2DDistance: 0
+  m_UseCameraSpace: 1
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_Duration: 1
+    m_NoiseOffsets: {x: -729.94617, y: -843.5187, z: 71.332306}
 --- !u!1 &2070925443526839464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,6 +1439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8753443833285472442}
   - component: {fileID: 1585131262}
+  - component: {fileID: 1338031965}
   m_Layer: 11
   m_Name: Hittables
   m_TagString: Untagged
@@ -1449,6 +1478,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliders: []
+--- !u!114 &1338031965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2232354698560630938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.3
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &2274936984995269199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2506,6 +2588,8 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 0.5
   hittableId: 0
+  shakeSource: {fileID: 1338031965}
+  shakePower: 0.4
 --- !u!1 &5645447450462312790
 GameObject:
   m_ObjectHideFlags: 0
@@ -3563,25 +3647,10 @@ PrefabInstance:
       propertyPath: hittableManager
       value: 
       objectReference: {fileID: 1585131262}
-    - target: {fileID: 6842764869505349170, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6842764869505349170, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7283300513466934740, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
         type: 3}
       propertyPath: m_Name
       value: Shotgun
-      objectReference: {fileID: 0}
-    - target: {fileID: 7283300513466934740, guid: ff35567ea24f23545bb4f0cc2fe33bdc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff35567ea24f23545bb4f0cc2fe33bdc, type: 3}
@@ -3663,21 +3732,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
-    - target: {fileID: 6708543336009785340, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7420966541678857242, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7420966541678857242, guid: 806106cbf8c59cd4a8c4dd6dded31343,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 806106cbf8c59cd4a8c4dd6dded31343, type: 3}
 --- !u!4 &9222923224880341373 stripped
@@ -3697,35 +3751,6 @@ PrefabInstance:
       propertyPath: userSpace
       value: 
       objectReference: {fileID: 6128214820260621315}
-    - target: {fileID: 2406442726296628, guid: 44039d663aa003247a93628d13c02462, type: 3}
-      propertyPath: targetScale
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1040741825567720507, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1040741825567720507, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1040741825567720507, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1040741825567720507, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1040741825567720507, guid: 44039d663aa003247a93628d13c02462,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2748118797753610252, guid: 44039d663aa003247a93628d13c02462,
         type: 3}
       propertyPath: weaponUI
@@ -4169,21 +4194,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MachineGun
-      objectReference: {fileID: 0}
-    - target: {fileID: 6708543336009785340, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7420966541678857242, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7420966541678857242, guid: 9fc755f69d075ab46a07a662b1418eb9,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc755f69d075ab46a07a662b1418eb9, type: 3}

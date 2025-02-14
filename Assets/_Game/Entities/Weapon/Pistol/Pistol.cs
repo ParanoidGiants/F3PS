@@ -44,6 +44,8 @@ namespace Weapon
                 targetPosition,
                 shotSpeed
             );
+            var shootDirection = targetPosition - projectileSpawn.position;
+            Shake(-shootDirection);
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
             while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {

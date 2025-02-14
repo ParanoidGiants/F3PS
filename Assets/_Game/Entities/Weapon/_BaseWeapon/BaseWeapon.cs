@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cinemachine;
 using DarkTonic.MasterAudio;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Weapon
     {
         [Header("References")]
         public Transform meshHolder;
+        public CinemachineImpulseSource screenShakeSource;
         
         [Space(10)]
         [Header("Projectile References")]
@@ -25,6 +27,7 @@ namespace Weapon
         public float shootCoolDownTimer = 0.2f;
         public float reloadMagazineTimer = 1f;
         public bool isShooting = false;
+        public float recoilPower;
 
         [Space(10)] [Header("Watchers")]
         public int totalAmount = 100;
@@ -37,6 +40,11 @@ namespace Weapon
         protected virtual IEnumerator Shoot(Vector3 targetPosition)
         {
             yield return null;
+        }
+
+        protected void Shake(Vector3 recoilDirection)
+        {
+            screenShakeSource.GenerateImpulseWithVelocity(recoilDirection * recoilPower);
         }
 
         public void SetWeaponUI(WeaponUI weaponUI) { this.weaponUI = weaponUI; }

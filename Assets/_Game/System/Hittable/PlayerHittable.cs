@@ -1,3 +1,4 @@
+using Cinemachine;
 using F3PS.AI.States.Action;
 using StarterAssets;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace F3PS.Damage.Take
     public class PlayerHittable : Hittable
     {
         private ThirdPersonController _controller;
+        public CinemachineImpulseSource shakeSource;
+        public float shakePower;
         void Awake()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
@@ -31,6 +34,7 @@ namespace F3PS.Damage.Take
             if (rush)
             {
                 _controller.Hit((int)(damageMultiplier * rush.damage));
+                shakeSource.GenerateImpulse(shakePower);
             }
         }
     }
