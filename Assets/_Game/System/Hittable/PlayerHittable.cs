@@ -8,8 +8,7 @@ namespace F3PS.Damage.Take
     public class PlayerHittable : Hittable
     {
         private ThirdPersonController _controller;
-        public CinemachineImpulseSource shakeSource;
-        public float shakePower;
+        public HittableManager hittableManager;
         void Awake()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
@@ -26,7 +25,7 @@ namespace F3PS.Damage.Take
             {
                 projectile.SetHit();
                 _controller.Hit((int)(damageMultiplier * projectile.damage));
-                shakeSource.GenerateImpulse(damageMultiplier * shakePower);
+                hittableManager.Shake(damageMultiplier);
                 return;
             }
 
@@ -35,7 +34,7 @@ namespace F3PS.Damage.Take
             if (rush)
             {
                 _controller.Hit((int)(damageMultiplier * rush.damage));
-                shakeSource.GenerateImpulse(damageMultiplier * shakePower);
+                hittableManager.Shake(damageMultiplier);
             }
         }
     }
