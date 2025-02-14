@@ -26,6 +26,7 @@ namespace F3PS.Damage.Take
             {
                 projectile.SetHit();
                 _controller.Hit((int)(damageMultiplier * projectile.damage));
+                shakeSource.GenerateImpulse(damageMultiplier * shakePower);
                 return;
             }
 
@@ -34,7 +35,7 @@ namespace F3PS.Damage.Take
             if (rush)
             {
                 _controller.Hit((int)(damageMultiplier * rush.damage));
-                shakeSource.GenerateImpulse(shakePower);
+                shakeSource.GenerateImpulse(damageMultiplier * shakePower);
             }
         }
     }
