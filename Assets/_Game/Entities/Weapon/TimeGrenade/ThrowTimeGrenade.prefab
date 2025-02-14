@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553198242833350073}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.106, z: 0.26}
-  m_LocalScale: {x: 0.010000001, y: 0.010000001, z: 0.010000001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656408189821302575}
@@ -130,9 +130,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dba63fdf16aac2459bf7204ae782632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userSpace: {fileID: 0}
   hittableManager: {fileID: 0}
   timeBubbleGrenadeProjectile: {fileID: 2406442726296628}
-  timeBubble: {fileID: 1080593552923030184}
   throwLine: {fileID: 2115599412}
   spawnTransform: {fileID: 1040741825567720507}
   lineResolution: 200
@@ -256,11 +256,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimeGrenadeProjectile
       objectReference: {fileID: 0}
-    - target: {fileID: 8541015354598396513, guid: 77b35e315e8ce234e9ba19b08a1dde29,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396518, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_RootOrder
@@ -328,18 +323,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8985127288dd1fa4aae2e23be98fd45a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1080593552923030184 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 313518837271188002, guid: 77b35e315e8ce234e9ba19b08a1dde29,
-    type: 3}
-  m_PrefabInstance: {fileID: 767544486606446730}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90bcc42fa97bf514ebcab9eaa70684d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8944454054671692524 stripped

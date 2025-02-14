@@ -1,5 +1,5 @@
+using Cinemachine;
 using DG.Tweening;
-using StarterAssets;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : BaseProjectile
@@ -7,9 +7,12 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     [Header("References")]
     public Transform userSpace;
     public TimeBubble timeBubble;
+    public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
     public float targetScale = 20f;
     private bool _isActive = false;
+
+    public float shakePower = 1f;
 
     public float Gravity => timeObject.gravityScale * Physics.gravity.magnitude;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
@@ -27,6 +30,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void ActivateTimeBubble()
     {
+        shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
         timeBubble.transform.localScale = Vector3.zero;
         timeBubble.transform

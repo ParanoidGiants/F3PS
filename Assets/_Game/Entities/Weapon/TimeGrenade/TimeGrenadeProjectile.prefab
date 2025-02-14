@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimeGrenadeProjectile
       objectReference: {fileID: 0}
+    - target: {fileID: 7785563140789300821, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7785563140789300822, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
       propertyPath: m_Mass
@@ -278,11 +283,67 @@ MonoBehaviour:
   damage: 0
   lifeTime: 0
   maximumLifeTimer: 5
+  enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
   userSpace: {fileID: 0}
   timeBubble: {fileID: 313518837271188002}
+  shakeSource: {fileID: 4839951289276561784}
   animationDuration: 0.5
-  targetScale: 20
+  targetScale: 50
+  shakePower: 0.5
+--- !u!114 &4839951289276561784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541015354598396513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.1
+    m_ImpulseType: 2
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!54 &8541015354598396514 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7785563140789300822, guid: 540c7b130eeac7c4b89347aae834408b,
