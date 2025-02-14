@@ -37,7 +37,12 @@ public class TimeObject : MonoBehaviour
         {
             return;
         }
-        Debug.Log($"PITCH {gameObject.name} from {currentTimeScale} to {newTimeScale}");
+        Flash(newTimeScale);
+        currentTimeScale = newTimeScale;
+    }
+
+    private void Flash(float newTimeScale)
+    {
         if (_sequence != null && _sequence.IsActive() && _sequence.IsPlaying())
         {
             _sequence.Kill();
@@ -51,10 +56,10 @@ public class TimeObject : MonoBehaviour
             foreach (var renderer in renderers)
             {
                 var material = renderer.material;
-                _sequence.InsertCallback(0f, () => { material.EnableKeyword("_EMISSION"); });
-                _sequence.Insert(0f, material.DOColor(_emissionColor, "_EmissionColor", animationDuration).SetEase(Ease.OutSine));
-                _sequence.Insert(animationDuration, material.DOColor(Color.black, "_EmissionColor", animationDuration).SetEase(Ease.OutSine));
-                _sequence.InsertCallback(animationDuration * 2f, () => { material.DisableKeyword("_EMISSION"); });
+                _sequence.InsertCallback(0f, () => { material.EnableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION); });
+                _sequence.Insert(0f, material.DOColor(_emissionColor, GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, animationDuration).SetEase(Ease.OutSine));
+                _sequence.Insert(animationDuration, material.DOColor(Color.black, GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, animationDuration).SetEase(Ease.OutSine));
+                _sequence.InsertCallback(animationDuration * 2f, () => { material.DisableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION); });
             }
         }
         else
@@ -64,14 +69,13 @@ public class TimeObject : MonoBehaviour
             foreach (var renderer in renderers)
             {
                 var material = renderer.material;
-                _sequence.InsertCallback(0f, () => { material.EnableKeyword("_EMISSION"); });
-                _sequence.Insert(0f, material.DOColor(_emissionColor, "_EmissionColor", animationDuration).SetEase(Ease.OutSine));
-                _sequence.Insert(animationDuration, material.DOColor(Color.black, "_EmissionColor", animationDuration).SetEase(Ease.OutSine));
-                _sequence.InsertCallback(animationDuration * 2f, () => { material.DisableKeyword("_EMISSION"); });
+                _sequence.InsertCallback(0f, () => { material.EnableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION); });
+                _sequence.Insert(0f, material.DOColor(_emissionColor, GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, animationDuration).SetEase(Ease.OutSine));
+                _sequence.Insert(animationDuration, material.DOColor(Color.black, GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, animationDuration).SetEase(Ease.OutSine));
+                _sequence.InsertCallback(animationDuration * 2f, () => { material.DisableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION); });
             }
         }
         _sequence.Play();
-        currentTimeScale = newTimeScale;
     }
 
     protected virtual void OnDisable()

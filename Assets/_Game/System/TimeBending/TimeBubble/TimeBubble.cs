@@ -14,7 +14,6 @@ public class TimeBubble : MonoBehaviour
         TimeObject o = other.GetComponent<TimeObject>();
         if (o == null) return;
         
-        Debug.Log("SLOW DOWN " + other);
         if (o.amountOfTimeZones == 0)
         {
             o.PitchTimeScale(timeScale);
