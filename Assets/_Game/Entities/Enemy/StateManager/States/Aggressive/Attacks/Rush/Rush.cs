@@ -68,7 +68,6 @@ namespace F3PS.AI.States.Action
         public void OnStartAttack(Hittable hittable)
         {
             base.OnStartAttack(hittable);
-            _hitCollider.enabled = true;
             OnCharge();
         }
         
@@ -118,6 +117,7 @@ namespace F3PS.AI.States.Action
         protected void OnAttack()
         {
             chargeFlare.SetActive(false);
+            _hitCollider.enabled = true;
             base.OnAttack();
 
             isAttacking = true;
