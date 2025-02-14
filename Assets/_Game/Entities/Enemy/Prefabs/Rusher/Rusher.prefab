@@ -932,7 +932,7 @@ PrefabInstance:
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: m_Interpolate
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
@@ -942,7 +942,7 @@ PrefabInstance:
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381469377751193113, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
