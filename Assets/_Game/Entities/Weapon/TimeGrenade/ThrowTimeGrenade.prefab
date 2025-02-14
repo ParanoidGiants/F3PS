@@ -251,6 +251,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6656408189821302575}
     m_Modifications:
+    - target: {fileID: 769641652181740734, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: shakePower
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 769641652181740734, guid: 77b35e315e8ce234e9ba19b08a1dde29,
+        type: 3}
+      propertyPath: maximumLifeTimer
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 8541015354598396513, guid: 77b35e315e8ce234e9ba19b08a1dde29,
         type: 3}
       propertyPath: m_Name
