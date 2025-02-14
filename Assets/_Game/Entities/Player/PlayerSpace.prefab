@@ -79,8 +79,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 1
   hittableId: 0
-  shakeSource: {fileID: 1338031965}
-  shakePower: 0.4
+  hittableManager: {fileID: 1585131262}
 --- !u!1 &387973775
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,8 +385,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 2
   hittableId: 0
-  shakeSource: {fileID: 1338031965}
-  shakePower: 0.4
+  hittableManager: {fileID: 1585131262}
 --- !u!1 &63126234240739105
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,6 +1475,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e804078b186744b9842608dbdfd18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hittableRenderer: {fileID: 3359960145585209165}
+  shakeSource: {fileID: 1338031965}
+  shakePower: 0.1
+  flash: 0
+  _emissionColor: {r: 1, g: 0, b: 1, a: 0}
+  flashEaseInAnimationDuration: 0.05
+  flashEaseOutAnimationDuration: 0.2
+  easeIn: 8
+  easeOut: 9
   colliders: []
 --- !u!114 &1338031965
 MonoBehaviour:
@@ -2588,8 +2595,7 @@ MonoBehaviour:
   _collider: {fileID: 0}
   damageMultiplier: 0.5
   hittableId: 0
-  shakeSource: {fileID: 1338031965}
-  shakePower: 0.4
+  hittableManager: {fileID: 1585131262}
 --- !u!1 &5645447450462312790
 GameObject:
   m_ObjectHideFlags: 0
@@ -3853,6 +3859,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6128214820260621315}
     m_Modifications:
+    - target: {fileID: 3258596985672818640, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 159.6848
+      objectReference: {fileID: 0}
     - target: {fileID: 3258596985944699312, guid: 7537192896f845b4286408dd2133b2f8,
         type: 3}
       propertyPath: m_Name
@@ -3962,6 +3973,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258596986216235356, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 238.7048
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258596986437892787, guid: 7537192896f845b4286408dd2133b2f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 193.61479
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7537192896f845b4286408dd2133b2f8, type: 3}

@@ -1,4 +1,4 @@
-using Cinemachine;
+using DG.Tweening;
 using F3PS.AI.States.Action;
 using StarterAssets;
 using UnityEngine;
@@ -8,7 +8,9 @@ namespace F3PS.Damage.Take
     public class PlayerHittable : Hittable
     {
         private ThirdPersonController _controller;
+        [Header("References")]
         public HittableManager hittableManager;
+        
         void Awake()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
@@ -21,21 +23,22 @@ namespace F3PS.Damage.Take
         {
             // Hit by projectile
             var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
+            var damage = 0;
             if (projectile && !projectile.Hit)
             {
+                damage = (int)(damageMultiplier * projectile.damage);
                 projectile.SetHit();
-                _controller.Hit((int)(damageMultiplier * projectile.damage));
-                hittableManager.Shake(damageMultiplier);
-                return;
             }
 
             // Hit by rush
             var rush = hitBy.gameObject.GetComponent<Rush>();
             if (rush)
             {
-                _controller.Hit((int)(damageMultiplier * rush.damage));
-                hittableManager.Shake(damageMultiplier);
+                damage = (int)(damageMultiplier * rush.damage);
             }
+            _controller.Hit(damage);
+            hittableManager.Shake(damage);
+            hittableManager.Flash();
         }
     }
 }
