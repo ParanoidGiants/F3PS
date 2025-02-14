@@ -1,20 +1,20 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealthUI : MonoBehaviour
 {
     public Image healthBar;
-    private Animator _animator;
-    
+    public Image healthBarBackground;
+
     void Start()
     {
         healthBar.fillAmount = 1f;
-        _animator = GetComponent<Animator>();
     }
 
     public void UpdateHealth(float healthPercentage)
     {
         healthBar.fillAmount = healthPercentage;
-        _animator.SetBool("hit", true);
+        healthBarBackground.DOFillAmount(healthPercentage, 0.5f).SetDelay(0.5f);
     }
 }
