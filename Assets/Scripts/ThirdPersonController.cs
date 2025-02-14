@@ -169,7 +169,8 @@ namespace StarterAssets
         private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
-        
+        private readonly int _animIDHit = Animator.StringToHash("Hit");
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         [SerializeField] private PlayerInput _playerInput;
@@ -590,6 +591,10 @@ namespace StarterAssets
             if (_health <= 0)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else
+            {
+                _animator.SetTrigger(_animIDHit);
             }
         }
 
