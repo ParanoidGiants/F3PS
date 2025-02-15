@@ -103,7 +103,10 @@ namespace F3PS.Enemy
 
         public virtual void SetMaterial(Material material)
         {
-            meshRenderer.sharedMaterial = material;
+            if (meshRenderer)
+            {
+                meshRenderer.sharedMaterial = material;
+            }
         }
 
         public void Deactivate()

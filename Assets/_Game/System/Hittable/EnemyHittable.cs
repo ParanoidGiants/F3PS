@@ -1,4 +1,3 @@
-using System;
 using F3PS.AI.States.Action;
 using F3PS.Enemy;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace F3PS.Damage.Take
         void Awake()
         {
             _collider = GetComponent<Collider>();
-            hittableId = enemy.GetInstanceID();
+            _hittableId = enemy.GetInstanceID();
         }
 
         private void OnEnable()
@@ -28,20 +27,21 @@ namespace F3PS.Damage.Take
         public void OnHit(HitBox hitBy)
         {
             // Hit by projectile
+            var damage = 0;
             var projectile = hitBy.GetComponent<BaseProjectile>();
-            if (projectile && !projectile.Hit)
+            if (projectile)
             {
-                enemy.Hit((int)(damageMultiplier * projectile.damage));
-                return;
+                damage = (int)(damageMultiplier * projectile.damage);
             }
             
             // Hit by rush
             var rush = hitBy.GetComponent<Rush>();
             if (rush)
             {
-                Debug.Log(enemy.name + " hit by rush from " + hitBy.name);
-                enemy.Hit((int)(damageMultiplier * rush.damage));
+                damage = (int)(damageMultiplier * rush.damage);
             }
+            enemy.Hit(damage);
+            hittableFlash.Flash();
         }
 
         internal void OnHitByPlayer(Vector3 hitDirection)

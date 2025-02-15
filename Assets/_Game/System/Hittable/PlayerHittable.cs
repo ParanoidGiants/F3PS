@@ -1,4 +1,3 @@
-using DG.Tweening;
 using F3PS.AI.States.Action;
 using StarterAssets;
 using UnityEngine;
@@ -9,13 +8,13 @@ namespace F3PS.Damage.Take
     {
         private ThirdPersonController _controller;
         [Header("References")]
-        public HittableManager hittableManager;
+        public HittableShake hittableShake;
         
         void Awake()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
             _collider = GetComponent<Collider>();
-            hittableId = _controller.GetInstanceID();
+            _hittableId = _controller.GetInstanceID();
         }
 
         override
@@ -24,10 +23,9 @@ namespace F3PS.Damage.Take
             // Hit by projectile
             var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
             var damage = 0;
-            if (projectile && !projectile.Hit)
+            if (projectile)
             {
                 damage = (int)(damageMultiplier * projectile.damage);
-                projectile.SetHit();
             }
 
             // Hit by rush
@@ -37,8 +35,8 @@ namespace F3PS.Damage.Take
                 damage = (int)(damageMultiplier * rush.damage);
             }
             _controller.Hit(damage);
-            hittableManager.Shake(damage);
-            hittableManager.Flash();
+            hittableShake.Shake(damage);
+            hittableFlash.Flash();
         }
     }
 }

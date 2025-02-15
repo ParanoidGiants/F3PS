@@ -44,6 +44,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void DeactivateTimeBubble()
     {
+        Debug.Log("Deactivate");
         _isActive = false;
         timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
@@ -68,11 +69,8 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     }
     
     override
-    public void SetHit()
+    protected void ProjectileSpecificActions()
     {
-        if (Hit) return;
-        
-        _isHit = true;
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         col.enabled = false;
