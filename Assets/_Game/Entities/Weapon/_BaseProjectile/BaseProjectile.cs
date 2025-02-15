@@ -26,8 +26,6 @@ public class BaseProjectile : MonoBehaviour
     protected bool _isHit = false;
     private HittableManager _hittableManager;
 
-    public bool Hit => _isHit;
-
     public void Init(int userSpaceId, HittableManager hittableManager)
     {
         hitBox.attackerId = userSpaceId;
@@ -36,7 +34,7 @@ public class BaseProjectile : MonoBehaviour
     
     private void Update()
     {
-        if (Hit) return;
+        if (_isHit) return;
 
         lifeTime += timeObject.ScaledDeltaTime;
         if (lifeTime > maximumLifeTimer)
@@ -84,15 +82,7 @@ public class BaseProjectile : MonoBehaviour
         noHitParticleSystem.gameObject.SetActive(false);
     }
 
-    public virtual void SetHit()
-    {
-        if (Hit) return;
-        
-        _isHit = true;
-        StartCoroutine(SetInactiveAfterSeconds());
-    }
-
-    protected IEnumerator SetInactiveAfterSeconds()
+    private IEnumerator SetInactiveAfterSeconds()
     {
         yield return new WaitForSeconds(hitParticleSystem.main.duration);
         gameObject.SetActive(false);
@@ -100,13 +90,19 @@ public class BaseProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        if (_isHit)
+        {
+            return;
+        }
+        _isHit = true;
+
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;
         timeObject.ClearTrail();
         mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null 
-            && hittable.hittableId != hitBox.attackerId
+            && hittable.HittableId != hitBox.attackerId
         ) {
             if (hittable is EnemyHittable enemyHittable)
             {
@@ -119,6 +115,11 @@ public class BaseProjectile : MonoBehaviour
         {
             noHitParticleSystem.gameObject.SetActive(true);
         }
-        SetHit();
+        ProjectileSpecificActions();
+    }
+
+    protected virtual void ProjectileSpecificActions()
+    {
+        StartCoroutine(SetInactiveAfterSeconds());
     }
 }

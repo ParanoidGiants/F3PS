@@ -10,7 +10,6 @@ namespace F3PS.AI.States.Action
         {
             base.OnEnter();
             
-            Debug.Log("ENTER CHECKING: " + enemy.name);
             _navMeshAgent.isStopped = false;
             animator.SetFloat("Speed", 1f);
         }
