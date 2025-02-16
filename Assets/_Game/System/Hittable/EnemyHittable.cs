@@ -26,6 +26,10 @@ namespace F3PS.Damage.Take
         override
         public void OnHit(HitBox hitBy)
         {
+            if (enemy.IsDead)
+            {
+                return;
+            }
             // Hit by projectile
             var damage = 0;
             var projectile = hitBy.GetComponent<BaseProjectile>();

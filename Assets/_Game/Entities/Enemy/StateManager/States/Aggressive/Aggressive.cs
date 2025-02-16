@@ -12,10 +12,14 @@ namespace F3PS.AI.States
         
         [Space(10)]
         [Header("Specific Watchers")]
-        [SerializeField] private Hittable _selectedTarget;
         [SerializeField] private bool _isStaying;
+        [SerializeField] private Hittable _selectedTarget;
         [SerializeField] private Attack _currentAttack;
         [SerializeField] private Attack[] _attacks;
+        
+        [SerializeField] private bool _isAttacking;
+        public bool IsAttacking => _isAttacking;
+
 
         override
         public void Initialize()
@@ -48,6 +52,7 @@ namespace F3PS.AI.States
         override
         public void OnPhysicsUpdate()
         {
+            _isAttacking = _currentAttack.isActive;
             if (_currentAttack.isActive)
             {
                 _currentAttack.OnPhysicsUpdate();

@@ -6,5 +6,7 @@ public enum StateType
     SUSPICIOUS,
     RETURN_TO_IDLE,
     PATROLLING,
+    HIT,
+    DYING,
     ENABLED_PHYSICS
 }
