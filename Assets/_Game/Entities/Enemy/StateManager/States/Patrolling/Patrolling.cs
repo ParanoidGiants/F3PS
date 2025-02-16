@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace F3PS.AI.States
 {
     public class Patrolling : State

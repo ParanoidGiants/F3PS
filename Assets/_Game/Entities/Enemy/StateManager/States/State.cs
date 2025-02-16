@@ -27,7 +27,7 @@ namespace F3PS.AI.States
         }
         public virtual void OnEnter()
         {
-            _navMeshAgent.speed = enemySpeed * enemy.TimeScale;
+            _navMeshAgent.speed = enemy.moveSpeed * enemySpeed * enemy.TimeScale;
             _navMeshAgent.stoppingDistance = enemyStoppingDistance;
             UpdateSensorState();
             enemy.SetMaterial(material);
