@@ -74,7 +74,8 @@ namespace StarterAssets
         public float SpeedChangeRate = 10.0f;
 
         [Tooltip("How fast the camera can revolve around the player")]
-        public float RotationSpeed = 0.2f;
+        public float RotationSpeedY = 0.2f;
+        public float RotationSpeedX = 0.2f;
 
 
         [Space(10)]
@@ -294,10 +295,11 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeed;
+                float deltaTimeMultiplierY = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedY;
+                float deltaTimeMultiplierX = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedX;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplierX;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplierY;
             }
 
             // clamp our rotations so our values are limited 360 degrees

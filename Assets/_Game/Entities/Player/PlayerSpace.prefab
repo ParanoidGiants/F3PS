@@ -1735,7 +1735,8 @@ MonoBehaviour:
   MoveSpeed: 10
   SprintSpeed: 18
   SpeedChangeRate: 22
-  RotationSpeed: 1
+  RotationSpeedY: 0.2
+  RotationSpeedX: 0.1
   JumpHeight: 8
   JumpCoolDownTimer: 0.5
   DodgeHeight: 1
