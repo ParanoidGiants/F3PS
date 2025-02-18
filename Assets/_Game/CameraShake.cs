@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-public class HittableShake : MonoBehaviour
+public class CameraShake : MonoBehaviour
 {
     [Header("References")]
     public CinemachineImpulseSource shakeSource;
