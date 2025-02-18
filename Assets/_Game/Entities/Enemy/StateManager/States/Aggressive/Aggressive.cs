@@ -40,6 +40,7 @@ namespace F3PS.AI.States
             _navMeshAgent.isStopped = false;
             ChangeAttack(AttackType.RUSH);
             HandleStoppingDistance();
+            animator.SetFloat("Speed", 1f);
         }
         
         override 

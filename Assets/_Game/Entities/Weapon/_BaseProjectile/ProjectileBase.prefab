@@ -9946,11 +9946,7 @@ MonoBehaviour:
   amountOfTimeZones: 0
   currentTimeScale: 1
   additionalTimeScale: 0.125
-  animateTransform: {fileID: 6202579013478385693}
-  renderers:
-  - {fileID: 8294872423647169855}
-  scaleAnimationOffset: 0.8
-  animationDuration: 0.2
+  animateMesh: {fileID: 6191514888584957300}
   gravityScale: 0.5
   _trail: {fileID: 4917439815977826471}
   _slowMoTrail: {fileID: 5558975623774224086}
@@ -9976,6 +9972,7 @@ MonoBehaviour:
   damage: 5
   lifeTime: 0
   maximumLifeTimer: 5
+  enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
 --- !u!1 &8597723212833340393
 GameObject:
@@ -9988,6 +9985,7 @@ GameObject:
   - component: {fileID: 6202579013478385693}
   - component: {fileID: 8294872423647169855}
   - component: {fileID: 1483993170369786442}
+  - component: {fileID: 6191514888584957300}
   m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
@@ -10030,7 +10028,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff188f58422043f489060e28a5e4e0c0, type: 2}
+  - {fileID: 5629084884208175553, guid: 426a2785f8a940049aac2c246661cf09, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10060,6 +10058,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8597723212833340393}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6191514888584957300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8597723212833340393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f9bdeefaf3f7040bc05a8ad0efa360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeAnimationDuration: 0.1
+  timeEmissionColor: {r: 0, g: 0.7490196, b: 191, a: 255}
+  hitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 0}
+  hitFlashEaseInAnimationDuration: 0
+  hitFlashEaseOutAnimationDuration: 0
+  hitFlashEaseIn: 0
+  hitFlashEaseOut: 0
+  hitFlashAnimate: 0
+  timeFlashAnimate: 0
+  timeFlashAnimateTimeScale: 1
 --- !u!1001 &3627254877286036417
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -28,6 +28,8 @@ namespace StarterAssets
         public StaminaManager staminaManager;
         public TimeManager timeManager;
         public WeaponManager weaponManager;
+        public CameraShake cameraShake;
+        public AnimateMesh animateMesh;
         private Crosshair _crosshair;
         private PlayerHealthUI _playerHealthUI;
 
@@ -596,6 +598,8 @@ namespace StarterAssets
             {
                 _animator.SetTrigger(_animIDHit);
             }
+            cameraShake.Shake(damage);
+            animateMesh.HitFlash();
         }
 
         private void GroundedCheck()

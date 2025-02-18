@@ -45,7 +45,6 @@ namespace F3PS.Damage.Take
                 damage = (int)(damageMultiplier * rush.damage);
             }
             enemy.Hit(damage);
-            hittableFlash.Flash();
         }
 
         internal void OnHitByPlayer(Vector3 hitDirection)

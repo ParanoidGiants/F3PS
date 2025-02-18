@@ -7,8 +7,6 @@ namespace F3PS.Damage.Take
     public class PlayerHittable : Hittable
     {
         private ThirdPersonController _controller;
-        [Header("References")]
-        public HittableShake hittableShake;
         
         void Awake()
         {
@@ -35,8 +33,6 @@ namespace F3PS.Damage.Take
                 damage = (int)(damageMultiplier * rush.damage);
             }
             _controller.Hit(damage);
-            hittableShake.Shake(damage);
-            hittableFlash.Flash();
         }
     }
 }

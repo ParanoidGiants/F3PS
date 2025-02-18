@@ -5,9 +5,6 @@ namespace F3PS.Damage.Take
 {
     public class Hittable : MonoBehaviour
     {
-        [Header("References")]
-        public HittableFlash hittableFlash;
-
         [Header("Settings")]
         public float damageMultiplier;
         

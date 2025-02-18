@@ -18,6 +18,7 @@ namespace F3PS.Enemy
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
         public TimeObject timeObject;
+        public AnimateMesh animateMesh;
         public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
         public float TimeScale => timeObject.currentTimeScale;
         protected EnemyHealthUIPool _healthUIPool;
@@ -25,7 +26,6 @@ namespace F3PS.Enemy
 
         [SerializeField] protected EnemyStateManager _stateManager;
         public EnemyStateManager StateManager => _stateManager;
-
 
         [Space(10)]
         [Header("Settings")]
@@ -108,6 +108,7 @@ namespace F3PS.Enemy
                 return;
             }
             _healthUIPool.OnHitTarget(this);
+            animateMesh.HitFlash();
             _stateManager.Hit();
         }
 
