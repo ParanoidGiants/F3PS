@@ -3,8 +3,6 @@ using UnityEngine;
 using TimeBending;
 
 using Weapon;
-using UnityEngine.SceneManagement;
-
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -147,6 +145,7 @@ namespace StarterAssets
         [SerializeField] private bool _isSlowMoStarted;
         [SerializeField] private bool _isAimingGrenade;
         [SerializeField] private bool _isRestartingGame;
+        [SerializeField] private bool _isDying;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _health;
         [SerializeField] private float _speed;
@@ -233,9 +232,9 @@ namespace StarterAssets
         {
             if (GameManager.Instance.IsGamePaused) return;
 
-            if (_input.restart && !_isRestartingGame)
+            if (_input.restart && !_isRestartingGame && !_isDying)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneLoader.Instance.ReloadScene();
                 _isRestartingGame = true;
             }
 
@@ -592,9 +591,10 @@ namespace StarterAssets
             _health -= damage;
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
             _playerHealthUI.UpdateHealth((float)_health / maxHealth);
-            if (_health <= 0)
+            if (_health <= 0 && !_isDying)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                _isDying = true;
+                Die();
             }
             else
             {
@@ -602,6 +602,15 @@ namespace StarterAssets
             }
             cameraShake.Shake(damage);
             animateMesh.HitFlash();
+        }
+
+        private void Die()
+        {
+            _animator.SetTrigger("Die");
+            if (!_isRestartingGame)
+            {
+                SceneLoader.Instance.ReloadScene();
+            }
         }
 
         private void GroundedCheck()
