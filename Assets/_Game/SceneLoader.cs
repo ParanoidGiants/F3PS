@@ -23,14 +23,15 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void ReloadScene()
+    public void ReloadScene(float delay = 0f)
     {
         backDrop.gameObject.SetActive(true);
         backDrop
             .DOColor(backDrop.color.WithAlpha(1), 0.5f)
             .OnComplete(() => {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            });
+            })
+            .SetDelay(delay);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -84,7 +84,7 @@ namespace F3PS.AI.States.Action
             _wasEarlyHit = true;
             if (hittable != null && hittable.HittableId != _hitBox.attackerId)
             {
-                hittable.OnHit(_hitBox);
+                hittable.OnHit(_hitBox, enemy.transform.forward);
             }
         }
 

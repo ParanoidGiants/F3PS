@@ -28,6 +28,7 @@ namespace StarterAssets
         public WeaponManager weaponManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
+        public HittableManager hittableManager;
         private Crosshair _crosshair;
         private PlayerHealthUI _playerHealthUI;
 
@@ -58,10 +59,6 @@ namespace StarterAssets
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
 
-        [Tooltip("How fast the character turns to face movement direction when aiming")]
-        [Range(0.0f, 1.0f)]
-        public float AimingRotationSmoothTime = 0.3f;
-
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -72,8 +69,8 @@ namespace StarterAssets
         public float SpeedChangeRate = 10.0f;
 
         [Tooltip("How fast the camera can revolve around the player")]
-        public float RotationSpeedY = 0.2f;
-        public float RotationSpeedX = 0.2f;
+        public float RotationSpeedPitch = 0.2f;
+        public float RotationSpeedYaw = 0.2f;
 
 
         [Space(10)]
@@ -232,6 +229,8 @@ namespace StarterAssets
         {
             if (GameManager.Instance.IsGamePaused) return;
 
+            if (_isDying) return;
+
             if (_input.restart && !_isRestartingGame && !_isDying)
             {
                 SceneLoader.Instance.ReloadScene();
@@ -275,6 +274,7 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
+            if (_isDying) return;
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;
 
@@ -294,11 +294,11 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplierY = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedY;
-                float deltaTimeMultiplierX = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedX;
+                float deltaTimeMultiplierPitch = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedPitch;
+                float deltaTimeMultiplierYaw = IsCurrentDeviceMouse ? 1.0f : Time.unscaledDeltaTime * RotationSpeedYaw;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplierX;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplierY;
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplierYaw;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplierPitch;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -347,7 +347,7 @@ namespace StarterAssets
             }
             _targetYaw = _mainCamera.transform.eulerAngles.y
                          + Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z);
-            _lookYaw = GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
+            _lookYaw = GetLookYaw(transform, _targetYaw);
             
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
@@ -391,7 +391,7 @@ namespace StarterAssets
             _speed = Mathf.Lerp(DodgeSpeed/2f, DodgeSpeed, Mathf.Pow(speedFactor,4f));
             _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
                          + _mainCamera.transform.eulerAngles.y;
-            _lookYaw = GetLookYaw(transform, _targetYaw, _cinemachineTargetYaw);
+            _lookYaw = GetLookYaw(transform, _targetYaw);
             
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
@@ -561,15 +561,13 @@ namespace StarterAssets
             staminaManager.UpdateAiming(_isAimingGrenade);
         }
 
-        public float GetLookYaw(Transform transform, float movementYaw, float cameraYaw)
+        public float GetLookYaw(Transform transform, float movementYaw)
         {
-            float smoothTime = _isAimingGrenade ? AimingRotationSmoothTime : RotationSmoothTime;
-            float yaw = _isDodging || _isSprinting ? movementYaw : cameraYaw;
             return Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
-                yaw,
+                movementYaw,
                 ref _rotationVelocity,
-                smoothTime * Time.unscaledDeltaTime
+                RotationSmoothTime * Time.unscaledDeltaTime
             );
         }
 
@@ -586,15 +584,19 @@ namespace StarterAssets
             return MoveSpeed;
         }
 
-        public void Hit(int damage)
+        public void Hit(int damage, Vector3 hitDirection)
         {
+            if (_isDying)
+            {
+                return;
+            }
             _health -= damage;
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
             _playerHealthUI.UpdateHealth((float)_health / maxHealth);
             if (_health <= 0 && !_isDying)
             {
                 _isDying = true;
-                Die();
+                Die(hitDirection);
             }
             else
             {
@@ -604,12 +606,17 @@ namespace StarterAssets
             animateMesh.HitFlash();
         }
 
-        private void Die()
+        private void Die(Vector3 hitDirection)
         {
+            _animator.SetFloat("XDieDirection", Vector3.Dot(-hitDirection.normalized, transform.right));
+            _animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
             _animator.SetTrigger("Die");
+            Destroy(hittableManager.gameObject);
+
+
             if (!_isRestartingGame)
             {
-                SceneLoader.Instance.ReloadScene();
+                SceneLoader.Instance.ReloadScene(5f);
             }
         }
 

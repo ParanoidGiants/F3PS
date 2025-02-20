@@ -35,6 +35,11 @@ namespace F3PS.AI.States
 
         public virtual void OnPhysicsUpdate()
         {
+            if (stateType == StateType.DYING)
+            {
+                return;
+            }
+
             if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.AGGRESSIVE);

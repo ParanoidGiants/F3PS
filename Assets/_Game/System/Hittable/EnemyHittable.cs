@@ -1,16 +1,20 @@
 using F3PS.AI.States.Action;
 using F3PS.Enemy;
+using StarterAssets;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
 {
     public class EnemyHittable : Hittable
     {
+        private int _playerId;
         public BaseEnemy enemy;
+
         void Awake()
         {
             _collider = GetComponent<Collider>();
             _hittableId = enemy.GetInstanceID();
+            _playerId = FindObjectOfType<ThirdPersonController>().playerSpace.GetInstanceID();
         }
 
         private void OnEnable()
@@ -24,7 +28,7 @@ namespace F3PS.Damage.Take
         }
 
         override
-        public void OnHit(HitBox hitBy)
+        public void OnHit(HitBox hitBy, Vector3 hitDirection)
         {
             if (enemy.IsDead)
             {
@@ -45,17 +49,18 @@ namespace F3PS.Damage.Take
                 damage = (int)(damageMultiplier * rush.damage);
             }
             enemy.Hit(damage);
+            if (hitBy.attackerId == _playerId)
+            {
+                OnHitByPlayer(hitDirection);
+            }
         }
 
-        internal void OnHitByPlayer(Vector3 hitDirection)
+        private void OnHitByPlayer(Vector3 hitDirection)
         {
-            if (enemy.StateManager.IsAggressive()) return;
+            if (enemy.StateManager.IsAggressive() || enemy.IsDead) return;
 
-            Debug.Log(enemy.name + " hit by player");
             enemy.navMeshAgent.destination = enemy.transform.position - hitDirection;
             enemy.StateManager.SwitchState(StateType.CHECKING);
-            Debug.Log(hitDirection);
-            Debug.DrawRay(transform.position, hitDirection, Color.red, 3f);
         }
     }
 }

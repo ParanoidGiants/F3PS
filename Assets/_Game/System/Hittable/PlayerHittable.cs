@@ -1,5 +1,6 @@
 using F3PS.AI.States.Action;
 using StarterAssets;
+using System;
 using UnityEngine;
 
 namespace F3PS.Damage.Take
@@ -7,7 +8,14 @@ namespace F3PS.Damage.Take
     public class PlayerHittable : Hittable
     {
         private ThirdPersonController _controller;
-        
+
+        public Action<Hittable> OnDestroyed;
+
+        private void OnDestroy()
+        {
+            OnDestroyed?.Invoke(this);
+        }
+
         void Awake()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
@@ -16,7 +24,7 @@ namespace F3PS.Damage.Take
         }
 
         override
-        public void OnHit(HitBox hitBy)
+        public void OnHit(HitBox hitBy, Vector3 hitDirection)
         {
             // Hit by projectile
             var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
@@ -32,7 +40,7 @@ namespace F3PS.Damage.Take
             {
                 damage = (int)(damageMultiplier * rush.damage);
             }
-            _controller.Hit(damage);
+            _controller.Hit(damage, hitDirection);
         }
     }
 }

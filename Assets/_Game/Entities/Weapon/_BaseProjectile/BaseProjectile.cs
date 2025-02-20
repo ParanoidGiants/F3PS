@@ -104,11 +104,7 @@ public class BaseProjectile : MonoBehaviour
         if (hittable != null 
             && hittable.HittableId != hitBox.attackerId
         ) {
-            if (hittable is EnemyHittable enemyHittable)
-            {
-                enemyHittable.OnHitByPlayer((-1) * other.impulse);
-            }
-            hittable.OnHit(hitBox);
+            hittable.OnHit(hitBox, transform.forward);
             hitParticleSystem.gameObject.SetActive(true);
         }
         else

@@ -18,6 +18,6 @@ namespace F3PS.Damage.Take
             return _collider.bounds.center;
         }
 
-        public virtual void OnHit(HitBox hitBy) { }
+        public virtual void OnHit(HitBox hitBy, Vector3 hitDirection) { }
     }
 }

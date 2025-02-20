@@ -819,7 +819,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1338597789668925173}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1064,8 +1064,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070925443028286612}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.719999, y: 1.913, z: 42.46}
+  m_LocalRotation: {x: -0, y: -0.10947819, z: -0, w: 0.9939892}
+  m_LocalPosition: {x: -8.341645, y: 1.005, z: 43.079994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1602,8 +1602,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2585070808375938922}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.4, y: -0.013, z: 50.3}
+  m_LocalRotation: {x: -0, y: -0.10947819, z: -0, w: 0.9939892}
+  m_LocalPosition: {x: -10.711645, y: -0.921, z: 50.58407}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1614,7 +1614,7 @@ Transform:
   - {fileID: 5358049144216984092}
   m_Father: {fileID: 6128214820260621315}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 9.769701, y: 18.88586, z: 2.284227}
 --- !u!95 &4482043466830890479
 Animator:
   serializedVersion: 5
@@ -1724,6 +1724,7 @@ MonoBehaviour:
   weaponManager: {fileID: 8118315732927897910}
   cameraShake: {fileID: 2616632145898068854}
   animateMesh: {fileID: 713014489}
+  hittableManager: {fileID: 1585131262}
   GroundedOffset: -0.45
   GroundedRadius: 0.54
   GroundLayers:
@@ -1731,12 +1732,11 @@ MonoBehaviour:
     m_Bits: 1
   maxHealth: 100
   RotationSmoothTime: 0.12
-  AimingRotationSmoothTime: 0.038
   MoveSpeed: 10
   SprintSpeed: 18
   SpeedChangeRate: 22
-  RotationSpeedY: 0.2
-  RotationSpeedX: 0.1
+  RotationSpeedPitch: 0.2
+  RotationSpeedYaw: 1
   JumpHeight: 8
   JumpCoolDownTimer: 0.5
   DodgeHeight: 1
@@ -1762,6 +1762,7 @@ MonoBehaviour:
   _isSlowMoStarted: 0
   _isAimingGrenade: 0
   _isRestartingGame: 0
+  _isDying: 0
   _rotationVelocity: 0
   _health: 0
   _speed: 0

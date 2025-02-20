@@ -12,7 +12,7 @@ public class BossHittable : Hittable
     }
 
     override
-    public void OnHit(HitBox hitBy)
+    public void OnHit(HitBox hitBy, Vector3 hitDirection)
     {
         // Hit by projectile
         var projectile = hitBy.GetComponent<BaseProjectile>();
