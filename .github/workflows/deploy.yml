@@ -172,4 +172,6 @@ jobs:
           else
             TARGET="$BUTLER_GAME_ID:html5"
           fi
+
+          echo "Uploading to game '$BUTLER_USER_NAME/$TARGET'"
           ~/butler push ~/current-build.zip $BUTLER_USER_NAME/$TARGET
