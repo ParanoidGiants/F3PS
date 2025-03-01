@@ -17,6 +17,7 @@ namespace F3PS.AI.States.Action
         public BaseEnemy enemy;
         public Material attackMaterial;
         public Material recoverMaterial;
+        public Animator animator;
         private Material _aggressiveMaterial;
 
         [Header("General Attack Settings")]

@@ -20,7 +20,11 @@ namespace F3PS.AI.States.Action
         private Collider _hitCollider;
         private Transform _enemyTransform;
         private HitBox _hitBox;
-        
+
+        [Space(10)]
+        [Header("Rush References")]
+        public GameObject chargeFlare;
+
         [Space(10)]
         [Header("Rush Settings")]
         public bool isCharging;
@@ -64,7 +68,6 @@ namespace F3PS.AI.States.Action
         public void OnStartAttack(Hittable hittable)
         {
             base.OnStartAttack(hittable);
-            _hitCollider.enabled = true;
             OnCharge();
         }
         
@@ -79,9 +82,9 @@ namespace F3PS.AI.States.Action
             }
             
             _wasEarlyHit = true;
-            if (hittable != null && hittable.hittableId != _hitBox.attackerId)
+            if (hittable != null && hittable.HittableId != _hitBox.attackerId)
             {
-                hittable.OnHit(_hitBox);
+                hittable.OnHit(_hitBox, enemy.transform.forward);
             }
         }
 
@@ -106,11 +109,15 @@ namespace F3PS.AI.States.Action
             _chargeStartPosition = _enemyTransform.position;
             _chargeForward = _enemyTransform.forward;
             _chargeEndPosition = _chargeStartPosition - _chargeForward * chargeStrength;
+            chargeFlare.SetActive(true);
+            animator.SetTrigger("Charge");
         }
         
         override
         protected void OnAttack()
         {
+            chargeFlare.SetActive(false);
+            _hitCollider.enabled = true;
             base.OnAttack();
 
             isAttacking = true;
@@ -120,6 +127,7 @@ namespace F3PS.AI.States.Action
             _attackEndPosition = _attackStartPosition + _attackForward * attackDistance;
             
             MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", _enemyTransform);
+            animator.SetTrigger("Attack");
         }
         
         override
@@ -131,8 +139,9 @@ namespace F3PS.AI.States.Action
             _hitCollider.enabled = false;
             _recoverStartPosition = _enemyTransform.position;
             _recoverForward = _enemyTransform.forward;
-            var strength = (_wasEarlyHit ? 1f : 0.5f) * this.recoverStrength;
+            var strength = this.recoverStrength;
             _recoverEndPosition = _recoverStartPosition - _recoverForward * strength;
+            animator.SetTrigger("Recover");
         }
             
         private void HandleCharging()
@@ -143,8 +152,16 @@ namespace F3PS.AI.States.Action
             {
                 OnAttack();
             }
-            
-            _enemyTransform.position = Vector3.Lerp(_chargeStartPosition, _chargeEndPosition, chargeTime / chargeTimer);
+
+            var enemyTransform = enemy.body.transform;
+            var lookDirection = _target.Center() - enemyTransform.position;
+            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+            var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            enemyTransform.rotation = Quaternion.RotateTowards(
+                enemyTransform.rotation,
+                newRotation,
+                enemy.ScaledDeltaTime * 80
+            );
         }
         override
         protected void HandleAttack()
@@ -155,7 +172,7 @@ namespace F3PS.AI.States.Action
             }
             else
             {
-                attackTime += enemy.ScaledDeltaTime;
+                attackTime += Mathf.Pow(enemy.timeObject.currentTimeScale, 4) * Time.deltaTime;
                 isAttacking = attackTime < attackTimer;
                 _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
             }

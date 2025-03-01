@@ -417,6 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 0
   enemySpeed: 0
   enemyStoppingDistance: 0
@@ -468,6 +469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 1
   enemySpeed: 5
   enemyStoppingDistance: 2
@@ -523,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 2
   enemySpeed: 4
   enemyStoppingDistance: 0
@@ -573,6 +576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 3
   enemySpeed: 0
   enemyStoppingDistance: 0
@@ -626,6 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 4
   enemySpeed: 3
   enemyStoppingDistance: 0
@@ -681,6 +686,61 @@ MonoBehaviour:
   defaultVision: {fileID: 3390804109366093350}
   aggressiveVision: {fileID: 3390804109126990868}
   aggressiveMovement: {fileID: 3390804110042760509}
+--- !u!1 &6097894776610851101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3999244082576052132}
+  - component: {fileID: 4056703789023878362}
+  m_Layer: 7
+  m_Name: Hittables
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3999244082576052132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097894776610851101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7874501508904201020}
+  m_Father: {fileID: 7355257768631384466}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4056703789023878362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097894776610851101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e804078b186744b9842608dbdfd18a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hittableRenderer: {fileID: 7874501508904201011}
+  shakeSource: {fileID: 0}
+  shakePower: 0
+  flash: 0
+  _emissionColor: {r: 1, g: 0, b: 0, a: 0}
+  flashEaseInAnimationDuration: 0.1
+  flashEaseOutAnimationDuration: 0.2
+  easeIn: 8
+  easeOut: 9
+  colliders: []
 --- !u!1 &7033205841911005262
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,7 +906,7 @@ Transform:
   - {fileID: 3390804110135604050}
   - {fileID: 6098287191083338888}
   m_Father: {fileID: 7355257768631384466}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6535353038984071311
 MonoBehaviour:
@@ -1016,7 +1076,7 @@ GameObject:
   - component: {fileID: 3025770809816011296}
   - component: {fileID: 1075320918615787717}
   m_Layer: 11
-  m_Name: Hittable
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1035,8 +1095,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 98723267095834350}
-  m_Father: {fileID: 7355257768631384466}
-  m_RootOrder: 1
+  m_Father: {fileID: 3999244082576052132}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7874501508904201021
 MeshFilter:
@@ -1147,7 +1207,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountOfTimeZones: 0
   currentTimeScale: 1
+  additionalTimeScale: 1
+  animateTransform: {fileID: 0}
+  renderers: []
+  scaleAnimationOffset: 0.2
+  animationDuration: 0.1
+  emissionColor: {r: 0, g: 0.7490196, b: 191, a: 255}
+  emissionEffect: 1
   agent: {fileID: 8818509671935900350}
+  animator: {fileID: 0}
 --- !u!1 &7874501509564256034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,6 +1453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 7874501509564256044}
   stateManager: {fileID: 6535353038984071311}
+  animator: {fileID: 0}
   stateType: 5
   enemySpeed: 5
   enemyStoppingDistance: 0
@@ -1420,8 +1489,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7883736632149064743}
-  - {fileID: 7874501508904201020}
   - {fileID: 4572814900443579839}
+  - {fileID: 3999244082576052132}
   m_Father: {fileID: 7874501509564256047}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

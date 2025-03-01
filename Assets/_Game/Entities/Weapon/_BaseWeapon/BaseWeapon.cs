@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cinemachine;
 using DarkTonic.MasterAudio;
 using UnityEngine;
 
@@ -7,12 +8,16 @@ namespace Weapon
 {
     public class BaseGun : MonoBehaviour
     {
-        [Header("Bullet References")]
+        [Header("References")]
+        public Transform meshHolder;
+        public CinemachineImpulseSource screenShakeSource;
+        
+        [Space(10)]
+        [Header("Projectile References")]
         public GameObject projectilePrefab;
         public Transform projectileSpawn;
         public ProjectilePool projectilePool;
-        public Transform meshHolder;
-        
+
         [Space(10)]
         [Header("Settings")]
         public Sprite icon;
@@ -22,31 +27,30 @@ namespace Weapon
         public float shootCoolDownTimer = 0.2f;
         public float reloadMagazineTimer = 1f;
         public bool isShooting = false;
+        public float recoilPower;
 
         [Space(10)] [Header("Watchers")]
-        public bool isPlayer;
         public int totalAmount = 100;
         public int currentMagazineAmount = 10;
         public float shootCoolDownTime = 0.0f;
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
         public WeaponUI weaponUI;
-        
-        protected virtual IEnumerator Shoot()
+
+        protected virtual IEnumerator Shoot(Vector3 targetPosition)
         {
             yield return null;
         }
 
-        public void InitForPlayer(Transform user, WeaponUI weaponUI = null)
+        protected void Shake(Vector3 recoilDirection)
         {
-            isPlayer = true;
-            Init(user);
-            this.weaponUI = weaponUI;
+            screenShakeSource.GenerateImpulseWithVelocity(recoilDirection * recoilPower);
         }
-        
-        public void Init(Transform user)
+
+        public void SetWeaponUI(WeaponUI weaponUI) { this.weaponUI = weaponUI; }
+        public void Init(Transform userSpace)
         {
-            projectilePool.Init(projectilePrefab, user, isPlayer);
+            projectilePool.Init(projectilePrefab, userSpace);
             totalAmount = maxAmmo;
             currentMagazineAmount = maxMagazineAmmo;
         }
@@ -81,7 +85,7 @@ namespace Weapon
             isReloadingMagazine = false;
         }
 
-        public virtual void HandleShoot(bool isShootingPressed) {}
+        public virtual void HandleShoot(bool isShootingPressed, Vector3 targetPosition) {}
 
         public void StartReloading()
         {

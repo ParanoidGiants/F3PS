@@ -13,10 +13,12 @@ namespace F3PS.Enemy
         public Rigidbody body;
 
         [Header("References")] public GameObject shield;
+        public Hittable[] _hittables;
         public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
         public PatrolManager patrolManager;
         public TimeObject timeObject;
+        public AnimateMesh animateMesh;
         public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
         public float TimeScale => timeObject.currentTimeScale;
         protected EnemyHealthUIPool _healthUIPool;
@@ -25,16 +27,18 @@ namespace F3PS.Enemy
         [SerializeField] protected EnemyStateManager _stateManager;
         public EnemyStateManager StateManager => _stateManager;
 
-
         [Space(10)]
         [Header("Settings")]
         public int maxHealth = 100;
+        public float moveSpeed;
         
         [Space(10)]
         [Header("Watchers")]
         public bool isActive = true;
         public int health;
-        [SerializeField] private Hittable[] _hittables;
+
+        private bool _isDead = false;
+        public bool IsDead => _isDead;
         
         public void Activate()
         {
@@ -89,21 +93,31 @@ namespace F3PS.Enemy
 
         public virtual void Hit(int damage)
         {
+            if (_stateManager.IsDying())
+            {
+                return;
+            }
             health -= damage;
             Debug.Log("Took " + damage + " damage");
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", body.transform);
             if (health <= 0)
             {
                 _healthUIPool.OnKillTarget(body.transform);
-                Destroy(gameObject);
+                _isDead = true;
+                _stateManager.SwitchState(StateType.DYING);
                 return;
             }
             _healthUIPool.OnHitTarget(this);
+            animateMesh.HitFlash();
+            _stateManager.Hit();
         }
 
         public virtual void SetMaterial(Material material)
         {
-            meshRenderer.sharedMaterial = material;
+            if (meshRenderer)
+            {
+                meshRenderer.sharedMaterial = material;
+            }
         }
 
         public void Deactivate()

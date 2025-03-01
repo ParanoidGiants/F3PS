@@ -12,7 +12,7 @@ namespace Weapon
         [SerializeField] private int _numberOfProjectiles;
         [SerializeField] private float _spreadAngle;
         override
-        public void HandleShoot(bool isShootingPressed)
+        public void HandleShoot(bool isShootingPressed, Vector3 targetPosition)
         {
             if (!_wasShootingPressedLastFrame && isShootingPressed)
             {
@@ -23,7 +23,7 @@ namespace Weapon
                 }
                 else
                 {
-                    StartCoroutine(Shoot());
+                    StartCoroutine(Shoot(targetPosition));
                     weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                 }
                 _wasShootingPressedLastFrame = true;
@@ -36,7 +36,7 @@ namespace Weapon
         
         
         override
-        protected IEnumerator Shoot()
+        protected IEnumerator Shoot(Vector3 targetPosition)
         {
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
@@ -46,13 +46,16 @@ namespace Weapon
             {
                 float xRotation = Random.Range(-_spreadAngle, _spreadAngle);
                 float yRotation = Random.Range(-_spreadAngle, _spreadAngle);
-                Quaternion projectileOrientation = Quaternion.Euler(xRotation, yRotation, 0f);
+                Quaternion projectileOrientation = Quaternion.Euler(xRotation, yRotation, 0f) * projectileSpawn.rotation;
+                var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - projectileSpawn.position);
                 projectilePool.ShootBullet(
                     projectileSpawn.position,
-                    projectileOrientation * meshHolder.rotation,
+                    projectileSpawn.position + targetDirection,
                     shotSpeed
                 );
             }
+            var shootDirection = targetPosition - projectileSpawn.position;
+            Shake(-shootDirection);
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
             while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {

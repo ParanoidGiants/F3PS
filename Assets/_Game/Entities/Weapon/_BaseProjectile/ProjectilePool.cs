@@ -3,35 +3,36 @@ using UnityEngine;
 
 public class ProjectilePool : MonoBehaviour
 {
+
+    [Header("Reference")]
+    public HittableManager hittableManager;
+
     [Header("Settings")]
     public int numberOfPooledObjects = 20;
     private List<BaseProjectile> _projectiles;
 
-    [Header("Watchers")]
-    public bool isPlayer;
 
-    public void Init(GameObject projectilePrefab, Transform user, bool isPlayer = false)
+    public void Init(GameObject projectilePrefab, Transform userSpace)
     {
-        this.isPlayer = isPlayer;
         _projectiles = new List<BaseProjectile>();
         Transform parent = new GameObject("Projectiles" + projectilePrefab.name).transform;
-        parent.transform.SetParent(user);
+        parent.transform.SetParent(userSpace);
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
             BaseProjectile projectile = Instantiate(projectilePrefab, parent).GetComponent<BaseProjectile>();
-            projectile.Init(user.GetInstanceID(), isPlayer);
+            projectile.Init(userSpace.GetInstanceID(), hittableManager);
             projectile.gameObject.SetActive(false);
             _projectiles.Add(projectile.GetComponent<BaseProjectile>());
         }
     }
 
-    public void ShootBullet(Vector3 fromPosition, Quaternion orientation, float shootSpeed)
+    public void ShootBullet(Vector3 fromPosition, Vector3 targetPosition, float shootSpeed)
     {
         foreach (BaseProjectile projectile in _projectiles)
         {
             if (!projectile.gameObject.activeInHierarchy)
             {
-                projectile.BeforeSetActive(fromPosition, orientation, shootSpeed);
+                projectile.BeforeSetActive(fromPosition, targetPosition, shootSpeed);
                 projectile.gameObject.SetActive(true);
                 return;
             }

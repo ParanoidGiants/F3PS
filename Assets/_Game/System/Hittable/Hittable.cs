@@ -5,20 +5,19 @@ namespace F3PS.Damage.Take
 {
     public class Hittable : MonoBehaviour
     {
-        [SerializeField] protected Collider _collider;
+        [Header("Settings")]
         public float damageMultiplier;
-        public int hittableId;
         
-        void Awake()
-        {
-            _collider = GetComponent<Collider>();
-        }
+        protected Collider _collider;
+        protected int _hittableId;
+
+        public int HittableId => _hittableId;
         
         public Vector3 Center()
         {
             return _collider.bounds.center;
         }
 
-        public virtual void OnHit(HitBox hitBy) { }
+        public virtual void OnHit(HitBox hitBy, Vector3 hitDirection) { }
     }
 }

@@ -16,7 +16,6 @@ namespace F3PS.AI.States.Action
         public BaseGun[] guns;
         public float requiredAngle;
 
-        private bool _isShootingPressed = false;
         public float shootTime = 0f;
         public float shootTimer;
         private BossEnemy _boss;
@@ -60,8 +59,8 @@ namespace F3PS.AI.States.Action
             bool isMagazineEmpty = false;
             foreach (var gun in guns)
             {
-                gun.HandleShoot(true);
-                gun.HandleShoot(false);
+                gun.HandleShoot(true, _target.Center());
+                gun.HandleShoot(false, _target.Center());
                 isMagazineEmpty = isMagazineEmpty || gun.IsMagazineEmpty();
             }
             if (isMagazineEmpty || !IsTargetInLineOfSight(_target.Center()))
