@@ -3,6 +3,10 @@ using UnityEngine;
 using TimeBending;
 
 using Weapon;
+using UnityEngine.Windows;
+using Cinemachine;
+
+
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -110,7 +114,7 @@ namespace StarterAssets
         
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject CinemachineCameraTarget;
+        public Transform PlayerCameraTarget;
 
         [Tooltip("How far in degrees can you move the camera up")]
         public float CameraTopClamp = 70.0f;
@@ -216,7 +220,8 @@ namespace StarterAssets
 
         private void Start()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            _currentCameraTarget = PlayerCameraTarget;
+            _cinemachineTargetYaw = PlayerCameraTarget.rotation.eulerAngles.y;
             // reset our timeouts on start
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
@@ -227,7 +232,12 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (GameManager.Instance.IsGamePaused) return;
+            HandlePauseGame();
+            if (GameManager.Instance.IsGamePaused)
+            {
+                HandlePauseGame();
+                return;
+            }
 
             if (_isDying) return;
 
@@ -272,6 +282,42 @@ namespace StarterAssets
             }
         }
 
+        [Space(10)]
+        [Header("Debug")]
+        public Transform _currentCameraTarget;
+        private bool _wasPausedLastFrame = false;
+        public Transform freeTarget;
+        public CinemachineVirtualCamera freeCamera;
+        public CinemachineVirtualCamera defaultCamera;
+        public float pauseGameSpeed = 20f;
+        private void HandlePauseGame()
+        {
+            bool isPausedThisFrame = _input.pause;
+            bool isKeyDown = !_wasPausedLastFrame && isPausedThisFrame;
+            _wasPausedLastFrame = isPausedThisFrame;
+            if (isKeyDown && !GameManager.Instance.timeManager.IsPaused)
+            {
+                GameManager.Instance.PauseGame();
+                freeCamera.gameObject.SetActive(true);
+                defaultCamera.gameObject.SetActive(false);
+                _currentCameraTarget = freeTarget;
+            }
+            else if (isKeyDown && GameManager.Instance.timeManager.IsPaused)
+            {
+                GameManager.Instance.ResumeGame();
+                freeCamera.gameObject.SetActive(false);
+                defaultCamera.gameObject.SetActive(true);
+                _currentCameraTarget = PlayerCameraTarget;
+            }
+            else if (GameManager.Instance.timeManager.IsPaused)
+            {
+                var speed = (_input.shoot ? 2f : 1f) * pauseGameSpeed;
+                var moveDirection = (_input.move.x * freeTarget.right + _input.move.y * freeTarget.forward).normalized;
+                freeTarget.position += speed * Time.unscaledDeltaTime * moveDirection;
+            }
+        }
+
+
         private void FixedUpdate()
         {
             if (_isDying) return;
@@ -285,10 +331,10 @@ namespace StarterAssets
         {
             if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
 
-            CameraRotation();
+            CameraTargetRotation();
         }
 
-        private void CameraRotation()
+        private void CameraTargetRotation()
         {
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
@@ -306,7 +352,7 @@ namespace StarterAssets
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, CameraBottomClamp, CameraTopClamp);
 
             // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
+            _currentCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
