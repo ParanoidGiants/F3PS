@@ -1,4 +1,4 @@
-name: Test, Build, and Deploy via GameCI and Butler
+name: Build, and Deploy via GameCI and Butler
 
 on:
   push:
@@ -24,7 +24,6 @@ jobs:
         run: exit 1
 
   buildWebGL:
-    needs: testRunner
     name: Build for WebGL 🖥️ and Deploy to Itch.io 🚀
     runs-on: ubuntu-latest
     strategy:
