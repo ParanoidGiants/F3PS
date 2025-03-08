@@ -1,0 +1,2 @@
+FROM unityci/editor:ubuntu-2021.3.45f1-webgl-3  
+RUN apt-get update && apt-get install -y --no-install-recommends blender
