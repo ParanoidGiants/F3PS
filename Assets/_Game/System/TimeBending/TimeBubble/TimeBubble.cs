@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,12 +6,14 @@ public class TimeBubble : MonoBehaviour
 {
     private readonly List<TimeObject> _timeObjects = new List<TimeObject>();
     public float timeScale = 0.05f;
+
+
+
     void OnTriggerEnter(Collider other)
     {
         TimeObject o = other.GetComponent<TimeObject>();
         if (o == null) return;
         
-        Debug.Log("SLOW DOWN " + other);
         if (o.amountOfTimeZones == 0)
         {
             o.PitchTimeScale(timeScale);

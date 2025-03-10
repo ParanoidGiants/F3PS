@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using F3PS.AI.Sensors;
+using System;
 
 namespace F3PS.AI.States
 {
@@ -37,6 +38,12 @@ namespace F3PS.AI.States
         
         public virtual void SwitchState(StateType stateType)
         {
+            if (_currentState.stateType == StateType.DYING)
+            {
+                Debug.LogWarning("Enemy is dying. State change is not possible");
+                return;
+            }
+
             _currentState.OnExit();
             _currentState = GetState(stateType);
             _currentState.OnEnter();
@@ -50,6 +57,24 @@ namespace F3PS.AI.States
         public bool IsAggressive()
         {
             return _currentState.stateType is StateType.AGGRESSIVE;
+        }
+
+        private bool IsAttacking()
+        {
+            return _currentState.stateType is StateType.AGGRESSIVE && (_currentState as Aggressive).IsAttacking;
+        }
+
+        public void Hit()
+        {
+            if (!IsAttacking())
+            {
+                SwitchState(StateType.HIT);
+            }
+        }
+
+        public bool IsDying()
+        {
+            return _currentState.stateType is StateType.DYING;
         }
     }
 }

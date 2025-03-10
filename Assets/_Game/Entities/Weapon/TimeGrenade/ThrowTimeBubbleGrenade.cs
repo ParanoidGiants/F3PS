@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Weapon
@@ -12,9 +11,9 @@ namespace Weapon
     public class ThrowTimeBubbleGrenade : MonoBehaviour
     {
         [Header("References")]
+        public Transform userSpace;
         public HittableManager hittableManager;
         public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
-        public TimeBubble timeBubble;
         public LineRenderer throwLine;
         public Transform spawnTransform;
         
@@ -34,9 +33,9 @@ namespace Weapon
 
         private void Awake()
         {
-            timeBubbleGrenadeProjectile.InitReferences();
             throwLine.positionCount = lineResolution;
-            
+
+            timeBubbleGrenadeProjectile.Init(userSpace.GetInstanceID(), hittableManager);
             var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
             foreach (var collider in hittableManager.colliders)
             {
@@ -90,7 +89,7 @@ namespace Weapon
             timeBubbleGrenadeProjectile.gameObject.SetActive(false);
             timeBubbleGrenadeProjectile.BeforeSetActive(
                 spawnTransform.position,
-                Quaternion.LookRotation(throwDirection, transform.up),
+                spawnTransform.position + throwDirection,
                 throwPower
             );
             timeBubbleGrenadeProjectile.gameObject.SetActive(true);

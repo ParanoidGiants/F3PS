@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class HittableManager : MonoBehaviour
 {
+    [Header("Watchers")]
     public Collider[] colliders;
-    void Awake()
+
+
+    private void Awake()
     {
         colliders = GetComponentsInChildren<Collider>();
     }

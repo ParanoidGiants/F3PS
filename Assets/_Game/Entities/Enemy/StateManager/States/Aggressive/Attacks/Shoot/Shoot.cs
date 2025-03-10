@@ -43,7 +43,7 @@ namespace F3PS.AI.States.Action
         {
             UpdateGunAndEnemyRotation();
             _isShootingPressed = !_isShootingPressed;
-            gun.HandleShoot(_isShootingPressed);
+            gun.HandleShoot(_isShootingPressed, _target.Center());
             
             
             if (gun.IsMagazineEmpty() || !IsTargetInLineOfSight(_target.Center()))

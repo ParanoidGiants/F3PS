@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Paranoid Giants
   productName: F3PS
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -697,9 +697,22 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: STARTER_ASSETS_PACKAGES_CHECKED
-    Standalone: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED
-    WebGL: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED
+    Android: STARTER_ASSETS_PACKAGES_CHECKED;DOTWEEN
+    EmbeddedLinux: DOTWEEN
+    GameCoreScarlett: DOTWEEN
+    GameCoreXboxOne: DOTWEEN
+    LinuxHeadlessSimulation: DOTWEEN
+    Lumin: DOTWEEN
+    Nintendo Switch: DOTWEEN
+    PS4: DOTWEEN
+    PS5: DOTWEEN
+    Stadia: DOTWEEN
+    Standalone: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED;DOTWEEN
+    WebGL: STARTER_ASSETS_PACKAGES_CHECKED;PHY2D_ENABLED;PHY3D_ENABLED;DOTWEEN
+    Windows Store Apps: DOTWEEN
+    XboxOne: DOTWEEN
+    iPhone: DOTWEEN
+    tvOS: DOTWEEN
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace F3PS.AI.States
 {
     public class Patrolling : State
@@ -11,13 +9,12 @@ namespace F3PS.AI.States
             _navMeshAgent.isStopped = false;
             enemy.patrolManager.SetNextPatrolPoint();
             _navMeshAgent.destination = enemy.patrolManager.CurrentPatrolPoint;
+            animator.SetFloat("Speed", 1f);
         }
         
         override
         public void OnExit()
         {
-            
-            Debug.Log("EXIT PATROL: " + enemy.name);
             _navMeshAgent.isStopped = true;
         }
 

@@ -12,7 +12,8 @@ namespace F3PS.AI.States
         protected NavMeshAgent _navMeshAgent;
         public BaseEnemy enemy;
         public EnemyStateManager stateManager;
-        
+        public Animator animator;
+
         [Space(10)]
         [Header("Base Settings")]
         public StateType stateType;
@@ -26,7 +27,7 @@ namespace F3PS.AI.States
         }
         public virtual void OnEnter()
         {
-            _navMeshAgent.speed = enemySpeed * enemy.TimeScale;
+            _navMeshAgent.speed = enemy.moveSpeed * enemySpeed * enemy.TimeScale;
             _navMeshAgent.stoppingDistance = enemyStoppingDistance;
             UpdateSensorState();
             enemy.SetMaterial(material);
@@ -34,6 +35,11 @@ namespace F3PS.AI.States
 
         public virtual void OnPhysicsUpdate()
         {
+            if (stateType == StateType.DYING)
+            {
+                return;
+            }
+
             if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
             {
                 stateManager.SwitchState(StateType.AGGRESSIVE);

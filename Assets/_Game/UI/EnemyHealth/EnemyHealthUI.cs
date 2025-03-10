@@ -8,6 +8,7 @@ public class EnemyHealthUI : MonoBehaviour
     private RectTransform _canvasRectTransform;
     private CinemachineBrain _cinemachineBrain;
     
+    public GameObject bar;
     public Transform target;
     public Image fillImage;
     public Vector2 offset;
@@ -32,10 +33,19 @@ public class EnemyHealthUI : MonoBehaviour
 
     private void UpdateUI(CinemachineBrain brain)
     {
-        if (brain == _cinemachineBrain && isTargetSet) 
+        if (brain != _cinemachineBrain || !isTargetSet) 
         {
-            _rectTransform.anchoredPosition = GetCanvasAnchoredPosition(target.position) + offset;
+            return;
         }
+
+        var enemyDirection = target.position - _cinemachineBrain.transform.position;
+        if (Vector3.Dot(_cinemachineBrain.transform.forward, enemyDirection) <= 0)
+        {
+            bar.SetActive(false);
+            return;
+        }
+        bar.SetActive(true);
+        _rectTransform.anchoredPosition = GetCanvasAnchoredPosition(target.position) + offset;
     }
 
     public Vector2 GetCanvasAnchoredPosition(Vector3 worldPosition)
