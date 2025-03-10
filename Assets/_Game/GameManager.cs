@@ -35,44 +35,17 @@ namespace F3PS
             inputs = FindObjectOfType<ThirdPersonController>().Input;
             timeManager = FindObjectOfType<TimeManager>();
         }
-        
-        private void Update()
+
+        public void PauseGame()
         {
-            HandlePauseGameSwitch();
+            GameManager.Instance.timeManager.PauseTime();
+            _isGamePaused = true;
         }
 
-        private bool _wasPausedLastFrame = false;
-        private void HandlePauseGameSwitch()
+        public void ResumeGame()
         {
-            bool isPausedThisFrame = inputs.pause;
-            bool isKeyDown = !_wasPausedLastFrame && isPausedThisFrame;
-            _wasPausedLastFrame = isPausedThisFrame;
-            if (isKeyDown && !_isGamePaused)
-            {
-                PauseTime();
-                _isGamePaused = true;
-            }
-            else if (isKeyDown && _isGamePaused)
-            {
-                ResumeTime();
-                _isGamePaused = false;
-            }
-        }
-
-        public void ResumeTime()
-        {
-            if (timeManager.IsPaused)
-            {
-                timeManager.ResumeTime();
-            }
-        }
-
-        public void PauseTime()
-        {
-            if (!timeManager.IsPaused)
-            {
-                timeManager.PauseTime();
-            }
+            GameManager.Instance.timeManager.ResumeTime();
+            _isGamePaused = false;
         }
     }
 }

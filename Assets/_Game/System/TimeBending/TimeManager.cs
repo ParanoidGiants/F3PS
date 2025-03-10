@@ -1,6 +1,7 @@
 using UnityEngine;
 using DarkTonic.MasterAudio;
 using System.Collections;
+using F3PS;
 
 namespace TimeBending
 {
@@ -78,16 +79,24 @@ namespace TimeBending
 
         public void PauseTime()
         {
+            if (IsPaused)
+            {
+                return;
+            }
+            _isPaused = true;
             Time.timeScale = 0f;
             Time.fixedDeltaTime = 0f;
-            _isPaused = true;
         }
         
         public void ResumeTime()
         {
+            if (!IsPaused)
+            {
+                return;
+            }
+            _isPaused = false;
             Time.timeScale = isActive ? slowdownFactor : 1f;
             Time.fixedDeltaTime = Time.timeScale / F3PS.GameManager.Instance.Fps;
-            _isPaused = false;
         }
     }
 }

@@ -82,14 +82,14 @@ namespace Weapon
         {
             if (isSwitchingWeapon && !isInSwitchWeaponMode)
             {
-                GameManager.Instance.PauseTime();
+                GameManager.Instance.timeManager.PauseTime();
                 // int nextWeaponIndex = (_activeWeaponIndex + 1) % weapons.Count;
                 _selectWeaponsPanel.SetActive(_activeWeaponIndex);
                 isInSwitchWeaponMode = true;
             }
             else if (!isSwitchingWeapon && isInSwitchWeaponMode)
             {
-                GameManager.Instance.ResumeTime();
+                GameManager.Instance.timeManager.ResumeTime();
                 ChooseWeapon(_selectWeaponsPanel.RetrieveSelection());
                 _selectWeaponsPanel.SetInactive();
                 isInSwitchWeaponMode = false;
