@@ -1,43 +1,33 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using F3PS;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Weapon
 {
     public class WeaponManager : MonoBehaviour
     {
+        [Header("References")]
+        public WeaponUI weaponUI;
+        public SelectWeaponsPanel selectWeaponsPanel;
         public ThrowTimeBubbleGrenade grenade;
         public List<BaseGun> weapons;
         private BaseGun _activeWeapon;
-        public BaseGun ActiveWeapon => _activeWeapon;
-        [SerializeField] private int _activeWeaponIndex = -1;
-        private bool isInSwitchWeaponMode = false;
-        private bool isSelecting = false;
-        private WeaponUI _weaponUI;
-        private SelectWeaponsPanel _selectWeaponsPanel;
-        
-        private void Awake()
-        {
-            weapons = GetComponentsInChildren<BaseGun>().ToList();
-            _weaponUI = FindObjectOfType<WeaponUI>();
-            _selectWeaponsPanel = FindObjectOfType<SelectWeaponsPanel>();
-        }
+
+        [Header("Watchers")]
+        public int _activeWeaponIndex = -1;
+        public bool isInSwitchWeaponMode = false;
+        public bool isSelecting = false;
 
         public void Init(Transform playerSpace)
         {
             foreach (var weapon in weapons)
             {
                 weapon.Init(playerSpace);
-                weapon.SetWeaponUI(_weaponUI);
                 weapon.gameObject.SetActive(false);
             }
-            ChooseWeapon(0);
-            _selectWeaponsPanel.Init(this);
-            grenade.weaponUI.SetGrenadeUIActive(grenade.gameObject.activeSelf);
+            selectWeaponsPanel.Init(this);
+            grenade.weaponUI.SetGrenadeUIActive(false);
         }
 
         private void ChooseWeapon(int i)
@@ -47,51 +37,56 @@ namespace Weapon
             _activeWeapon = weapons[i];
             _activeWeapon.gameObject.SetActive(true);
             
-            _weaponUI.UpdateAmmoText(
-                ActiveWeapon.currentMagazineAmount, 
-                ActiveWeapon.totalAmount
+            weaponUI.UpdateAmmoText(
+                _activeWeapon.currentMagazineAmount, 
+                _activeWeapon.totalAmount
             );
-            _weaponUI.UpdateImage(ActiveWeapon.icon);
+            weaponUI.UpdateImage(_activeWeapon.icon);
         }
 
         public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
         {
-            if (grenade.HandleThrow(isAimingGrenade, targetPosition) || ActiveWeapon.isReloadingMagazine)
+            if (_activeWeapon == null) return;
+
+            if (grenade.HandleThrow(isAimingGrenade, targetPosition) || _activeWeapon.isReloadingMagazine)
             {
                 return;
             }
 
             if (isReloading)
             {
-                ActiveWeapon.StartReloading();
+                _activeWeapon.StartReloading();
             }
             else
             {
-                ActiveWeapon.HandleShoot(isShooting, targetPosition);
+                _activeWeapon.HandleShoot(isShooting, targetPosition);
             }
         }
 
         public void OnFixedUpdate(Vector3 targetPosition)
         {
-            var gunForward = targetPosition - ActiveWeapon.transform.position;
+            if (_activeWeapon == null) return;
+
+            var gunForward = targetPosition - _activeWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
-            ActiveWeapon.UpdateRotation(gunRotation);
+            _activeWeapon.UpdateRotation(gunRotation);
         }
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)
         {
+            if (weapons.Count(w => w.isUnlocked) <= 1 || _activeWeapon.isReloadingMagazine) return;
+
             if (isSwitchingWeapon && !isInSwitchWeaponMode)
             {
                 GameManager.Instance.timeManager.PauseTime();
-                // int nextWeaponIndex = (_activeWeaponIndex + 1) % weapons.Count;
-                _selectWeaponsPanel.SetActive(_activeWeaponIndex);
+                selectWeaponsPanel.SetActive(_activeWeaponIndex);
                 isInSwitchWeaponMode = true;
             }
             else if (!isSwitchingWeapon && isInSwitchWeaponMode)
             {
                 GameManager.Instance.timeManager.ResumeTime();
-                ChooseWeapon(_selectWeaponsPanel.RetrieveSelection());
-                _selectWeaponsPanel.SetInactive();
+                ChooseWeapon(selectWeaponsPanel.RetrieveSelection());
+                selectWeaponsPanel.SetInactive();
                 isInSwitchWeaponMode = false;
                 isSelecting = false;
             }
@@ -99,12 +94,12 @@ namespace Weapon
             {
                 if (lookX > 0.1f)
                 {
-                    _selectWeaponsPanel.SelectNextWeapon();
+                    selectWeaponsPanel.SelectNextWeapon();
                     isSelecting = true;
                 }
                 else if (lookX < -0.1f)
                 {
-                    _selectWeaponsPanel.SelectPreviousWeapon();
+                    selectWeaponsPanel.SelectPreviousWeapon();
                     isSelecting = true;
                 }
             }
@@ -112,6 +107,11 @@ namespace Weapon
             {
                 isSelecting = false;
             }
+        }
+
+        public bool IsActive(BaseGun weapon)
+        {
+            return _activeWeapon != null && _activeWeapon == weapon;
         }
     }
 }

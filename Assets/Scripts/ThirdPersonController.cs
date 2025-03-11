@@ -3,11 +3,7 @@ using UnityEngine;
 using TimeBending;
 
 using Weapon;
-using UnityEngine.Windows;
 using Cinemachine;
-
-
-
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -226,7 +222,6 @@ namespace StarterAssets
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
             _dodgeCoolDownTime = DodgeCoolDownTimer;
-
             weaponManager.Init(playerSpace);
         }
 
@@ -247,10 +242,7 @@ namespace StarterAssets
                 _isRestartingGame = true;
             }
 
-            if (!weaponManager.ActiveWeapon.isReloadingMagazine)
-            {
-                weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
-            }
+            weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
 
             if (GameManager.Instance.timeManager.IsPaused) return;
 
@@ -320,6 +312,7 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
+
             if (_isDying) return;
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;

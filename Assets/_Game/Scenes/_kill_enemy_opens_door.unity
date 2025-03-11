@@ -23131,26 +23131,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1588156886137979279, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: freeCamera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2602475737655182291, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: freeTarget
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4473622566383276541, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5635362313151117394, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -23325,16 +23305,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerSpace
-      objectReference: {fileID: 0}
-    - target: {fileID: 7513071543682358439, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7792972036735780437, guid: 4d4db73df165e4d40aed90ef571a18f0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8035988881084857064, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
