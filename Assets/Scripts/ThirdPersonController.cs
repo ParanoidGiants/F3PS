@@ -29,7 +29,6 @@ namespace StarterAssets
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
-        private Crosshair _crosshair;
         private PlayerHealthUI _playerHealthUI;
 
         [Space(20)]
@@ -209,7 +208,6 @@ namespace StarterAssets
             Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
-            _crosshair = FindObjectOfType<Crosshair>();
 
             _health = maxHealth;
         }
@@ -253,8 +251,7 @@ namespace StarterAssets
             weaponManager.OnUpdate(
                 _isAimingGrenade,
                 _isShooting,
-                _isReloading,
-                _crosshair.GetTargetPosition()
+                _isReloading
             );
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
@@ -317,7 +314,7 @@ namespace StarterAssets
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;
 
-            weaponManager.OnFixedUpdate(_crosshair.GetTargetPosition());
+            weaponManager.OnFixedUpdate();
         }
 
         private void LateUpdate()

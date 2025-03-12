@@ -21,7 +21,7 @@ public class SelectWeaponsPanel : MonoBehaviour
             var selectableWeaponUI = Instantiate(selectableWeaponUIPrefab, selectableWeaponsParent.transform).GetComponent<SelectableWeaponEntry>();
             selectableWeaponUI.Setup(weapon);
             selectableWeaponUIs.Add(selectableWeaponUI);
-            if (_weaponManager.IsActive(weapon))
+            if (weaponManager.IsActive(weapon))
             {
                 _activeWeaponIndex = i;
                 _selectedWeaponIndex = i;

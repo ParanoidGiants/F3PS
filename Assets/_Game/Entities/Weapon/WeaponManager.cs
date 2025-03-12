@@ -10,14 +10,19 @@ namespace Weapon
         [Header("References")]
         public WeaponUI weaponUI;
         public SelectWeaponsPanel selectWeaponsPanel;
+        public Crosshair crosshair;
         public ThrowTimeBubbleGrenade grenade;
         public List<BaseGun> weapons;
-        private BaseGun _activeWeapon;
+        public BaseGun _activeWeapon;
+        
 
         [Header("Watchers")]
         public int _activeWeaponIndex = -1;
         public bool isInSwitchWeaponMode = false;
         public bool isSelecting = false;
+        public bool isOneWeaponUnlocked;
+        
+        private Vector3 _aimTargetPosition;
 
         public void Init(Transform playerSpace)
         {
@@ -28,6 +33,10 @@ namespace Weapon
             }
             selectWeaponsPanel.Init(this);
             grenade.weaponUI.SetGrenadeUIActive(false);
+            
+            selectWeaponsPanel.gameObject.SetActive(isOneWeaponUnlocked);
+            weaponUI.gameObject.SetActive(isOneWeaponUnlocked);
+            crosshair.gameObject.SetActive(isOneWeaponUnlocked);
         }
 
         private void ChooseWeapon(int i)
@@ -44,11 +53,13 @@ namespace Weapon
             weaponUI.UpdateImage(_activeWeapon.icon);
         }
 
-        public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading, Vector3 targetPosition)
+        public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading)
         {
-            if (_activeWeapon == null) return;
+            isOneWeaponUnlocked = weapons.Any(w => w.isUnlocked);
+            if (!isOneWeaponUnlocked) return;
 
-            if (grenade.HandleThrow(isAimingGrenade, targetPosition) || _activeWeapon.isReloadingMagazine)
+            // TODO: Refactor for crosshair to only ray cast once per frame and only when needed
+            if (grenade.HandleThrow(isAimingGrenade, _aimTargetPosition) || _activeWeapon.isReloadingMagazine)
             {
                 return;
             }
@@ -59,22 +70,22 @@ namespace Weapon
             }
             else
             {
-                _activeWeapon.HandleShoot(isShooting, targetPosition);
+                _activeWeapon.HandleShoot(isShooting, _aimTargetPosition);
             }
         }
 
-        public void OnFixedUpdate(Vector3 targetPosition)
+        public void OnFixedUpdate()
         {
-            if (_activeWeapon == null) return;
-
-            var gunForward = targetPosition - _activeWeapon.transform.position;
+            if (!isOneWeaponUnlocked) return;
+            _aimTargetPosition = crosshair.GetTargetPosition();
+            var gunForward = _aimTargetPosition - _activeWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
             _activeWeapon.UpdateRotation(gunRotation);
         }
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)
         {
-            if (weapons.Count(w => w.isUnlocked) <= 1 || _activeWeapon.isReloadingMagazine) return;
+            if (!isOneWeaponUnlocked || _activeWeapon.isReloadingMagazine) return;
 
             if (isSwitchingWeapon && !isInSwitchWeaponMode)
             {
