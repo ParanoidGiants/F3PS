@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
@@ -106,6 +107,11 @@ namespace Weapon
         public bool IsMagazineEmpty()
         {
             return currentMagazineAmount <= 0;
+        }
+
+        public void Unlock()
+        {
+            isUnlocked = true;
         }
     }
 }

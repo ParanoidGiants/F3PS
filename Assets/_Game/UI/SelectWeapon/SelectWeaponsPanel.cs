@@ -12,16 +12,15 @@ public class SelectWeaponsPanel : MonoBehaviour
     [SerializeField] private int _selectedWeaponIndex = -1;
     public Color activeWeaponColor;
     
-    public void Init(WeaponManager weaponManager)
+    public void Init()
     {
-        _weaponManager = weaponManager;
         for (int i = 0; i < _weaponManager.weapons.Count; i++)
         {
             var weapon = _weaponManager.weapons[i];
             var selectableWeaponUI = Instantiate(selectableWeaponUIPrefab, selectableWeaponsParent.transform).GetComponent<SelectableWeaponEntry>();
             selectableWeaponUI.Setup(weapon);
             selectableWeaponUIs.Add(selectableWeaponUI);
-            if (weaponManager.IsActive(weapon))
+            if (_weaponManager.IsSelected(weapon))
             {
                 _activeWeaponIndex = i;
                 _selectedWeaponIndex = i;

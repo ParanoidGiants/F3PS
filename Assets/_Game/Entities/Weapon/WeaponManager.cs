@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using F3PS;
@@ -8,12 +9,13 @@ namespace Weapon
     public class WeaponManager : MonoBehaviour
     {
         [Header("References")]
+        public Transform playerSpace;
         public WeaponUI weaponUI;
         public SelectWeaponsPanel selectWeaponsPanel;
         public Crosshair crosshair;
         public ThrowTimeBubbleGrenade grenade;
         public List<BaseGun> weapons;
-        public BaseGun _activeWeapon;
+        public BaseGun _selectedWeapon;
         
 
         [Header("Watchers")]
@@ -24,18 +26,15 @@ namespace Weapon
         
         private Vector3 _aimTargetPosition;
 
-        public void Init(Transform playerSpace)
+        public void Init()
         {
             foreach (var weapon in weapons)
             {
                 weapon.Init(playerSpace);
                 weapon.gameObject.SetActive(false);
             }
-            selectWeaponsPanel.Init(this);
-            grenade.weaponUI.SetGrenadeUIActive(false);
-            
-            selectWeaponsPanel.gameObject.SetActive(isOneWeaponUnlocked);
-            weaponUI.gameObject.SetActive(isOneWeaponUnlocked);
+            selectWeaponsPanel.Init();
+            weaponUI.SetGrenadeVisible(grenade.isUnlocked);
             crosshair.gameObject.SetActive(isOneWeaponUnlocked);
         }
 
@@ -43,14 +42,14 @@ namespace Weapon
         {
             weapons[_activeWeaponIndex].gameObject.SetActive(false);
             _activeWeaponIndex = i;
-            _activeWeapon = weapons[i];
-            _activeWeapon.gameObject.SetActive(true);
+            _selectedWeapon = weapons[i];
+            _selectedWeapon.gameObject.SetActive(true);
             
             weaponUI.UpdateAmmoText(
-                _activeWeapon.currentMagazineAmount, 
-                _activeWeapon.totalAmount
+                _selectedWeapon.currentMagazineAmount, 
+                _selectedWeapon.totalAmount
             );
-            weaponUI.UpdateImage(_activeWeapon.icon);
+            weaponUI.UpdateImage(_selectedWeapon.icon);
         }
 
         public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading)
@@ -59,18 +58,18 @@ namespace Weapon
             if (!isOneWeaponUnlocked) return;
 
             // TODO: Refactor for crosshair to only ray cast once per frame and only when needed
-            if (grenade.HandleThrow(isAimingGrenade, _aimTargetPosition) || _activeWeapon.isReloadingMagazine)
+            if (grenade.HandleThrow(isAimingGrenade, _aimTargetPosition) || _selectedWeapon.isReloadingMagazine)
             {
                 return;
             }
 
             if (isReloading)
             {
-                _activeWeapon.StartReloading();
+                _selectedWeapon.StartReloading();
             }
             else
             {
-                _activeWeapon.HandleShoot(isShooting, _aimTargetPosition);
+                _selectedWeapon.HandleShoot(isShooting, _aimTargetPosition);
             }
         }
 
@@ -78,14 +77,14 @@ namespace Weapon
         {
             if (!isOneWeaponUnlocked) return;
             _aimTargetPosition = crosshair.GetTargetPosition();
-            var gunForward = _aimTargetPosition - _activeWeapon.transform.position;
+            var gunForward = _aimTargetPosition - _selectedWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
-            _activeWeapon.UpdateRotation(gunRotation);
+            _selectedWeapon.UpdateRotation(gunRotation);
         }
 
         public void HandleSwitchWeapon(bool isSwitchingWeapon, float lookX)
         {
-            if (!isOneWeaponUnlocked || _activeWeapon.isReloadingMagazine) return;
+            if (!isOneWeaponUnlocked || _selectedWeapon.isReloadingMagazine) return;
 
             if (isSwitchingWeapon && !isInSwitchWeaponMode)
             {
@@ -120,9 +119,17 @@ namespace Weapon
             }
         }
 
-        public bool IsActive(BaseGun weapon)
+        public bool IsSelected(BaseGun weapon)
         {
-            return _activeWeapon != null && _activeWeapon == weapon;
+            return _selectedWeapon != null && _selectedWeapon == weapon;
+        }
+
+        public void UnlockPistol()
+        {
+            weapons[0].Unlock();
+            ChooseWeapon(0);
+            weaponUI.SetGunVisible(true);
+            crosshair.gameObject.SetActive(true);
         }
     }
 }

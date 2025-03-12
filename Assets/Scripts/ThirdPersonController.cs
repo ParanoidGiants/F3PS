@@ -22,7 +22,6 @@ namespace StarterAssets
     public class ThirdPersonController : MonoBehaviour
     {
         [Header("References")]
-        public Transform playerSpace;
         public StaminaManager staminaManager;
         public TimeManager timeManager;
         public WeaponManager weaponManager;
@@ -220,7 +219,7 @@ namespace StarterAssets
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
             _dodgeCoolDownTime = DodgeCoolDownTimer;
-            weaponManager.Init(playerSpace);
+            weaponManager.Init();
         }
 
         private void Update()
