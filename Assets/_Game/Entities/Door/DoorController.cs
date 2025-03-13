@@ -3,6 +3,30 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
+    #region DEBUG
+    [Header("Debug")]
+    public bool debug = false;
+    public bool openClose = false;
+    private void Update()
+    {
+        if (!debug)
+        {
+            return;
+        }
+        if (!_open && openClose)
+        {
+            OpenDoor();
+        }
+
+        if (_open && !openClose)
+        {
+            CloseDoor();
+        }
+    }
+
+    #endregion DEBUG
+
+    [Space(10)]
     [Header("Reference")]
     [SerializeField] private Transform _door;
 
@@ -13,29 +37,14 @@ public class DoorController : MonoBehaviour
     [SerializeField] private float _openPosition = 1.5f;
     [SerializeField] private float _closePosition = 0.5f;
 
-    [Space(10)]
-    [Header("Debug")]
-    public bool openClose = false;
-
-    private void Update()
+    public void OpenDoor()
     {
-        if (!_open && openClose)
-        {
-            OnOpenDoor();
-        }
-
-        if (_open && !openClose)
-        {
-            OnCloseDoor();
-        }
-    }
-
-    private void OnOpenDoor()
-    {
+        Debug.Log("Open Door");
         if (_open)
         {
             return;
         }
+        Debug.Log("Open Door");
         _open = true;
 
         // Kill any existing animation on _door
@@ -45,7 +54,7 @@ public class DoorController : MonoBehaviour
         _door.DOLocalMoveY(_openPosition, animationDuration);
     }
 
-    private void OnCloseDoor()
+    private void CloseDoor()
     {
         if (!_open)
         {

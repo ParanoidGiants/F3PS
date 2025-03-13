@@ -1,9 +1,9 @@
 using StarterAssets;
 using UnityEngine;
-using Weapon;
 
 public class UnlockPistol : MonoBehaviour
 {
+    public SpawnEnemy spawnEnemy;
     private void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponent<ThirdPersonController>();
@@ -13,6 +13,7 @@ public class UnlockPistol : MonoBehaviour
         }
 
         player.weaponManager.UnlockPistol();
+        spawnEnemy.Spawn();
         Destroy(gameObject);
     }
 }

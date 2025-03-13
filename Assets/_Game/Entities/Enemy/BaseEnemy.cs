@@ -39,7 +39,9 @@ namespace F3PS.Enemy
 
         private bool _isDead = false;
         public bool IsDead => _isDead;
-        
+        public delegate void DeathHandler();
+        public event DeathHandler Dead;
+
         public void Activate()
         {
             isActive = true;
@@ -114,7 +116,7 @@ namespace F3PS.Enemy
 
         public virtual void SetMaterial(Material material)
         {
-            if (meshRenderer)
+            if (meshRenderer != null)
             {
                 meshRenderer.sharedMaterial = material;
             }
@@ -130,6 +132,12 @@ namespace F3PS.Enemy
             {
                 hittable.enabled = false;
             }
+        }
+
+        internal void Died()
+        {
+            Dead?.Invoke();
+            Destroy(gameObject);
         }
     }
 }

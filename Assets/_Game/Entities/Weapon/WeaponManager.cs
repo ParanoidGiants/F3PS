@@ -31,8 +31,8 @@ namespace Weapon
             foreach (var weapon in weapons)
             {
                 weapon.Init(playerSpace);
-                weapon.gameObject.SetActive(false);
             }
+            _selectedWeapon = weapons.FirstOrDefault(w => w.isUnlocked);
             selectWeaponsPanel.Init();
             weaponUI.SetGrenadeVisible(grenade.isUnlocked);
             crosshair.gameObject.SetActive(isOneWeaponUnlocked);
