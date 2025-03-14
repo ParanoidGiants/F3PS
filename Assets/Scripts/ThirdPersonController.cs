@@ -225,6 +225,7 @@ namespace StarterAssets
         private void Update()
         {
             HandlePauseGame();
+            if (!canControlPlayer) return;
             if (GameManager.Instance.IsGamePaused)
             {
                 HandlePauseGame();
@@ -278,6 +279,17 @@ namespace StarterAssets
         public CinemachineVirtualCamera freeCamera;
         public CinemachineVirtualCamera defaultCamera;
         public float pauseGameSpeed = 20f;
+        public bool canControlPlayer = true;
+
+        public void StopControlPlayer()
+        {
+            canControlPlayer = false;
+        }
+        public void ResumeControlPlayer()
+        {
+            canControlPlayer = true;
+        }
+
         private void HandlePauseGame()
         {
             bool isPausedThisFrame = _input.pause;
@@ -308,7 +320,7 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
-
+            if (!canControlPlayer) return;
             if (_isDying) return;
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;
@@ -318,6 +330,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (!canControlPlayer) return;
             if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
 
             CameraTargetRotation();

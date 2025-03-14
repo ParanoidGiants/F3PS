@@ -105232,6 +105232,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6170025711916257235, guid: 6cc946c995453b34a82abbf14a12ccf5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2541874962982027758, guid: a631f2127b6d8f64aa10890597ff574b,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cc946c995453b34a82abbf14a12ccf5, type: 3}
 --- !u!4 &8743913109940997359 stripped
@@ -105327,6 +105333,12 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6170025711916257235, guid: 6cc946c995453b34a82abbf14a12ccf5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2541874962982027758, guid: a631f2127b6d8f64aa10890597ff574b,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 6170025711699871845, guid: 6cc946c995453b34a82abbf14a12ccf5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6cc946c995453b34a82abbf14a12ccf5, type: 3}
@@ -105342,7 +105354,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8743913108987468509}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3240563221179533109
+--- !u!114 &1128552459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105351,17 +105363,116 @@ MonoBehaviour:
   m_GameObject: {fileID: 3240563222561002170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2624e45d8f3cd34fb7771f6a3500d5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6542626f0978c7644a147605db53cd0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
   openClose: 0
   _door: {fileID: 3240563222509507856}
+  _cameraRumble: {fileID: 1128552462}
   _open: 0
   _animationDuration: 5
   _openPosition: 1.5
   _closePosition: 0.5
-  enemy: {fileID: 0}
+--- !u!114 &1128552460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240563222561002170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 11648f465c1092447a702693b3d82736, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1128552459}
+          m_TargetAssemblyTypeName: DoorController, Assembly-CSharp
+          m_MethodName: OpenDoor
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1128552461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240563222561002170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 1
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.05
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &1128552462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240563222561002170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791c13e97dbef994bb94482c2a4b8d54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  triggerRumble: 0
+  rumbleDuration: 3
+  rumbleIntensityRandomRange: {x: 0.2, y: 0.5}
 --- !u!4 &3240563222561002171 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6170025711699871846, guid: 6cc946c995453b34a82abbf14a12ccf5,

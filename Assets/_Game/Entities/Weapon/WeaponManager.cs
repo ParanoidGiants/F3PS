@@ -32,7 +32,7 @@ namespace Weapon
             {
                 weapon.Init(playerSpace);
             }
-            _selectedWeapon = weapons.FirstOrDefault(w => w.isUnlocked);
+            _selectedWeapon = weapons.FirstOrDefault(w => w.IsUnlocked);
             selectWeaponsPanel.Init();
             weaponUI.SetGrenadeVisible(grenade.isUnlocked);
             crosshair.gameObject.SetActive(isOneWeaponUnlocked);
@@ -54,7 +54,7 @@ namespace Weapon
 
         public void OnUpdate(bool isAimingGrenade, bool isShooting, bool isReloading)
         {
-            isOneWeaponUnlocked = weapons.Any(w => w.isUnlocked);
+            isOneWeaponUnlocked = weapons.Any(w => w.IsUnlocked);
             if (!isOneWeaponUnlocked) return;
 
             // TODO: Refactor for crosshair to only ray cast once per frame and only when needed

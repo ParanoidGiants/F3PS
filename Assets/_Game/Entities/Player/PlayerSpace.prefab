@@ -1261,7 +1261,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 1
+  m_Priority: 2
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1204151532081024997}
   m_Follow: {fileID: 1204151532081024997}
@@ -1770,6 +1770,7 @@ GameObject:
   - component: {fileID: 2602475737655182291}
   - component: {fileID: 8482234456506793290}
   - component: {fileID: 6430316854099993046}
+  - component: {fileID: 1753395287}
   m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
@@ -1973,6 +1974,7 @@ MonoBehaviour:
   freeCamera: {fileID: 21158771}
   defaultCamera: {fileID: 2070925443028286826}
   pauseGameSpeed: 20
+  canControlPlayer: 0
 --- !u!114 &8482234456506793290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,6 +2005,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _frames: 0
+--- !u!114 &1753395287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585070808375938922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: c53d82f05e02a9441be110c6c9708128, type: 2}
+    - {fileID: 11400000, guid: cac413524ad720741b80b9070d0c9bae, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2602475737655182291}
+          m_TargetAssemblyTypeName: StarterAssets.ThirdPersonController, Assembly-CSharp
+          m_MethodName: StopControlPlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2602475737655182291}
+          m_TargetAssemblyTypeName: StarterAssets.ThirdPersonController, Assembly-CSharp
+          m_MethodName: ResumeControlPlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2615087080052962260
 GameObject:
   m_ObjectHideFlags: 0

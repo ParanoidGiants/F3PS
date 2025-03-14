@@ -11,7 +11,7 @@ namespace Weapon
         public Transform meshHolder;
         public WeaponUI weaponUI;
         public CinemachineImpulseSource screenShakeSource;
-        
+
         [Space(10)]
         [Header("Projectile References")]
         public GameObject projectilePrefab;
@@ -29,13 +29,15 @@ namespace Weapon
         public bool isShooting = false;
         public float recoilPower;
 
-        [Space(10)] [Header("Watchers")]
-        public bool isUnlocked;
+        [Space(10)][Header("Watchers")]
         public int totalAmount = 100;
         public int currentMagazineAmount = 10;
         public float shootCoolDownTime = 0.0f;
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
+
+        [SerializeField] private bool _isUnlocked;
+        public bool IsUnlocked => _isUnlocked;
 
         protected virtual IEnumerator Shoot(Vector3 targetPosition)
         {
@@ -111,7 +113,7 @@ namespace Weapon
 
         public void Unlock()
         {
-            isUnlocked = true;
+            _isUnlocked = true;
         }
     }
 }

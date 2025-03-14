@@ -29,6 +29,7 @@ public class DoorController : MonoBehaviour
     [Space(10)]
     [Header("Reference")]
     [SerializeField] private Transform _door;
+    [SerializeField] private CameraRumble _cameraRumble;
 
     [Space(10)]
     [Header("Watcher")]
@@ -39,12 +40,10 @@ public class DoorController : MonoBehaviour
 
     public void OpenDoor()
     {
-        Debug.Log("Open Door");
         if (_open)
         {
             return;
         }
-        Debug.Log("Open Door");
         _open = true;
 
         // Kill any existing animation on _door
@@ -52,6 +51,7 @@ public class DoorController : MonoBehaviour
 
         float animationDuration = _animationDuration * (_openPosition - _door.localPosition.y) / (_openPosition - _closePosition);
         _door.DOLocalMoveY(_openPosition, animationDuration);
+        _cameraRumble.TriggerRumble(animationDuration);
     }
 
     private void CloseDoor()
@@ -67,5 +67,6 @@ public class DoorController : MonoBehaviour
 
         float animationDuration = _animationDuration * (_door.localPosition.y - _closePosition) / (_openPosition - _closePosition);
         _door.DOLocalMoveY(_closePosition, animationDuration);
+        _cameraRumble.TriggerRumble(animationDuration);
     }
 }
