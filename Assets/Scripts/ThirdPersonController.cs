@@ -21,6 +21,19 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+
+        [Header("Debug")]
+        public Transform _currentCameraTarget;
+        private bool _wasPausedLastFrame = false;
+        public GameObject pausedText;
+        public GameObject slowMoText;
+        public Transform freeTarget;
+        public CinemachineVirtualCamera freeCamera;
+        public CinemachineVirtualCamera defaultCamera;
+        public float pauseGameSpeed = 20f;
+        public bool canControlPlayer = true;
+
+        [Space(10)]
         [Header("References")]
         public StaminaManager staminaManager;
         public TimeManager timeManager;
@@ -226,11 +239,6 @@ namespace StarterAssets
         {
             HandlePauseGame();
             if (!canControlPlayer) return;
-            if (GameManager.Instance.IsGamePaused)
-            {
-                HandlePauseGame();
-                return;
-            }
 
             if (_isDying) return;
 
@@ -247,7 +255,7 @@ namespace StarterAssets
             GroundedCheck();
             _isShooting = _input.shoot;
             _isReloading = _input.reload;
-            _isAimingGrenade = weaponManager.grenade.gameObject.activeSelf && _input.aimGrenade;
+            _isAimingGrenade = _input.aimGrenade;
             weaponManager.OnUpdate(
                 _isAimingGrenade,
                 _isShooting,
@@ -271,19 +279,10 @@ namespace StarterAssets
             }
         }
 
-        [Space(10)]
-        [Header("Debug")]
-        public Transform _currentCameraTarget;
-        private bool _wasPausedLastFrame = false;
-        public Transform freeTarget;
-        public CinemachineVirtualCamera freeCamera;
-        public CinemachineVirtualCamera defaultCamera;
-        public float pauseGameSpeed = 20f;
-        public bool canControlPlayer = true;
-
         public void StopControlPlayer()
         {
             canControlPlayer = false;
+            timeManager.StopSlowMotion();
         }
         public void ResumeControlPlayer()
         {
@@ -297,6 +296,7 @@ namespace StarterAssets
             _wasPausedLastFrame = isPausedThisFrame;
             if (isKeyDown && !GameManager.Instance.timeManager.IsPaused)
             {
+                pausedText.SetActive(true);
                 GameManager.Instance.PauseGame();
                 freeCamera.gameObject.SetActive(true);
                 defaultCamera.gameObject.SetActive(false);
@@ -304,6 +304,7 @@ namespace StarterAssets
             }
             else if (isKeyDown && GameManager.Instance.timeManager.IsPaused)
             {
+                pausedText.SetActive(false);
                 GameManager.Instance.ResumeGame();
                 freeCamera.gameObject.SetActive(false);
                 defaultCamera.gameObject.SetActive(true);
@@ -583,10 +584,12 @@ namespace StarterAssets
                 _isSlowMoStarted = !_isSlowMoStarted;
                 if (_isSlowMoStarted)
                 {
+                    slowMoText.SetActive(true);
                     timeManager.StartSlowMotion();
                 }
                 else
                 {
+                    slowMoText.SetActive(false);
                     timeManager.StopSlowMotion();
                 }
             }
@@ -597,16 +600,13 @@ namespace StarterAssets
         {
             if (staminaManager._isRegenerating)
             {
-                _isAimingGrenade = false;
                 _isSprinting = false;
             }
             else
             {
-                _isAimingGrenade = aimInput;
                 _isSprinting = !_isAimingGrenade && sprintInput;
             }
             staminaManager.UpdateSprinting(_isSprinting && moveInput > 0.1f);
-            staminaManager.UpdateAiming(_isAimingGrenade);
         }
 
         public float GetLookYaw(Transform transform, float movementYaw)

@@ -32,9 +32,11 @@ namespace Weapon
             {
                 weapon.Init(playerSpace);
             }
+            isOneWeaponUnlocked = weapons.Any(w => w.IsUnlocked);
             _selectedWeapon = weapons.FirstOrDefault(w => w.IsUnlocked);
             selectWeaponsPanel.Init();
             weaponUI.SetGrenadeVisible(grenade.isUnlocked);
+            weaponUI.SetGunVisible(isOneWeaponUnlocked);
             crosshair.gameObject.SetActive(isOneWeaponUnlocked);
         }
 
@@ -58,7 +60,12 @@ namespace Weapon
             if (!isOneWeaponUnlocked) return;
 
             // TODO: Refactor for crosshair to only ray cast once per frame and only when needed
-            if (grenade.HandleThrow(isAimingGrenade, _aimTargetPosition) || _selectedWeapon.isReloadingMagazine)
+            if (grenade.isUnlocked && grenade.HandleThrow(isAimingGrenade, _aimTargetPosition))
+            {
+                return;
+            }
+
+            if (_selectedWeapon.isReloadingMagazine)
             {
                 return;
             }
@@ -76,6 +83,7 @@ namespace Weapon
         public void OnFixedUpdate()
         {
             if (!isOneWeaponUnlocked) return;
+
             _aimTargetPosition = crosshair.GetTargetPosition();
             var gunForward = _aimTargetPosition - _selectedWeapon.transform.position;
             Quaternion gunRotation = Quaternion.identity * Quaternion.LookRotation(gunForward);
