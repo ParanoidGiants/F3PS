@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class WeaponUI : MonoBehaviour
 {
     private RectTransform _rectTransform;
-    private float _reloadPercentage;
     private Animator _animator;
 
     [Header("Time Grenade")]
@@ -13,7 +12,8 @@ public class WeaponUI : MonoBehaviour
     public Image grenadeIcon;
 
     [Space(10)]
-    [Header("Primary Weapon")]
+    [Header("Gun")]
+    public GameObject gunParent;
     public TextMeshProUGUI magazineAmountText;
     public TextMeshProUGUI magazineAmountTextDuplicate;
     public TextMeshProUGUI totalAmountText;
@@ -70,8 +70,18 @@ public class WeaponUI : MonoBehaviour
         weaponIcon.sprite = activeWeaponIcon;
     }
 
-    public void SetGrenadeUIActive(bool isGrenadeActive)
+    public void ShowGrenade()
     {
-        grenadeIcon.gameObject.SetActive(isGrenadeActive);
+        grenadeIcon.gameObject.SetActive(true);
+    }
+
+    public void SetGrenadeVisible(bool visible)
+    {
+        grenadeIcon.gameObject.SetActive(visible);
+    }
+
+    public void SetGunVisible(bool visible)
+    {
+        gunParent.SetActive(visible);
     }
 }

@@ -3,11 +3,7 @@ using UnityEngine;
 using TimeBending;
 
 using Weapon;
-using UnityEngine.Windows;
 using Cinemachine;
-
-
-
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -25,15 +21,31 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+        #region DEBUG_TOOLS
+        [Header("Debug Pause and Camera")]
+        public GameObject pausedText;
+        public GameObject slowMoText;
+
+        public CanvasGroup uiCanvasGroup;
+
+        public Transform _currentCameraTarget;
+        public CinemachineVirtualCamera freeCamera;
+        public Transform freeCameraTarget;
+        public float freeCameraSpeed = 20f;
+        public bool canControlPlayer = true;
+
+        private bool _wasPausedLastFrame = false;
+        #endregion DEBUG_TOOLS
+
+        [Space(20)]
         [Header("References")]
-        public Transform playerSpace;
+        public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
         public TimeManager timeManager;
         public WeaponManager weaponManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
-        private Crosshair _crosshair;
         private PlayerHealthUI _playerHealthUI;
 
         [Space(20)]
@@ -213,7 +225,6 @@ namespace StarterAssets
             Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
-            _crosshair = FindObjectOfType<Crosshair>();
 
             _health = maxHealth;
         }
@@ -226,18 +237,13 @@ namespace StarterAssets
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
             _dodgeCoolDownTime = DodgeCoolDownTimer;
-
-            weaponManager.Init(playerSpace);
+            weaponManager.Init();
         }
 
         private void Update()
         {
             HandlePauseGame();
-            if (GameManager.Instance.IsGamePaused)
-            {
-                HandlePauseGame();
-                return;
-            }
+            if (!canControlPlayer) return;
 
             if (_isDying) return;
 
@@ -247,22 +253,18 @@ namespace StarterAssets
                 _isRestartingGame = true;
             }
 
-            if (!weaponManager.ActiveWeapon.isReloadingMagazine)
-            {
-                weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
-            }
+            weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
 
             if (GameManager.Instance.timeManager.IsPaused) return;
 
             GroundedCheck();
             _isShooting = _input.shoot;
             _isReloading = _input.reload;
-            _isAimingGrenade = weaponManager.grenade.gameObject.activeSelf && _input.aimGrenade;
+            _isAimingGrenade = _input.aimGrenade;
             weaponManager.OnUpdate(
                 _isAimingGrenade,
                 _isShooting,
-                _isReloading,
-                _crosshair.GetTargetPosition()
+                _isReloading
             );
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
@@ -282,14 +284,16 @@ namespace StarterAssets
             }
         }
 
-        [Space(10)]
-        [Header("Debug")]
-        public Transform _currentCameraTarget;
-        private bool _wasPausedLastFrame = false;
-        public Transform freeTarget;
-        public CinemachineVirtualCamera freeCamera;
-        public CinemachineVirtualCamera defaultCamera;
-        public float pauseGameSpeed = 20f;
+        public void StopControlPlayer()
+        {
+            canControlPlayer = false;
+            timeManager.StopSlowMotion();
+        }
+        public void ResumeControlPlayer()
+        {
+            canControlPlayer = true;
+        }
+
         private void HandlePauseGame()
         {
             bool isPausedThisFrame = _input.pause;
@@ -297,38 +301,45 @@ namespace StarterAssets
             _wasPausedLastFrame = isPausedThisFrame;
             if (isKeyDown && !GameManager.Instance.timeManager.IsPaused)
             {
+                pausedText.SetActive(true);
                 GameManager.Instance.PauseGame();
                 freeCamera.gameObject.SetActive(true);
                 defaultCamera.gameObject.SetActive(false);
-                _currentCameraTarget = freeTarget;
+                _currentCameraTarget = freeCameraTarget;
+                freeCameraTarget.position = defaultCamera.transform.position;
+                uiCanvasGroup.alpha = 0f;
             }
             else if (isKeyDown && GameManager.Instance.timeManager.IsPaused)
             {
+                pausedText.SetActive(false);
                 GameManager.Instance.ResumeGame();
                 freeCamera.gameObject.SetActive(false);
                 defaultCamera.gameObject.SetActive(true);
                 _currentCameraTarget = PlayerCameraTarget;
+                uiCanvasGroup.alpha = 1f;
             }
             else if (GameManager.Instance.timeManager.IsPaused)
             {
-                var speed = (_input.shoot ? 2f : 1f) * pauseGameSpeed;
-                var moveDirection = (_input.move.x * freeTarget.right + _input.move.y * freeTarget.forward).normalized;
-                freeTarget.position += speed * Time.unscaledDeltaTime * moveDirection;
+                var speed = (_input.shoot ? 2f : 1f) * freeCameraSpeed;
+                var moveDirection = (_input.move.x * freeCameraTarget.right + _input.move.y * freeCameraTarget.forward).normalized;
+                freeCameraTarget.position += speed * Time.unscaledDeltaTime * moveDirection;
             }
         }
 
 
         private void FixedUpdate()
         {
+            if (!canControlPlayer) return;
             if (_isDying) return;
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;
 
-            weaponManager.OnFixedUpdate(_crosshair.GetTargetPosition());
+            weaponManager.OnFixedUpdate();
         }
 
         private void LateUpdate()
         {
+            if (!canControlPlayer) return;
             if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
 
             CameraTargetRotation();
@@ -581,10 +592,12 @@ namespace StarterAssets
                 _isSlowMoStarted = !_isSlowMoStarted;
                 if (_isSlowMoStarted)
                 {
+                    slowMoText.SetActive(true);
                     timeManager.StartSlowMotion();
                 }
                 else
                 {
+                    slowMoText.SetActive(false);
                     timeManager.StopSlowMotion();
                 }
             }
@@ -595,16 +608,13 @@ namespace StarterAssets
         {
             if (staminaManager._isRegenerating)
             {
-                _isAimingGrenade = false;
                 _isSprinting = false;
             }
             else
             {
-                _isAimingGrenade = aimInput;
                 _isSprinting = !_isAimingGrenade && sprintInput;
             }
             staminaManager.UpdateSprinting(_isSprinting && moveInput > 0.1f);
-            staminaManager.UpdateAiming(_isAimingGrenade);
         }
 
         public float GetLookYaw(Transform transform, float movementYaw)

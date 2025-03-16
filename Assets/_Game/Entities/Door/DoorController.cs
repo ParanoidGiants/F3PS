@@ -3,54 +3,70 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    private Tweener _openAnimation;
-    private Tweener _closeAnimation;
+    #region DEBUG
+    [Header("Debug")]
+    public bool debug = false;
+    public bool openClose = false;
+    private void Update()
+    {
+        if (!debug)
+        {
+            return;
+        }
+        if (!_open && openClose)
+        {
+            OpenDoor();
+        }
 
+        if (_open && !openClose)
+        {
+            CloseDoor();
+        }
+    }
+
+    #endregion DEBUG
+
+    [Space(10)]
     [Header("Reference")]
     [SerializeField] private Transform _door;
+    [SerializeField] private CameraRumble _cameraRumble;
 
     [Space(10)]
     [Header("Watcher")]
-    [SerializeField] private bool _isOpen;
+    [SerializeField] private bool _open;
     [SerializeField] private float _animationDuration = 5f;
     [SerializeField] private float _openPosition = 1.5f;
     [SerializeField] private float _closePosition = 0.5f;
 
-    [Space(10)]
-    [Header("Debug")]
-    public bool openClose = false;
-    private void Update()
+    public void OpenDoor()
     {
-        if (!_isOpen && openClose)
+        if (_open)
         {
-            OnOpenDoor();
+            return;
         }
-        
-        if (_isOpen && !openClose)
-        {
-            OnCloseDoor();
-        }
+        _open = true;
+
+        // Kill any existing animation on _door
+        DOTween.Kill(_door);
+
+        float animationDuration = _animationDuration * (_openPosition - _door.localPosition.y) / (_openPosition - _closePosition);
+        _door.DOLocalMoveY(_openPosition, animationDuration);
+        _cameraRumble.TriggerRumble(animationDuration);
     }
 
-    private void OnOpenDoor()
+    private void CloseDoor()
     {
-        if (_isOpen)
+        if (!_open)
         {
             return;
         }
-        _isOpen = true;
-        DOTween.Kill(_closeAnimation);
-        _openAnimation = _door.DOLocalMoveY(_openPosition, _animationDuration);
-    }
-    
-    private void OnCloseDoor()
-    {
-        if (!_isOpen)
-        {
-            return;
-        }
-        _isOpen = false;
-        DOTween.Kill(_openAnimation);
-        _closeAnimation = _openAnimation = _door.DOLocalMoveY(_closePosition, _animationDuration);
+        _open = false;
+
+        // Kill any existing animation on _door
+        DOTween.Kill(_door);
+
+        float animationDuration = _animationDuration * (_door.localPosition.y - _closePosition) / (_openPosition - _closePosition);
+        _door.DOLocalMoveY(_closePosition, animationDuration);
+        _cameraRumble.TriggerRumble(animationDuration);
     }
 }

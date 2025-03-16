@@ -22,6 +22,7 @@ namespace Weapon
         public int lineResolution = 100;
         public float lineStepSize = 0.1f;
         public LayerMask whatCanCollide;
+        public bool isUnlocked;
         
         [Space(10)]
         [Header("Watchers")]

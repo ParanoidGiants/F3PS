@@ -71,11 +71,11 @@ namespace F3PS.AI.States.Action
             OnCharge();
         }
         
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision collision)
         {
             if (_wasEarlyHit) return;
             
-            var hittable = other.gameObject.GetComponent<Hittable>();
+            var hittable = collision.collider.gameObject.GetComponent<Hittable>();
             if (hittable is EnemyHittable or BossHittable)
             {
                 return;

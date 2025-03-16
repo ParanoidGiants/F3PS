@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Cinemachine;
-using DarkTonic.MasterAudio;
 using UnityEngine;
 
 namespace Weapon
@@ -10,8 +9,9 @@ namespace Weapon
     {
         [Header("References")]
         public Transform meshHolder;
+        public WeaponUI weaponUI;
         public CinemachineImpulseSource screenShakeSource;
-        
+
         [Space(10)]
         [Header("Projectile References")]
         public GameObject projectilePrefab;
@@ -29,13 +29,15 @@ namespace Weapon
         public bool isShooting = false;
         public float recoilPower;
 
-        [Space(10)] [Header("Watchers")]
+        [Space(10)][Header("Watchers")]
         public int totalAmount = 100;
         public int currentMagazineAmount = 10;
         public float shootCoolDownTime = 0.0f;
         public float reloadMagazineTime = 0.0f;
         public bool isReloadingMagazine = false;
-        public WeaponUI weaponUI;
+
+        [SerializeField] private bool _isUnlocked;
+        public bool IsUnlocked => _isUnlocked;
 
         protected virtual IEnumerator Shoot(Vector3 targetPosition)
         {
@@ -47,12 +49,12 @@ namespace Weapon
             screenShakeSource.GenerateImpulseWithVelocity(recoilDirection * recoilPower);
         }
 
-        public void SetWeaponUI(WeaponUI weaponUI) { this.weaponUI = weaponUI; }
         public void Init(Transform userSpace)
         {
             projectilePool.Init(projectilePrefab, userSpace);
             totalAmount = maxAmmo;
             currentMagazineAmount = maxMagazineAmmo;
+            meshHolder.gameObject.SetActive(false);
         }
         
         public void UpdateRotation(Quaternion rotation)
@@ -107,6 +109,11 @@ namespace Weapon
         public bool IsMagazineEmpty()
         {
             return currentMagazineAmount <= 0;
+        }
+
+        public void Unlock()
+        {
+            _isUnlocked = true;
         }
     }
 }

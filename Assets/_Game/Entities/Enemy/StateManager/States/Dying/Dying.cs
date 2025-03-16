@@ -42,9 +42,8 @@ namespace F3PS.AI.States
                 _fadeOutTime -= enemy.ScaledDeltaTime;
                 return;
             }
-
-            Destroy(enemy.gameObject);
-
+            Debug.Log("Enemy Dead");
+            enemy.Died();
         }
     }
 }
