@@ -21,20 +21,25 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
-
-        [Header("Debug")]
-        public Transform _currentCameraTarget;
-        private bool _wasPausedLastFrame = false;
+        #region DEBUG_TOOLS
+        [Header("Debug Pause and Camera")]
         public GameObject pausedText;
         public GameObject slowMoText;
-        public Transform freeTarget;
+
+        public CanvasGroup uiCanvasGroup;
+
+        public Transform _currentCameraTarget;
         public CinemachineVirtualCamera freeCamera;
-        public CinemachineVirtualCamera defaultCamera;
-        public float pauseGameSpeed = 20f;
+        public Transform freeCameraTarget;
+        public float freeCameraSpeed = 20f;
         public bool canControlPlayer = true;
 
-        [Space(10)]
+        private bool _wasPausedLastFrame = false;
+        #endregion DEBUG_TOOLS
+
+        [Space(20)]
         [Header("References")]
+        public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
         public TimeManager timeManager;
         public WeaponManager weaponManager;
@@ -300,7 +305,9 @@ namespace StarterAssets
                 GameManager.Instance.PauseGame();
                 freeCamera.gameObject.SetActive(true);
                 defaultCamera.gameObject.SetActive(false);
-                _currentCameraTarget = freeTarget;
+                _currentCameraTarget = freeCameraTarget;
+                freeCameraTarget.position = defaultCamera.transform.position;
+                uiCanvasGroup.alpha = 0f;
             }
             else if (isKeyDown && GameManager.Instance.timeManager.IsPaused)
             {
@@ -309,12 +316,13 @@ namespace StarterAssets
                 freeCamera.gameObject.SetActive(false);
                 defaultCamera.gameObject.SetActive(true);
                 _currentCameraTarget = PlayerCameraTarget;
+                uiCanvasGroup.alpha = 1f;
             }
             else if (GameManager.Instance.timeManager.IsPaused)
             {
-                var speed = (_input.shoot ? 2f : 1f) * pauseGameSpeed;
-                var moveDirection = (_input.move.x * freeTarget.right + _input.move.y * freeTarget.forward).normalized;
-                freeTarget.position += speed * Time.unscaledDeltaTime * moveDirection;
+                var speed = (_input.shoot ? 2f : 1f) * freeCameraSpeed;
+                var moveDirection = (_input.move.x * freeCameraTarget.right + _input.move.y * freeCameraTarget.forward).normalized;
+                freeCameraTarget.position += speed * Time.unscaledDeltaTime * moveDirection;
             }
         }
 
