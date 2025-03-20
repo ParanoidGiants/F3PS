@@ -1,4 +1,5 @@
 using F3PS;
+using StarterAssets;
 using UnityEngine;
 
 public class InGameMenu : MonoBehaviour
@@ -13,6 +14,11 @@ public class InGameMenu : MonoBehaviour
     {
         parent.SetActive(true);
         OpenMenuSelection();
+    }
+
+    public void ResumeGame()
+    {
+        FindObjectOfType<ThirdPersonController>().ResumeGame();
     }
 
     public void CloseMenu()

@@ -27,7 +27,6 @@ public class SceneLoader : MonoBehaviour
             return;
         }
         _instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void ReloadScene(float delay = 0f)

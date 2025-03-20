@@ -1,4 +1,3 @@
-using System;
 using StarterAssets;
 using TimeBending;
 using UnityEngine;
@@ -11,8 +10,9 @@ namespace F3PS
         public static GameManager Instance => _instance;
         
         public StarterAssetsInputs inputs;
-        
         public TimeManager timeManager;
+        public InGameMenu inGameMenu;
+
         [SerializeField] private bool _isGamePaused;
         public bool IsGamePaused => _isGamePaused;
         [SerializeField] private int _fps = 60;

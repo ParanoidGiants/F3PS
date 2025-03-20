@@ -1,9 +1,9 @@
 ﻿using F3PS;
 using UnityEngine;
-using TimeBending;
 
 using Weapon;
 using Cinemachine;
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -39,6 +39,7 @@ namespace StarterAssets
 
         [Space(20)]
         [Header("References")]
+
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
         public WeaponManager weaponManager;
@@ -190,14 +191,15 @@ namespace StarterAssets
         private readonly int _animIDHit = Animator.StringToHash("Hit");
 
 
+
+        private Animator _animator;
+        private GameObject _mainCamera;
+        private CharacterController _controller;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
-        private Animator _animator;
-        private CharacterController _controller;
         private StarterAssetsInputs _input;
         public StarterAssetsInputs Input => _input;
-        private GameObject _mainCamera;
 
         private bool IsCurrentDeviceMouse
         {
@@ -213,12 +215,7 @@ namespace StarterAssets
 
         private void Awake()
         {
-            // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
-
+            _mainCamera = FindObjectOfType<Camera>().gameObject;
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GameManager.Instance.inputs;
@@ -316,25 +313,25 @@ namespace StarterAssets
             }
             else if (isKeyDown && _isMenuOpen)
             {
-                CloseMenu();
+                ResumeGame();
             }
         }
 
         public void OpenMenu()
         {
-            FindObjectOfType<InGameMenu>().OpenMenu();
+            GameManager.Instance.inGameMenu.OpenMenu();
             GameManager.Instance.PauseGame();
             canControlPlayer = false;
             _isMenuOpen = true;
         }
 
-        public void CloseMenu()
+        public void ResumeGame()
         {
             if (!_isTimeStopped)
             {
                 GameManager.Instance.ResumeGame();
             }
-            FindObjectOfType<InGameMenu>().CloseMenu();
+            GameManager.Instance.inGameMenu.CloseMenu();
             canControlPlayer = true;
             _isMenuOpen = false;
         }

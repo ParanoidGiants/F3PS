@@ -2160,6 +2160,9 @@ MonoBehaviour:
   freeCameraTarget: {fileID: 794407365}
   freeCameraSpeed: 20
   canControlPlayer: 1
+  _playerInput: {fileID: 0}
+  _input: {fileID: 0}
+  _mainCamera: {fileID: 0}
   defaultCamera: {fileID: 2070925443028286826}
   staminaManager: {fileID: 1308249554798671341}
   weaponManager: {fileID: 8118315732927897910}
@@ -2173,8 +2176,8 @@ MonoBehaviour:
     m_Bits: 1
   maxHealth: 100
   RotationSmoothTime: 0.12
-  MoveSpeed: 10
-  SprintSpeed: 18
+  MoveSpeed: 20
+  SprintSpeed: 25
   SpeedChangeRate: 22
   RotationSpeedPitch: 0.2
   RotationSpeedYaw: 1
