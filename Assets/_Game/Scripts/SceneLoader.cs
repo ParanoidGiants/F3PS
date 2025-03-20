@@ -7,6 +7,14 @@ public class SceneLoader : MonoBehaviour
 {
     private static SceneLoader _instance;
     public static SceneLoader Instance => _instance;
+    public bool isLoading;
+
+    public string[] sceneNames = new string[]
+    {
+        "_menu",
+        "_controls",
+        "_kill_enemy_opens_door"
+    };
 
     [Header("References")]
     public Image backDrop;
@@ -24,14 +32,22 @@ public class SceneLoader : MonoBehaviour
 
     public void ReloadScene(float delay = 0f)
     {
+        if (isLoading) return;
+
+        LoadScene(SceneManager.GetActiveScene().name, delay);
+    }
+
+    public void LoadScene(string sceneName, float delay = 0f)
+    {
+        if (isLoading) return;
+
+        isLoading = true;
         backDrop.gameObject.SetActive(true);
-        // Create a new color with full opacity (alpha = 1)
         Color targetColor = new Color(backDrop.color.r, backDrop.color.g, backDrop.color.b, 1f);
         backDrop.DOColor(targetColor, 0.5f)
-            .OnComplete(() => {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            })
-            .SetDelay(delay);
+            .OnComplete(() => SceneManager.LoadScene(sceneName))
+            .SetDelay(delay)
+            .SetUpdate(true);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -42,6 +58,7 @@ public class SceneLoader : MonoBehaviour
         backDrop.DOColor(targetColor, 0.5f)
             .OnComplete(() => {
                 backDrop.gameObject.SetActive(false);
+                isLoading = false;
             });
     }
 

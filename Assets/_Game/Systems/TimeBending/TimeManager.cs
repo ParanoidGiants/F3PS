@@ -2,6 +2,7 @@ using UnityEngine;
 using DarkTonic.MasterAudio;
 using System.Collections;
 using F3PS;
+using UnityEngine.SceneManagement;
 
 namespace TimeBending
 {
@@ -14,7 +15,7 @@ namespace TimeBending
         private float _pitchTime = 0f;
 
         [SerializeField] private bool _isPaused;
-        public bool IsPaused => _isPaused;
+        public bool Stopped => _isPaused;
         private float _fps = 60f;
         public float lookRotationSpeed = 0.6f;  
 
@@ -22,7 +23,7 @@ namespace TimeBending
         {
             if (_isPaused) return;
             
-            int fps = F3PS.GameManager.Instance.Fps;
+            int fps = GameManager.Instance.Fps;
             Time.timeScale = slowdownFactor;
             Time.fixedDeltaTime = Time.timeScale /_fps; // timeScale divided by 60fps
             MasterAudio.PlaySoundAndForget("SlowMo_init");
@@ -79,7 +80,7 @@ namespace TimeBending
 
         public void PauseTime()
         {
-            if (IsPaused)
+            if (Stopped)
             {
                 return;
             }
@@ -90,13 +91,28 @@ namespace TimeBending
         
         public void ResumeTime()
         {
-            if (!IsPaused)
+            if (!Stopped)
             {
                 return;
             }
             _isPaused = false;
             Time.timeScale = isActive ? slowdownFactor : 1f;
             Time.fixedDeltaTime = Time.timeScale / F3PS.GameManager.Instance.Fps;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            ResumeTime();
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
     }
 }

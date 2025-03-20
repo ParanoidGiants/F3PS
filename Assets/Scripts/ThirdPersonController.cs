@@ -23,6 +23,7 @@ namespace StarterAssets
     {
         #region DEBUG_TOOLS
         [Header("Debug Pause and Camera")]
+        public GameObject freeCameraText;
         public GameObject pausedText;
         public GameObject slowMoText;
 
@@ -34,14 +35,12 @@ namespace StarterAssets
         public float freeCameraSpeed = 20f;
         public bool canControlPlayer = true;
 
-        private bool _wasPausedLastFrame = false;
         #endregion DEBUG_TOOLS
 
         [Space(20)]
         [Header("References")]
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
-        public TimeManager timeManager;
         public WeaponManager weaponManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
@@ -162,7 +161,6 @@ namespace StarterAssets
         [SerializeField] private bool _isSlowMoToggle;
         [SerializeField] private bool _isSlowMoStarted;
         [SerializeField] private bool _isAimingGrenade;
-        [SerializeField] private bool _isRestartingGame;
         [SerializeField] private bool _isDying;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _health;
@@ -193,11 +191,11 @@ namespace StarterAssets
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-        [SerializeField] private PlayerInput _playerInput;
+        private PlayerInput _playerInput;
 #endif
         private Animator _animator;
         private CharacterController _controller;
-        [SerializeField] private StarterAssetsInputs _input;
+        private StarterAssetsInputs _input;
         public StarterAssetsInputs Input => _input;
         private GameObject _mainCamera;
 
@@ -223,10 +221,9 @@ namespace StarterAssets
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            // _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-            // _playerInput = GetComponent<PlayerInput>();
-#else
+            _input = FindObjectOfType<StarterAssetsInputs>();
+            _playerInput = _input.GetComponent<PlayerInput>();
+#if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
@@ -247,21 +244,18 @@ namespace StarterAssets
 
         private void Update()
         {
-            HandlePauseGame();
+            HandleMenu();
+            HandleFreeCamera();
+            HandleStopTime();
             if (!canControlPlayer) return;
 
             if (_isDying) return;
 
-            if (_input.restart && !_isRestartingGame && !_isDying)
-            {
-                SceneLoader.Instance.ReloadScene();
-                _isRestartingGame = true;
-            }
 
 
             weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
 
-            if (GameManager.Instance.timeManager.IsPaused) return;
+            if (GameManager.Instance.timeManager.Stopped) return;
 
             GroundedCheck();
             _isShooting = _input.shoot;
@@ -299,38 +293,105 @@ namespace StarterAssets
         public void StopControlPlayer()
         {
             canControlPlayer = false;
-            timeManager.StopSlowMotion();
+            GameManager.Instance.timeManager.StopSlowMotion();
         }
         public void ResumeControlPlayer()
         {
             canControlPlayer = true;
         }
 
-        private void HandlePauseGame()
+
+        private bool _wasMenuPressedLastFrame = false;
+        private bool _isMenuOpen = false;
+        private void HandleMenu()
         {
-            bool isPausedThisFrame = _input.pause;
-            bool isKeyDown = !_wasPausedLastFrame && isPausedThisFrame;
-            _wasPausedLastFrame = isPausedThisFrame;
-            if (isKeyDown && !GameManager.Instance.timeManager.IsPaused)
+            if (SceneLoader.Instance.isLoading) return;
+
+            var isMenuPressedThisFrame = _input.menu;
+            var isKeyDown = !_wasMenuPressedLastFrame && isMenuPressedThisFrame;
+            _wasMenuPressedLastFrame = isMenuPressedThisFrame;
+            if (isKeyDown && !_isMenuOpen)
+            {
+                OpenMenu();
+            }
+            else if (isKeyDown && _isMenuOpen)
+            {
+                CloseMenu();
+            }
+        }
+
+        public void OpenMenu()
+        {
+            FindObjectOfType<InGameMenu>().OpenMenu();
+            GameManager.Instance.PauseGame();
+            canControlPlayer = false;
+            _isMenuOpen = true;
+        }
+
+        public void CloseMenu()
+        {
+            if (!_isTimeStopped)
+            {
+                GameManager.Instance.ResumeGame();
+            }
+            FindObjectOfType<InGameMenu>().CloseMenu();
+            canControlPlayer = true;
+            _isMenuOpen = false;
+        }
+
+        private bool _wasTimeStoppedLastFrame = false;
+        private bool _isTimeStopped = false;
+        private void HandleStopTime()
+        {
+            if (_isMenuOpen) return;
+
+            bool isTimeStoppedThisFrame = _input.pause;
+            bool isKeyDown = !_wasTimeStoppedLastFrame && isTimeStoppedThisFrame;
+            _wasTimeStoppedLastFrame = isTimeStoppedThisFrame;
+            if (isKeyDown && !_isTimeStopped)
             {
                 pausedText.SetActive(true);
                 GameManager.Instance.PauseGame();
+                _isTimeStopped = true;
+            }
+            else if (isKeyDown && _isTimeStopped)
+            {
+                pausedText.SetActive(false);
+                GameManager.Instance.ResumeGame();
+                _isTimeStopped = false;
+            }
+        }
+        private bool _wasFreeCameraLastFrame = false;
+        private bool isFreeCameraActive = false;
+        private void HandleFreeCamera()
+        {
+            if (_isMenuOpen) return;
+
+            bool isFreeCameraThisFrame = _input.freeCamera;
+            bool isKeyDown = !_wasFreeCameraLastFrame && isFreeCameraThisFrame;
+            _wasFreeCameraLastFrame = isFreeCameraThisFrame;
+            if (isKeyDown && !isFreeCameraActive)
+            {
+                freeCameraText.SetActive(true);
                 freeCamera.gameObject.SetActive(true);
                 defaultCamera.gameObject.SetActive(false);
                 _currentCameraTarget = freeCameraTarget;
                 freeCameraTarget.position = defaultCamera.transform.position;
                 uiCanvasGroup.alpha = 0f;
+                canControlPlayer = false;
+                isFreeCameraActive = true;
             }
-            else if (isKeyDown && GameManager.Instance.timeManager.IsPaused)
+            else if (isKeyDown && isFreeCameraActive)
             {
-                pausedText.SetActive(false);
-                GameManager.Instance.ResumeGame();
+                freeCameraText.SetActive(false);
                 freeCamera.gameObject.SetActive(false);
                 defaultCamera.gameObject.SetActive(true);
                 _currentCameraTarget = PlayerCameraTarget;
                 uiCanvasGroup.alpha = 1f;
+                canControlPlayer = true;
+                isFreeCameraActive = false;
             }
-            else if (GameManager.Instance.timeManager.IsPaused)
+            else if (isFreeCameraActive)
             {
                 var speed = (_input.shoot ? 2f : 1f) * freeCameraSpeed;
                 var moveDirection = (_input.move.x * freeCameraTarget.right + _input.move.y * freeCameraTarget.forward).normalized;
@@ -344,7 +405,7 @@ namespace StarterAssets
             if (!canControlPlayer) return;
             if (_isDying) return;
             if (GameManager.Instance.IsGamePaused) return;
-            if (GameManager.Instance.timeManager.IsPaused) return;
+            if (GameManager.Instance.timeManager.Stopped) return;
 
             HandleBubbleTimeScale();
             weaponManager.OnFixedUpdate();
@@ -352,10 +413,10 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            if (!canControlPlayer) return;
-            if (!GameManager.Instance.IsGamePaused && GameManager.Instance.timeManager.IsPaused) return;
+            if (_isMenuOpen) return;
 
             CameraTargetRotation();
+
         }
 
         private void CameraTargetRotation()
@@ -606,12 +667,12 @@ namespace StarterAssets
                 if (_isSlowMoStarted)
                 {
                     slowMoText.SetActive(true);
-                    timeManager.StartSlowMotion();
+                    GameManager.Instance.timeManager.StartSlowMotion();
                 }
                 else
                 {
                     slowMoText.SetActive(false);
-                    timeManager.StopSlowMotion();
+                    GameManager.Instance.timeManager.StopSlowMotion();
                 }
             }
             _isSlowMoToggle = slowMoInput;
@@ -681,12 +742,7 @@ namespace StarterAssets
             _animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
             _animator.SetTrigger("Die");
             Destroy(hittableManager.gameObject);
-
-
-            if (!_isRestartingGame)
-            {
-                SceneLoader.Instance.ReloadScene(5f);
-            }
+            SceneLoader.Instance.ReloadScene(5f);
         }
 
         private void GroundedCheck()

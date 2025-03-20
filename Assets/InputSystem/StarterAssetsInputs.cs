@@ -1,7 +1,6 @@
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI;
 #endif
 
 namespace StarterAssets
@@ -19,12 +18,13 @@ namespace StarterAssets
 		public bool reload;
 		public bool slowmo;
 		public bool dodge;
-		public bool pause;
 		public bool switchWeapon;
 		public bool aimGrenade;
-		public bool restart;
+		public bool pause;
+        public bool menu;
+        public bool freeCamera;
 
-		[Header("Movement Settings")]
+        [Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
@@ -97,16 +97,21 @@ namespace StarterAssets
 		public void OnAimGrenade(InputValue value)
 		{
 			AimGrenadeInput(value.isPressed);
-		}
-		
-		public void OnRestart(InputValue value)
-		{
-			RestartInput(value.isPressed);
-		}
+        }
+
+        public void OnMenu(InputValue value)
+        {
+            MenuInput(value.isPressed);
+        }
+
+        public void OnFreeCamera(InputValue value)
+        {
+            FreeCameraInput(value.isPressed);
+        }
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
         }
@@ -168,14 +173,19 @@ namespace StarterAssets
 		private void AimGrenadeInput(bool valueIsPressed)
 		{
 			aimGrenade = valueIsPressed;
-		}
-		
-		private void RestartInput(bool valueIsPressed)
-		{
-			restart = valueIsPressed;
-		}
+        }
 
-		private void OnApplicationFocus(bool hasFocus)
+        private void MenuInput(bool valueIsPressed)
+        {
+            menu = valueIsPressed;
+        }
+
+        private void FreeCameraInput(bool valueIsPressed)
+        {
+            freeCamera = valueIsPressed;
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}

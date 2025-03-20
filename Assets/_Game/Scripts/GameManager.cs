@@ -32,19 +32,17 @@ namespace F3PS
         private void Start()
         {
             Application.targetFrameRate = _fps;
-            inputs = FindObjectOfType<ThirdPersonController>().Input;
-            timeManager = FindObjectOfType<TimeManager>();
         }
 
         public void PauseGame()
         {
-            GameManager.Instance.timeManager.PauseTime();
+            timeManager.PauseTime();
             _isGamePaused = true;
         }
 
         public void ResumeGame()
         {
-            GameManager.Instance.timeManager.ResumeTime();
+            timeManager.ResumeTime();
             _isGamePaused = false;
         }
     }
