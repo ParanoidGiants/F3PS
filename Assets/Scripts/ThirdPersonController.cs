@@ -221,7 +221,7 @@ namespace StarterAssets
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = FindObjectOfType<StarterAssetsInputs>();
+            _input = GameManager.Instance.inputs;
             _playerInput = _input.GetComponent<PlayerInput>();
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
