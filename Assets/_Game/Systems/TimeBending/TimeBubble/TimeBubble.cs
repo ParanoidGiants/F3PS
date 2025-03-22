@@ -1,49 +1,46 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeBubble : MonoBehaviour
 {
-    private readonly List<TimeObject> _timeObjects = new List<TimeObject>();
+    public List<PhysicsRecorder> recorders = new List<PhysicsRecorder>();
     public float timeScale = 0.05f;
-
-
-
     void OnTriggerEnter(Collider other)
     {
-        TimeObject o = other.GetComponent<TimeObject>();
-        if (o == null) return;
-        
-        if (o.amountOfTimeZones == 0)
-        {
-            o.PitchTimeScale(timeScale);
-        }
-        o.amountOfTimeZones++;
-        _timeObjects.Add(o);
+        var o = other.GetComponent<PhysicsRecorder>();
+        if (o == null || o.isInTimeBubble) return;
+
+        o.StartRecording(transform.position, transform.localScale.x);
+        recorders.Add(o);
     }
     
     void OnTriggerExit(Collider other)
     {
-        TimeObject o = other.GetComponent<TimeObject>();
-        if (o != null)
+        Debug.Log("Exit");
+        var o = other.GetComponent<PhysicsRecorder>();
+        if (o == null)
         {
-            if (o.amountOfTimeZones == 1)
-            {
-                o.PitchTimeScale(1f);
-            }
-            o.amountOfTimeZones--;
-            _timeObjects.Remove(o);
+            return;
+        }
+
+        o.ChangeDirection();
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (var  recorder in recorders)
+        {
+            recorder.OnFixedUpdate();
         }
     }
 
     private void OnDisable()
     {
-        foreach (var timeObject in _timeObjects)
+
+        foreach (var recorder in recorders)
         {
-            timeObject.amountOfTimeZones--;
-            timeObject.PitchTimeScale(1f);
+            recorder.StopRecording();
         }
-        
-        _timeObjects.Clear();
+        recorders.Clear();
     }
 }
