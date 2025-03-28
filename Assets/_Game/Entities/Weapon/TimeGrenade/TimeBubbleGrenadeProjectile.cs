@@ -14,7 +14,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     public float shakePower = 1f;
 
-    public float Gravity => timeObject.gravityScale * Physics.gravity.magnitude;
+    public float Gravity => Physics.gravity.magnitude;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
 
     private void Update()
@@ -60,7 +60,6 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
     {
         transform.SetParent(userSpace);
-        timeObject.enabled = true;
         base.BeforeSetActive(position, targetPosition, shootSpeed);
         rb.isKinematic = false;
         rb.constraints = RigidbodyConstraints.None;
@@ -74,7 +73,6 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         col.enabled = false;
-        GetComponent<TimeObject>().enabled = false;
         ActivateTimeBubble();
     }
 

@@ -9753,8 +9753,8 @@ GameObject:
   - component: {fileID: 6314279165363591881}
   - component: {fileID: 6917445223256748906}
   - component: {fileID: 5029885233580578800}
-  - component: {fileID: 3012829188919006432}
   - component: {fileID: 5237609906146117335}
+  - component: {fileID: 6781872152688321966}
   m_Layer: 6
   m_Name: ProjectileBase
   m_TagString: Untagged
@@ -9789,7 +9789,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7785563140789300821}
   serializedVersion: 2
-  m_Mass: 0.1
+  m_Mass: 20
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -9931,25 +9931,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackerId: 0
---- !u!114 &3012829188919006432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7785563140789300821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ee8a7dfcdca57f48843dfdb9920356d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountOfTimeZones: 0
-  currentTimeScale: 1
-  additionalTimeScale: 0.125
-  animateMesh: {fileID: 6191514888584957300}
-  gravityScale: 0.5
-  _trail: {fileID: 4917439815977826471}
-  _slowMoTrail: {fileID: 5558975623774224086}
 --- !u!114 &5237609906146117335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9965,15 +9946,39 @@ MonoBehaviour:
   hitParticleSystem: {fileID: 3903986444325833803}
   noHitParticleSystem: {fileID: 6623682297467693661}
   mesh: {fileID: 8597723212833340393}
-  timeObject: {fileID: 3012829188919006432}
   hitBox: {fileID: 5029885233580578800}
   rb: {fileID: 7785563140789300822}
   col: {fileID: 6917445223256748906}
   damage: 5
   lifeTime: 0
-  maximumLifeTimer: 5
+  maximumLifeTimer: 30
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
+--- !u!114 &6781872152688321966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7785563140789300821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e023b73c829f41469d16c0cf62d3530, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackSpeed: 0
+  _default: {fileID: 2100000, guid: 8cf9b854c9328954580c6ae5fa498252, type: 2}
+  resume: {fileID: 2100000, guid: 855066636d1cad44abbdc3c7121884d3, type: 2}
+  rewind: {fileID: 2100000, guid: e32886938824ee74db2f29008cd092fb, type: 2}
+  floating: {fileID: 2100000, guid: f54f727468c8b4e48a3fb95fb1f7fcea, type: 2}
+  currentFrame: 0
+  floatingTolerance: 0.1
+  timeBubbleCenter: {x: 0, y: 0, z: 0}
+  timeBubbleRadius: 0
+  state: 0
+  isRecording: 0
+  isFloatingTheFirstTime: 0
+  _floatingVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &8597723212833340393
 GameObject:
   m_ObjectHideFlags: 0
@@ -10070,16 +10075,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f9bdeefaf3f7040bc05a8ad0efa360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitFlashAnimate: 0
+  timeFlashAnimate: 0
+  timeFlashAnimateTimeScale: 1
+  timeScale: 1
   timeAnimationDuration: 0.1
   timeEmissionColor: {r: 0, g: 0.7490196, b: 191, a: 255}
+  currentTimeEmissionColor: {r: 0, g: 0, b: 0, a: 1}
   hitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 0}
+  currentHitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 1}
   hitFlashEaseInAnimationDuration: 0
   hitFlashEaseOutAnimationDuration: 0
   hitFlashEaseIn: 0
   hitFlashEaseOut: 0
-  hitFlashAnimate: 0
-  timeFlashAnimate: 0
-  timeFlashAnimateTimeScale: 1
 --- !u!1001 &3627254877286036417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10164,18 +10172,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 719cc149230967c4fa65ef24ceca8c6b, type: 3}
---- !u!96 &4917439815977826471 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 8532307412656819046, guid: 719cc149230967c4fa65ef24ceca8c6b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3627254877286036417}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &5558975623774224086 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 9183943512510549271, guid: 719cc149230967c4fa65ef24ceca8c6b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3627254877286036417}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8801056247187710598 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5221144287671275847, guid: 719cc149230967c4fa65ef24ceca8c6b,
