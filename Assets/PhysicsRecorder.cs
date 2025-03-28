@@ -5,24 +5,35 @@ public enum PhysicsRecorderState
 {
     None,
     Record,
-    Rewind,
     Playback,
     Floating
 }
 
-public struct PhysicsFrame
+public static class EqualityUtils
 {
-    public Vector3 position;
-    public Quaternion rotation;
-    public Vector3 velocity;
-    public Vector3 angularVelocity;
+    public static bool Vector3Equals(Vector3 a, Vector3 b)
+    {
+        // Using the overloaded operator for Vector3.
+        return a == b;
+    }
+
+    public static bool QuaternionEquals(Quaternion a, Quaternion b)
+    {
+        // Using the overloaded operator for Quaternion.
+        return a == b;
+    }
 }
+
 
 public class PhysicsRecorder : MonoBehaviour
 {
     private Rigidbody _rigidbody;
     private Renderer _renderer;
-    private PhysicsFrame[] frames = new PhysicsFrame[1000000];
+
+    public PropertyRecorder<Vector3> positions = new();
+    public PropertyRecorder<Quaternion> rotations = new();
+    public PropertyRecorder<Vector3> velocities = new();
+    public PropertyRecorder<Vector3> angularVelocities = new();
 
     [Header("Playback")]
     public int playbackSpeed = 0;
@@ -41,7 +52,7 @@ public class PhysicsRecorder : MonoBehaviour
     public Vector3 timeBubbleCenter;
     public float timeBubbleRadius;
     public PhysicsRecorderState state;
-    public bool isInTimeBubble = false;
+    public bool isRecording = false;
     public bool isFloatingTheFirstTime = false;
     public Vector3 _floatingVelocity;
 
@@ -53,95 +64,70 @@ public class PhysicsRecorder : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         state = PhysicsRecorderState.None;
     }
-    private void Record()
-    {
-        var frame = new PhysicsFrame() {
-            position = transform.position,
-            rotation = transform.rotation,
-            velocity = _rigidbody.velocity,
-            angularVelocity = _rigidbody.angularVelocity
-        };
 
-        frames[currentFrame++] = frame;
+
+    private void OnDisable()
+    {
+        if (isRecording)
+        {
+            StopRecording();
+        }
     }
 
-
-    private void RecordInitialFrame()
+    private void Record()
     {
-        var frame = new PhysicsFrame()
-        {
-            position = transform.position,
-            rotation = transform.rotation,
-            velocity = _rigidbody.velocity,
-            angularVelocity = _rigidbody.angularVelocity
-        };
+        Debug.Log("Record");
+        positions.RecordIfChanged(currentFrame, transform.position, EqualityUtils.Vector3Equals);
+        rotations.RecordIfChanged(currentFrame, transform.rotation, EqualityUtils.QuaternionEquals);
+        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, EqualityUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, EqualityUtils.Vector3Equals);
 
-        frames[0] = frame;
+        currentFrame++;
     }
 
 
     private void Playback()
     {
+        Debug.Log("Playback");
         if (currentFrame <= 0)
         {
-            currentFrame = 1;
-            ChangeDirection();
+            ChangeDirectionToRecord();
             return;
         }
-        transform.position = frames[currentFrame].position;
-        transform.rotation = frames[currentFrame].rotation;
+        transform.position = positions.GetValueAtFrame(currentFrame);
+        transform.rotation = rotations.GetValueAtFrame(currentFrame);
         currentFrame--;
     }
 
     private void Resume()
     {
+        Debug.Log("Resume");
         _renderer.material = resume;
 
         _rigidbody.useGravity = true;
         _rigidbody.isKinematic = false;
         _rigidbody.constraints = RigidbodyConstraints.None;
 
-        _rigidbody.velocity = frames[currentFrame].velocity;
-        _rigidbody.angularVelocity = frames[currentFrame].angularVelocity;
+        _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame);
+        _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame);
     }
 
     public void OnFixedUpdate()
     {
+        Debug.Log("--------------------------");
+        Debug.Log($"Frame: {currentFrame}");
         switch (state)
         {
             case PhysicsRecorderState.None:
                 break;
 
-            case PhysicsRecorderState.Floating:
-                _rigidbody.AddForce(_floatingVelocity, ForceMode.Acceleration);
-                _rigidbody.velocity = Vector3.Project(_rigidbody.velocity, _floatingVelocity);
-                var distanceToCenter = Vector3.Distance(timeBubbleCenter, transform.position);
-                if (distanceToCenter < timeBubbleRadius)
-                {
-                    if (isFloatingTheFirstTime)
-                    {
-                        isFloatingTheFirstTime = false;
-                        RecordInitialFrame();
-                    }
-                    RestoreInitialFrame();
-                    Resume();
-                    state = PhysicsRecorderState.Record;
-                }
-                break;
-
-            case PhysicsRecorderState.Rewind:
-                _renderer.material = rewind;
-                _rigidbody.isKinematic = true;
-                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-                state = PhysicsRecorderState.Playback;
-                currentFrame--;
-                break;
-
             case PhysicsRecorderState.Record:
+                Debug.Log("Handle Recording");
                 Record();
                 break;
 
             case PhysicsRecorderState.Playback:
+                Debug.Log("Handle Playback");
                 Playback();
                 break;
 
@@ -152,49 +138,75 @@ public class PhysicsRecorder : MonoBehaviour
 
     private void RestoreInitialFrame()
     {
-        var frame = frames[0];
-        transform.position = frame.position;
-        transform.rotation = frame.rotation;
-        _rigidbody.velocity = frame.velocity;
-        _rigidbody.angularVelocity = frame.angularVelocity;
+        Debug.Log("Restore Initial Frame");
+        transform.position = positions.GetValueAtFrame(0);
+        transform.rotation = rotations.GetValueAtFrame(0);
+        _rigidbody.velocity = velocities.GetValueAtFrame(0);
+        _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(0);
+        currentFrame = 0;
     }
 
-    public void ChangeDirection()
+    public void ChangeDirectionToRecord()
     {
-        if (state is PhysicsRecorderState.Playback)
-        {
-            _renderer.material = floating;
-            _rigidbody.useGravity = false;
-            _rigidbody.isKinematic = false;
-            state = PhysicsRecorderState.Floating;
-        }
-        else if (state is PhysicsRecorderState.Record)
-        {
-            state = PhysicsRecorderState.Rewind;
-        }
+        Debug.Log("Change Direction to Record");
+        RestoreInitialFrame();
+        state = PhysicsRecorderState.Record;
+        ClearAllExceptFirstFrame();
+        Resume();
+        currentFrame++;
+    }
+    public void ChangeDirectionToPlayback()
+    {
+        Debug.Log("Change Direction to Playback");
+        _renderer.material = rewind;
+        _rigidbody.isKinematic = true;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        state = PhysicsRecorderState.Playback;
+        currentFrame--;
     }
 
     public void StartRecording(Vector3 centerPosition, float radius)
     {
+        Debug.Log("Start Recording");
         timeBubbleCenter = centerPosition;
         timeBubbleRadius = radius;
-        isInTimeBubble = true;
-
-        isFloatingTheFirstTime = true;
-
-        _renderer.material = floating;
-        _floatingVelocity = _rigidbody.velocity;
-        _rigidbody.useGravity = false;
-        _rigidbody.isKinematic = false;
-        state = PhysicsRecorderState.Floating;
+        isRecording = true;
+        _renderer.material = resume;
+        state = PhysicsRecorderState.Record;
     }
 
     public void StopRecording()
     {
+        Debug.Log("Stop Recording");
         Resume();
         isFloatingTheFirstTime = false;
+        currentFrame = 0;
         state = PhysicsRecorderState.None;
-        isInTimeBubble = false;
+        isRecording = false;
         _renderer.material = _default;
+        ClearAll();
+        
     }
+
+    public bool IsMovingForward()
+    {
+        return state == PhysicsRecorderState.Record && currentFrame > 1;
+    }
+
+    private void ClearAll()
+    {
+        positions.ClearAll();
+        rotations.ClearAll();
+        velocities.ClearAll();
+        angularVelocities.ClearAll();
+    }
+
+    private void ClearAllExceptFirstFrame()
+    {
+        positions.ClearAllExceptFirstFrame();
+        rotations.ClearAllExceptFirstFrame();
+        velocities.ClearAllExceptFirstFrame();
+        angularVelocities.ClearAllExceptFirstFrame();
+    }
+
 }

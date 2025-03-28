@@ -8,22 +8,23 @@ public class TimeBubble : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var o = other.GetComponent<PhysicsRecorder>();
-        if (o == null || o.isInTimeBubble) return;
+        if (o == null || o.isRecording) return;
 
-        o.StartRecording(transform.position, transform.localScale.x);
+        o.StartRecording(transform.position, transform.localScale.x * 0.5f);
         recorders.Add(o);
     }
     
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exit");
         var o = other.GetComponent<PhysicsRecorder>();
         if (o == null)
         {
             return;
         }
-
-        o.ChangeDirection();
+        if (o.IsMovingForward())
+        {
+            o.ChangeDirectionToPlayback();
+        }
     }
 
     private void FixedUpdate()
