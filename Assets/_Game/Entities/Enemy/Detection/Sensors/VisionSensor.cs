@@ -20,8 +20,6 @@ namespace F3PS.AI.Sensors
                 var direction = targetPosition - position;
                 var playerPartDistance = direction.magnitude;
                 direction.Normalize();
-                Debug.DrawRay(position, direction * playerPartDistance, Color.red);
-                    
                 // check if something is between the player and the eyes
                 if (!Physics.Raycast(position, direction, playerPartDistance, Helper.DefaultLayer))
                 {
