@@ -4,13 +4,14 @@ using UnityEngine;
 public class TimeBubble : MonoBehaviour
 {
     public List<PhysicsRecorder> recorders = new List<PhysicsRecorder>();
-    public float timeScale = 0.05f;
+    public float timeScale = 1f;
     void OnTriggerEnter(Collider other)
     {
         var o = other.GetComponent<PhysicsRecorder>();
         if (o == null || o.isRecording) return;
 
         o.StartRecording(transform.position, transform.localScale.x * 0.5f);
+        o.PitchTimeScale(timeScale);
         recorders.Add(o);
     }
     
@@ -43,5 +44,15 @@ public class TimeBubble : MonoBehaviour
             recorder.StopRecording();
         }
         recorders.Clear();
+    }
+
+    public void PitchTimeScale(float bubbleTimeScaleDirection)
+    {
+        timeScale += bubbleTimeScaleDirection;
+        timeScale = Mathf.Clamp(timeScale, 0f, 1f);
+        foreach (var recorder in recorders)
+        {
+            recorder.PitchTimeScale(timeScale);
+        }
     }
 }

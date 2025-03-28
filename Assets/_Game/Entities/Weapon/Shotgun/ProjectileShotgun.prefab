@@ -27,6 +27,31 @@ PrefabInstance:
       propertyPath: removeAfterSeconds
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 7615002434370928052}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 5553063311695686210}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 8805520617357189082}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[3]
+      value: 
+      objectReference: {fileID: 8297967856198506923}
     - target: {fileID: 7785563140789300818, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
       propertyPath: m_RootOrder
@@ -109,3 +134,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 540c7b130eeac7c4b89347aae834408b, type: 3}
+--- !u!23 &5553063311695686210 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8294872423647169855, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4471299465143936893}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &7615002434370928052 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6314279165363591881, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4471299465143936893}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &8297967856198506923 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5558975623774224086, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4471299465143936893}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &8805520617357189082 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 4917439815977826471, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4471299465143936893}
+  m_PrefabAsset: {fileID: 0}

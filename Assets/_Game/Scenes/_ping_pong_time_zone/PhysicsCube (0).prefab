@@ -128,15 +128,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playbackSpeed: 1
+  renderers:
+  - {fileID: 4827258201038800980}
   _default: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   resume: {fileID: 2100000, guid: 855066636d1cad44abbdc3c7121884d3, type: 2}
   rewind: {fileID: 2100000, guid: e32886938824ee74db2f29008cd092fb, type: 2}
   floating: {fileID: 2100000, guid: f54f727468c8b4e48a3fb95fb1f7fcea, type: 2}
+  currentRecordingTime: 0
   currentFrame: 0
-  floatingTolerance: 0.001
   timeBubbleCenter: {x: 0, y: 0, z: 0}
   timeBubbleRadius: 0
   state: 0
   isRecording: 0
-  isFloatingTheFirstTime: 0
-  _floatingVelocity: {x: 0, y: 0, z: 0}
+  aliveTime: 0
+  amountOfTimeZones: 0
+  currentTimeScale: 1
+  additionalTimeScale: 1
+  gravityScale: 1
+  defaultMass: 0
+  initialTimeScale: 1

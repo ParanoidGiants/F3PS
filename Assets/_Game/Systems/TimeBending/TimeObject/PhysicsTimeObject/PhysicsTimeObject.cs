@@ -38,8 +38,7 @@ public class PhysicsTimeObject : TimeObject
             newTimeScale *= additionalTimeScale;
         }
         float relation = currentTimeScale == 0f ? 1f : newTimeScale / currentTimeScale;
-        base.PitchTimeScale(newTimeScale);
-        
+        currentTimeScale = newTimeScale;
         if (newTimeScale > TOLERANCE)
         {
             _rb.isKinematic = false;
