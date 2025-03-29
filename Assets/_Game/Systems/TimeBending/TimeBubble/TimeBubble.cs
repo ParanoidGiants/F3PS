@@ -22,7 +22,8 @@ public class TimeBubble : MonoBehaviour
         {
             return;
         }
-        if (o.IsMovingForward())
+        
+        if (!o.IsInSphere() && o.IsMovingForward())
         {
             o.ChangeDirectionToPlayback();
         }

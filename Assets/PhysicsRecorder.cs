@@ -56,10 +56,7 @@ public static class MathUtils
         // Return the intersection point.
         return point + t * direction;
     }
-}
 
-public static class EqualityUtils
-{
     public static bool Vector3Equals(Vector3 a, Vector3 b)
     {
         // Using the overloaded operator for Vector3.
@@ -115,6 +112,7 @@ public class PhysicsRecorder : MonoBehaviour
     protected const double TOLERANCE = 0.001f;
     public float defaultMass;
     public float initialTimeScale = 1f;
+    public bool isFrozen = false;
 
     protected virtual void Awake()
     {
@@ -142,28 +140,44 @@ public class PhysicsRecorder : MonoBehaviour
         aliveTime = 0f;
     }
 
+    public bool isTimeFrozen = false;
     public void PitchTimeScale(float newTimeScale)
     {
-        if (_rigidbody == null) return;
-
         float relation = currentTimeScale == 0f ? 1f : newTimeScale / currentTimeScale;
         currentTimeScale = newTimeScale;
 
-        if (newTimeScale > TOLERANCE)
+        if (!isTimeFrozen && newTimeScale <= TOLERANCE)
         {
-            UnfreezeRigidbody();
-            _rigidbody.mass = defaultMass / (newTimeScale * newTimeScale);
-            _rigidbody.velocity *= relation;
-            _rigidbody.angularVelocity *= relation;
+            isTimeFrozen = true;
+            Debug.Log("TimeFreeze");
+            if (state != PhysicsRecorderState.Playback)
+            {
+                _rigidbody.isKinematic = true;
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            }
         }
-        else
+        else if (newTimeScale > TOLERANCE)
         {
-            FreezeRigidbody();
+            if (isTimeFrozen)
+            {
+                isTimeFrozen = false;
+                Debug.Log("TimeUnfreeze");
+                _rigidbody.isKinematic = false;
+                _rigidbody.constraints = RigidbodyConstraints.None;
+            }
+
+            if (state != PhysicsRecorderState.Playback)
+            {
+                _rigidbody.mass = defaultMass / (newTimeScale * newTimeScale);
+                _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * relation;
+                _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * relation;
+            }
         }
     }
 
     private void FreezeRigidbody()
     {
+        Debug.Log("Freeze");
         _rigidbody.isKinematic = true;
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }
@@ -176,6 +190,8 @@ public class PhysicsRecorder : MonoBehaviour
         }
         _rigidbody.isKinematic = false;
         _rigidbody.constraints = RigidbodyConstraints.None;
+        _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
+        _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * currentTimeScale;
     }
 
     private void OnDisable()
@@ -196,29 +212,29 @@ public class PhysicsRecorder : MonoBehaviour
         }
         currentFrame = nextFrame;
         Debug.Log($"Record Frame {currentFrame}: {transform.position}");
-        positions.RecordIfChanged(currentFrame, transform.position, EqualityUtils.Vector3Equals);
-        rotations.RecordIfChanged(currentFrame, transform.rotation, EqualityUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, EqualityUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, EqualityUtils.Vector3Equals);
+        positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
+        rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
+        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
     private void RecordInitialFrame()
     {
         currentFrame = 0;
         Debug.Log($"Record Initial Frame {currentFrame}: {transform.position}");
-        positions.RecordIfChanged(currentFrame, transform.position, EqualityUtils.Vector3Equals);
-        rotations.RecordIfChanged(currentFrame, transform.rotation, EqualityUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, EqualityUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, EqualityUtils.Vector3Equals);
+        positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
+        rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
+        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
     private void RecordFutureFramePosition(int frame, Vector3 position)
     {
         Debug.Log($"Record Specific Frame {frame}: {position}");
-        positions.RecordIfChanged(frame, position, EqualityUtils.Vector3Equals);
-        rotations.RecordIfChanged(frame, transform.rotation, EqualityUtils.QuaternionEquals);
-        velocities.RecordIfChanged(frame, _rigidbody.velocity, EqualityUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(frame, _rigidbody.angularVelocity, EqualityUtils.Vector3Equals);
+        positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
+        rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
+        velocities.RecordIfChanged(frame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(frame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
     private void Playback()
@@ -346,7 +362,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public bool IsMovingForward()
     {
-        return state == PhysicsRecorderState.Record && currentFrame > 1;
+        return state == PhysicsRecorderState.Record && currentFrame > 1;    
     }
 
     private void ClearAll()
@@ -365,4 +381,8 @@ public class PhysicsRecorder : MonoBehaviour
         angularVelocities.ClearAllExceptFirstFrame();
     }
 
+    public bool IsInSphere()
+    {
+        return MathUtils.IsPositionInsideOfSphere(transform.position, timeBubbleCenter, timeBubbleRadius);
+    }
 }
