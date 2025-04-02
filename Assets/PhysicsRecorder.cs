@@ -113,6 +113,7 @@ public class PhysicsRecorder : MonoBehaviour
     public float defaultMass;
     public float initialTimeScale = 1f;
     public bool isFrozen = false;
+    public float frameDuration = 0.02f;
 
     protected virtual void Awake()
     {
@@ -149,7 +150,7 @@ public class PhysicsRecorder : MonoBehaviour
         if (!isTimeFrozen && newTimeScale <= TOLERANCE)
         {
             isTimeFrozen = true;
-            Debug.Log("TimeFreeze");
+            Log("TimeFreeze");
             if (state != PhysicsRecorderState.Playback)
             {
                 _rigidbody.isKinematic = true;
@@ -161,7 +162,7 @@ public class PhysicsRecorder : MonoBehaviour
             if (isTimeFrozen)
             {
                 isTimeFrozen = false;
-                Debug.Log("TimeUnfreeze");
+                Log("TimeUnfreeze");
                 _rigidbody.isKinematic = false;
                 _rigidbody.constraints = RigidbodyConstraints.None;
             }
@@ -177,7 +178,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     private void FreezeRigidbody()
     {
-        Debug.Log("Freeze");
+        Log("Freeze");
         _rigidbody.isKinematic = true;
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }
@@ -205,13 +206,17 @@ public class PhysicsRecorder : MonoBehaviour
     private void Record()
     {
         currentRecordingTime += Time.fixedDeltaTime * currentTimeScale * Time.timeScale;
-        var nextFrame = (int) Math.Floor(currentRecordingTime / Time.fixedDeltaTime);
+        var nextFrame = (int) Math.Floor(currentRecordingTime / frameDuration);
+        Log($"Next Frame: {nextFrame}");
+        Log($"Current Recording Time: {currentRecordingTime}");
+        Log($"Current Fixed Delta Time: {Time.fixedDeltaTime}");
+        Log($"Current Time Scale: {currentTimeScale}");
         if (nextFrame <= currentFrame)
         {
             return;
         }
         currentFrame = nextFrame;
-        Debug.Log($"Record Frame {currentFrame}: {transform.position}");
+        Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
         velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
@@ -221,7 +226,7 @@ public class PhysicsRecorder : MonoBehaviour
     private void RecordInitialFrame()
     {
         currentFrame = 0;
-        Debug.Log($"Record Initial Frame {currentFrame}: {transform.position}");
+        Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
         velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
@@ -230,7 +235,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     private void RecordFutureFramePosition(int frame, Vector3 position)
     {
-        Debug.Log($"Record Specific Frame {frame}: {position}");
+        Log($"Record Specific Frame {frame}: {position}");
         positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
         velocities.RecordIfChanged(frame, _rigidbody.velocity, MathUtils.Vector3Equals);
@@ -298,9 +303,9 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void ChangeDirectionToRecord()
     {
-        Debug.Log("Change Direction to Record");
+        Log("Change Direction to Record");
 
-        Debug.Log("Restore Initial Frame");
+        Log("Restore Initial Frame");
         transform.position = positions.GetValueAtFrame(0);
         transform.rotation = rotations.GetValueAtFrame(0);
         _rigidbody.velocity = velocities.GetValueAtFrame(0) * currentTimeScale;
@@ -313,7 +318,7 @@ public class PhysicsRecorder : MonoBehaviour
     }
     public void ChangeDirectionToPlayback()
     {
-        Debug.Log("Change Direction to Playback");
+        Log("Change Direction to Playback");
 
         Array.ForEach(renderers, r => r.material = rewind);
         FreezeRigidbody();
@@ -330,7 +335,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void StartRecording(Vector3 centerPosition, float radius)
     {
-        Debug.Log("Start Recording");
+        Log("Start Recording");
         timeBubbleCenter = centerPosition;
         timeBubbleRadius = radius;
         isRecording = true;
@@ -350,7 +355,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void StopRecording()
     {
-        Debug.Log("Stop Recording");
+        Log("Stop Recording");
         Resume();
         currentFrame = 0;
         state = PhysicsRecorderState.None;
@@ -358,6 +363,11 @@ public class PhysicsRecorder : MonoBehaviour
         Array.ForEach(renderers, r => r.material = _default);
         ClearAll();
         PitchTimeScale(1f);
+    }
+
+    private void Log(string v)
+    {
+        // Debug.Log($"{gameObject.name}: {v}");
     }
 
     public bool IsMovingForward()
