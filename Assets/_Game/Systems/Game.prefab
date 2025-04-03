@@ -1765,6 +1765,7 @@ MonoBehaviour:
   sceneNames:
   - _controls
   - _kill_enemy_opens_door
+  - _ping_pong_space
   backDrop: {fileID: 1664451570}
 --- !u!1 &1717960509
 GameObject:
@@ -2842,6 +2843,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
+  bubbleTimeScale: 0
   jump: 0
   sprint: 0
   shoot: 0
