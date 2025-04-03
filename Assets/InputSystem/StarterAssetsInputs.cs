@@ -1,6 +1,7 @@
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 #endif
 
 namespace StarterAssets
@@ -10,7 +11,8 @@ namespace StarterAssets
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
-		public bool jump;
+		public float bubbleTimeScale;
+        public bool jump;
 		public bool sprint;
 		public bool shoot;
 		public bool aim;
@@ -30,12 +32,16 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
-		}
+        public void OnMove(InputValue value)
+        {
+            MoveInput(value.Get<Vector2>());
+        }
+        public void OnBubbleTimeScale(InputValue value)
+        {
+            BubbleTimeScale(value.Get<float>());
+        }
 
-		public void OnLook(InputValue value)
+        public void OnLook(InputValue value)
 		{
 			if(cursorInputForLook)
 			{
@@ -103,9 +109,13 @@ namespace StarterAssets
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
-		} 
+        }
+        public void BubbleTimeScale(float direction)
+		{
+			bubbleTimeScale = direction == 0f ? 0f : Mathf.Sign(direction);
+        }
 
-		public void LookInput(Vector2 newLookDirection)
+        public void LookInput(Vector2 newLookDirection)
 		{
 			look = newLookDirection;
 		}

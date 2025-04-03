@@ -46,6 +46,7 @@ namespace StarterAssets
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
+        public TimeBubble timeBubble;
         private PlayerHealthUI _playerHealthUI;
 
         [Space(20)]
@@ -140,6 +141,10 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+
+        [Header("TimeBubble")]
+        [Tooltip("Speed of scrolling per second")]
+        public float timeBubbleTimeScaleSpeed = 1f;
 
         [Space(10)]
         
@@ -253,6 +258,7 @@ namespace StarterAssets
                 _isRestartingGame = true;
             }
 
+
             weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
 
             if (GameManager.Instance.timeManager.IsPaused) return;
@@ -282,6 +288,12 @@ namespace StarterAssets
             {
                 Move();
             }
+        }
+
+        private void HandleBubbleTimeScale()
+        {
+            if (_input.bubbleTimeScale == 0f) return;
+            timeBubble.PitchTimeScale(timeBubbleTimeScaleSpeed * _input.bubbleTimeScale * Time.deltaTime);
         }
 
         public void StopControlPlayer()
@@ -334,6 +346,7 @@ namespace StarterAssets
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.IsPaused) return;
 
+            HandleBubbleTimeScale();
             weaponManager.OnFixedUpdate();
         }
 

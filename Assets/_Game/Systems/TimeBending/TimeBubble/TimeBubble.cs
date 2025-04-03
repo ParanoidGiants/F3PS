@@ -1,49 +1,59 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeBubble : MonoBehaviour
 {
-    private readonly List<TimeObject> _timeObjects = new List<TimeObject>();
-    public float timeScale = 0.05f;
-
-
-
+    public List<PhysicsRecorder> recorders = new List<PhysicsRecorder>();
+    public float timeScale = 1f;
     void OnTriggerEnter(Collider other)
     {
-        TimeObject o = other.GetComponent<TimeObject>();
-        if (o == null) return;
-        
-        if (o.amountOfTimeZones == 0)
-        {
-            o.PitchTimeScale(timeScale);
-        }
-        o.amountOfTimeZones++;
-        _timeObjects.Add(o);
+        var o = other.GetComponent<PhysicsRecorder>();
+        if (o == null || o.isRecording) return;
+
+        o.StartRecording(transform.position, transform.localScale.x * 0.5f);
+        o.PitchTimeScale(timeScale);
+        recorders.Add(o);
     }
     
     void OnTriggerExit(Collider other)
     {
-        TimeObject o = other.GetComponent<TimeObject>();
-        if (o != null)
+        var o = other.GetComponent<PhysicsRecorder>();
+        if (o == null)
         {
-            if (o.amountOfTimeZones == 1)
-            {
-                o.PitchTimeScale(1f);
-            }
-            o.amountOfTimeZones--;
-            _timeObjects.Remove(o);
+            return;
+        }
+        
+        if (!o.IsInSphere() && o.IsMovingForward())
+        {
+            o.ChangeDirectionToPlayback();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (var  recorder in recorders)
+        {
+            recorder.OnFixedUpdate();
         }
     }
 
     private void OnDisable()
     {
-        foreach (var timeObject in _timeObjects)
+
+        foreach (var recorder in recorders)
         {
-            timeObject.amountOfTimeZones--;
-            timeObject.PitchTimeScale(1f);
+            recorder.StopRecording();
         }
-        
-        _timeObjects.Clear();
+        recorders.Clear();
+    }
+
+    public void PitchTimeScale(float bubbleTimeScaleDirection)
+    {
+        timeScale += bubbleTimeScaleDirection;
+        timeScale = Mathf.Clamp(timeScale, 0f, 1f);
+        foreach (var recorder in recorders)
+        {
+            recorder.PitchTimeScale(timeScale);
+        }
     }
 }

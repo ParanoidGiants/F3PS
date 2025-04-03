@@ -8,7 +8,6 @@ public class BaseProjectile : MonoBehaviour
     public ParticleSystem hitParticleSystem;
     public ParticleSystem noHitParticleSystem;
     public GameObject mesh;
-    public ProjectileTimeObject timeObject;
     public HitBox hitBox;
     public Rigidbody rb;
     public Collider col;
@@ -36,7 +35,7 @@ public class BaseProjectile : MonoBehaviour
     {
         if (_isHit) return;
 
-        lifeTime += timeObject.ScaledDeltaTime;
+        lifeTime += Time.deltaTime;
         if (lifeTime > maximumLifeTimer)
         {
             gameObject.SetActive(false);
@@ -68,11 +67,11 @@ public class BaseProjectile : MonoBehaviour
     
     private void OnEnable()
     {
-        timeObject.ClearTrail();
         rb.isKinematic = false;
         rb.velocity = transform.forward * _speed;
         lifeTime = 0f;
         enableCollisionsTime = 0f;
+        col.enabled = true;
     }
 
     private void OnDisable()
@@ -80,12 +79,6 @@ public class BaseProjectile : MonoBehaviour
         mesh.SetActive(true);
         hitParticleSystem.gameObject.SetActive(false);
         noHitParticleSystem.gameObject.SetActive(false);
-    }
-
-    private IEnumerator SetInactiveAfterSeconds()
-    {
-        yield return new WaitForSeconds(hitParticleSystem.main.duration);
-        gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -96,9 +89,6 @@ public class BaseProjectile : MonoBehaviour
         }
         _isHit = true;
 
-        rb.velocity = Vector3.zero;
-        rb.isKinematic = true;
-        timeObject.ClearTrail();
         mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null 
@@ -117,5 +107,16 @@ public class BaseProjectile : MonoBehaviour
     protected virtual void ProjectileSpecificActions()
     {
         StartCoroutine(SetInactiveAfterSeconds());
+    }
+
+    private IEnumerator SetInactiveAfterSeconds()
+    {
+        yield return new WaitForFixedUpdate();
+        col.enabled = false;
+        yield return new WaitForFixedUpdate();
+        rb.isKinematic = true;
+
+        yield return new WaitForSeconds(hitParticleSystem.main.duration);
+        gameObject.SetActive(false);
     }
 }

@@ -21,8 +21,10 @@ public class TimeObject : MonoBehaviour
         {
             return;
         }
+        /*
         animateMesh.TimeFlash(newTimeScale);
         animateMesh.SetTimeScale(newTimeScale);
+         */
 
         currentTimeScale = newTimeScale;
     }

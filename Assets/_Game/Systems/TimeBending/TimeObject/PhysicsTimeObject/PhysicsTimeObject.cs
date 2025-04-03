@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PhysicsTimeObject : TimeObject
 {
-    protected const double TOLERANCE = 0.0001f;
+    protected const double TOLERANCE = 0.001f;
     protected float _defaultMass;
     private Rigidbody _rb;
 
@@ -37,12 +37,12 @@ public class PhysicsTimeObject : TimeObject
         {
             newTimeScale *= additionalTimeScale;
         }
-        float relation = newTimeScale / currentTimeScale;
-        base.PitchTimeScale(newTimeScale);
-        
+        float relation = currentTimeScale == 0f ? 1f : newTimeScale / currentTimeScale;
+        currentTimeScale = newTimeScale;
         if (newTimeScale > TOLERANCE)
         {
             _rb.isKinematic = false;
+            _rb.constraints = RigidbodyConstraints.None;
             _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
             _rb.velocity *= relation;
             _rb.angularVelocity *= relation;
