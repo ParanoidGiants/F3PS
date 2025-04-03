@@ -318,7 +318,7 @@ PrefabInstance:
     - target: {fileID: 6791457124252350137, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}
       propertyPath: m_Name
-      value: PlayerSpace
+      value: ping_pong_space
       objectReference: {fileID: 0}
     - target: {fileID: 8035988881084857064, guid: 4d4db73df165e4d40aed90ef571a18f0,
         type: 3}

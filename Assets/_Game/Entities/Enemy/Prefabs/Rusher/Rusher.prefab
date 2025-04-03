@@ -1661,7 +1661,7 @@ PrefabInstance:
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}
       propertyPath: m_Interpolate
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 97857952171034523, guid: adf3ea1951483e14fa379173f1539d49,
         type: 3}

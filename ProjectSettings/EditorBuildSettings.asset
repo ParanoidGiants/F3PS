@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Game/Scenes/_controls.unity
+    guid: 659f2ca9ad0153847a7515ea6eceb148
+  - enabled: 1
+    path: Assets/_Game/Scenes/_kill_enemy_opens_door.unity
+    guid: 618799eb3134d834d811a89b79127e64
+  - enabled: 1
     path: Assets/_Game/Scenes/_ping_pong_space.unity
     guid: df36fe56b6396d749bd49d2266b4242c
   m_configObjects:
