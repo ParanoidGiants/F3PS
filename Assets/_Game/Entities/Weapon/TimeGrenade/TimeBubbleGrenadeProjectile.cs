@@ -9,7 +9,6 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public TimeBubble timeBubble;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
-    public float targetScale = 20f;
     private bool _isActive = false;
 
     public float shakePower = 1f;
@@ -30,11 +29,12 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void ActivateTimeBubble()
     {
+        timeBubble.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
         timeBubble.transform.localScale = Vector3.zero;
         timeBubble.transform
-            .DOScale(Vector3.one * targetScale, animationDuration)
+            .DOScale(Vector3.one * timeBubble.targetSize, animationDuration)
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
@@ -51,6 +51,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
             .OnComplete(() =>
             {
                 // Deactivate the GameObject after the tween is complete.
+                timeBubble.Clear();
                 timeBubble.gameObject.SetActive(false);
                 gameObject.SetActive(false);
             });

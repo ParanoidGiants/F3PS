@@ -147,3 +147,6 @@ MonoBehaviour:
   gravityScale: 1
   defaultMass: 0
   initialTimeScale: 1
+  isFrozen: 0
+  frameDuration: 0.02
+  isTimeFrozen: 0

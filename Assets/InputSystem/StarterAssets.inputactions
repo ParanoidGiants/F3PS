@@ -486,7 +486,7 @@
                 {
                     "name": "",
                     "id": "5966f2e6-4409-4f9b-8d73-132ca9d672e6",
-                    "path": "<Keyboard>/escape",
+                    "path": "<Keyboard>/m",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",

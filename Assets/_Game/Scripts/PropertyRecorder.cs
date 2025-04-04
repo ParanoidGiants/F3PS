@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class PropertyRecorder<T>
 {
@@ -7,6 +8,8 @@ public class PropertyRecorder<T>
     private List<FrameRecord<T>> records = new List<FrameRecord<T>>();
     private T lastValue;
     private bool hasValue = false;
+
+    public int Count => records.Count;
 
     // This delegate lets you decide what “changed” means for type T.
     // For instance, for Vector3 you might use the == operator (or consider an epsilon tolerance).
@@ -65,5 +68,10 @@ public class PropertyRecorder<T>
     {
         records.Clear();
         hasValue = false;
+    }
+
+    internal void RecordIfChanged(int currentFrame, object currentWayPoint, Func<Vector3, Vector3, bool> vector3Equals)
+    {
+        throw new NotImplementedException();
     }
 }

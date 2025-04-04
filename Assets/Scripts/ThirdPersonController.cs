@@ -3,6 +3,8 @@ using UnityEngine;
 
 using Weapon;
 using Cinemachine;
+using UnityEngine.InputSystem.XR;
+
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -92,6 +94,11 @@ namespace StarterAssets
 
         [Space(10)]
         [Header("Gravity, Jump & Dodge")]
+
+
+        public float groundedCoyoteDuration = 0.3f;
+        public float _groundedCoyoteTime = 0f;
+
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
 
@@ -171,6 +178,8 @@ namespace StarterAssets
         [SerializeField] private float _lookYaw;
         [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _lastInputDirection;
+        [SerializeField] private Transform currentPlatform;
+        [SerializeField] private Vector3 lastPosition;
 
         private const float _threshold = 0.01f;
         private const float _terminalVelocity = 53.0f;
@@ -189,8 +198,6 @@ namespace StarterAssets
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
-
-
 
         private Animator _animator;
         private GameObject _mainCamera;
@@ -245,16 +252,14 @@ namespace StarterAssets
             HandleFreeCamera();
             HandleStopTime();
             if (!canControlPlayer) return;
-
             if (_isDying) return;
-
-
 
             weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
 
             if (GameManager.Instance.timeManager.Stopped) return;
 
-            GroundedCheck();
+            _animator.SetBool(_animIDGrounded, _isGrounded);
+
             _isShooting = _input.shoot;
             _isReloading = _input.reload;
             _isAimingGrenade = _input.aimGrenade;
@@ -266,11 +271,7 @@ namespace StarterAssets
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
 
-            _hasAnimator = TryGetComponent(out _animator);
-
-            _animator.SetBool(_animIDGrounded, _isGrounded);
             JumpAndGravity();
-
             if (_isDodging)
             {
                 Dodge();
@@ -278,6 +279,66 @@ namespace StarterAssets
             else
             {
                 Move();
+            }
+
+        }
+
+        private void FixedUpdate()
+        {
+            if (!canControlPlayer) return;
+            if (_isDying) return;
+            if (GameManager.Instance.IsGamePaused) return;
+            if (GameManager.Instance.timeManager.Stopped) return;
+
+            GroundedCheck();
+            HandlePlatform();
+
+            HandleBubbleTimeScale();
+            weaponManager.OnFixedUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            if (_isMenuOpen) return;
+
+            CameraTargetRotation();
+
+        }
+
+        private void HandlePlatform()
+        {
+            if (currentPlatform == null) return;
+
+            var platformDelta = currentPlatform.position - lastPosition;
+            _controller.Move(platformDelta);
+            lastPosition = currentPlatform.position;
+
+            if (!_isGrounded)
+            {
+                Ray ray = new Ray(transform.position, Vector3.down);
+                Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    var groundDelta = transform.position - hit.point;
+                    if (groundDelta.magnitude > 0.1f)
+                    {
+                        _controller.Move(groundDelta);
+                    }
+                }
+            }
+        }
+
+        public void SetCurrentPlatform(Transform transform)
+        {
+            currentPlatform = transform;
+            lastPosition = transform.position;
+        }
+
+        public void RemoveCurrentPlatform(Transform transform)
+        {
+            if (currentPlatform == transform)
+            {
+                currentPlatform = null;
             }
         }
 
@@ -396,25 +457,6 @@ namespace StarterAssets
             }
         }
 
-
-        private void FixedUpdate()
-        {
-            if (!canControlPlayer) return;
-            if (_isDying) return;
-            if (GameManager.Instance.IsGamePaused) return;
-            if (GameManager.Instance.timeManager.Stopped) return;
-
-            HandleBubbleTimeScale();
-            weaponManager.OnFixedUpdate();
-        }
-
-        private void LateUpdate()
-        {
-            if (_isMenuOpen) return;
-
-            CameraTargetRotation();
-
-        }
 
         private void CameraTargetRotation()
         {
@@ -536,6 +578,7 @@ namespace StarterAssets
         {
             if (_isGrounded)
             {
+                _groundedCoyoteTime = 0f;
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
@@ -556,30 +599,13 @@ namespace StarterAssets
                 // Jump
                 if (_input.jump && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDJump, true);
-                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-                    }
+                    DoJump();
                 }
                 
                 // Dodge
                 else if (!_isDodging && _input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
-                    _isDodging = true;
-                    _dodgeAscendTime = DodgeAscendTimer;
-                    _dodgeLandTime = DodgeLandTimer;
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDDodge, true);
-                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-                    }
+                    DoDodge();
                 }
 
                 // jump timeout
@@ -591,6 +617,23 @@ namespace StarterAssets
                 {
                     _verticalVelocity = Mathf.Max(_verticalVelocity, DodgeHeight);
                     _dodgeCoolDownTime -= Time.deltaTime;
+                }
+            }
+            else if (_groundedCoyoteTime < groundedCoyoteDuration && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
+            {
+                _groundedCoyoteTime += Time.deltaTime;
+                // Jump
+                if (_input.jump)
+                {
+                    DoJump();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
+                }
+
+                // Dodge
+                else if (!_isDodging && _input.dodge)
+                {
+                    DoDodge();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
                 }
             }
             else
@@ -626,6 +669,34 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity && _dodgeAscendTime <= 0f)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
+            }
+        }
+
+        private void DoJump()
+        {
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDJump, true);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+            }
+        }
+
+        private void DoDodge()
+        {
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
+            _isDodging = true;
+            _dodgeAscendTime = DodgeAscendTimer;
+            _dodgeLandTime = DodgeLandTimer;
+            _groundedCoyoteTime = groundedCoyoteDuration;
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDDodge, true);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
             }
         }
 

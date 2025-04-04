@@ -17,7 +17,8 @@ namespace TimeBending
         [SerializeField] private bool _isPaused;
         public bool Stopped => _isPaused;
         private float _fps = 60f;
-        public float lookRotationSpeed = 0.6f;  
+        public float lookRotationSpeed = 0.6f;
+
 
         public void StartSlowMotion ()
         {
