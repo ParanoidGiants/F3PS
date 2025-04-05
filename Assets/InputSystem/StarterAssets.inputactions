@@ -387,7 +387,7 @@
                 {
                     "name": "",
                     "id": "2645569a-2949-4076-a41a-06afd6a71cab",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -409,7 +409,7 @@
                 {
                     "name": "",
                     "id": "db134118-c92f-405c-bc29-cadc5620656e",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",

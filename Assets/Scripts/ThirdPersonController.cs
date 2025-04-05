@@ -3,9 +3,6 @@ using UnityEngine;
 
 using Weapon;
 using Cinemachine;
-using UnityEngine.InputSystem.XR;
-
-
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -17,7 +14,7 @@ using DarkTonic.MasterAudio;
 
 namespace StarterAssets
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     // [RequireComponent(typeof(PlayerInput))]
 #endif
@@ -49,6 +46,7 @@ namespace StarterAssets
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
         public TimeBubble timeBubble;
+        public Transform armature;
         private PlayerHealthUI _playerHealthUI;
 
         [Space(20)]
@@ -94,8 +92,6 @@ namespace StarterAssets
 
         [Space(10)]
         [Header("Gravity, Jump & Dodge")]
-
-
         public float groundedCoyoteDuration = 0.3f;
         public float _groundedCoyoteTime = 0f;
 
@@ -201,7 +197,7 @@ namespace StarterAssets
 
         private Animator _animator;
         private GameObject _mainCamera;
-        private CharacterController _controller;
+        private Rigidbody _rigidbody;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
@@ -224,11 +220,11 @@ namespace StarterAssets
         {
             _mainCamera = FindObjectOfType<Camera>().gameObject;
             _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
+            _rigidbody = GetComponent<Rigidbody>();
             _input = GameManager.Instance.inputs;
             _playerInput = _input.GetComponent<PlayerInput>();
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
-            Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
 
@@ -270,17 +266,6 @@ namespace StarterAssets
             );
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
-
-            JumpAndGravity();
-            if (_isDodging)
-            {
-                Dodge();
-            }
-            else
-            {
-                Move();
-            }
-
         }
 
         private void FixedUpdate()
@@ -295,6 +280,16 @@ namespace StarterAssets
 
             HandleBubbleTimeScale();
             weaponManager.OnFixedUpdate();
+
+            JumpAndGravity();
+            if (_isDodging)
+            {
+                Dodge();
+            }
+            else
+            {
+                Move();
+            }
         }
 
         private void LateUpdate()
@@ -302,7 +297,6 @@ namespace StarterAssets
             if (_isMenuOpen) return;
 
             CameraTargetRotation();
-
         }
 
         private void HandlePlatform()
@@ -310,7 +304,7 @@ namespace StarterAssets
             if (currentPlatform == null) return;
 
             var platformDelta = currentPlatform.position - lastPosition;
-            _controller.Move(platformDelta);
+            var platformDirection = platformDelta;
             lastPosition = currentPlatform.position;
 
             if (!_isGrounded)
@@ -322,16 +316,18 @@ namespace StarterAssets
                     var groundDelta = transform.position - hit.point;
                     if (groundDelta.magnitude > 0.1f)
                     {
-                        _controller.Move(groundDelta);
+                        platformDirection += groundDelta;
                     }
                 }
             }
+
+            _rigidbody.AddForce(platformDirection, ForceMode.Force);
         }
 
-        public void SetCurrentPlatform(Transform transform)
+        public void SetCurrentPlatform(Transform platform)
         {
-            currentPlatform = transform;
-            lastPosition = transform.position;
+            currentPlatform = platform;
+            lastPosition = platform.position;
         }
 
         public void RemoveCurrentPlatform(Transform transform)
@@ -481,11 +477,12 @@ namespace StarterAssets
 
         private void Move()
         {
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
             float targetSpeed = GetTargetSpeed(_input.move);
 
             // a reference to the players current horizontal velocity
-            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+            float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -515,19 +512,23 @@ namespace StarterAssets
             {
                 _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
             }
-            _targetYaw = _mainCamera.transform.eulerAngles.y
-                         + Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z);
+            _targetYaw = Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z)
+                + _mainCamera.transform.rotation.eulerAngles.y;
             _lookYaw = GetLookYaw(transform, _targetYaw);
-            
-            // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
+            // rotate to face input direction relative to camera position
+            // transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            if (_input.move.magnitude > 0f)
+            {
+                armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            }
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
+            var moveVelocity = lookDirection.normalized * _speed;
             // move the player
-            _controller.Move(
-                lookDirection.normalized * (_speed * Time.deltaTime)
-                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
-            );
+            var moveDirection = (verticalVelocity + moveVelocity);
+
+            _rigidbody.velocity = moveDirection;
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
@@ -568,10 +569,8 @@ namespace StarterAssets
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(
-                lookDirection.normalized * (_speed * Time.deltaTime)
-                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
-            );
+            _rigidbody.velocity = lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
         }
 
         private void JumpAndGravity()
@@ -593,7 +592,7 @@ namespace StarterAssets
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = -2f;
+                    _verticalVelocity = 0f;
                 }
 
                 // Jump
@@ -723,7 +722,7 @@ namespace StarterAssets
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
-                AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                AudioSource.PlayClipAtPoint(LandingAudioClip, transform.position, FootstepAudioVolume);
             }
         }
 
@@ -816,15 +815,17 @@ namespace StarterAssets
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                transform.position.z);
+            Vector3 spherePosition = new Vector3(
+                transform.position.x,
+                transform.position.y - GroundedOffset,
+                transform.position.z
+            );
             _isGrounded = Physics.CheckSphere(
                 spherePosition,
                 GroundedRadius,
                 GroundLayers,
                 QueryTriggerInteraction.Ignore
             );
-
         }
 
         private void OnDrawGizmosSelected()
@@ -838,7 +839,8 @@ namespace StarterAssets
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-                GroundedRadius);
+                GroundedRadius
+            );
         }
     }
 }
