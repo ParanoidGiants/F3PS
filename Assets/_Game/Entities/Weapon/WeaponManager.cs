@@ -59,7 +59,6 @@ namespace Weapon
             isOneWeaponUnlocked = weapons.Any(w => w.IsUnlocked);
             if (!isOneWeaponUnlocked) return;
 
-            // TODO: Refactor for crosshair to only ray cast once per frame and only when needed
             if (grenade.isUnlocked && grenade.HandleThrow(isAimingGrenade, _aimTargetPosition))
             {
                 return;

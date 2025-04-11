@@ -1,4 +1,5 @@
 using StarterAssets;
+using System;
 using UnityEngine;
 
 public class PlatformMover : MonoBehaviour
@@ -7,6 +8,10 @@ public class PlatformMover : MonoBehaviour
     public float speed = 5f;
     private int _currentWaypointIndex = 0;
     private PlatformRecorder recorder;
+
+    private float waitDuration = 2f;
+    private float waitTimer = 0f;
+    private bool moveBackwards = false;
 
     public int CurrentWayPointIndex { get { return _currentWaypointIndex; } set { _currentWaypointIndex = value; } }
 
@@ -18,6 +23,11 @@ public class PlatformMover : MonoBehaviour
 
     void Update()
     {
+        if (waitTimer > 0f)
+        {
+            waitTimer -= Time.deltaTime;
+            return;
+        }
         if (recorder.isFrozen || recorder.state == RecorderState.Playback)
         {
             return;
@@ -35,12 +45,41 @@ public class PlatformMover : MonoBehaviour
         {
             // Snap to the waypoint and move to the next one
             transform.position = targetWaypoint.position;
-            _currentWaypointIndex = (_currentWaypointIndex + 1) % waypoints.Count;
+            DetermineNextWayPoint();
         }
         else
         {
             // Move the platform
             transform.Translate(direction.normalized * distanceThisFrame, Space.World);
+        }
+    }
+
+    private void DetermineNextWayPoint()
+    {
+        if (path.loop)
+        {
+            _currentWaypointIndex = (_currentWaypointIndex + 1) % path.waypoints.Count;
+            waitTimer = waitDuration;
+        }
+        else if (moveBackwards)
+        {
+            CurrentWayPointIndex--;
+            if (CurrentWayPointIndex < 0)
+            {
+                moveBackwards = false;
+                CurrentWayPointIndex = 1;
+                waitTimer = waitDuration;
+            }
+        }
+        else
+        {
+            CurrentWayPointIndex++;
+            if (CurrentWayPointIndex >= path.waypoints.Count)
+            {
+                moveBackwards = true;
+                CurrentWayPointIndex = path.waypoints.Count - 2;
+                waitTimer = waitDuration;
+            }
         }
     }
 }

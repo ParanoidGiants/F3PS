@@ -1,28 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public enum PathType
-{
-    Linear,
-    Circular
-}
 
 [ExecuteAlways]
 public class MovePath : MonoBehaviour
 {
     public List<Transform> waypoints = new List<Transform>();
-    public PathType pathType = PathType.Linear;
+    public bool loop;
 
     private void OnDrawGizmos()
     {
         if (waypoints.Count < 2)
             return;
 
-        if (pathType == PathType.Circular)
+        if (loop)
         {
             DrawCircularPath();
         }
-        else if (pathType == PathType.Linear)
+        else
         {
             DrawLinearPath();
         }

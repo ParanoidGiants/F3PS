@@ -174,8 +174,6 @@ namespace StarterAssets
         [SerializeField] private float _lookYaw;
         [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _lastInputDirection;
-        [SerializeField] private Transform currentPlatform;
-        [SerializeField] private Vector3 lastPosition;
 
         private const float _threshold = 0.01f;
         private const float _terminalVelocity = 53.0f;
@@ -266,6 +264,7 @@ namespace StarterAssets
             );
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
+            HandlePlatformTransform();
         }
 
         private void FixedUpdate()
@@ -276,7 +275,6 @@ namespace StarterAssets
             if (GameManager.Instance.timeManager.Stopped) return;
 
             GroundedCheck();
-            HandlePlatform();
 
             HandleBubbleTimeScale();
             weaponManager.OnFixedUpdate();
@@ -290,8 +288,8 @@ namespace StarterAssets
             {
                 Move();
             }
+            HandlePlatformPhysics();
         }
-
         private void LateUpdate()
         {
             if (_isMenuOpen) return;
@@ -299,33 +297,47 @@ namespace StarterAssets
             CameraTargetRotation();
         }
 
-        private void HandlePlatform()
+
+        [Header("Platform")]
+        public LayerMask platformLayer;
+        public Vector3 lastPosition;
+        public Transform currentPlatform;
+        public bool isOnPlatform = false;
+        public bool hasContactToPlatform = false;
+        private void HandlePlatformTransform()
         {
-            if (currentPlatform == null) return;
-
-            var platformDelta = currentPlatform.position - lastPosition;
-            var platformDirection = platformDelta;
-            lastPosition = currentPlatform.position;
-
-            if (!_isGrounded)
+            if (!hasContactToPlatform || !isOnPlatform)
             {
-                Ray ray = new Ray(transform.position, Vector3.down);
-                Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    var groundDelta = transform.position - hit.point;
-                    if (groundDelta.magnitude > 0.1f)
-                    {
-                        platformDirection += groundDelta;
-                    }
-                }
+                return;
             }
 
-            _rigidbody.AddForce(platformDirection, ForceMode.Force);
+            var platformDirection = currentPlatform.position - lastPosition;
+            lastPosition = currentPlatform.position;
+            transform.position += platformDirection;
+        }
+
+        private void HandlePlatformPhysics()
+        {
+            if (!hasContactToPlatform)
+            {
+                this.isOnPlatform = false;
+                return;
+            }
+            var ray = new Ray(transform.position + 0.5f * Vector3.up, Vector3.down);
+            Debug.DrawRay(ray.origin, ray.direction * 2f, Color.red);
+            var isOnPlatform = Physics.Raycast(ray, out var hit, 2f, platformLayer, QueryTriggerInteraction.Collide);
+            if (!isOnPlatform)
+            {
+                this.isOnPlatform = false;
+                return;
+            }
+            Debug.DrawLine(ray.origin, hit.point, Color.green);
+            this.isOnPlatform = isOnPlatform;
         }
 
         public void SetCurrentPlatform(Transform platform)
         {
+            hasContactToPlatform = true;
             currentPlatform = platform;
             lastPosition = platform.position;
         }
@@ -334,6 +346,7 @@ namespace StarterAssets
         {
             if (currentPlatform == transform)
             {
+                hasContactToPlatform = false;
                 currentPlatform = null;
             }
         }
@@ -477,7 +490,6 @@ namespace StarterAssets
 
         private void Move()
         {
-            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
             float targetSpeed = GetTargetSpeed(_input.move);
 
@@ -525,10 +537,17 @@ namespace StarterAssets
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
             var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
             var moveVelocity = lookDirection.normalized * _speed;
+
             // move the player
             var moveDirection = (verticalVelocity + moveVelocity);
-
-            _rigidbody.velocity = moveDirection;
+            if (_input.move.magnitude > 0f)
+            {
+                _rigidbody.velocity = moveDirection;
+            }
+            else
+            {
+                _rigidbody.velocity = new Vector3(0f, _verticalVelocity, 0f);
+            }
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
