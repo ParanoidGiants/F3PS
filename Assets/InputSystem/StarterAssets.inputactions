@@ -139,6 +139,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "TelekinesisPushPull",
+                    "type": "PassThrough",
+                    "id": "5402a087-ea25-40a7-a012-55430172355e",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -601,6 +610,39 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "BubbleTimeScale",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "PushPull",
+                    "id": "24044fc4-781e-4ca6-bef1-53b8ed0e2be1",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TelekinesisPushPull",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "5e3a1f0f-afda-4762-bfd1-e497ec673728",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TelekinesisPushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "ba18e404-0ad4-4e85-9512-fa04683d47f4",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TelekinesisPushPull",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

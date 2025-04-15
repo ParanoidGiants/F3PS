@@ -20,7 +20,11 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+        [Header("Telekinesis")]
+        public TelekinesisController telekinesisController;
+
         #region DEBUG_TOOLS
+        [Space(20)]
         [Header("Debug Pause and Camera")]
         public GameObject freeCameraText;
         public GameObject pausedText;
@@ -166,6 +170,7 @@ namespace StarterAssets
         [SerializeField] private bool _isSlowMoStarted;
         [SerializeField] private bool _isAimingGrenade;
         [SerializeField] private bool _isDying;
+        [SerializeField] private float _telekinesisPushPull;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _health;
         [SerializeField] private float _speed;
@@ -239,7 +244,6 @@ namespace StarterAssets
             _dodgeCoolDownTime = DodgeCoolDownTimer;
             weaponManager.Init();
         }
-
         private void Update()
         {
             HandleMenu();
@@ -257,11 +261,8 @@ namespace StarterAssets
             _isShooting = _input.shoot;
             _isReloading = _input.reload;
             _isAimingGrenade = _input.aimGrenade;
-            weaponManager.OnUpdate(
-                _isAimingGrenade,
-                _isShooting,
-                _isReloading
-            );
+            _telekinesisPushPull = _input.telekinesisPushPull;
+            telekinesisController.OnUpdate(_isShooting, _telekinesisPushPull);
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
             HandlePlatformTransform();
@@ -277,7 +278,7 @@ namespace StarterAssets
             GroundedCheck();
 
             HandleBubbleTimeScale();
-            weaponManager.OnFixedUpdate();
+            telekinesisController.OnFixedUpdate();
 
             JumpAndGravity();
             if (_isDodging)
