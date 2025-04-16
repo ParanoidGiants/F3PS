@@ -11,7 +11,7 @@ public class TelekinesisController : MonoBehaviour
 
     [Space(10)]
     [Header("Settings")]
-    public float pushPullSpeed = 1.0f;
+    public float pushPullSpeed = 5.0f;
 
     [Space(10)]
     [Header("Watchers")]

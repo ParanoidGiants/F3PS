@@ -42,7 +42,8 @@ namespace StarterAssets
 
         [Space(20)]
         [Header("References")]
-
+        private bool _hasAnimator;
+        public Animator animator;
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
         public WeaponManager weaponManager;
@@ -182,7 +183,6 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
         private const float _terminalVelocity = 53.0f;
-        private bool _hasAnimator;
 
         [Header("Audio")]
         public AudioClip LandingAudioClip;
@@ -198,7 +198,6 @@ namespace StarterAssets
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
 
-        private Animator _animator;
         private GameObject _mainCamera;
         private Rigidbody _rigidbody;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -222,7 +221,7 @@ namespace StarterAssets
         private void Awake()
         {
             _mainCamera = FindObjectOfType<Camera>().gameObject;
-            _hasAnimator = TryGetComponent(out _animator);
+            _hasAnimator = animator != null;
             _rigidbody = GetComponent<Rigidbody>();
             _input = GameManager.Instance.inputs;
             _playerInput = _input.GetComponent<PlayerInput>();
@@ -256,7 +255,7 @@ namespace StarterAssets
 
             if (GameManager.Instance.timeManager.Stopped) return;
 
-            _animator.SetBool(_animIDGrounded, _isGrounded);
+            animator.SetBool(_animIDGrounded, _isGrounded);
 
             _isShooting = _input.shoot;
             _isReloading = _input.reload;
@@ -551,8 +550,8 @@ namespace StarterAssets
             }
             if (_hasAnimator)
             {
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                animator.SetFloat(_animIDSpeed, _animationBlend);
+                animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
 
@@ -604,9 +603,9 @@ namespace StarterAssets
                 // update animator if using character
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDJump, false);
-                    _animator.SetBool(_animIDFreeFall, false);
-                    _animator.SetBool(_animIDDodge, false);
+                    animator.SetBool(_animIDJump, false);
+                    animator.SetBool(_animIDFreeFall, false);
+                    animator.SetBool(_animIDDodge, false);
                 }
 
                 // stop our velocity dropping infinitely when grounded
@@ -675,7 +674,7 @@ namespace StarterAssets
                 }
                 else if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDFreeFall, true);
+                    animator.SetBool(_animIDFreeFall, true);
                 }
 
                 // if we are not grounded, do not jump
@@ -698,7 +697,7 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDJump, true);
+                animator.SetBool(_animIDJump, true);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
             }
         }
@@ -714,7 +713,7 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDDodge, true);
+                animator.SetBool(_animIDDodge, true);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
             }
         }
@@ -817,7 +816,7 @@ namespace StarterAssets
             }
             else
             {
-                _animator.SetTrigger(_animIDHit);
+                animator.SetTrigger(_animIDHit);
             }
             cameraShake.Shake(damage);
             animateMesh.HitFlash();
@@ -825,9 +824,9 @@ namespace StarterAssets
 
         private void Die(Vector3 hitDirection)
         {
-            _animator.SetFloat("XDieDirection", Vector3.Dot(-hitDirection.normalized, transform.right));
-            _animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
-            _animator.SetTrigger("Die");
+            animator.SetFloat("XDieDirection", Vector3.Dot(-hitDirection.normalized, transform.right));
+            animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
+            animator.SetTrigger("Die");
             Destroy(hittableManager.gameObject);
             SceneLoader.Instance.ReloadScene(5f);
         }

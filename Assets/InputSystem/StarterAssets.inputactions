@@ -450,17 +450,6 @@
                 },
                 {
                     "name": "",
-                    "id": "9d89573a-cde4-485f-afd5-7db241a1f08d",
-                    "path": "<Keyboard>/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwitchWeapon",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "694f6bac-2b05-4748-9d94-022cc36afa6b",
                     "path": "<Gamepad>/dpad/left",
                     "interactions": "",
