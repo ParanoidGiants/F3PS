@@ -6,15 +6,20 @@ public class TelekinesisController : MonoBehaviour
     public Crosshair crosshair;
     public LayerMask movableLayer;
     public LineRenderer lineRenderer;
-    public TelekinesisMovable currentCandidate;
     public Transform target;
 
     [Space(10)]
     [Header("Settings")]
     public float pushPullSpeed = 5.0f;
+    public float moveSpeed = 5.0f;
+    public float minimumDistance = 3f;
+    public float maximumDistance = 50f;
+
 
     [Space(10)]
     [Header("Watchers")]
+    public TelekinesisMovable currentCandidate;
+    public Vector3 movablePoint;
     public bool isMovingObject = false;
     public bool hasCandidate = false;
 
@@ -27,40 +32,71 @@ public class TelekinesisController : MonoBehaviour
 
         if (!isMovingObject &&  isShooting)
         {
-            target.position = currentCandidate.transform.position;
+            target.gameObject.SetActive(true);
+            SetTargetPosition(movablePoint);
             currentCandidate.StartMoving();
             isMovingObject = true;
         }
         else if (isMovingObject && !isShooting)
         {
+            target.gameObject.SetActive(false);
             currentCandidate.StopMoving();
             isMovingObject = false;
         }
-        else
+        else if (pushPull != 0f)
         {
             HandlePushPull(pushPull);
         }
 
     }
 
+    private void SetTargetPosition(Vector3 position)
+    {
+        target.position = position;
+        ClampTargetPosition();
+    }
+
     private void HandlePushPull(float pushPull)
     {
-        if (pushPull == 0f)
+        var moveDirection = target.forward;
+        var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
+
+        SetTargetPosition(moveTarget);
+    }
+
+    private void ClampTargetPosition()
+    {
+        if (target.localPosition.z >= minimumDistance && target.localPosition.z <= maximumDistance)
         {
             return;
         }
-
-        var moveDirection = pushPull * target.forward;
-        var moveTarget = target.position + moveDirection * Time.deltaTime * pushPullSpeed;
-        target.position = moveTarget;
+        var clamped = Mathf.Clamp(target.localPosition.z, minimumDistance, maximumDistance);
+        target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, clamped);
     }
+
     public void OnFixedUpdate()
     {
         if (isMovingObject)
         {
-            currentCandidate.OnFixedUpdate(target);
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, target.position);
+            var targetPosition = target.position;
+            var candidatePosition = currentCandidate.transform.position;
+            var totalDistance = Vector3.Distance(candidatePosition, targetPosition);
+            var moveTo = Vector3.ClampMagnitude(
+                moveSpeed * Time.fixedDeltaTime * (targetPosition - candidatePosition).normalized,
+                totalDistance
+            );
+            if (moveTo.magnitude > 0f)
+            {
+                var newPosition = candidatePosition + moveTo;
+                Debug.DrawLine(targetPosition, newPosition);
+                currentCandidate.MoveTowards(newPosition);
+            }
             return;
         }
+
+
         lineRenderer.SetPosition(0, transform.position);
         if (!crosshair.CrosshairRaycast(out var hit))
         {
@@ -68,7 +104,8 @@ public class TelekinesisController : MonoBehaviour
             UnsetCurrentCandidate();
             return;
         }
-        lineRenderer.SetPosition(1, hit.point);
+        movablePoint = hit.point;
+        lineRenderer.SetPosition(1, movablePoint);
         var movable = hit.transform.GetComponent<TelekinesisMovable>();
         if (movable == currentCandidate)
         {

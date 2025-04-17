@@ -262,6 +262,7 @@ namespace StarterAssets
             _isAimingGrenade = _input.aimGrenade;
             _telekinesisPushPull = _input.telekinesisPushPull;
             telekinesisController.OnUpdate(_isShooting, _telekinesisPushPull);
+            weaponManager.OnUpdate(_isAimingGrenade, _isShooting, _isReloading);
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
             HandlePlatformTransform();
@@ -278,6 +279,7 @@ namespace StarterAssets
 
             HandleBubbleTimeScale();
             telekinesisController.OnFixedUpdate();
+            // weaponManager.OnFixedUpdate();
 
             JumpAndGravity();
             if (_isDodging)

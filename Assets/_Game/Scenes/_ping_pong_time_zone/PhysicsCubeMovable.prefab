@@ -127,3 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8840de49502cfe1489318d9fb03ffd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigidbody_: {fileID: 63254702304100392}
+  renderer_: {fileID: 63254702304100398}
+  unset: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  candidate: {fileID: 2100000, guid: f54f727468c8b4e48a3fb95fb1f7fcea, type: 2}
+  selected: {fileID: 2100000, guid: 855066636d1cad44abbdc3c7121884d3, type: 2}
+  isMoving: 0
+  pushPull: 0

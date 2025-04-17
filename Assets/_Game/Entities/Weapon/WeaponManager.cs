@@ -63,7 +63,7 @@ namespace Weapon
             {
                 return;
             }
-
+            /*
             if (_selectedWeapon.isReloadingMagazine)
             {
                 return;
@@ -77,6 +77,7 @@ namespace Weapon
             {
                 _selectedWeapon.HandleShoot(isShooting, _aimTargetPosition);
             }
+             */
         }
 
         public void OnFixedUpdate()
