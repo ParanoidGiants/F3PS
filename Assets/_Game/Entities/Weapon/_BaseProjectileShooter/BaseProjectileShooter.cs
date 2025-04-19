@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class BaseGun : MonoBehaviour
+    public class BaseProjectileShooter : BaseSkill
     {
         [Header("References")]
-        public Transform meshHolder;
-        public WeaponUI weaponUI;
         public CinemachineImpulseSource screenShakeSource;
 
         [Space(10)]
@@ -20,7 +18,6 @@ namespace Weapon
 
         [Space(10)]
         [Header("Settings")]
-        public Sprite icon;
         public int maxAmmo = 100;
         public int maxMagazineAmmo = 10;
         public float shotSpeed = 100f;
@@ -54,12 +51,12 @@ namespace Weapon
             projectilePool.Init(projectilePrefab, userSpace);
             totalAmount = maxAmmo;
             currentMagazineAmount = maxMagazineAmmo;
-            meshHolder.gameObject.SetActive(false);
+            origin.gameObject.SetActive(false);
         }
         
         public void UpdateRotation(Quaternion rotation)
         {
-            meshHolder.rotation = rotation;
+            origin.rotation = rotation;
         }
         
         private IEnumerator HandleReload()
@@ -98,12 +95,12 @@ namespace Weapon
 
         protected void UpdateWeaponUI(float reloadPercentage = 0f)
         {
-            if (!weaponUI) return;
+            if (!skillUI) return;
             
-            weaponUI.UpdateWeaponReload(reloadPercentage);
+            skillUI.UpdateWeaponReload(reloadPercentage);
             if (reloadPercentage > 0f) return;
             
-            weaponUI.UpdateAmmoText(currentMagazineAmount, totalAmount);
+            skillUI.UpdateAmmoText(currentMagazineAmount, totalAmount);
         }
 
         public bool IsMagazineEmpty()

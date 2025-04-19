@@ -46,7 +46,7 @@ namespace StarterAssets
         public Animator animator;
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
-        public WeaponManager weaponManager;
+        public SkillManager weaponManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
@@ -250,19 +250,12 @@ namespace StarterAssets
             HandleStopTime();
             if (!canControlPlayer) return;
             if (_isDying) return;
-
-            weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
-
             if (GameManager.Instance.timeManager.Stopped) return;
 
             animator.SetBool(_animIDGrounded, _isGrounded);
 
-            _isShooting = _input.shoot;
-            _isReloading = _input.reload;
-            _isAimingGrenade = _input.aimGrenade;
             _telekinesisPushPull = _input.telekinesisPushPull;
-            telekinesisController.OnUpdate(_isShooting, _telekinesisPushPull);
-            weaponManager.OnUpdate(_isAimingGrenade, _isShooting, _isReloading);
+            weaponManager.OnUpdate();
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
             HandlePlatformTransform();

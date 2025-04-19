@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WeaponUI : MonoBehaviour
+public class SkillHUD : MonoBehaviour
 {
     private RectTransform _rectTransform;
     private Animator _animator;

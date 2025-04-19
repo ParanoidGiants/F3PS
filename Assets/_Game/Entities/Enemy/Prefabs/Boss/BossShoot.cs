@@ -13,7 +13,7 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Shoot Watchers")]
-        public BaseGun[] guns;
+        public BaseProjectileShooter[] guns;
         public float requiredAngle;
 
         public float shootTime = 0f;
@@ -24,7 +24,7 @@ namespace F3PS.AI.States.Action
         override
         public void Initialize(Material aggressiveMaterial)
         {
-            guns = shooterLayer.GetComponentsInChildren<BaseGun>();
+            guns = shooterLayer.GetComponentsInChildren<BaseProjectileShooter>();
             foreach (var gun in guns)
             {
                 gun.Init(enemy.body.transform.parent);
