@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Resume
+  m_Name: TelekinesisPicked
   m_Shader: {fileID: -6465566751694194690, guid: b99a520994056bd4e898a56e6b3c376d,
     type: 3}
   m_ValidKeywords: []
@@ -106,12 +106,12 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GlowStrength: 1
+    - _GlowStrength: 5
     - _LineFrequency: 6
     - _LineOffset: 0.96
     - _LineRotation: 90
-    - _LineScrollSpeed: 1
-    - _LineThickness: 0.3
+    - _LineScrollSpeed: -1
+    - _LineThickness: 0.15
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -129,7 +129,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 0.627451, g: 2.666667, b: 4, a: 0}
+    - _GlowColor: {r: 7.129739, g: 0, b: 4.973171, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tint: {r: 0.15686268, g: 0.8544739, b: 1, a: 0}
+    - _Tint: {r: 0.9605547, g: 0.6773585, b: 1, a: 0}
   m_BuildTextureStacks: []

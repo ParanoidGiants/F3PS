@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rewind
+  m_Name: RewindCandidate
   m_Shader: {fileID: -6465566751694194690, guid: b99a520994056bd4e898a56e6b3c376d,
     type: 3}
   m_ValidKeywords: []
@@ -35,7 +35,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 8b995c5cb643c2f4a9d6d70f4f50a18b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -129,7 +129,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 3.9999995, g: 1.2524345, b: 0.62827224, a: 0}
+    - _GlowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tint: {r: 1, g: 0.22277744, b: 0.15686274, a: 0}
+    - _Tint: {r: 0.381132, g: 0.381132, b: 0.381132, a: 0}
   m_BuildTextureStacks: []

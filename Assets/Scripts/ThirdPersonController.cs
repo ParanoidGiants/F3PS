@@ -20,9 +20,6 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
-        [Header("Telekinesis")]
-        public TelekinesisController telekinesisController;
-
         #region DEBUG_TOOLS
         [Space(20)]
         [Header("Debug Pause and Camera")]
@@ -271,8 +268,7 @@ namespace StarterAssets
             GroundedCheck();
 
             HandleBubbleTimeScale();
-            telekinesisController.OnFixedUpdate();
-            // weaponManager.OnFixedUpdate();
+            weaponManager.OnFixedUpdate();
 
             JumpAndGravity();
             if (_isDodging)

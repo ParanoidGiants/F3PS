@@ -19,12 +19,19 @@ public class TelekinesisController : MonoBehaviour
     [Space(10)]
     [Header("Watchers")]
     public TelekinesisMovable currentCandidate;
-    public Vector3 movablePoint;
+    public Vector3 contactPoint;
     public bool isMovingObject = false;
     public bool hasCandidate = false;
 
+    public void OnDisable()
+    {
+        target.gameObject.SetActive(false);
+    }
+
     public void OnUpdate(bool isShooting, float pushPull)
     {
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, contactPoint);
         if (!hasCandidate)
         {
             return;
@@ -33,7 +40,7 @@ public class TelekinesisController : MonoBehaviour
         if (!isMovingObject &&  isShooting)
         {
             target.gameObject.SetActive(true);
-            SetTargetPosition(movablePoint);
+            SetTargetPosition(contactPoint);
             currentCandidate.StartMoving();
             isMovingObject = true;
         }
@@ -45,7 +52,10 @@ public class TelekinesisController : MonoBehaviour
         }
         else if (pushPull != 0f)
         {
-            HandlePushPull(pushPull);
+            var moveDirection = target.forward;
+            var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
+
+            SetTargetPosition(moveTarget);
         }
 
     }
@@ -53,19 +63,6 @@ public class TelekinesisController : MonoBehaviour
     private void SetTargetPosition(Vector3 position)
     {
         target.position = position;
-        ClampTargetPosition();
-    }
-
-    private void HandlePushPull(float pushPull)
-    {
-        var moveDirection = target.forward;
-        var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
-
-        SetTargetPosition(moveTarget);
-    }
-
-    private void ClampTargetPosition()
-    {
         if (target.localPosition.z >= minimumDistance && target.localPosition.z <= maximumDistance)
         {
             return;
@@ -78,8 +75,7 @@ public class TelekinesisController : MonoBehaviour
     {
         if (isMovingObject)
         {
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, target.position);
+            contactPoint = target.position;
             var targetPosition = target.position;
             var candidatePosition = currentCandidate.transform.position;
             var totalDistance = Vector3.Distance(candidatePosition, targetPosition);
@@ -90,53 +86,40 @@ public class TelekinesisController : MonoBehaviour
             if (moveTo.magnitude > 0f)
             {
                 var newPosition = candidatePosition + moveTo;
-                Debug.DrawLine(targetPosition, newPosition);
                 currentCandidate.MoveTowards(newPosition);
             }
             return;
         }
-
-
-        lineRenderer.SetPosition(0, transform.position);
         if (!crosshair.CrosshairRaycast(out var hit))
         {
-            lineRenderer.SetPosition(1, crosshair.GetInfiniteDirection());
-            UnsetCurrentCandidate();
+            contactPoint = crosshair.GetInfiniteDirection();
+
+            if (!hasCandidate)
+            {
+                return;
+            }
+            hasCandidate = false;
+            currentCandidate.UnselectAsCandidate();
+            currentCandidate = null;
             return;
         }
-        movablePoint = hit.point;
-        lineRenderer.SetPosition(1, movablePoint);
+        contactPoint = hit.point;
         var movable = hit.transform.GetComponent<TelekinesisMovable>();
         if (movable == currentCandidate)
         {
             return;
         }
-        ChangeCandidate(movable);
-    }
 
-    private void UnsetCurrentCandidate()
-    {
-        if (!hasCandidate)
-        {
-            return;
-        }
-        hasCandidate = false;
-        currentCandidate.Unset();
-        currentCandidate = null;
-    }
-
-    private void ChangeCandidate(TelekinesisMovable movable)
-    {
         if (hasCandidate)
         {
             hasCandidate = false;
-            currentCandidate.Unset();
+            currentCandidate.UnselectAsCandidate();
             currentCandidate = null;
         }
         if (movable != null)
         {
             hasCandidate = true;
-            movable.SetToCandidate();
+            movable.SelectAsCandidate();
             currentCandidate = movable;
         }
     }

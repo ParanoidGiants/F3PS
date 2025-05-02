@@ -1,15 +1,10 @@
 using UnityEngine;
-
-public enum ThrowState
-{
-    IDLE,
-    AIM
-}
     
-public class ThrowTimeBubbleGrenade : MonoBehaviour
+public class TimeBubbleController : MonoBehaviour
 {
     [Header("References")]
     public Transform userSpace;
+    public TimeBubbleHUD hud;
     public HittableManager hittableManager;
     public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
     public LineRenderer throwLine;
@@ -17,6 +12,7 @@ public class ThrowTimeBubbleGrenade : MonoBehaviour
         
     [Space(10)]
     [Header("Settings")]
+    public float throwPower;
     public int lineResolution = 100;
     public float lineStepSize = 0.1f;
     public LayerMask whatCanCollide;
@@ -25,10 +21,8 @@ public class ThrowTimeBubbleGrenade : MonoBehaviour
     [Space(10)]
     [Header("Watchers")]
     public bool isTimeBubbleActive;
-    public ThrowState state = ThrowState.IDLE;
+    public bool wasAimingLastFrame;
     public Vector3 throwDirection;
-    public float throwPower;
-    public TimeBubbleHUD hud;
 
     private void Awake()
     {
@@ -52,34 +46,27 @@ public class ThrowTimeBubbleGrenade : MonoBehaviour
         hud.gameObject.SetActive(false);
     }
 
-    public bool HandleThrow(bool isAiming, Vector3 targetPosition)
+    public void OnUpdate(bool isAiming, Vector3 targetPosition)
     {
         throwDirection = (targetPosition - spawnTransform.position).normalized;
         hud.UpdateGrenadeEffect(timeBubbleGrenadeProjectile.LifeTimePercentage);
 
-        switch (state)
+
+        if (isAiming && wasAimingLastFrame)
         {
-            case ThrowState.IDLE:
-                if (isAiming)
-                {
-                    UpdateThrowLine();
-                    ShowThrowLine();
-                    state = ThrowState.AIM;
-                    return true;
-                }
-                return false;
-            case ThrowState.AIM:
-                if (isAiming)
-                {
-                    UpdateThrowLine();
-                    return true;
-                }
-                ThrowGrenade();
-                HideThrowLine();
-                state = ThrowState.IDLE;
-                return false;
-            default:
-                return false;
+            UpdateThrowLine();
+        }
+        else if (wasAimingLastFrame)
+        {
+            ThrowGrenade();
+            HideThrowLine();
+            wasAimingLastFrame = false;
+        }
+        else if (isAiming)
+        {
+            UpdateThrowLine();
+            ShowThrowLine();
+            wasAimingLastFrame = true;
         }
     }
 
