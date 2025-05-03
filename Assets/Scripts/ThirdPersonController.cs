@@ -43,7 +43,7 @@ namespace StarterAssets
         public Animator animator;
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
-        public SkillManager weaponManager;
+        public SkillManager skillManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
@@ -238,7 +238,7 @@ namespace StarterAssets
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
             _dodgeCoolDownTime = DodgeCoolDownTimer;
-            weaponManager.Init();
+            skillManager.Init();
         }
         private void Update()
         {
@@ -252,7 +252,7 @@ namespace StarterAssets
             animator.SetBool(_animIDGrounded, _isGrounded);
 
             _telekinesisPushPull = _input.telekinesisPushPull;
-            weaponManager.OnUpdate();
+            skillManager.OnUpdate();
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
             HandlePlatformTransform();
@@ -268,7 +268,7 @@ namespace StarterAssets
             GroundedCheck();
 
             HandleBubbleTimeScale();
-            weaponManager.OnFixedUpdate();
+            skillManager.OnFixedUpdate();
 
             JumpAndGravity();
             if (_isDodging)

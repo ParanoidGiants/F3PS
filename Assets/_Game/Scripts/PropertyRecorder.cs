@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class PropertyRecorder<T>
 {
@@ -79,10 +78,7 @@ public class PropertyRecorder<T>
 
     internal void ClearAllAfterCurrentFrame(int currentFrame)
     {
-        // Log all values here
         var index = GetIndexAtFrame(currentFrame);
-        Debug.Log($"Current frame: {currentFrame}, Index: {index}");
-        Debug.Log($"Records count: {records.Count}");
         if (records.Count > index)
         {
             records.RemoveRange(index, records.Count - index - 1);

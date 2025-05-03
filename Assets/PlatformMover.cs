@@ -7,7 +7,7 @@ public class PlatformMover : MonoBehaviour
     public MovePath path;  // Assign these in the Inspector
     public float speed = 5f;
     private int _currentWaypointIndex = 0;
-    private PlatformRecorder recorder;
+    
 
     private float waitDuration = 2f;
     private float waitTimer = 0f;
@@ -17,7 +17,6 @@ public class PlatformMover : MonoBehaviour
 
     private void Start()
     {
-        recorder = GetComponent<PlatformRecorder>();
         transform.position = path.waypoints[0].position;
     }
 
@@ -28,10 +27,6 @@ public class PlatformMover : MonoBehaviour
             waitTimer -= Time.deltaTime;
             return;
         }
-        if (recorder.isFrozen || recorder.state == RecorderState.Playback)
-        {
-            return;
-        }
 
         var waypoints = path.waypoints;
         if (waypoints.Count == 0) return;
@@ -39,7 +34,7 @@ public class PlatformMover : MonoBehaviour
         // Move towards the current waypoint
         Transform targetWaypoint = waypoints[_currentWaypointIndex];
         Vector3 direction = targetWaypoint.position - transform.position;
-        float distanceThisFrame = speed * recorder.ScaledDeltaTime;
+        float distanceThisFrame = speed * Time.deltaTime;
 
         if (direction.magnitude <= distanceThisFrame)
         {

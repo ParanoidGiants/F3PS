@@ -76,18 +76,7 @@ public class TelekinesisController : MonoBehaviour
         if (isMovingObject)
         {
             contactPoint = target.position;
-            var targetPosition = target.position;
-            var candidatePosition = currentCandidate.transform.position;
-            var totalDistance = Vector3.Distance(candidatePosition, targetPosition);
-            var moveTo = Vector3.ClampMagnitude(
-                moveSpeed * Time.fixedDeltaTime * (targetPosition - candidatePosition).normalized,
-                totalDistance
-            );
-            if (moveTo.magnitude > 0f)
-            {
-                var newPosition = candidatePosition + moveTo;
-                currentCandidate.MoveTowards(newPosition);
-            }
+            currentCandidate.MoveTowards(target.position, moveSpeed);
             return;
         }
         if (!crosshair.CrosshairRaycast(out var hit))

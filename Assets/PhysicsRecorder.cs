@@ -61,7 +61,7 @@ public class PhysicsRecorder : MonoBehaviour
         defaultMass = _rigidbody.mass;
     }
 
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         switch (state)
         {
@@ -264,5 +264,10 @@ public class PhysicsRecorder : MonoBehaviour
         rotations.ClearAllAfterCurrentFrame(currentFrame);
         velocities.ClearAllAfterCurrentFrame(currentFrame);
         angularVelocities.ClearAllAfterCurrentFrame(currentFrame);
+    }
+
+    internal float GetPlaybackPercentage()
+    {
+        return currentFrame / (float)framesRecorded;
     }
 }

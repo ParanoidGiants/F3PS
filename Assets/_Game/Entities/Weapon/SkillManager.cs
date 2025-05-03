@@ -1,7 +1,5 @@
 using F3PS;
 using StarterAssets;
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum Skill
@@ -65,7 +63,6 @@ public class SkillManager : MonoBehaviour
 
         if (!_isWeaponSwitched)
         {
-            Debug.Log("Switching skill");
             _isWeaponSwitched = true;
             var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
             SwitchSkill(nextSkill);
@@ -96,7 +93,7 @@ public class SkillManager : MonoBehaviour
         }
         activeSkill = nextSkill;
     }
-
+        
     public void OnFixedUpdate()
     {
         _aimTargetPosition = crosshair.GetTargetPosition();

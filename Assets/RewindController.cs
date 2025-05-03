@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class RewindController : MonoBehaviour
 {
+    [Header("UI References")]
+    public RewindHUD rewindHUD;
+
     [Space(10)]
     [Header("Settings")]
     public LayerMask rewindableLayer;
@@ -41,11 +44,13 @@ public class RewindController : MonoBehaviour
                 if (!selectedObjectForRecord)
                 {
                     currentCandidate.StartRecording();
+                    rewindHUD.UpdateRecordEffect(0);
                     selectedObjectForRecord = true;
                 }
                 else
                 {
                     currentCandidate.StopRecording();
+                    rewindHUD.UpdateRecordEffect(0);
                     selectedObjectForRecord = false;
                     isPlaybackActive = false;
                 }
@@ -56,11 +61,13 @@ public class RewindController : MonoBehaviour
                 if (!isPlaybackActive)
                 {
                     currentCandidate.ChangeToPlayback();
+                    rewindHUD.ShowPlaybackCircle(true);
                     isPlaybackActive = true;
                 }
                 else
                 {
                     currentCandidate.ChangeToRecord();
+                    rewindHUD.ShowPlaybackCircle(false);
                     isPlaybackActive = false;
                 }
             }
@@ -68,16 +75,23 @@ public class RewindController : MonoBehaviour
             if (isPlaybackActive)
             {
                 currentCandidate.Playback(rewindSpeed * forwardBackward);
+                rewindHUD.UpdatePlaybackEffect(currentCandidate.GetPlaybackPercentage());
+            }
+            else
+            {
+                rewindHUD.UpdateRecordEffect(currentCandidate.GetPlaybackPercentage());
             }
         }
         wasRecordingLastFrame = isRecording;
         wasActivatingPlaybackLastFrame = activatePlayback;
+
     }
 
     public void OnFixedUpdate()
     {
         if (selectedObjectForRecord)
         {
+            // currentCandidate.OnFixedUpdate();
             return;
         }
         if (!_crosshair.CrosshairRaycast(out var hit))

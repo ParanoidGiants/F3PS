@@ -1,5 +1,3 @@
-using System;
-using TMPro;
 using UnityEngine;
 
 public class TelekinesisMovable : MonoBehaviour
@@ -8,26 +6,18 @@ public class TelekinesisMovable : MonoBehaviour
     private Renderer _renderer;
 
     [Header("References")]
-    public Material outlineMaterial;
-    public Material defaultMaterial;
-    public Material pickedMaterial;
+    public TelekinesisOutline outline;
 
     [Space(10)]
     [Header("Watcher")]
     public bool isMoving;
-    public GameObject outline;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _renderer = GetComponent<Renderer>();
         var meshFilter = GetComponent<MeshFilter>();
-        outline = new GameObject("Outline");
-        outline.transform.SetParent(transform);
-        outline.transform.localPosition = Vector3.zero;
-        outline.transform.localRotation = Quaternion.identity;
-        outline.AddComponent<MeshFilter>().mesh = meshFilter.mesh;
-        outline.AddComponent<MeshRenderer>().material = outlineMaterial;
+        outline.Init(meshFilter.mesh);
         outline.SetActive(false);
     }
 
@@ -43,12 +33,12 @@ public class TelekinesisMovable : MonoBehaviour
 
     public void Pick()
     {
-        _renderer.material = pickedMaterial;
+        outline.Pick();
     }
 
     private void Unpick()
     {
-        _renderer.material = defaultMaterial;
+        outline.Unpick();
     }
 
     public void StartMoving()
@@ -66,9 +56,11 @@ public class TelekinesisMovable : MonoBehaviour
         SelectAsCandidate();
     }
 
-    public void MoveTowards(Vector3 moveTo)
+    public void MoveTowards(Vector3 moveTo, float moveSpeed)
     {
-        _rigidbody.MovePosition(moveTo);
+        Vector3 direction = (moveTo - transform.position);
+        Vector3 velocity = direction * moveSpeed;
+        _rigidbody.velocity = velocity;
     }
 
 }
