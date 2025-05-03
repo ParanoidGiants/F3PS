@@ -279,7 +279,6 @@ namespace StarterAssets
             {
                 Move();
             }
-            HandlePlatformPhysics();
         }
         private void LateUpdate()
         {
@@ -289,57 +288,20 @@ namespace StarterAssets
         }
 
 
+
         [Header("Platform")]
-        public LayerMask platformLayer;
-        public Vector3 lastPosition;
-        public Transform currentPlatform;
-        public bool isOnPlatform = false;
-        public bool hasContactToPlatform = false;
+        public Transform currentGround;
+        public Vector3 lastGroundPosition;
         private void HandlePlatformTransform()
         {
-            if (!hasContactToPlatform || !isOnPlatform)
+            if (!_isGrounded)
             {
                 return;
             }
 
-            var platformDirection = currentPlatform.position - lastPosition;
-            lastPosition = currentPlatform.position;
+            var platformDirection = currentGround.position - lastGroundPosition;
+            lastGroundPosition = currentGround.position;
             transform.position += platformDirection;
-        }
-
-        private void HandlePlatformPhysics()
-        {
-            if (!hasContactToPlatform)
-            {
-                this.isOnPlatform = false;
-                return;
-            }
-            var ray = new Ray(transform.position + 0.5f * Vector3.up, Vector3.down);
-            Debug.DrawRay(ray.origin, ray.direction * 2f, Color.red);
-            var isOnPlatform = Physics.Raycast(ray, out var hit, 2f, platformLayer, QueryTriggerInteraction.Collide);
-            if (!isOnPlatform)
-            {
-                this.isOnPlatform = false;
-                return;
-            }
-            Debug.DrawLine(ray.origin, hit.point, Color.green);
-            this.isOnPlatform = isOnPlatform;
-        }
-
-        public void SetCurrentPlatform(Transform platform)
-        {
-            hasContactToPlatform = true;
-            currentPlatform = platform;
-            lastPosition = platform.position;
-        }
-
-        public void RemoveCurrentPlatform(Transform transform)
-        {
-            if (currentPlatform == transform)
-            {
-                hasContactToPlatform = false;
-                currentPlatform = null;
-            }
         }
 
         private void HandleBubbleTimeScale()
@@ -836,6 +798,34 @@ namespace StarterAssets
                 GroundLayers,
                 QueryTriggerInteraction.Ignore
             );
+
+            if (!_isGrounded)
+            {
+                return;
+            }
+            Ray groundRay = new Ray(
+                spherePosition,
+                Vector3.down
+            );
+            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
+            // check if the ray hits the ground
+
+            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
+            {
+                // Debug.LogError("Grounded check failed although ground should be present");
+                return;
+            }
+
+            var groundedObject = hit.transform;
+            if (groundedObject == currentGround)
+            {
+                return;
+            }
+            Debug.Log("Grounded object changed");
+            Debug.Log($"Before: {currentGround}");
+            Debug.Log($"After: {groundedObject}");
+            currentGround = groundedObject;
+            lastGroundPosition = currentGround.position;
         }
 
         private void OnDrawGizmosSelected()

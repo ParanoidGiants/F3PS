@@ -154,6 +154,37 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!1 &37451082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 37451083}
+  m_Layer: 0
+  m_Name: Waypoint 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &37451083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37451082}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 54.785526, y: 2.5604239, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2136889165}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &129074326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 2136889166}
-  speed: 10
+  speed: 30
 --- !u!54 &492975830
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7464,6 +7495,7 @@ Transform:
   m_Children:
   - {fileID: 138261546}
   - {fileID: 1581376615}
+  - {fileID: 37451083}
   m_Father: {fileID: 232638921}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7482,6 +7514,7 @@ MonoBehaviour:
   waypoints:
   - {fileID: 138261546}
   - {fileID: 1581376615}
+  - {fileID: 37451083}
   loop: 0
 --- !u!222 &4395668829225318
 CanvasRenderer:
@@ -15215,13 +15248,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
-  platformLayer:
-    serializedVersion: 2
-    m_Bits: 32768
   lastPosition: {x: 0, y: 0, z: 0}
-  currentPlatform: {fileID: 0}
-  isOnPlatform: 0
-  hasContactToPlatform: 0
+  currentGround: {fileID: 0}
 --- !u!1 &5135985129173183022
 GameObject:
   m_ObjectHideFlags: 0

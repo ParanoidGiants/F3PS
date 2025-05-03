@@ -9,7 +9,7 @@ public class PlatformStandingGround : MonoBehaviour
         var moveWithPlatform = other.GetComponent<ThirdPersonController>();
         if (moveWithPlatform != null)
         {
-            moveWithPlatform.SetCurrentPlatform(transform);
+            // moveWithPlatform.SetCurrentPlatform(transform);
         }
     }
 
@@ -20,7 +20,7 @@ public class PlatformStandingGround : MonoBehaviour
         var moveWithPlatform = other.GetComponent<ThirdPersonController>();
         if (moveWithPlatform != null)
         {
-            moveWithPlatform.RemoveCurrentPlatform(transform);
+            // moveWithPlatform.RemoveCurrentPlatform(transform);
         }
     }
 }
