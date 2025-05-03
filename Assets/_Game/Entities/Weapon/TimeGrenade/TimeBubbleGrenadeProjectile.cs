@@ -1,5 +1,6 @@
 using Cinemachine;
 using DG.Tweening;
+using F3PS;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : BaseProjectile
@@ -9,12 +10,13 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public TimeBubble timeBubble;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
+    public ProjectileTimeObject timeObject;
     private bool _isActive = false;
 
     public float shakePower = 1f;
-
-    public float Gravity => Physics.gravity.magnitude;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
+
+    public float Gravity => -Physics.gravity.y * timeObject.gravityScale;
 
     private void Update()
     {

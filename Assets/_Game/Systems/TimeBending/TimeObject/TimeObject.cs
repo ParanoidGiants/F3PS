@@ -7,7 +7,6 @@ public class TimeObject : MonoBehaviour
     public float currentTimeScale = 1;
     public float additionalTimeScale = 1;
     public float ScaledDeltaTime => currentTimeScale * Time.deltaTime;
-    public AnimateMesh animateMesh;
 
 
     void Start()
@@ -21,10 +20,6 @@ public class TimeObject : MonoBehaviour
         {
             return;
         }
-        /*
-        animateMesh.TimeFlash(newTimeScale);
-        animateMesh.SetTimeScale(newTimeScale);
-         */
 
         currentTimeScale = newTimeScale;
     }

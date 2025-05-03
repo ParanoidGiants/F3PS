@@ -11,20 +11,19 @@ public class TimeBubble : MonoBehaviour
         var timeObject = other.GetComponent<TimeObject>();
         if (timeObject != null)
         {
-            this.timeObjects.Add(timeObject);
+            timeObjects.Add(timeObject);
+            timeObject.PitchTimeScale(timeScale);
             return;
         }
     }
     
     void OnTriggerExit(Collider other)
     {
-        var physicsRecorder = other.GetComponent<PhysicsRecorder>();
-        if (physicsRecorder != null)
+        var timeObject = other.GetComponent<TimeObject>();
+        if (timeObject != null)
         {
-            if (physicsRecorder.IsMovingForward())
-            {
-                physicsRecorder.ChangeToPlayback();
-            }
+            timeObjects.Remove(timeObject);
+            timeObject.PitchTimeScale(1f);
             return;
         }
     }
@@ -42,9 +41,9 @@ public class TimeBubble : MonoBehaviour
     {
         timeScale += bubbleTimeScaleDirection;
         timeScale = Mathf.Clamp(timeScale, 0f, 1f);
-        foreach (var recorder in timeObjects)
+        foreach (var timeObject in timeObjects)
         {
-            recorder.PitchTimeScale(timeScale);
+            timeObject.PitchTimeScale(timeScale);
         }
     }
 }

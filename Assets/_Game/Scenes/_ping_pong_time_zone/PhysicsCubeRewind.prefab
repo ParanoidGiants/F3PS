@@ -149,5 +149,3 @@ MonoBehaviour:
   framesRecorded: 0
   state: 0
   isRecording: 0
-  aliveTime: 0
-  isTimeFrozen: 0

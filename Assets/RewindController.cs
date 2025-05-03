@@ -32,6 +32,18 @@ public class RewindController : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
     }
 
+    private void OnEnable()
+    {
+        rewindHUD.gameObject.SetActive(true);
+        _lineRenderer.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        rewindHUD.gameObject.SetActive(false);
+        _lineRenderer.enabled = false;
+    }
+
     public void OnUpdate(bool isRecording, bool activatePlayback, float forwardBackward)
     {
         _lineRenderer.SetPosition(0, transform.position);

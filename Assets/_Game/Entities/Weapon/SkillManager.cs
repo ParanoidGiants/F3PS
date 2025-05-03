@@ -64,7 +64,7 @@ public class SkillManager : MonoBehaviour
         if (!_isWeaponSwitched)
         {
             _isWeaponSwitched = true;
-            var nextSkill = (Skill)(((int)activeSkill + 1) % 2);
+            var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
             SwitchSkill(nextSkill);
         }
     }
