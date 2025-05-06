@@ -68,7 +68,7 @@ public class BaseProjectile : MonoBehaviour
     private void OnEnable()
     {
         rb.isKinematic = false;
-        rb.velocity = transform.forward * _speed;
+        rb.linearVelocity = transform.forward * _speed;
         lifeTime = 0f;
         enableCollisionsTime = 0f;
         col.enabled = true;

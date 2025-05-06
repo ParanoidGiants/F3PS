@@ -170,7 +170,7 @@ public class PhysicsRecorder : MonoBehaviour
             if (state != PhysicsRecorderState.Playback)
             {
                 _rigidbody.mass = defaultMass / (newTimeScale * newTimeScale);
-                _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * relation;
+                _rigidbody.linearVelocity = velocities.GetValueAtFrame(currentFrame) * relation;
                 _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * relation;
             }
         }
@@ -191,7 +191,7 @@ public class PhysicsRecorder : MonoBehaviour
         }
         _rigidbody.isKinematic = false;
         _rigidbody.constraints = RigidbodyConstraints.None;
-        _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
+        _rigidbody.linearVelocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
         _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * currentTimeScale;
     }
 
@@ -219,7 +219,7 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _rigidbody.linearVelocity, MathUtils.Vector3Equals);
         angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
@@ -229,7 +229,7 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _rigidbody.linearVelocity, MathUtils.Vector3Equals);
         angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
@@ -238,7 +238,7 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Specific Frame {frame}: {position}");
         positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(frame, _rigidbody.velocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(frame, _rigidbody.linearVelocity, MathUtils.Vector3Equals);
         angularVelocities.RecordIfChanged(frame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
     }
 
@@ -277,7 +277,7 @@ public class PhysicsRecorder : MonoBehaviour
 
         UnfreezeRigidbody();
 
-        _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
+        _rigidbody.linearVelocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
         _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * currentTimeScale;
     }
 
@@ -308,7 +308,7 @@ public class PhysicsRecorder : MonoBehaviour
         Log("Restore Initial Frame");
         transform.position = positions.GetValueAtFrame(0);
         transform.rotation = rotations.GetValueAtFrame(0);
-        _rigidbody.velocity = velocities.GetValueAtFrame(0) * currentTimeScale;
+        _rigidbody.linearVelocity = velocities.GetValueAtFrame(0) * currentTimeScale;
         _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(0) * currentTimeScale;
         currentFrame = 0;
 
@@ -343,7 +343,7 @@ public class PhysicsRecorder : MonoBehaviour
 
         if (aliveTime > Time.fixedDeltaTime)
         {
-            var initialPoint = MathUtils.GetSphereIntersectionPoint(centerPosition, radius, transform.position, -_rigidbody.velocity);
+            var initialPoint = MathUtils.GetSphereIntersectionPoint(centerPosition, radius, transform.position, -_rigidbody.linearVelocity);
             if (initialPoint != null)
             {
                 transform.position = (Vector3)initialPoint;

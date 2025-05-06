@@ -44,7 +44,7 @@ public class PhysicsTimeObject : TimeObject
             _rb.isKinematic = false;
             _rb.constraints = RigidbodyConstraints.None;
             _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
-            _rb.velocity *= relation;
+            _rb.linearVelocity *= relation;
             _rb.angularVelocity *= relation;
         }
         else
