@@ -1,18 +1,25 @@
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class PhysicsTimeObject : TimeObject
 {
     protected const double TOLERANCE = 0.001f;
     protected float _defaultMass;
-    private Rigidbody _rigidbody;
+    protected Rigidbody _rigidbody;
 
     [Space(10)]
     [Header("Physics Settings")]
     public float gravityScale = 1f;
     public bool isTimeFrozen = false;
 
-    protected virtual void Awake()
+    private void Awake()
     {
+        InitReferences();
+    }
+
+    override protected void InitReferences()
+    {
+        base.InitReferences();
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         _defaultMass = _rigidbody.mass;
@@ -39,7 +46,7 @@ public class PhysicsTimeObject : TimeObject
             newTimeScale *= additionalTimeScale;
         }
         float relation = currentTimeScale == 0f ? 1f : newTimeScale / currentTimeScale;
-        currentTimeScale = newTimeScale;
+        base.PitchTimeScale(newTimeScale);
         if (newTimeScale > TOLERANCE)
         {
             _rigidbody.isKinematic = false;

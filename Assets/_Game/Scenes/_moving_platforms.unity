@@ -2492,7 +2492,7 @@ MonoBehaviour:
     IsEditing: 0
     IsTemporary: 0
     ProspectiveName: '[Uncategorized]'
-  frames: 391
+  frames: 1749
   showUnityMixerGroupAssignment: 1
 --- !u!4 &981401014
 Transform:
@@ -4751,7 +4751,7 @@ MonoBehaviour:
   playlistStartedCustomEvent: 
   playlistEndedEventExpanded: 0
   playlistEndedCustomEvent: 
-  _frames: 8208540
+  _frames: 8218631
 --- !u!82 &1513793261
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14910,7 +14910,7 @@ MonoBehaviour:
   RotationSpeedYaw: 1
   groundedCoyoteDuration: 0.3
   _groundedCoyoteTime: 0
-  JumpHeight: 8
+  JumpHeight: 10
   JumpCoolDownTimer: 0.5
   DodgeHeight: 1
   DodgeSpeed: 70
@@ -21351,6 +21351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee8a7dfcdca57f48843dfdb9920356d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _renderer: {fileID: 6767807778289746689}
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
   amountOfTimeZones: 0
   currentTimeScale: 1
   additionalTimeScale: 1
