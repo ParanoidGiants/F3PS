@@ -11,7 +11,7 @@ public enum RecorderState
 public class PhysicsRecorder : MonoBehaviour
 {
     private Rigidbody _rigidbody;
-    private Renderer _renderer;
+    private PhysicsTimeObject _timeObject;
 
     public PropertyRecorder<Vector3> positions = new();
     public PropertyRecorder<Quaternion> rotations = new();
@@ -19,14 +19,7 @@ public class PhysicsRecorder : MonoBehaviour
     public PropertyRecorder<Vector3> angularVelocities = new();
 
     [Header("Materials")]
-    public Renderer[] renderers;
-    public Material defaultMaterial;
-    public Material candidate;
-    public Material picked;
-    public Material recording;
-    public Material resume;
-    public Material rewind;
-    public Material pause;
+    public RewindOutline outline;
 
 
     [Space(10)]
@@ -55,10 +48,9 @@ public class PhysicsRecorder : MonoBehaviour
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _renderer = GetComponent<Renderer>();
-
         state = RecorderState.None;
         defaultMass = _rigidbody.mass;
+        outline.Init(GetComponent<MeshFilter>().mesh);
     }
 
     public void FixedUpdate()
@@ -75,19 +67,17 @@ public class PhysicsRecorder : MonoBehaviour
     }
     public void SelectAsCandidate()
     {
-        _renderer.material = candidate;
+        outline.SetActive(true);
     }
 
     public void Unpick()
     {
-        _renderer.material = defaultMaterial;
+        outline.SetActive(false);
     }
     public void Pick()
     {
-        _renderer.material = picked;
+        outline.Pick();
     }
-
-    
 
     private void FreezeRigidbody()
     {
@@ -153,17 +143,17 @@ public class PhysicsRecorder : MonoBehaviour
 
         if (forwardBackward == 0)
         {
-            _renderer.material = pause;
+            outline.Pause();
             return;
         }
         
         if (forwardBackward < 0)
         {
-            _renderer.material = rewind;
+            outline.Rewind();
         }
-        else
+        else if (forwardBackward > 0)
         {
-            _renderer.material = resume;
+            outline.Resume();
         }
 
         currentRecordingTime += ScaledDeltaTime * forwardBackward;
@@ -198,7 +188,7 @@ public class PhysicsRecorder : MonoBehaviour
         transform.position = positions.GetValueAtFrame(currentFrame);
         transform.rotation = rotations.GetValueAtFrame(currentFrame);
 
-        Array.ForEach(renderers, r => r.material = recording);
+        outline.Record();
         _rigidbody.constraints = RigidbodyConstraints.None;
         _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
         _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * currentTimeScale;
@@ -209,7 +199,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void ChangeToPlayback()
     {
-        Array.ForEach(renderers, r => r.material = rewind);
+        outline.Rewind();
         FreezeRigidbody();
         state = RecorderState.Playback;
 
@@ -228,7 +218,7 @@ public class PhysicsRecorder : MonoBehaviour
         currentFrame = 0;
         currentRecordingTime = 0f;
         isRecording = true;
-        Array.ForEach(renderers, r => r.material = recording);
+        outline.Record();
 
         RecordInitialFrame();
         state = RecorderState.Record;
@@ -241,7 +231,7 @@ public class PhysicsRecorder : MonoBehaviour
         currentFrame = 0;
         state = RecorderState.None;
         isRecording = false;
-        Array.ForEach(renderers, r => r.material = defaultMaterial);
+        outline.gameObject.SetActive(false);
         positions.ClearAll();
         rotations.ClearAll();
         velocities.ClearAll();

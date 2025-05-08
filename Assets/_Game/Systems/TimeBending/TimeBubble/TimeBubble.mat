@@ -99,7 +99,7 @@ Material:
     - _BrackeysFillFront: 0.0344
     - _BrackeysFresnelPoewr: 1.38
     - _BrackeysFresnelPower: 5
-    - _BrackeysMoveSpeed: 0.05
+    - _BrackeysMoveSpeed: 0
     - _BrackeysOffset: 0.1
     - _Brightness: 8
     - _BumpScale: 1

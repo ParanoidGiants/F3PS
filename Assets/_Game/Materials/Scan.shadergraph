@@ -2615,7 +2615,7 @@
         "r": 0.15686273574829102,
         "g": 0.854473888874054,
         "b": 1.0,
-        "a": 0.0
+        "a": 0.019607843831181527
     },
     "isMainColor": false,
     "m_ColorMode": 0
@@ -2786,7 +2786,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "GlowColor",
     "m_DefaultReferenceName": "_GlowColor",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_Color",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using StarterAssets;
 using TimeBending;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace F3PS
             }
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            DOTween.Init();
         }
 
         private void Start()

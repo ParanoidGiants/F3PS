@@ -9,6 +9,7 @@ public class PhysicsTimeObject : TimeObject
 
     [Space(10)]
     [Header("Physics Settings")]
+    public bool useGravity = true;
     public float gravityScale = 1f;
     public bool isTimeFrozen = false;
 
@@ -27,8 +28,7 @@ public class PhysicsTimeObject : TimeObject
 
     void FixedUpdate()
     {
-        if (_rigidbody.isKinematic) return;
-        
+        if (!useGravity || isTimeFrozen) return;
         var force = Physics.gravity * (currentTimeScale * currentTimeScale * gravityScale);
         _rigidbody.AddForce(
             force,
@@ -49,7 +49,6 @@ public class PhysicsTimeObject : TimeObject
         base.PitchTimeScale(newTimeScale);
         if (newTimeScale > TOLERANCE)
         {
-            _rigidbody.isKinematic = false;
             _rigidbody.constraints = RigidbodyConstraints.None;
             _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
             _rigidbody.velocity *= relation;

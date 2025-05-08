@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RewindLine
-  m_Shader: {fileID: -6465566751694194690, guid: 766dd21ce517ac445ba2ca8ec2344697,
+  m_Shader: {fileID: -6465566751694194690, guid: b99a520994056bd4e898a56e6b3c376d,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -35,7 +35,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8b995c5cb643c2f4a9d6d70f4f50a18b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:

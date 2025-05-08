@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TelekinesisMovable : MonoBehaviour
@@ -44,16 +45,29 @@ public class TelekinesisMovable : MonoBehaviour
     public void StartMoving()
     {
         isMoving = true;
-        _rigidbody.useGravity = false;
+        SetUseGravity(false);
         _rigidbody.velocity = Vector3.zero;
         Pick();
     }
     public void StopMoving()
     {
         isMoving = false;
-        _rigidbody.useGravity = true;
+        SetUseGravity(true);
         Unpick();
         SelectAsCandidate();
+    }
+
+    private void SetUseGravity(bool use)
+    {
+        var timeObject = GetComponent<PhysicsTimeObject>();
+        if (timeObject != null)
+        {
+            timeObject.useGravity = use;
+        }
+        else
+        {
+            _rigidbody.useGravity = use;
+        }
     }
 
     public void MoveTowards(Vector3 moveTo, float moveSpeed)
