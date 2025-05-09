@@ -55,6 +55,7 @@ public class TelekinesisMovable : MonoBehaviour
         SetUseGravity(true);
         Unpick();
         SelectAsCandidate();
+        _rigidbody.velocity = Vector3.zero;
     }
 
     private void SetUseGravity(bool use)

@@ -1,11 +1,9 @@
-using DG.Tweening;
 using UnityEngine;
 
 public class TimeObject : MonoBehaviour
 {
     [Header("Watchers")]
-    public Renderer _renderer;
-    public Color defaultColor;
+    public OutlineTimeObject outline;
     public int amountOfTimeZones = 0;
     public float currentTimeScale = 1;
     public float additionalTimeScale = 1;
@@ -19,15 +17,11 @@ public class TimeObject : MonoBehaviour
     private void Start()
     {
         PitchTimeScale(currentTimeScale);
-        defaultColor = _renderer.material.color;
     }
 
     protected virtual void InitReferences()
     {
-        if (_renderer == null)
-        {
-            _renderer = GetComponent<Renderer>();
-        }
+        outline = GetComponentInChildren<OutlineTimeObject>(true);
     }
 
     public virtual void PitchTimeScale(float newTimeScale)
@@ -37,10 +31,21 @@ public class TimeObject : MonoBehaviour
             return;
         }
 
-        var targetColor = defaultColor * newTimeScale * newTimeScale;
-        _renderer.material.DOColor(targetColor, newTimeScale * 0.5f).SetEase(Ease.OutCubic);
+        outline.Pitch(newTimeScale);
 
         currentTimeScale = newTimeScale;
+    }
+
+    public virtual void Deactivate()
+    {
+        outline.Deactivate();
+        PitchTimeScale(1f);
+    }
+
+    public virtual void Activate(float initialTimeScale)
+    {
+        outline.Activate();
+        PitchTimeScale(initialTimeScale);
     }
 
     protected virtual void OnDisable()

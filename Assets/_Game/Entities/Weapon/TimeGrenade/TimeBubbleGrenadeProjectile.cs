@@ -1,6 +1,6 @@
 using Cinemachine;
 using DG.Tweening;
-using F3PS;
+using System;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : BaseProjectile
@@ -17,6 +17,13 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
 
     public float Gravity => -Physics.gravity.y * timeObject.gravityScale;
+    public bool IsTimeBubbleActive => timeBubble.isActiveAndEnabled;
+    public bool IsProjectileActive => _isActive;
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 
     private void Update()
     {
@@ -44,9 +51,8 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
              });
     }
 
-    private void DeactivateTimeBubble()
+    public void DeactivateTimeBubble()
     {
-        Debug.Log("Deactivate");
         _isActive = false;
         timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
@@ -78,5 +84,4 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         col.enabled = false;
         ActivateTimeBubble();
     }
-
 }

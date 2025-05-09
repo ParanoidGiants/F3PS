@@ -45,7 +45,7 @@ public class SkillManager : MonoBehaviour
                 break;
             case Skill.TimeBubble:
                 bool isAimingGrenade = _inputs.aimGrenade;
-                timeBubbleController.OnUpdate(_inputs.shoot, _aimTargetPosition);
+                timeBubbleController.OnUpdate(_inputs.shoot, _inputs.telekinesisPushPull, _aimTargetPosition);
                 break;
             default:
                 break;

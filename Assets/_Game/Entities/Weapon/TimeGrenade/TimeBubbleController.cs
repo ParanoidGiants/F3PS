@@ -17,11 +17,13 @@ public class TimeBubbleController : MonoBehaviour
     public float lineStepSize = 0.1f;
     public LayerMask whatCanCollide;
     public bool isUnlocked;
-        
+    public float timeBubbleTimeScaleSpeed = 1f;
+
     [Space(10)]
     [Header("Watchers")]
     public bool isTimeBubbleActive;
     public bool wasAimingLastFrame;
+    public bool wasDeactivated;
     public Vector3 throwDirection;
 
     private void Awake()
@@ -46,27 +48,49 @@ public class TimeBubbleController : MonoBehaviour
         hud.gameObject.SetActive(false);
     }
 
-    public void OnUpdate(bool isAiming, Vector3 targetPosition)
+    public void OnUpdate(bool isAiming, float bubbleTimeScaleChange, Vector3 targetPosition)
     {
         throwDirection = (targetPosition - spawnTransform.position).normalized;
         hud.UpdateGrenadeEffect(timeBubbleGrenadeProjectile.LifeTimePercentage);
 
+        if (timeBubbleGrenadeProjectile.IsTimeBubbleActive)
+        {
+            if (isAiming && !wasDeactivated)
+            {
+                wasDeactivated = true;
+                timeBubbleGrenadeProjectile.DeactivateTimeBubble();
+            }
+        }
+        else if (wasDeactivated)
+        {
+            if (!isAiming)
+            {
+                wasDeactivated = false;
+            }
+        }
+        else
+        {
+            if (isAiming && wasAimingLastFrame)
+            {
+                UpdateThrowLine();
+            }
+            else if (wasAimingLastFrame)
+            {
+                ThrowGrenade();
+                HideThrowLine();
+                wasAimingLastFrame = false;
+            }
+            else if (isAiming)
+            {
+                UpdateThrowLine();
+                ShowThrowLine();
+                wasAimingLastFrame = true;
+            }
+        }
 
-        if (isAiming && wasAimingLastFrame)
+        if (bubbleTimeScaleChange != 0f)
         {
-            UpdateThrowLine();
-        }
-        else if (wasAimingLastFrame)
-        {
-            ThrowGrenade();
-            HideThrowLine();
-            wasAimingLastFrame = false;
-        }
-        else if (isAiming)
-        {
-            UpdateThrowLine();
-            ShowThrowLine();
-            wasAimingLastFrame = true;
+            timeBubbleGrenadeProjectile.timeBubble.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
         }
     }
 

@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class PhysicsTimeObject : TimeObject
 {
@@ -12,6 +12,11 @@ public class PhysicsTimeObject : TimeObject
     public bool useGravity = true;
     public float gravityScale = 1f;
     public bool isTimeFrozen = false;
+    public Vector3 timeFreezeVelocity = Vector3.zero;
+    public Vector3 timeFreezeAngularVelocity = Vector3.zero;
+
+    public Vector3 AngularVelocity => _rigidbody.angularVelocity / currentTimeScale;
+    public Vector3 Velocity => _rigidbody.velocity / currentTimeScale;
 
     private void Awake()
     {
@@ -49,14 +54,50 @@ public class PhysicsTimeObject : TimeObject
         base.PitchTimeScale(newTimeScale);
         if (newTimeScale > TOLERANCE)
         {
-            _rigidbody.constraints = RigidbodyConstraints.None;
-            _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
-            _rigidbody.velocity *= relation;
-            _rigidbody.angularVelocity *= relation;
+            if (!isTimeFrozen)
+            {
+                _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
+                _rigidbody.velocity *= relation;
+                _rigidbody.angularVelocity *= relation;
+            }
+            else
+            {
+                _rigidbody.constraints = RigidbodyConstraints.None;
+                _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
+                _rigidbody.velocity = timeFreezeVelocity;
+                _rigidbody.angularVelocity = timeFreezeAngularVelocity;
+                isTimeFrozen = false;
+            }
         }
-        else
+        else if (!isTimeFrozen)
         {
+            isTimeFrozen = true;
+            timeFreezeVelocity = _rigidbody.velocity;
+            timeFreezeAngularVelocity = _rigidbody.angularVelocity;
             _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
+    }
+
+    public bool isFrozenExternal = false;
+    internal void FreeFromExternalConstraints()
+    {
+        if (!isTimeFrozen && isFrozenExternal)
+        {
+            isFrozenExternal = false;
+            _rigidbody.constraints = RigidbodyConstraints.None;
+        }
+    }
+
+    public void SetVelocity(Vector3 velocity, Vector3 angularVelocity)
+    {
+        float relation = 1f / currentTimeScale;
+        _rigidbody.velocity = velocity * relation;
+        _rigidbody.angularVelocity = angularVelocity * relation;
+    }
+
+    internal void FreezeExternally()
+    {
+        isFrozenExternal = true;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }
 }

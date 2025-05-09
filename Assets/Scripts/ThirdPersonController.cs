@@ -47,7 +47,6 @@ namespace StarterAssets
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
-        public TimeBubble timeBubble;
         public Transform armature;
         private PlayerHealthUI _playerHealthUI;
 
@@ -147,10 +146,6 @@ namespace StarterAssets
         public bool LockCameraPosition = false;
 
 
-        [Header("TimeBubble")]
-        [Tooltip("Speed of scrolling per second")]
-        public float timeBubbleTimeScaleSpeed = 1f;
-
         [Space(10)]
         
         // cinemachine
@@ -168,7 +163,6 @@ namespace StarterAssets
         [SerializeField] private bool _isSlowMoStarted;
         [SerializeField] private bool _isAimingGrenade;
         [SerializeField] private bool _isDying;
-        [SerializeField] private float _telekinesisPushPull;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _health;
         [SerializeField] private float _speed;
@@ -251,7 +245,6 @@ namespace StarterAssets
 
             animator.SetBool(_animIDGrounded, _isGrounded);
 
-            _telekinesisPushPull = _input.telekinesisPushPull;
             skillManager.OnUpdate();
             UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
             UpdateTimeManager(_input.slowmo);
@@ -266,8 +259,6 @@ namespace StarterAssets
             if (GameManager.Instance.timeManager.Stopped) return;
 
             GroundedCheck();
-
-            HandleBubbleTimeScale();
             skillManager.OnFixedUpdate();
 
             JumpAndGravity();
@@ -302,12 +293,6 @@ namespace StarterAssets
             var platformDirection = currentGround.position - lastGroundPosition;
             lastGroundPosition = currentGround.position;
             transform.position += platformDirection;
-        }
-
-        private void HandleBubbleTimeScale()
-        {
-            if (_input.bubbleTimeScale == 0f) return;
-            timeBubble.PitchTimeScale(timeBubbleTimeScaleSpeed * _input.bubbleTimeScale * Time.deltaTime);
         }
 
         public void StopControlPlayer()

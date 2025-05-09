@@ -10,7 +10,6 @@ public enum RecorderState
 
 public class PhysicsRecorder : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
     private PhysicsTimeObject _timeObject;
 
     public PropertyRecorder<Vector3> positions = new();
@@ -47,10 +46,9 @@ public class PhysicsRecorder : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         state = RecorderState.None;
-        defaultMass = _rigidbody.mass;
         outline.Init(GetComponent<MeshFilter>().mesh);
+        _timeObject = GetComponent<PhysicsTimeObject>();
     }
 
     public void FixedUpdate()
@@ -82,7 +80,7 @@ public class PhysicsRecorder : MonoBehaviour
     private void FreezeRigidbody()
     {
         Log("Freeze");
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        _timeObject.FreezeExternally();
     }
 
     private void OnDisable()
@@ -109,8 +107,8 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _timeObject.Velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
         framesRecorded = currentFrame;
     }
 
@@ -120,8 +118,8 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _rigidbody.velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _timeObject.Velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
     }
 
     private void RecordFutureFramePosition(int frame, Vector3 position)
@@ -129,8 +127,8 @@ public class PhysicsRecorder : MonoBehaviour
         Log($"Record Specific Frame {frame}: {position}");
         positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(frame, _rigidbody.velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(frame, _rigidbody.angularVelocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(frame, _timeObject.Velocity, MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(frame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
     }
 
     public void Playback(float forwardBackward)
@@ -189,9 +187,8 @@ public class PhysicsRecorder : MonoBehaviour
         transform.rotation = rotations.GetValueAtFrame(currentFrame);
 
         outline.Record();
-        _rigidbody.constraints = RigidbodyConstraints.None;
-        _rigidbody.velocity = velocities.GetValueAtFrame(currentFrame) * currentTimeScale;
-        _rigidbody.angularVelocity = angularVelocities.GetValueAtFrame(currentFrame) * currentTimeScale;
+        _timeObject.FreeFromExternalConstraints();
+        _timeObject.SetVelocity(velocities.GetValueAtFrame(currentFrame), angularVelocities.GetValueAtFrame(currentFrame));
 
         state = RecorderState.Record;
         ClearAllAfterCurrentFrame(currentFrame);
@@ -226,8 +223,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void StopRecording()
     {
-        Log("Stop Recording");
-        _rigidbody.constraints = RigidbodyConstraints.None;
+        _timeObject.FreeFromExternalConstraints();
         currentFrame = 0;
         state = RecorderState.None;
         isRecording = false;
