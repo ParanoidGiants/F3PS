@@ -46,7 +46,7 @@ public class TelekinesisMovable : MonoBehaviour
     {
         isMoving = true;
         SetUseGravity(false);
-        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.linearVelocity = Vector3.zero;
         Pick();
     }
     public void StopMoving()
@@ -55,7 +55,7 @@ public class TelekinesisMovable : MonoBehaviour
         SetUseGravity(true);
         Unpick();
         SelectAsCandidate();
-        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.linearVelocity = Vector3.zero;
     }
 
     private void SetUseGravity(bool use)
@@ -75,7 +75,7 @@ public class TelekinesisMovable : MonoBehaviour
     {
         Vector3 direction = (moveTo - transform.position);
         Vector3 velocity = direction * moveSpeed;
-        _rigidbody.velocity = velocity;
+        _rigidbody.linearVelocity = velocity;
     }
 
 }

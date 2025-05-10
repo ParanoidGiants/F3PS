@@ -16,7 +16,7 @@ public class PhysicsTimeObject : TimeObject
     public Vector3 timeFreezeAngularVelocity = Vector3.zero;
 
     public Vector3 AngularVelocity => _rigidbody.angularVelocity / currentTimeScale;
-    public Vector3 Velocity => _rigidbody.velocity / currentTimeScale;
+    public Vector3 Velocity => _rigidbody.linearVelocity / currentTimeScale;
 
     private void Awake()
     {
@@ -57,14 +57,14 @@ public class PhysicsTimeObject : TimeObject
             if (!isTimeFrozen)
             {
                 _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
-                _rigidbody.velocity *= relation;
+                _rigidbody.linearVelocity *= relation;
                 _rigidbody.angularVelocity *= relation;
             }
             else
             {
                 _rigidbody.constraints = RigidbodyConstraints.None;
                 _rigidbody.mass = _defaultMass / (newTimeScale*newTimeScale);
-                _rigidbody.velocity = timeFreezeVelocity;
+                _rigidbody.linearVelocity = timeFreezeVelocity;
                 _rigidbody.angularVelocity = timeFreezeAngularVelocity;
                 isTimeFrozen = false;
             }
@@ -72,7 +72,7 @@ public class PhysicsTimeObject : TimeObject
         else if (!isTimeFrozen)
         {
             isTimeFrozen = true;
-            timeFreezeVelocity = _rigidbody.velocity;
+            timeFreezeVelocity = _rigidbody.linearVelocity;
             timeFreezeAngularVelocity = _rigidbody.angularVelocity;
             _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
@@ -91,7 +91,7 @@ public class PhysicsTimeObject : TimeObject
     public void SetVelocity(Vector3 velocity, Vector3 angularVelocity)
     {
         float relation = 1f / currentTimeScale;
-        _rigidbody.velocity = velocity * relation;
+        _rigidbody.linearVelocity = velocity * relation;
         _rigidbody.angularVelocity = angularVelocity * relation;
     }
 
