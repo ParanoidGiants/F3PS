@@ -31,4 +31,16 @@ public class Crosshair : MonoBehaviour
             return origin + ray.direction * 100f;
         }
     }
+    public bool CrosshairRaycast(out RaycastHit hit)
+    {
+        var ray = _cam.ScreenPointToRay(_rectTransform.position);
+        var origin = ray.origin + ray.direction * sourceDistance;
+        return Physics.Raycast(origin, ray.direction, out hit, 100f, whatIsShootable);
+    }
+
+    public Vector3 GetInfiniteDirection()
+    {
+        var ray = _cam.ScreenPointToRay(_rectTransform.position);
+        return ray.origin + ray.direction * 100f;
+    }
 }

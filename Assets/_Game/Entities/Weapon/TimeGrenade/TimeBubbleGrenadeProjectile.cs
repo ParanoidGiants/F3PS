@@ -1,5 +1,6 @@
 using Cinemachine;
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : BaseProjectile
@@ -9,13 +10,20 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public TimeBubble timeBubble;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
-    public float targetScale = 20f;
+    public ProjectileTimeObject timeObject;
     private bool _isActive = false;
 
     public float shakePower = 1f;
-
-    public float Gravity => Physics.gravity.magnitude;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
+
+    public float Gravity => -Physics.gravity.y * timeObject.gravityScale;
+    public bool IsTimeBubbleActive => timeBubble.isActiveAndEnabled;
+    public bool IsProjectileActive => _isActive;
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 
     private void Update()
     {
@@ -30,11 +38,12 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void ActivateTimeBubble()
     {
+        timeBubble.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
         timeBubble.transform.localScale = Vector3.zero;
         timeBubble.transform
-            .DOScale(Vector3.one * targetScale, animationDuration)
+            .DOScale(Vector3.one * timeBubble.targetSize, animationDuration)
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
@@ -42,15 +51,15 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
              });
     }
 
-    private void DeactivateTimeBubble()
+    public void DeactivateTimeBubble()
     {
-        Debug.Log("Deactivate");
         _isActive = false;
         timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
             .OnComplete(() =>
             {
                 // Deactivate the GameObject after the tween is complete.
+                timeBubble.Clear();
                 timeBubble.gameObject.SetActive(false);
                 gameObject.SetActive(false);
             });
@@ -75,5 +84,4 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         col.enabled = false;
         ActivateTimeBubble();
     }
-
 }

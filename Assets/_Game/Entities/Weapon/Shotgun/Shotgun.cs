@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class Shotgun : BaseGun
+    public class Shotgun : BaseProjectileShooter
     {
         private bool _wasShootingPressedLastFrame = false;
         [Space(10)]
@@ -19,12 +19,12 @@ namespace Weapon
                 if (currentMagazineAmount <= 0)
                 {
                     // TODO: Play empty clip sound
-                    weaponUI?.OnTryShootWithEmptyClip();
+                    skillUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {
                     StartCoroutine(Shoot(targetPosition));
-                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    skillUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                 }
                 _wasShootingPressedLastFrame = true;
             }

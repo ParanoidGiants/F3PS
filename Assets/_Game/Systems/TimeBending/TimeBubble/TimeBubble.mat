@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2993
+  m_CustomRenderQueue: 3010
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -103,7 +103,7 @@ Material:
     - _BrackeysFillFront: 0.0344
     - _BrackeysFresnelPoewr: 1.38
     - _BrackeysFresnelPower: 5
-    - _BrackeysMoveSpeed: 0.05
+    - _BrackeysMoveSpeed: 1
     - _BrackeysOffset: 0.1
     - _Brightness: 8
     - _BumpScale: 1
@@ -124,7 +124,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
-    - _QueueOffset: -7
+    - _QueueOffset: 10
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0

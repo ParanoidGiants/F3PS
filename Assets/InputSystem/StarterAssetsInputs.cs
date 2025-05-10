@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -11,6 +12,7 @@ namespace StarterAssets
 		public Vector2 move;
 		public Vector2 look;
 		public float bubbleTimeScale;
+        public float telekinesisPushPull;
         public bool jump;
 		public bool sprint;
 		public bool shoot;
@@ -20,7 +22,7 @@ namespace StarterAssets
 		public bool dodge;
 		public bool switchWeapon;
 		public bool aimGrenade;
-		public bool pause;
+        public bool pause;
         public bool menu;
         public bool freeCamera;
 
@@ -39,6 +41,10 @@ namespace StarterAssets
         public void OnBubbleTimeScale(InputValue value)
         {
             BubbleTimeScale(value.Get<float>());
+        }
+        public void OnTelekinesisPushPull(InputValue value)
+        {
+            TelekinesisPushPull(value.Get<float>());
         }
 
         public void OnLook(InputValue value)
@@ -118,6 +124,11 @@ namespace StarterAssets
         public void BubbleTimeScale(float direction)
 		{
 			bubbleTimeScale = direction == 0f ? 0f : Mathf.Sign(direction);
+        }
+
+        private void TelekinesisPushPull(float direction)
+        {
+            telekinesisPushPull = direction;
         }
 
         public void LookInput(Vector2 newLookDirection)

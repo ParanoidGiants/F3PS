@@ -4,7 +4,6 @@ using UnityEngine;
 using Weapon;
 using Cinemachine;
 
-
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using DarkTonic.MasterAudio;
@@ -15,13 +14,14 @@ using DarkTonic.MasterAudio;
 
 namespace StarterAssets
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     // [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
         #region DEBUG_TOOLS
+        [Space(20)]
         [Header("Debug Pause and Camera")]
         public GameObject freeCameraText;
         public GameObject pausedText;
@@ -39,14 +39,15 @@ namespace StarterAssets
 
         [Space(20)]
         [Header("References")]
-
+        private bool _hasAnimator;
+        public Animator animator;
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
-        public WeaponManager weaponManager;
+        public SkillManager skillManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
-        public TimeBubble timeBubble;
+        public Transform armature;
         private PlayerHealthUI _playerHealthUI;
 
         [Space(20)]
@@ -92,6 +93,9 @@ namespace StarterAssets
 
         [Space(10)]
         [Header("Gravity, Jump & Dodge")]
+        public float groundedCoyoteDuration = 0.3f;
+        public float _groundedCoyoteTime = 0f;
+
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
 
@@ -142,10 +146,6 @@ namespace StarterAssets
         public bool LockCameraPosition = false;
 
 
-        [Header("TimeBubble")]
-        [Tooltip("Speed of scrolling per second")]
-        public float timeBubbleTimeScaleSpeed = 1f;
-
         [Space(10)]
         
         // cinemachine
@@ -174,7 +174,6 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
         private const float _terminalVelocity = 53.0f;
-        private bool _hasAnimator;
 
         [Header("Audio")]
         public AudioClip LandingAudioClip;
@@ -190,11 +189,8 @@ namespace StarterAssets
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
 
-
-
-        private Animator _animator;
         private GameObject _mainCamera;
-        private CharacterController _controller;
+        private Rigidbody _rigidbody;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
@@ -216,12 +212,12 @@ namespace StarterAssets
         private void Awake()
         {
             _mainCamera = FindObjectOfType<Camera>().gameObject;
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
+            _hasAnimator = animator != null;
+            _rigidbody = GetComponent<Rigidbody>();
             _input = GameManager.Instance.inputs;
             _playerInput = _input.GetComponent<PlayerInput>();
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
-            Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
             _playerHealthUI = FindObjectOfType<PlayerHealthUI>();
 
@@ -236,41 +232,36 @@ namespace StarterAssets
             _jumpCoolDownTime = JumpCoolDownTimer;
             _fallTimeoutDelta = FallTimeout;
             _dodgeCoolDownTime = DodgeCoolDownTimer;
-            weaponManager.Init();
+            skillManager.Init();
         }
-
         private void Update()
         {
             HandleMenu();
             HandleFreeCamera();
             HandleStopTime();
             if (!canControlPlayer) return;
-
             if (_isDying) return;
+            if (GameManager.Instance.timeManager.Stopped) return;
 
+            animator.SetBool(_animIDGrounded, _isGrounded);
 
+            skillManager.OnUpdate();
+            UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
+            UpdateTimeManager(_input.slowmo);
+            HandlePlatformTransform();
+        }
 
-            weaponManager.HandleSwitchWeapon(_input.switchWeapon, _input.look.x);
-
+        private void FixedUpdate()
+        {
+            if (!canControlPlayer) return;
+            if (_isDying) return;
+            if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.Stopped) return;
 
             GroundedCheck();
-            _isShooting = _input.shoot;
-            _isReloading = _input.reload;
-            _isAimingGrenade = _input.aimGrenade;
-            weaponManager.OnUpdate(
-                _isAimingGrenade,
-                _isShooting,
-                _isReloading
-            );
-            UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
-            UpdateTimeManager(_input.slowmo);
+            skillManager.OnFixedUpdate();
 
-            _hasAnimator = TryGetComponent(out _animator);
-
-            _animator.SetBool(_animIDGrounded, _isGrounded);
             JumpAndGravity();
-
             if (_isDodging)
             {
                 Dodge();
@@ -280,11 +271,28 @@ namespace StarterAssets
                 Move();
             }
         }
-
-        private void HandleBubbleTimeScale()
+        private void LateUpdate()
         {
-            if (_input.bubbleTimeScale == 0f) return;
-            timeBubble.PitchTimeScale(timeBubbleTimeScaleSpeed * _input.bubbleTimeScale * Time.deltaTime);
+            if (_isMenuOpen) return;
+
+            CameraTargetRotation();
+        }
+
+
+
+        [Header("Platform")]
+        public Transform currentGround;
+        public Vector3 lastGroundPosition;
+        private void HandlePlatformTransform()
+        {
+            if (!_isGrounded)
+            {
+                return;
+            }
+
+            var platformDirection = currentGround.position - lastGroundPosition;
+            lastGroundPosition = currentGround.position;
+            transform.position += platformDirection;
         }
 
         public void StopControlPlayer()
@@ -397,25 +405,6 @@ namespace StarterAssets
         }
 
 
-        private void FixedUpdate()
-        {
-            if (!canControlPlayer) return;
-            if (_isDying) return;
-            if (GameManager.Instance.IsGamePaused) return;
-            if (GameManager.Instance.timeManager.Stopped) return;
-
-            HandleBubbleTimeScale();
-            weaponManager.OnFixedUpdate();
-        }
-
-        private void LateUpdate()
-        {
-            if (_isMenuOpen) return;
-
-            CameraTargetRotation();
-
-        }
-
         private void CameraTargetRotation()
         {
             // if there is an input and camera position is not fixed
@@ -443,7 +432,7 @@ namespace StarterAssets
             float targetSpeed = GetTargetSpeed(_input.move);
 
             // a reference to the players current horizontal velocity
-            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+            float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -473,23 +462,34 @@ namespace StarterAssets
             {
                 _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
             }
-            _targetYaw = _mainCamera.transform.eulerAngles.y
-                         + Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z);
+            _targetYaw = Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z)
+                + _mainCamera.transform.rotation.eulerAngles.y;
             _lookYaw = GetLookYaw(transform, _targetYaw);
-            
+
             // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            // transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            if (_input.move.magnitude > 0f)
+            {
+                armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+            }
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
+            var moveVelocity = lookDirection.normalized * _speed;
 
             // move the player
-            _controller.Move(
-                lookDirection.normalized * (_speed * Time.deltaTime)
-                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
-            );
+            var moveDirection = (verticalVelocity + moveVelocity);
+            if (_input.move.magnitude > 0f)
+            {
+                _rigidbody.velocity = moveDirection;
+            }
+            else
+            {
+                _rigidbody.velocity = new Vector3(0f, _verticalVelocity, 0f);
+            }
             if (_hasAnimator)
             {
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                animator.SetFloat(_animIDSpeed, _animationBlend);
+                animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
 
@@ -526,60 +526,42 @@ namespace StarterAssets
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(
-                lookDirection.normalized * (_speed * Time.deltaTime)
-                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
-            );
+            _rigidbody.velocity = lookDirection.normalized * (_speed * Time.deltaTime)
+                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
         }
 
         private void JumpAndGravity()
         {
             if (_isGrounded)
             {
+                _groundedCoyoteTime = 0f;
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
                 // update animator if using character
                 if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDJump, false);
-                    _animator.SetBool(_animIDFreeFall, false);
-                    _animator.SetBool(_animIDDodge, false);
+                    animator.SetBool(_animIDJump, false);
+                    animator.SetBool(_animIDFreeFall, false);
+                    animator.SetBool(_animIDDodge, false);
                 }
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = -2f;
+                    _verticalVelocity = 0f;
                 }
 
                 // Jump
                 if (_input.jump && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDJump, true);
-                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-                    }
+                    DoJump();
                 }
                 
                 // Dodge
                 else if (!_isDodging && _input.dodge && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
-                    _isDodging = true;
-                    _dodgeAscendTime = DodgeAscendTimer;
-                    _dodgeLandTime = DodgeLandTimer;
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDDodge, true);
-                        MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-                    }
+                    DoDodge();
                 }
 
                 // jump timeout
@@ -591,6 +573,23 @@ namespace StarterAssets
                 {
                     _verticalVelocity = Mathf.Max(_verticalVelocity, DodgeHeight);
                     _dodgeCoolDownTime -= Time.deltaTime;
+                }
+            }
+            else if (_groundedCoyoteTime < groundedCoyoteDuration && _jumpCoolDownTime <= 0.0f && _dodgeCoolDownTime <= 0.0f)
+            {
+                _groundedCoyoteTime += Time.deltaTime;
+                // Jump
+                if (_input.jump)
+                {
+                    DoJump();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
+                }
+
+                // Dodge
+                else if (!_isDodging && _input.dodge)
+                {
+                    DoDodge();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
                 }
             }
             else
@@ -613,7 +612,7 @@ namespace StarterAssets
                 }
                 else if (_hasAnimator)
                 {
-                    _animator.SetBool(_animIDFreeFall, true);
+                    animator.SetBool(_animIDFreeFall, true);
                 }
 
                 // if we are not grounded, do not jump
@@ -626,6 +625,34 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity && _dodgeAscendTime <= 0f)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
+            }
+        }
+
+        private void DoJump()
+        {
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                animator.SetBool(_animIDJump, true);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+            }
+        }
+
+        private void DoDodge()
+        {
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(DodgeHeight * -2f * Gravity);
+            _isDodging = true;
+            _dodgeAscendTime = DodgeAscendTimer;
+            _dodgeLandTime = DodgeLandTimer;
+            _groundedCoyoteTime = groundedCoyoteDuration;
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                animator.SetBool(_animIDDodge, true);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
             }
         }
 
@@ -652,7 +679,7 @@ namespace StarterAssets
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
-                AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                AudioSource.PlayClipAtPoint(LandingAudioClip, transform.position, FootstepAudioVolume);
             }
         }
 
@@ -727,7 +754,7 @@ namespace StarterAssets
             }
             else
             {
-                _animator.SetTrigger(_animIDHit);
+                animator.SetTrigger(_animIDHit);
             }
             cameraShake.Shake(damage);
             animateMesh.HitFlash();
@@ -735,9 +762,9 @@ namespace StarterAssets
 
         private void Die(Vector3 hitDirection)
         {
-            _animator.SetFloat("XDieDirection", Vector3.Dot(-hitDirection.normalized, transform.right));
-            _animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
-            _animator.SetTrigger("Die");
+            animator.SetFloat("XDieDirection", Vector3.Dot(-hitDirection.normalized, transform.right));
+            animator.SetFloat("ZDieDirection", Vector3.Dot(-hitDirection.normalized, transform.forward));
+            animator.SetTrigger("Die");
             Destroy(hittableManager.gameObject);
             SceneLoader.Instance.ReloadScene(5f);
         }
@@ -745,8 +772,11 @@ namespace StarterAssets
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                transform.position.z);
+            Vector3 spherePosition = new Vector3(
+                transform.position.x,
+                transform.position.y - GroundedOffset,
+                transform.position.z
+            );
             _isGrounded = Physics.CheckSphere(
                 spherePosition,
                 GroundedRadius,
@@ -754,6 +784,33 @@ namespace StarterAssets
                 QueryTriggerInteraction.Ignore
             );
 
+            if (!_isGrounded)
+            {
+                return;
+            }
+            Ray groundRay = new Ray(
+                spherePosition,
+                Vector3.down
+            );
+            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
+            // check if the ray hits the ground
+
+            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
+            {
+                // Debug.LogError("Grounded check failed although ground should be present");
+                return;
+            }
+
+            var groundedObject = hit.transform;
+            if (groundedObject == currentGround)
+            {
+                return;
+            }
+            Debug.Log("Grounded object changed");
+            Debug.Log($"Before: {currentGround}");
+            Debug.Log($"After: {groundedObject}");
+            currentGround = groundedObject;
+            lastGroundPosition = currentGround.position;
         }
 
         private void OnDrawGizmosSelected()
@@ -767,7 +824,8 @@ namespace StarterAssets
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-                GroundedRadius);
+                GroundedRadius
+            );
         }
     }
 }
