@@ -72,13 +72,13 @@ public class RewindController : MonoBehaviour
             {
                 if (!isPlaybackActive)
                 {
-                    currentCandidate.ChangeToPlayback();
+                    currentCandidate.SetupForPlayback();
                     rewindHUD.ShowPlaybackCircle(true);
                     isPlaybackActive = true;
                 }
                 else
                 {
-                    currentCandidate.ChangeToRecord();
+                    currentCandidate.SetupForRecording();
                     rewindHUD.ShowPlaybackCircle(false);
                     isPlaybackActive = false;
                 }

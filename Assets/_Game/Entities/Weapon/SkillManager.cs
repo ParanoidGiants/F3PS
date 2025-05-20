@@ -39,18 +39,17 @@ public class SkillManager : MonoBehaviour
         {
             case Skill.Telekinesis:
                 telekinesisController.OnUpdate(
-                    _inputs.shoot,
-                    _inputs.sprint,
+                    _inputs.skill,
+                    _inputs.grab,
                     _inputs.look,
                     _inputs.telekinesisPushPull
                 );
                 break;
             case Skill.Rewind:
-                rewindController.OnUpdate(_inputs.shoot, _inputs.aimGrenade, _inputs.telekinesisPushPull);
+                rewindController.OnUpdate(_inputs.skill, _inputs.grab, _inputs.telekinesisPushPull);
                 break;
             case Skill.TimeBubble:
-                bool isAimingGrenade = _inputs.aimGrenade;
-                timeBubbleController.OnUpdate(_inputs.shoot, _inputs.telekinesisPushPull, _aimTargetPosition);
+                timeBubbleController.OnUpdate(_inputs.skill, _inputs.telekinesisPushPull, _aimTargetPosition);
                 break;
             default:
                 break;

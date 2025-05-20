@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TelekinesisMovable : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
+    private RigidbodyHub _rigidbodyHub;
     private Quaternion _initialRotation;
 
     [Header("References")]
@@ -13,10 +13,12 @@ public class TelekinesisMovable : MonoBehaviour
     [Space(10)]
     [Header("Watcher")]
     public bool isMoving;
+    public bool isInRotationCoroutine = false;
+    private Coroutine rotateCoroutine;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbodyHub = GetComponent<RigidbodyHub>();
         var meshFilter = GetComponent<MeshFilter>();
         outline.Init(meshFilter.mesh);
         outline.SetActive(false);
@@ -35,40 +37,23 @@ public class TelekinesisMovable : MonoBehaviour
     public void StartMoving()
     {
         isMoving = true;
-        SetUseGravity(false);
-        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        _rigidbody.velocity = Vector3.zero;
+        _rigidbodyHub.StartTelekinesisMoving();
         _initialRotation = transform.rotation;
         outline.Pick();
     }
     public void StopMoving(float maximumThrowSpeed)
     {
         isMoving = false;
-        SetUseGravity(true);
+        _rigidbodyHub.StopTelekinesisMoving(maximumThrowSpeed);
         outline.Unpick();
         SelectAsCandidate();
-        _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, maximumThrowSpeed);
-        _rigidbody.constraints = RigidbodyConstraints.None;
-    }
-
-    private void SetUseGravity(bool use)
-    {
-        var timeObject = GetComponent<PhysicsTimeObject>();
-        if (timeObject != null)
-        {
-            timeObject.useGravity = use;
-        }
-        else
-        {
-            _rigidbody.useGravity = use;
-        }
     }
 
     public void MoveTowards(Vector3 moveTo, float moveSpeed, Vector3 subjectRight)
     {
         Vector3 direction = (moveTo - transform.position);
         Vector3 velocity = direction * moveSpeed;
-        _rigidbody.velocity = velocity;
+        _rigidbodyHub.SetTelekinesisVelocity(velocity);
     }
 
     public void StartRotating()
@@ -99,9 +84,6 @@ public class TelekinesisMovable : MonoBehaviour
     {
         transform.rotation = subjectOrientation * _initialRotation;
     }
-
-    public bool isInRotationCoroutine = false;
-    private Coroutine rotateCoroutine;
 
     public void Rotate(RotationCommand rotationCommand, Quaternion subjectOrientation, float rotateTimer)
     {

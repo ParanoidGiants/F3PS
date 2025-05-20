@@ -16,12 +16,15 @@ namespace StarterAssets
         public bool jump;
 		public bool sprint;
 		public bool shoot;
-		public bool aim;
+        public bool skill;
+        public bool grab;
+
+
+        public bool aim;
 		public bool reload;
 		public bool slowmo;
 		public bool dodge;
 		public bool switchWeapon;
-		public bool aimGrenade;
         public bool pause;
         public bool menu;
         public bool freeCamera;
@@ -67,10 +70,15 @@ namespace StarterAssets
 		
 		public void OnShoot(InputValue value)
 		{
-			ShootInput(shoot = value.isPressed);		
-		}
+			ShootInput(shoot = value.isPressed);
+        }
 
-		public void OnAim(InputValue value)
+        public void OnSkill(InputValue value)
+        {
+            SkillInput(value.isPressed);
+        }
+
+        public void OnAim(InputValue value)
 		{
 			AimInput(value.isPressed);
 		}
@@ -100,11 +108,6 @@ namespace StarterAssets
 			SwitchWeaponInput(value.isPressed);
 		}
 
-		public void OnAimGrenade(InputValue value)
-		{
-			AimGrenadeInput(value.isPressed);
-        }
-
         public void OnMenu(InputValue value)
         {
             MenuInput(value.isPressed);
@@ -113,6 +116,11 @@ namespace StarterAssets
         public void OnFreeCamera(InputValue value)
         {
             FreeCameraInput(value.isPressed);
+        }
+
+        public void OnGrab(InputValue value)
+        {
+            GrabInput(value.isPressed);
         }
 #endif
 
@@ -181,9 +189,9 @@ namespace StarterAssets
 			switchWeapon = valueIsPressed;
 		}
 
-		private void AimGrenadeInput(bool valueIsPressed)
+		private void SkillInput(bool valueIsPressed)
 		{
-			aimGrenade = valueIsPressed;
+			skill = valueIsPressed;
         }
 
         private void MenuInput(bool valueIsPressed)
@@ -194,6 +202,11 @@ namespace StarterAssets
         private void FreeCameraInput(bool valueIsPressed)
         {
             freeCamera = valueIsPressed;
+        }
+
+        private void GrabInput(bool valueIsPressed)
+        {
+            grab = valueIsPressed;
         }
 
         private void OnApplicationFocus(bool hasFocus)

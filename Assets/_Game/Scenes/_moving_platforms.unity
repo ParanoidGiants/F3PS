@@ -1415,6 +1415,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
       propertyPath: m_RootOrder
@@ -2150,18 +2155,17 @@ MonoBehaviour:
     m_Bits: 1
   lineRenderer: {fileID: 595774393}
   target: {fileID: 1147270545}
-  pushPullSpeed: 20
-  rotateSpeed: 45
+  pushPullSpeed: 10
+  rotateTimer: 0.5
   moveSpeed: 10
   minimumDistance: 3
   maximumDistance: 50
-  maximumThrowSpeed: 3
+  maximumThrowSpeed: 30
   currentCandidate: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   isMovingObject: 0
   isRotatingObject: 0
   hasCandidate: 0
-  rotateDuration: 1
 --- !u!120 &595774393
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -3947,6 +3951,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
@@ -6647,6 +6656,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
       propertyPath: m_RootOrder
@@ -6720,6 +6734,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
@@ -9836,6 +9855,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
       propertyPath: m_RootOrder
@@ -10717,6 +10741,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PhysicsCubeRewindSlowMoTelekinesis (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2488913616749242317, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
@@ -16436,11 +16465,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1792816963175001164, guid: 299283cd7b5968243bc8065b4b32a983,
-        type: 3}
-      propertyPath: rotateOutline
-      value: 
-      objectReference: {fileID: 2100000, guid: 07a1dadcde32b634991a5100f3de0622, type: 2}
     - target: {fileID: 2488913616749242306, guid: 299283cd7b5968243bc8065b4b32a983,
         type: 3}
       propertyPath: m_Name
@@ -18274,6 +18298,7 @@ GameObject:
   - component: {fileID: 4527000044724362932}
   - component: {fileID: 8599488809410743154}
   - component: {fileID: 8599488809410743155}
+  - component: {fileID: 8599488809410743156}
   m_Layer: 6
   m_Name: TimeGrenadeProjectile
   m_TagString: Untagged
@@ -24758,14 +24783,30 @@ MonoBehaviour:
   amountOfTimeZones: 0
   currentTimeScale: 1
   additionalTimeScale: 1
-  useGravity: 1
-  gravityScale: 1
-  isTimeFrozen: 0
-  timeFreezeVelocity: {x: 0, y: 0, z: 0}
-  timeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
-  isFrozenExternal: 0
   _trail: {fileID: 7696399567830529689}
   _slowMoTrail: {fileID: 7193419811414896872}
+--- !u!114 &8599488809410743156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4826376354169921643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fdc978bfd431e4fb657e0d9216bba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocityLine: {fileID: 0}
+  _rigidbody: {fileID: 0}
+  useGravity: 1
+  defaultMass: 0
+  currentGravityScale: 1
+  currentTimeScale: 1
+  isTimeFrozen: 0
+  unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
+  unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
+  isMovingByTelekinesis: 0
 --- !u!4 &8710708334905673251
 Transform:
   m_ObjectHideFlags: 0

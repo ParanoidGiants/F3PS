@@ -16,7 +16,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public float shakePower = 1f;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
 
-    public float Gravity => -Physics.gravity.y * timeObject.gravityScale;
+    public float Gravity => -Physics.gravity.y * timeObject.GravityScale;
     public bool IsTimeBubbleActive => timeBubble.isActiveAndEnabled;
     public bool IsProjectileActive => _isActive;
 

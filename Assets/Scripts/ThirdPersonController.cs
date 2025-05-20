@@ -208,19 +208,29 @@ namespace StarterAssets
             if (GameManager.Instance.IsGamePaused) return;
             if (GameManager.Instance.timeManager.Stopped) return;
 
-            GroundedCheck();
-            skillManager.OnFixedUpdate();
 
-            JumpAndGravity();
+            GroundedCheck();
+            HandleFallAndGravity();
+
+            skillManager.OnFixedUpdate();
+            if (_input.skill)
+            {
+                MoveWhileAiming();
+                return;
+            }
+
+            JumpAndDodge();
+
             if (_isDodging)
             {
-                Dodge();
+                HandleDodgeRoll();
             }
             else
             {
                 Move();
             }
         }
+
         private void LateUpdate()
         {
             if (_isMenuOpen)
@@ -399,7 +409,8 @@ namespace StarterAssets
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
             if (currentHorizontalSpeed < targetSpeed - speedOffset
                 || currentHorizontalSpeed > targetSpeed + speedOffset
-            ) {
+            )
+            {
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
                     targetSpeed * inputMagnitude,
@@ -452,9 +463,75 @@ namespace StarterAssets
                 animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
+        private void MoveWhileAiming()
+        {
+            float targetSpeed = 0f;
+            if (_input.move.magnitude > 0f)
+            {
+                targetSpeed = playerModel.MoveSpeed * 0.5f;
+            }
+            float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
+            float speedOffset = 0.1f;
+            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            if (currentHorizontalSpeed < targetSpeed - speedOffset
+                || currentHorizontalSpeed > targetSpeed + speedOffset
+            )
+            {
+                _speed = Mathf.Lerp(
+                    currentHorizontalSpeed,
+                    targetSpeed * inputMagnitude,
+                    Time.deltaTime * playerModel.SpeedChangeRate
+                );
+                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            }
+            else
+            {
+                _speed = targetSpeed;
+            }
+
+            _animationBlend = Mathf.Lerp(
+                _animationBlend,
+                targetSpeed,
+                Time.deltaTime * playerModel.SpeedChangeRate
+            );
+            if (_animationBlend < 0.01f) _animationBlend = 0f;
+            if (_input.move.sqrMagnitude > 0f)
+            {
+                _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            }
+            _targetYaw = Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z)
+                + _mainCamera.transform.rotation.eulerAngles.y;
+            _lookYaw = Mathf.SmoothDampAngle(
+                transform.eulerAngles.y,
+                _targetYaw,
+                ref _rotationVelocity,
+                playerModel.RotationSmoothTime * Time.unscaledDeltaTime
+            );
+
+            var cameraForward = defaultCamera.transform.forward;
+            var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
+            armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
+            var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
+            var moveDirection = (verticalVelocity + moveVelocity);
+            if (_input.move.magnitude > 0f)
+            {
+                _rigidbody.velocity = moveDirection;
+            }
+            else
+            {
+                _rigidbody.velocity = new Vector3(0f, _verticalVelocity, 0f);
+            }
+            if (_hasAnimator)
+            {
+                animator.SetFloat(_animIDSpeed, _animationBlend);
+                animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+        }
 
         // TODO: fix dodge
-        private void Dodge()
+        private void HandleDodgeRoll()
         {
             if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
             {
@@ -491,50 +568,66 @@ namespace StarterAssets
                 playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
 
-            // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
-            // move the player
             _rigidbody.velocity = lookDirection.normalized * (_speed * Time.deltaTime)
                 + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
         }
 
-        private void JumpAndGravity()
+        private void JumpAndDodge()
         {
+            var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
             if (_isGrounded)
             {
                 _groundedCoyoteTime = 0f;
-                // reset the fall timeout timer
-                fallTime = fallTimer;
+                if (_input.jump && cooledDown)
+                {
+                    DoJump();
+                }
+                else if (!_isDodging && _input.dodge && cooledDown)
+                {
+                    DoDodge();
+                }
+            }
+            else if (_groundedCoyoteTime < groundedCoyoteDuration && cooledDown)
+            {
+                _groundedCoyoteTime += Time.deltaTime;
+                if (_input.jump)
+                {
+                    DoJump();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
+                }
+                else if (!_isDodging && _input.dodge)
+                {
+                    DoDodge();
+                    _groundedCoyoteTime = groundedCoyoteDuration;
+                }
+            }
+            else
+            {
+                _input.jump = false;
+                _input.dodge = false;
+            }
+        }
 
-                // update animator if using character
+        private void HandleFallAndGravity()
+        {
+            var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
+            if (_isGrounded)
+            {
+                _groundedCoyoteTime = 0f;
+                fallTime = fallTimer;
                 if (_hasAnimator)
                 {
                     animator.SetBool(_animIDJump, false);
                     animator.SetBool(_animIDFreeFall, false);
                     animator.SetBool(_animIDDodge, false);
                 }
-
-                // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
                 {
                     _verticalVelocity = 0f;
                 }
-
-                // Jump
-                if (_input.jump && jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f)
-                {
-                    DoJump();
-                }
-                
-                // Dodge
-                else if (!_isDodging && _input.dodge && jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f)
-                {
-                    DoDodge();
-                }
-
-                // jump timeout
                 if (jumpCoolDownTime >= 0.0f)
                 {
                     jumpCoolDownTime -= Time.deltaTime;
@@ -545,26 +638,8 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
-            else if (_groundedCoyoteTime < groundedCoyoteDuration && jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f)
+            else if (_groundedCoyoteTime >= groundedCoyoteDuration || !cooledDown)
             {
-                _groundedCoyoteTime += Time.deltaTime;
-                // Jump
-                if (_input.jump)
-                {
-                    DoJump();
-                    _groundedCoyoteTime = groundedCoyoteDuration;
-                }
-
-                // Dodge
-                else if (!_isDodging && _input.dodge)
-                {
-                    DoDodge();
-                    _groundedCoyoteTime = groundedCoyoteDuration;
-                }
-            }
-            else
-            {
-                // reset the jump timeout timer
                 if (_isDodging)
                 {
                     dodgeCoolDownTime = dodgeCoolDownTimer;
@@ -573,9 +648,6 @@ namespace StarterAssets
                 {
                     jumpCoolDownTime = jumpCoolDownTimer;
                 }
-                
-
-                // fall timeout
                 if (fallTime >= 0.0f)
                 {
                     fallTime -= Time.deltaTime;
@@ -584,14 +656,7 @@ namespace StarterAssets
                 {
                     animator.SetBool(_animIDFreeFall, true);
                 }
-
-                // if we are not grounded, do not jump
-                _input.jump = false;
-                // if we are not grounded, do not jump
-                _input.dodge = false;
             }
-
-            // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity && _dodgeAscendTime <= 0f)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
