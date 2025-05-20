@@ -5,6 +5,7 @@ public class TelekinesisOutline : MonoBehaviour
 {
     public Material hoveringOutline;
     public Material pickedOutline;
+    public Material rotateOutline;
 
     private MeshRenderer _meshRenderer;
 
@@ -27,5 +28,15 @@ public class TelekinesisOutline : MonoBehaviour
     internal void Unpick()
     {
         _meshRenderer.material = hoveringOutline;
+    }
+
+    public void StartRotate()
+    {
+        _meshRenderer.material = rotateOutline;
+    }
+
+    public void StopRotate()
+    {
+        _meshRenderer.material = pickedOutline;
     }
 }

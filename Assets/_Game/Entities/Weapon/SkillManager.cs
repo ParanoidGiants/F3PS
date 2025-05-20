@@ -38,7 +38,12 @@ public class SkillManager : MonoBehaviour
         switch (activeSkill)
         {
             case Skill.Telekinesis:
-                telekinesisController.OnUpdate(_inputs.shoot, _inputs.telekinesisPushPull);
+                telekinesisController.OnUpdate(
+                    _inputs.shoot,
+                    _inputs.sprint,
+                    _inputs.look,
+                    _inputs.telekinesisPushPull
+                );
                 break;
             case Skill.Rewind:
                 rewindController.OnUpdate(_inputs.shoot, _inputs.aimGrenade, _inputs.telekinesisPushPull);

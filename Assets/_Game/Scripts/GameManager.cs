@@ -13,6 +13,8 @@ namespace F3PS
         public StarterAssetsInputs inputs;
         public TimeManager timeManager;
         public InGameMenu inGameMenu;
+        public PlayerData PlayerData;
+        public PlayerEventController PlayerEventController;
 
         [SerializeField] private bool _isGamePaused;
         public bool IsGamePaused => _isGamePaused;
@@ -29,6 +31,7 @@ namespace F3PS
             _instance = this;
             DontDestroyOnLoad(gameObject);
             DOTween.Init();
+            PlayerEventController = new PlayerEventController(PlayerData);
         }
 
         private void Start()

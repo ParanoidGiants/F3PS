@@ -106,7 +106,7 @@ public class RewindController : MonoBehaviour
             // currentCandidate.OnFixedUpdate();
             return;
         }
-        if (!_crosshair.CrosshairRaycast(out var hit))
+        if (!_crosshair.CrosshairRaycast())
         {
             contactPoint = _crosshair.GetInfiniteDirection();
 
@@ -118,8 +118,9 @@ public class RewindController : MonoBehaviour
             }
             return;
         }
-        contactPoint = hit.point;
-        var movable = hit.transform.GetComponent<PhysicsRecorder>();
+        var target = _crosshair.Target;
+        contactPoint = target.point;
+        var movable = target.transform.GetComponent<PhysicsRecorder>();
         if (movable == currentCandidate)
         {
             return;
