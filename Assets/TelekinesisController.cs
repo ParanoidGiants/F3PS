@@ -56,7 +56,7 @@ public class TelekinesisController : MonoBehaviour
 
     public void OnDisable()
     {
-        target.gameObject.SetActive(false);
+        StopTelekinesis();
     }
 
     public void OnUpdate(bool isMoving, bool isRotating, Vector2 rotationDeltaXY, float pushPull)
@@ -79,10 +79,7 @@ public class TelekinesisController : MonoBehaviour
         }
         else if (isMovingObject && !isMoving)
         {
-            target.gameObject.SetActive(false);
-            currentCandidate.StopMoving(maximumThrowSpeed);
-            isMovingObject = false;
-            isRotatingObject = false;
+            StopTelekinesis();
         }
         else if (isMovingObject && !isRotatingObject && isRotating)
         {
@@ -113,6 +110,14 @@ public class TelekinesisController : MonoBehaviour
                 currentCandidate.Rotate(rotationCommand, SubjectOrientation, rotateTimer);
             }
         }
+    }
+
+    private void StopTelekinesis()
+    {
+        target.gameObject.SetActive(false);
+        currentCandidate.StopMoving(maximumThrowSpeed);
+        isMovingObject = false;
+        isRotatingObject = false;
     }
 
     public void OnFixedUpdate()

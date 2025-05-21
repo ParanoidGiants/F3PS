@@ -1,12 +1,13 @@
 using F3PS;
 using StarterAssets;
+using System;
 using UnityEngine;
 
 public enum Skill
 {
     Telekinesis = 0,
     Rewind = 1,
-    TimeBubble = 2
+    TimeBubble = 2,
 }
 
 public class SkillManager : MonoBehaviour
@@ -29,51 +30,83 @@ public class SkillManager : MonoBehaviour
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
-        SwitchSkill(activeSkill);
+        SetActiveSkill(activeSkill);
     }
 
     public void OnUpdate()
     {
-        HandleSwitchSkill();
+        HandleSwitchSkill(_inputs.switchWeapon);
+        HandleActiveSkill(
+            _inputs.skill,
+            _inputs.grab,
+            _inputs.look,
+            _inputs.telekinesisPushPull
+        );
+    }
+
+    public void OnFixedUpdate()
+    {
+        _aimTargetPosition = crosshair.GetTargetPosition();
+
         switch (activeSkill)
         {
             case Skill.Telekinesis:
-                telekinesisController.OnUpdate(
-                    _inputs.skill,
-                    _inputs.grab,
-                    _inputs.look,
-                    _inputs.telekinesisPushPull
-                );
+                telekinesisController.OnFixedUpdate();
                 break;
             case Skill.Rewind:
-                rewindController.OnUpdate(_inputs.skill, _inputs.grab, _inputs.telekinesisPushPull);
+                rewindController.OnFixedUpdate();
                 break;
             case Skill.TimeBubble:
-                timeBubbleController.OnUpdate(_inputs.skill, _inputs.telekinesisPushPull, _aimTargetPosition);
                 break;
             default:
                 break;
         }
     }
 
-    private void HandleSwitchSkill()
+    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
     {
-        if (!_inputs.switchWeapon)
+        switch (activeSkill)
+        {
+            case Skill.Telekinesis:
+                telekinesisController.OnUpdate(
+                    skill,
+                    grab,
+                    look,
+                    telekinesisPushPull
+                );
+                break;
+            case Skill.Rewind:
+                rewindController.OnUpdate(skill, grab, telekinesisPushPull);
+                break;
+            case Skill.TimeBubble:
+                timeBubbleController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleSwitchSkill(bool switchWeapon)
+    {
+        if (!switchWeapon)
         {
             _isWeaponSwitched = false;
             return;
         }
 
 
-        if (!_isWeaponSwitched)
+        if (_isWeaponSwitched)
         {
-            _isWeaponSwitched = true;
-            var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
-            SwitchSkill(nextSkill);
+            return;
         }
+
+        _isWeaponSwitched = true;
+        var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
+        activeSkill = nextSkill;
+        SetActiveSkill(nextSkill);
     }
 
-    private void SwitchSkill(Skill nextSkill)
+    private void SetActiveSkill(Skill nextSkill)
     {
         switch (nextSkill)
         {
@@ -91,26 +124,6 @@ public class SkillManager : MonoBehaviour
                 telekinesisController.gameObject.SetActive(false);
                 rewindController.gameObject.SetActive(false);
                 timeBubbleController.gameObject.SetActive(true);
-                break;
-            default:
-                break;
-        }
-        activeSkill = nextSkill;
-    }
-        
-    public void OnFixedUpdate()
-    {
-        _aimTargetPosition = crosshair.GetTargetPosition();
-
-        switch (activeSkill)
-        {
-            case Skill.Telekinesis:
-                telekinesisController.OnFixedUpdate();
-                break;
-            case Skill.Rewind:
-                rewindController.OnFixedUpdate();
-                break;
-            case Skill.TimeBubble:
                 break;
             default:
                 break;
