@@ -2104,6 +2104,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554739552}
   m_CullTransparentMesh: 1
+--- !u!1 &583305983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 754453862, guid: 299283cd7b5968243bc8065b4b32a983,
+    type: 3}
+  m_PrefabInstance: {fileID: 1792816963139431102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!120 &583305984 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 754453863, guid: 299283cd7b5968243bc8065b4b32a983,
+    type: 3}
+  m_PrefabInstance: {fileID: 1792816963139431102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &583305986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583305983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d12bdde7c90a1d4ea8aa2e824d7c164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1404081983}
+  velocityLine: {fileID: 583305984}
 --- !u!1 &595774390
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,6 +2181,7 @@ MonoBehaviour:
     m_Bits: 1
   lineRenderer: {fileID: 595774393}
   target: {fileID: 1147270545}
+  playerCameraTransform: {fileID: 9201257751673545873}
   pushPullSpeed: 10
   rotateTimer: 0.5
   moveSpeed: 10
@@ -6563,6 +6590,12 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!54 &1404081983 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2488913616749242319, guid: 299283cd7b5968243bc8065b4b32a983,
+    type: 3}
+  m_PrefabInstance: {fileID: 1792816963139431102}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1409647543
 GameObject:
   m_ObjectHideFlags: 0
@@ -24797,7 +24830,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0fdc978bfd431e4fb657e0d9216bba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityLine: {fileID: 0}
   _rigidbody: {fileID: 0}
   useGravity: 1
   defaultMass: 0

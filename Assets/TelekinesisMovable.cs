@@ -115,7 +115,6 @@ public class TelekinesisMovable : MonoBehaviour
         var time = 0f;
         while (time < rotateTimer)
         {
-            Debug.Log($"Rotating: {time}s");
             time += Time.deltaTime;
             var t = Mathf.Clamp01(time / rotateTimer);
             var rotation = Quaternion.Slerp(worldStartRotation, worldTargetRotation, t);

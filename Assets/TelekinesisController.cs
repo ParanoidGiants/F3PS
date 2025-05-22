@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ public class TelekinesisController : MonoBehaviour
     public LayerMask movableLayer;
     public LineRenderer lineRenderer;
     public Transform target;
+    public Transform playerCameraTransform;
 
     [Space(10)]
     [Header("Settings")]
@@ -43,7 +45,7 @@ public class TelekinesisController : MonoBehaviour
     public Quaternion SubjectOrientation
     {
         get {
-            var forward = transform.forward;
+            var forward = playerCameraTransform.forward;
             var projectedForward = new Vector3(forward.x, 0f, forward.z);
             return Quaternion.LookRotation(projectedForward, Vector3.up);
         }
@@ -115,6 +117,10 @@ public class TelekinesisController : MonoBehaviour
     private void StopTelekinesis()
     {
         target.gameObject.SetActive(false);
+        if (!hasCandidate)
+        {
+            return;
+        }
         currentCandidate.StopMoving(maximumThrowSpeed);
         isMovingObject = false;
         isRotatingObject = false;
@@ -132,37 +138,54 @@ public class TelekinesisController : MonoBehaviour
         {
             targetPosition = crosshair.GetInfiniteDirection();
 
-            if (!hasCandidate)
+            if (hasCandidate)
             {
-                return;
+                hasCandidate = false;
+                currentCandidate.UnselectAsCandidate();
+                currentCandidate = null;
             }
-            hasCandidate = false;
-            currentCandidate.UnselectAsCandidate();
-            currentCandidate = null;
             return;
         }
+
         var targetHit = crosshair.Target;
         var targetTransform = targetHit.transform;
         var ray = crosshair.Ray;
-        targetPosition = MathUtils.ClosestPointOnRay(ray, targetTransform.position);
+        var movableTarget = targetTransform.GetComponent<TelekinesisMovable>();
 
-        var movable = targetTransform.GetComponent<TelekinesisMovable>();
-        if (movable == currentCandidate)
-        {
-            return;
-        }
-
-        if (hasCandidate)
+        var targetHasMovable = movableTarget != null;
+        if (hasCandidate && !targetHasMovable)
         {
             hasCandidate = false;
             currentCandidate.UnselectAsCandidate();
             currentCandidate = null;
+            targetPosition = targetHit.point;
+            return;
         }
-        if (movable != null)
+        else if (!targetHasMovable)
+        {
+            targetPosition = crosshair.GetInfiniteDirection();
+            return;
+        }
+
+        targetPosition = MathUtils.ClosestPointOnRay(ray, targetTransform.position);
+        if (hasCandidate && targetHasMovable)
+        {
+            if (movableTarget == currentCandidate)
+            {
+                return;
+            }
+            else
+            {
+                currentCandidate.UnselectAsCandidate();
+                movableTarget.SelectAsCandidate();
+                currentCandidate = movableTarget;
+            }
+        }
+        else if (!hasCandidate && targetHasMovable)
         {
             hasCandidate = true;
-            movable.SelectAsCandidate();
-            currentCandidate = movable;
+            currentCandidate = movableTarget;
+            currentCandidate.SelectAsCandidate();
         }
     }
 

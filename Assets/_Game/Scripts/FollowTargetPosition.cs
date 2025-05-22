@@ -5,7 +5,7 @@ public class FollowTargetPosition : MonoBehaviour
     public Transform target;
     public Vector3 offset;
 
-    void LateUpdate()
+    void Update()
     {
         transform.position = target.position + offset;
     }

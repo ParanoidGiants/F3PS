@@ -6,7 +6,6 @@ public class RigidbodyHub : MonoBehaviour
 {
     private const double TIME_SCALE_TOLERANCE = 0.001f;
 
-    public LineRenderer velocityLine;
     public Rigidbody _rigidbody;
     public bool useGravity = true;
     public float defaultMass;
@@ -39,15 +38,10 @@ public class RigidbodyHub : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         defaultMass = _rigidbody.mass;
-        velocityLine.SetPosition(0, transform.position);
-        velocityLine.SetPosition(1, transform.position);
     }
 
     void FixedUpdate()
     {
-        velocityLine.SetPosition(0, transform.position);
-        velocityLine.SetPosition(1, transform.position + _rigidbody.velocity);
-
         if (!useGravity || isTimeFrozen) return;
         var force = Physics.gravity * (currentTimeScale * currentTimeScale * currentGravityScale);
         _rigidbody.AddForce(
