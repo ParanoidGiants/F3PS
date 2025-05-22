@@ -797,6 +797,7 @@ namespace StarterAssets
 
             if (!_isGrounded)
             {
+                currentGround = null;
                 groundNormal = Vector3.up;
                 return;
             }
@@ -810,7 +811,7 @@ namespace StarterAssets
             if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
             {
                 groundNormal = Vector3.up;
-                // Debug.LogError("Grounded check failed although ground should be present");
+                _isGrounded = false;
                 return;
             }
 
