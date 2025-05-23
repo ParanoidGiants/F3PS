@@ -72,6 +72,7 @@ public class RewindController : MonoBehaviour
                 else
                 {
                     currentCandidate.StopRecording();
+                    currentCandidate.SelectAsCandidate();
                     rewindHUD.UpdateRecordEffect(0);
                     selectedObjectForRecord = false;
                     isPlaybackActive = false;
