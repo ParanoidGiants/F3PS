@@ -66,15 +66,12 @@ public class PhysicsRecorder : MonoBehaviour
     public void SelectAsCandidate()
     {
         outline.SetActive(true);
+        outline.Pick();
     }
 
     public void Unpick()
     {
         outline.SetActive(false);
-    }
-    public void Pick()
-    {
-        outline.Pick();
     }
 
     private void FreezeRigidbody()

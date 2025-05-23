@@ -11669,7 +11669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpace: {fileID: 3893294199639930361}
   crosshair: {fileID: 3258596987015465067}
-  activeSkill: 0
+  activeSkill: 1
   telekinesisController: {fileID: 595774392}
   rewindController: {fileID: 1624850603}
   timeBubbleController: {fileID: 1799444611619086988}

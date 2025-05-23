@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RewindController : MonoBehaviour
@@ -40,8 +41,17 @@ public class RewindController : MonoBehaviour
 
     private void OnDisable()
     {
+        rewindHUD.UpdateRecordEffect(0);
         rewindHUD.gameObject.SetActive(false);
         _lineRenderer.enabled = false;
+
+        if (hasCandidate && !selectedObjectForRecord)
+        {
+            currentCandidate.StopRecording();
+            rewindHUD.UpdateRecordEffect(0);
+            hasCandidate = false;
+            currentCandidate = null;
+        }
     }
 
     public void OnUpdate(bool isRecording, bool activatePlayback, float forwardBackward)
@@ -106,37 +116,53 @@ public class RewindController : MonoBehaviour
             contactPoint = currentCandidate.transform.position;
             return;
         }
+
+        var physicsRecorder = GetCandidate();
+        if (physicsRecorder == null)
+        {
+            return;
+        }
+        
+
+        if (currentCandidate != physicsRecorder)
+        {
+            if (currentCandidate != null)
+            {
+                currentCandidate.Unpick();
+            }
+            physicsRecorder.SelectAsCandidate();
+            currentCandidate = physicsRecorder;
+            hasCandidate = true;
+        }
+
+        contactPoint = physicsRecorder.transform.position;
+    }
+
+    private PhysicsRecorder GetCandidate()
+    {
         if (!_crosshair.CrosshairRaycast())
         {
             contactPoint = _crosshair.GetInfiniteDirection();
-
             if (hasCandidate)
             {
                 hasCandidate = false;
                 currentCandidate.Unpick();
                 currentCandidate = null;
             }
-            return;
+            return null;
         }
-        var target = _crosshair.Target;
-        contactPoint = target.transform.position;
-        var movable = target.transform.GetComponent<PhysicsRecorder>();
-        if (movable == currentCandidate)
+        var physicsRecorder = _crosshair.Target.transform.GetComponent<PhysicsRecorder>();
+        if (physicsRecorder == null)
         {
-            return;
+            contactPoint = _crosshair.GetInfiniteDirection();
+            if (hasCandidate)
+            {
+                hasCandidate = false;
+                currentCandidate.Unpick();
+                currentCandidate = null;
+            }
+            return null;
         }
-
-        if (hasCandidate)
-        {
-            hasCandidate = false;
-            currentCandidate.Unpick();
-            currentCandidate = null;
-        }
-        if (movable != null)
-        {
-            hasCandidate = true;
-            movable.SelectAsCandidate();
-            currentCandidate = movable;
-        }
+        return physicsRecorder;
     }
 }

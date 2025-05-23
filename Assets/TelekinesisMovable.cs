@@ -46,7 +46,6 @@ public class TelekinesisMovable : MonoBehaviour
         isMoving = false;
         _rigidbodyHub.StopTelekinesisMoving(maximumThrowSpeed);
         outline.Unpick();
-        SelectAsCandidate();
     }
 
     public void MoveTowards(Vector3 moveTo, float moveSpeed, Vector3 subjectRight)
