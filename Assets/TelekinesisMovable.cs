@@ -15,23 +15,32 @@ public class TelekinesisMovable : MonoBehaviour
     public bool isMoving;
     public bool isInRotationCoroutine = false;
     private Coroutine rotateCoroutine;
+    public bool IsLocked => _rigidbodyHub.isRewinding;
 
     private void Awake()
     {
         _rigidbodyHub = GetComponent<RigidbodyHub>();
         var meshFilter = GetComponent<MeshFilter>();
         outline.Init(meshFilter.mesh);
-        outline.SetActive(false);
+        outline.gameObject.SetActive(false);
     }
 
     public void SelectAsCandidate()
     {
-        outline.SetActive(true);
+        outline.gameObject.SetActive(true);
+        if (IsLocked)
+        {
+            outline.Lock();
+        }
+        else
+        {
+            outline.Pick();
+        }
     }
 
     public void UnselectAsCandidate()
     {
-        outline.SetActive(false);
+        outline.gameObject.SetActive(false);
     }
 
     public void StartMoving()

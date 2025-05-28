@@ -74,7 +74,7 @@ public class TelekinesisController : MonoBehaviour
     {
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, targetPosition);
-        if (!hasCandidate)
+        if (!hasCandidate || currentCandidate.IsLocked)
         {
             return;
         }
@@ -156,23 +156,20 @@ public class TelekinesisController : MonoBehaviour
         var ray = crosshair.Ray;
         var movableTarget = targetTransform.GetComponent<TelekinesisMovable>();
 
-        var targetHasMovable = movableTarget != null;
-        if (hasCandidate && !targetHasMovable)
+        if (movableTarget == null)
         {
-            hasCandidate = false;
-            currentCandidate.UnselectAsCandidate();
-            currentCandidate = null;
-            targetPosition = targetHit.point;
-            return;
-        }
-        else if (!targetHasMovable)
-        {
+            if (hasCandidate)
+            {
+                hasCandidate = false;
+                currentCandidate.UnselectAsCandidate();
+                currentCandidate = null;
+            }
             targetPosition = crosshair.GetInfiniteDirection();
             return;
         }
 
         targetPosition = MathUtils.ClosestPointOnRay(ray, targetTransform.position);
-        if (hasCandidate && targetHasMovable)
+        if (hasCandidate)
         {
             if (movableTarget == currentCandidate)
             {
@@ -185,7 +182,7 @@ public class TelekinesisController : MonoBehaviour
                 currentCandidate = movableTarget;
             }
         }
-        else if (!hasCandidate && targetHasMovable)
+        else if (!hasCandidate)
         {
             hasCandidate = true;
             currentCandidate = movableTarget;

@@ -6,6 +6,7 @@ public class TelekinesisOutline : MonoBehaviour
     public Material hoveringOutline;
     public Material pickedOutline;
     public Material rotateOutline;
+    public Material lockedOutline;
 
     private MeshRenderer _meshRenderer;
 
@@ -13,11 +14,6 @@ public class TelekinesisOutline : MonoBehaviour
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         GetComponent<MeshFilter>().mesh = mesh;
-    }
-
-    public void SetActive(bool active)
-    {
-        gameObject.SetActive(active);
     }
 
     internal void Pick()
@@ -38,5 +34,10 @@ public class TelekinesisOutline : MonoBehaviour
     public void StopRotate()
     {
         _meshRenderer.material = pickedOutline;
+    }
+
+    internal void Lock()
+    {
+        _meshRenderer.material = lockedOutline;
     }
 }

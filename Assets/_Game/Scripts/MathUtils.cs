@@ -39,9 +39,20 @@ public static class MathUtils
         return a == b;
     }
 
+    public static bool Vector3Equals(Vector3 a, Vector3 b, float threshold)
+    {
+        return Vector3.Distance(a, b) < threshold;
+    }
+
     public static bool QuaternionEquals(Quaternion a, Quaternion b)
     {
         return a == b;
+    }
+
+    public static bool QuaternionEquals(Quaternion a, Quaternion b, float threshold)
+    {
+        float difference = Quaternion.Angle(a, b);
+        return difference < threshold;
     }
 
     public static bool IntEquals(int a, int b)
