@@ -132,9 +132,9 @@ public class RigidbodyHub : MonoBehaviour
 
     public void FreeFromConstraints()
     {
+        constraintsFreezeAllCommandCount--;
         if (constraintsFreezeAllCommandCount > 0)
         {
-            constraintsFreezeAllCommandCount--;
             return;
         }
         _rigidbody.constraints = RigidbodyConstraints.None;
@@ -188,6 +188,7 @@ public class RigidbodyHub : MonoBehaviour
         FreeFromConstraints();
         SetUnbiasedVelocity(unbiasedVelocity);
         SetUnbiasedAngularVelocity(unbiasedAngularVelocity);
+        isRewinding = false;
     }
 
     public void SetupForPlayback()
