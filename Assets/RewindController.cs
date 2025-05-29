@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,6 +24,7 @@ public class RewindController : MonoBehaviour
     public bool wasRecordingLastFrame = false;
     public bool wasActivatingPlaybackLastFrame = false;
     public bool isPlaybackActive = false;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
 
     private LineRenderer _lineRenderer;
     private Crosshair _crosshair;
@@ -31,18 +33,18 @@ public class RewindController : MonoBehaviour
     {
         _crosshair = FindObjectOfType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
+        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
     }
 
     private void OnEnable()
     {
-        rewindHUD.gameObject.SetActive(true);
         _lineRenderer.enabled = true;
+        selectSkillControllerHUD.SelectRewindHud();
     }
 
     private void OnDisable()
     {
         rewindHUD.UpdateRecordEffect(0);
-        rewindHUD.gameObject.SetActive(false);
         _lineRenderer.enabled = false;
 
         if (hasCandidate && !selectedObjectForRecord)
@@ -65,12 +67,14 @@ public class RewindController : MonoBehaviour
             {
                 if (!selectedObjectForRecord)
                 {
+                    rewindHUD.SetRecording();
                     currentCandidate.StartRecording();
                     rewindHUD.UpdateRecordEffect(0);
                     selectedObjectForRecord = true;
                 }
                 else
                 {
+                    rewindHUD.SetNone();
                     currentCandidate.StopRecording();
                     currentCandidate.SelectAsCandidate();
                     rewindHUD.UpdateRecordEffect(0);
@@ -83,20 +87,34 @@ public class RewindController : MonoBehaviour
             {
                 if (!isPlaybackActive)
                 {
+                    rewindHUD.SetPausing();
                     currentCandidate.SetupForPlayback();
-                    rewindHUD.ShowPlaybackCircle(true);
+                    rewindHUD.ShowPlaybackBar(true);
                     isPlaybackActive = true;
                 }
                 else
                 {
+                    rewindHUD.SetRecording();
                     currentCandidate.SetupForRecording();
-                    rewindHUD.ShowPlaybackCircle(false);
+                    rewindHUD.ShowPlaybackBar(false);
                     isPlaybackActive = false;
                 }
             }
 
             if (isPlaybackActive)
             {
+                if (forwardBackward > 0)
+                {
+                    rewindHUD.SetPlaying();
+                }
+                else if (forwardBackward < 0)
+                {
+                    rewindHUD.SetRewinding();
+                }
+                else
+                {
+                    rewindHUD.SetPausing();
+                }
                 currentCandidate.Playback(rewindSpeed * forwardBackward);
                 rewindHUD.UpdatePlaybackEffect(currentCandidate.GetPlaybackPercentage());
             }

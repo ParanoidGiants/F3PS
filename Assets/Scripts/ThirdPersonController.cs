@@ -15,6 +15,9 @@ namespace StarterAssets
     [RequireComponent(typeof(Rigidbody))]
     public class ThirdPersonController : MonoBehaviour
     {
+        private float _cinemachineTargetYaw;
+        private float _cinemachineTargetPitch;
+
         [Header("Data")]
         public PlayerData playerModel;
         public PlayerEventController playerEventController;
@@ -98,16 +101,14 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
-
         [Space(10)]
-        
-        // cinemachine
-        private float _cinemachineTargetYaw;
-        private float _cinemachineTargetPitch;
+        [Header("Platform")]
+        public Transform currentGround;
+        public Vector3 groundNormal;
+        public Vector3 lastGroundPosition;
 
         [Header("Watchers")]
-        [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-        [SerializeField] private bool _isGrounded = true;
+        [SerializeField] private bool _isGrounded;
         [SerializeField] private bool _isSprinting;
         [SerializeField] private bool _isShooting;
         [SerializeField] private bool _isReloading;
@@ -116,6 +117,8 @@ namespace StarterAssets
         [SerializeField] private bool _isSlowMoStarted;
         [SerializeField] private bool _isAimingGrenade;
         [SerializeField] private bool _isDying;
+        [SerializeField] private bool _wasTimeStoppedLastFrame = false;
+        [SerializeField] private bool _isTimeStopped = false;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _speed;
         [SerializeField] private float _animationBlend;
@@ -243,11 +246,6 @@ namespace StarterAssets
         }
 
 
-
-        [Header("Platform")]
-        public Transform currentGround;
-        public Vector3 groundNormal;
-        public Vector3 lastGroundPosition;
         private void HandlePlatformTransform()
         {
             if (!_isGrounded)
@@ -292,8 +290,8 @@ namespace StarterAssets
 
         public void OpenMenu()
         {
-            GameManager.Instance.inGameMenu.OpenMenu();
             GameManager.Instance.PauseGame();
+            GameManager.Instance.OpenMenu();
             canControlPlayer = false;
             _isMenuOpen = true;
         }
@@ -304,13 +302,11 @@ namespace StarterAssets
             {
                 GameManager.Instance.ResumeGame();
             }
-            GameManager.Instance.inGameMenu.CloseMenu();
+            GameManager.Instance.CloseMenu();
             canControlPlayer = true;
             _isMenuOpen = false;
         }
 
-        private bool _wasTimeStoppedLastFrame = false;
-        private bool _isTimeStopped = false;
         private void HandleStopTime()
         {
             if (_isMenuOpen) return;

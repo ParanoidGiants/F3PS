@@ -1,5 +1,6 @@
 using DG.Tweening;
 using StarterAssets;
+using System;
 using TimeBending;
 using UnityEngine;
 
@@ -49,6 +50,18 @@ namespace F3PS
         {
             timeManager.ResumeTime();
             _isGamePaused = false;
+        }
+
+        public void OpenMenu()
+        {
+            inGameMenu.OpenMenu();
+            inputs.SetCursorLockedState(false);
+        }
+
+        internal void CloseMenu()
+        {
+            inGameMenu.CloseMenu();
+            inputs.SetCursorLockedState(true);
         }
     }
 }

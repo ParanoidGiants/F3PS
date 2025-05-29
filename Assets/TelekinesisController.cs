@@ -40,6 +40,7 @@ public class TelekinesisController : MonoBehaviour
     public bool isMovingObject = false;
     public bool isRotatingObject = false;
     public bool hasCandidate = false;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
 
     private static List<Quaternion> uniqueRotations = new List<Quaternion>();
     public Quaternion SubjectOrientation
@@ -51,9 +52,15 @@ public class TelekinesisController : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
+        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
         InitializeRotations();
+    }
+
+    public void OnEnable()
+    {
+        selectSkillControllerHUD.SelectTelekinesisHud();
     }
 
     public void OnDisable()
@@ -239,7 +246,6 @@ public class TelekinesisController : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Unique Rotations Count: " + uniqueRotations.Count);
     }
 
     public static Quaternion GetClosestRotation(Quaternion target)

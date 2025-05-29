@@ -13,7 +13,9 @@ public class InGameMenu : MonoBehaviour
     public void OpenMenu()
     {
         parent.SetActive(true);
-        OpenMenuSelection();
+        menuSelection.SetActive(true);
+        settings.SetActive(false);
+        levelSelection.SetActive(false);
     }
 
     public void ResumeGame()
@@ -25,13 +27,6 @@ public class InGameMenu : MonoBehaviour
     {
         parent.SetActive(false);
         menuSelection.SetActive(false);
-        settings.SetActive(false);
-        levelSelection.SetActive(false);
-    }
-
-    public void OpenMenuSelection()
-    {
-        menuSelection.SetActive(true);
         settings.SetActive(false);
         levelSelection.SetActive(false);
     }
@@ -52,6 +47,7 @@ public class InGameMenu : MonoBehaviour
 
     public void RestartLevel()
     {
+        FindObjectOfType<ThirdPersonController>().ResumeGame();
         SceneLoader.Instance.ReloadScene();
         CloseMenu();
     }

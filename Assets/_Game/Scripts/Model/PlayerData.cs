@@ -1,6 +1,13 @@
 using System;
 using UnityEngine;
 
+public enum Skill
+{
+    Telekinesis = 0,
+    Rewind = 1,
+    TimeBubble = 2,
+}
+
 [Serializable]
 public class PlayerData
 {
@@ -11,6 +18,8 @@ public class PlayerData
 
     public int CurrentHealth;
     public int MaxHealth = 100;
+
+    public Skill ActiveSkill = Skill.Telekinesis;
 
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;

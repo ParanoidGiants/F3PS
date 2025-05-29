@@ -3,13 +3,6 @@ using StarterAssets;
 using System;
 using UnityEngine;
 
-public enum Skill
-{
-    Telekinesis = 0,
-    Rewind = 1,
-    TimeBubble = 2,
-}
-
 public class SkillManager : MonoBehaviour
 {
     [Header("References")]
@@ -17,20 +10,19 @@ public class SkillManager : MonoBehaviour
     public Crosshair crosshair;
         
     [Header("Skills")]
-    public Skill activeSkill;
     public TelekinesisController telekinesisController;
     public RewindController rewindController;
     public TimeBubbleController timeBubbleController;
 
-    private StarterAssetsInputs _inputs;        
+    private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
-    private bool _isWeaponSwitched;
+    private bool _isSkillSwitched;
 
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
-        SetActiveSkill(activeSkill);
+        SetActiveSkill(GameManager.Instance.PlayerData.ActiveSkill);
     }
 
     public void OnUpdate()
@@ -48,7 +40,7 @@ public class SkillManager : MonoBehaviour
     {
         _aimTargetPosition = crosshair.GetTargetPosition();
 
-        switch (activeSkill)
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
                 telekinesisController.OnFixedUpdate();
@@ -65,7 +57,7 @@ public class SkillManager : MonoBehaviour
 
     private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
     {
-        switch (activeSkill)
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
                 telekinesisController.OnUpdate(
@@ -90,17 +82,18 @@ public class SkillManager : MonoBehaviour
     {
         if (!switchWeapon)
         {
-            _isWeaponSwitched = false;
+            _isSkillSwitched = false;
             return;
         }
 
 
-        if (_isWeaponSwitched)
+        if (_isSkillSwitched)
         {
             return;
         }
 
-        _isWeaponSwitched = true;
+        _isSkillSwitched = true;
+        var activeSkill = GameManager.Instance.PlayerData.ActiveSkill;
         var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
         activeSkill = nextSkill;
         SetActiveSkill(nextSkill);
@@ -108,6 +101,7 @@ public class SkillManager : MonoBehaviour
 
     private void SetActiveSkill(Skill nextSkill)
     {
+        GameManager.Instance.PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {
             case Skill.Telekinesis:

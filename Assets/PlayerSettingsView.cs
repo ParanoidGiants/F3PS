@@ -5,13 +5,11 @@ public class PlayerSettingsView : MonoBehaviour
 {
     void OnEnable()
     {
-        GameManager.Instance.inputs.cursorInputForLook = false;
-        GameManager.Instance.inputs.cursorLocked = false;
+        GameManager.Instance.inputs.SetCursorLockedState(false);
     }
 
     void OnDisable()
     {
-        GameManager.Instance.inputs.cursorInputForLook = true;
-        GameManager.Instance.inputs.cursorLocked = true;
+        GameManager.Instance.inputs.SetCursorLockedState(true);
     }
 }

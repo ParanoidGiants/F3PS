@@ -4,7 +4,7 @@ public class TimeBubbleController : MonoBehaviour
 {
     [Header("References")]
     public Transform userSpace;
-    public TimeBubbleHUD hud;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
     public HittableManager hittableManager;
     public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
     public LineRenderer throwLine;
@@ -23,13 +23,13 @@ public class TimeBubbleController : MonoBehaviour
     [Header("Watchers")]
     public bool isTimeBubbleActive;
     public bool wasAimingLastFrame;
-    public bool wasDeactivated;
+    public bool isDeactivated;
     public Vector3 throwDirection;
 
     private void Awake()
     {
         throwLine.positionCount = lineResolution;
-
+        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
         timeBubbleGrenadeProjectile.Init(userSpace.GetInstanceID(), hittableManager);
         var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
         foreach (var collider in hittableManager.colliders)
@@ -40,37 +40,34 @@ public class TimeBubbleController : MonoBehaviour
 
     private void OnEnable()
     {
-        hud.gameObject.SetActive(true);
-    }
-        
-    private void OnDisable()
-    {
-        hud.gameObject.SetActive(false);
+        selectSkillControllerHUD.SelectTimeBubbleHud();
     }
 
     public void OnUpdate(bool isAiming, float bubbleTimeScaleChange, Vector3 targetPosition)
     {
         throwDirection = (targetPosition - spawnTransform.position).normalized;
-        hud.UpdateGrenadeEffect(timeBubbleGrenadeProjectile.LifeTimePercentage);
 
-        if (timeBubbleGrenadeProjectile.IsTimeBubbleActive)
+        if (timeBubbleGrenadeProjectile.IsProjectileUpAndRunning)
         {
-            if (isAiming && !wasDeactivated)
+            if (isAiming)
             {
-                wasDeactivated = true;
+                isDeactivated = true;
                 timeBubbleGrenadeProjectile.DeactivateTimeBubble();
+                return;
             }
-        }
-        else if (wasDeactivated)
-        {
-            if (!isAiming)
+
+            if (bubbleTimeScaleChange != 0f)
             {
-                wasDeactivated = false;
+                timeBubbleGrenadeProjectile.timeBubble.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
             }
         }
-        else
+        else if (!timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled)
         {
-            if (isAiming && wasAimingLastFrame)
+            if (isDeactivated && !isAiming)
+            {
+                isDeactivated = false;
+            }
+            else if (isAiming && wasAimingLastFrame)
             {
                 UpdateThrowLine();
             }
@@ -86,11 +83,6 @@ public class TimeBubbleController : MonoBehaviour
                 ShowThrowLine();
                 wasAimingLastFrame = true;
             }
-        }
-
-        if (bubbleTimeScaleChange != 0f)
-        {
-            timeBubbleGrenadeProjectile.timeBubble.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
         }
     }
 
