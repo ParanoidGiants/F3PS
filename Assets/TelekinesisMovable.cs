@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,8 +12,9 @@ public class TelekinesisMovable : MonoBehaviour
     [Space(10)]
     [Header("Watcher")]
     public bool isMoving;
-    public bool isInRotationCoroutine = false;
-    private Coroutine rotateCoroutine;
+    public bool isBeingRotated = false;
+    public bool isCurrentlyTouchedByPlayer = false;
+    private Coroutine _rotateCoroutine;
     public bool IsLocked => _rigidbodyHub.isRewinding;
 
     private void Awake()
@@ -25,17 +25,18 @@ public class TelekinesisMovable : MonoBehaviour
         outline.gameObject.SetActive(false);
     }
 
+    public void SetLocked()
+    {
+        outline.Lock();
+    }
+    public void SetUnpicked()
+    {
+        outline.Unpick();
+    }
+
     public void SelectAsCandidate()
     {
         outline.gameObject.SetActive(true);
-        if (IsLocked)
-        {
-            outline.Lock();
-        }
-        else
-        {
-            outline.Pick();
-        }
     }
 
     public void UnselectAsCandidate()
@@ -76,7 +77,7 @@ public class TelekinesisMovable : MonoBehaviour
 
     public void SnapToRelativeRotation(Quaternion subjectOrientation)
     {
-        if (isInRotationCoroutine)
+        if (isBeingRotated)
         {
             return;
         }
@@ -99,17 +100,17 @@ public class TelekinesisMovable : MonoBehaviour
         {
             return;
         }
-        if (isInRotationCoroutine)
+        if (isBeingRotated)
         {
             return;
         }
-        isInRotationCoroutine = true;
-        if (rotateCoroutine != null)
+        isBeingRotated = true;
+        if (_rotateCoroutine != null)
         {
-            StopCoroutine(rotateCoroutine);
+            StopCoroutine(_rotateCoroutine);
         }
 
-        rotateCoroutine = StartCoroutine(RotateCoroutine(rotationCommand, subjectOrientation, rotateTimer));
+        _rotateCoroutine = StartCoroutine(RotateCoroutine(rotationCommand, subjectOrientation, rotateTimer));
     }
 
     private IEnumerator RotateCoroutine(RotationCommand rotationCommand, Quaternion subjectOrientation, float rotateTimer)
@@ -130,6 +131,22 @@ public class TelekinesisMovable : MonoBehaviour
             yield return null;
         }
         transform.rotation = worldTargetRotation;
-        isInRotationCoroutine = false;
+        isBeingRotated = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            isCurrentlyTouchedByPlayer = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            isCurrentlyTouchedByPlayer = false;
+        }
     }
 }

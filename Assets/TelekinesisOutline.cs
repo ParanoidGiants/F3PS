@@ -16,7 +16,7 @@ public class TelekinesisOutline : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    internal void Pick()
+    public void Pick()
     {
         _meshRenderer.material = pickedOutline;
     }
@@ -36,7 +36,7 @@ public class TelekinesisOutline : MonoBehaviour
         _meshRenderer.material = pickedOutline;
     }
 
-    internal void Lock()
+    public void Lock()
     {
         _meshRenderer.material = lockedOutline;
     }

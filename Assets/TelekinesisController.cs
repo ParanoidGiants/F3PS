@@ -1,4 +1,5 @@
 using Cinemachine;
+using StarterAssets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,17 @@ public class TelekinesisController : MonoBehaviour
     [Header("Watchers")]
     public TelekinesisMovable currentCandidate;
     public Vector3 targetPosition;
-    public bool isMovingObject = false;
-    public bool isRotatingObject = false;
+
+    public bool wasObjectTouchedByPlayer = false;
+
+    public bool isActuallyMovingObject = false;
+    public bool wasMovingObjectLastFrame = false;
+    public bool isMovingObjectThisFrame = false;
+
+    public bool isActuallyRotatingObject = false;
+    public bool wasRotatingObjectLastFrame = false;
+    public bool isRotatingObjectThisFrame = false;
+
     public bool hasCandidate = false;
     public SelectSkillControllerHUD selectSkillControllerHUD;
 
@@ -70,10 +80,16 @@ public class TelekinesisController : MonoBehaviour
         {
             return;
         }
-        currentCandidate.StopMoving(maximumThrowSpeed);
+
+        if (isActuallyMovingObject)
+        {
+            currentCandidate.StopMoving(maximumThrowSpeed);
+        }
+
+
         currentCandidate.UnselectAsCandidate();
-        isMovingObject = false;
-        isRotatingObject = false;
+        isActuallyMovingObject = false;
+        isRotatingObjectThisFrame = false;
         hasCandidate = false;
     }
 
@@ -81,65 +97,106 @@ public class TelekinesisController : MonoBehaviour
     {
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, targetPosition);
-        if (!hasCandidate || currentCandidate.IsLocked)
+
+        wasMovingObjectLastFrame = isMovingObjectThisFrame ;
+        isMovingObjectThisFrame = isMoving;
+
+        if (!PlayerIsGrounded() || !hasCandidate || currentCandidate.IsLocked)
+        {
+            isActuallyMovingObject = false;
+            return;
+        }
+
+        var startMovingObject = !wasMovingObjectLastFrame && isMovingObjectThisFrame;
+        var stopMovingObject = wasMovingObjectLastFrame && !isMovingObjectThisFrame;
+        var isTouchedByPlayer = currentCandidate.isCurrentlyTouchedByPlayer;
+
+        if (isTouchedByPlayer)
+        {
+            if (isActuallyMovingObject)
+            {
+                // Stop Moving Object
+                isActuallyMovingObject = false;
+                isActuallyRotatingObject = false;
+                target.gameObject.SetActive(false);
+                currentCandidate.StopMoving(maximumThrowSpeed);
+            }
+            wasObjectTouchedByPlayer = true;
+            currentCandidate.SetLocked();
+            return;
+        }
+        else if (wasObjectTouchedByPlayer)
+        {
+            wasObjectTouchedByPlayer = false;
+            currentCandidate.SetUnpicked();
+        }
+
+        if (startMovingObject)
+        {
+            isActuallyMovingObject = true;
+            target.gameObject.SetActive(true);
+            SetTargetPosition(targetPosition);
+            currentCandidate.SnapToRelativeRotation(SubjectOrientation);
+            currentCandidate.StartMoving();
+            return;
+        }
+        
+        if (stopMovingObject)
+        {
+            // Stop Moving Object
+            isActuallyMovingObject = false;
+            isActuallyRotatingObject = false;
+            target.gameObject.SetActive(false);
+            currentCandidate.StopMoving(maximumThrowSpeed);
+            return;
+        }
+
+        if (!isActuallyMovingObject)
         {
             return;
         }
 
-        if (!isMovingObject && isMoving)
-        {
-            target.gameObject.SetActive(true);
-            SetTargetPosition(targetPosition);
 
-            currentCandidate.SnapToRelativeRotation(SubjectOrientation);
-            currentCandidate.StartMoving();
-            isMovingObject = true;
-        }
-        else if (isMovingObject && !isMoving)
+        if (pushPull != 0f)
         {
-            target.gameObject.SetActive(false);
-            if (!hasCandidate)
-            {
-                return;
-            }
-            currentCandidate.StopMoving(maximumThrowSpeed);
-            isMovingObject = false;
-            isRotatingObject = false;
+            var moveDirection = target.forward;
+            var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
+            SetTargetPosition(moveTarget);
         }
-        else if (isMovingObject && !isRotatingObject && isRotating)
+
+        wasRotatingObjectLastFrame = isRotatingObjectThisFrame;
+        isRotatingObjectThisFrame = isRotating;
+        if (isActuallyRotatingObject)
         {
-            isRotatingObject = true;
+            var rotationCommand = GetRotationCommand(rotationDeltaXY);
+            currentCandidate.Rotate(rotationCommand, SubjectOrientation, rotateTimer);
+        }
+        var startRotatingObject = !wasRotatingObjectLastFrame && isRotatingObjectThisFrame;
+        var stopRotatingObject = wasRotatingObjectLastFrame && !isRotatingObjectThisFrame;
+        if (startRotatingObject)
+        {
+            isActuallyRotatingObject = true;
             currentCandidate.StartRotating();
         }
-        else if (isMovingObject && isRotatingObject && !isRotating)
+        else if (stopRotatingObject)
         {
-            isRotatingObject = false;
+            isActuallyRotatingObject = false;
             currentCandidate.StopRotating();
         }
-        else if (isMovingObject)
+        else if (!currentCandidate.isBeingRotated)
         {
-            if (!currentCandidate.isInRotationCoroutine)
-            {
-                currentCandidate.SnapToRelativeRotation(SubjectOrientation);
-            }
-            if (pushPull != 0f)
-            {
-                var moveDirection = target.forward;
-                var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
-
-                SetTargetPosition(moveTarget);
-            }
-            if (isRotating)
-            {
-                var rotationCommand = GetRotationCommand(rotationDeltaXY);
-                currentCandidate.Rotate(rotationCommand, SubjectOrientation, rotateTimer);
-            }
+            currentCandidate.SnapToRelativeRotation(SubjectOrientation);
         }
+    }
+
+    private bool PlayerIsGrounded()
+    {
+        return FindObjectOfType<ThirdPersonController>().IsGrounded;
     }
 
     public void OnFixedUpdate()
     {
-        if (isMovingObject)
+        if (hasCandidate && isActuallyMovingObject)
         {
             targetPosition = target.position;
             currentCandidate.MoveTowards(targetPosition, moveSpeed, transform.right);
@@ -185,15 +242,28 @@ public class TelekinesisController : MonoBehaviour
             else
             {
                 currentCandidate.UnselectAsCandidate();
-                movableTarget.SelectAsCandidate();
+                InitializeCandidate(movableTarget);
                 currentCandidate = movableTarget;
             }
         }
         else if (!hasCandidate)
         {
             hasCandidate = true;
+            InitializeCandidate(movableTarget);
             currentCandidate = movableTarget;
-            currentCandidate.SelectAsCandidate();
+        }
+    }
+
+    private void InitializeCandidate(TelekinesisMovable movableTarget)
+    {
+        movableTarget.SelectAsCandidate();
+        if (movableTarget.IsLocked)
+        {
+            movableTarget.SetLocked();
+        }
+        else
+        {
+            movableTarget.SetUnpicked();
         }
     }
 

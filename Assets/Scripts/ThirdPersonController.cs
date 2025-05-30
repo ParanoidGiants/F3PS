@@ -164,6 +164,8 @@ namespace StarterAssets
             }
         }
 
+        public bool IsGrounded => _isGrounded;
+
         private void Awake()
         {
             _mainCamera = FindObjectOfType<Camera>().gameObject;
@@ -199,7 +201,19 @@ namespace StarterAssets
             animator.SetBool(_animIDGrounded, _isGrounded);
 
             skillManager.OnUpdate();
-            UpdateStaminaManager(_input.move.magnitude, _isAimingGrenade, _input.sprint);
+            
+            // Update Stamina Manager
+            if (staminaManager._isRegenerating)
+            {
+                _isSprinting = false;
+            }
+            else
+            {
+                _isSprinting = !_isAimingGrenade && _input.sprint;
+            }
+            staminaManager.UpdateSprinting(_isSprinting && _input.move.magnitude > 0.1f);
+
+
             UpdateTimeManager(_input.slowmo);
             HandlePlatformTransform();
         }
@@ -216,7 +230,7 @@ namespace StarterAssets
             HandleFallAndGravity();
 
             skillManager.OnFixedUpdate();
-            if (_input.skill)
+            if (skillManager.IsAiming())
             {
                 MoveWhileAiming();
                 return;
@@ -239,7 +253,7 @@ namespace StarterAssets
             if (_isMenuOpen)
                 return;
 
-            if (skillManager.telekinesisController.isRotatingObject)
+            if (skillManager.telekinesisController.isRotatingObjectThisFrame)
                 return;
 
             CameraTargetRotation();
@@ -400,6 +414,7 @@ namespace StarterAssets
                     ? playerModel.SprintSpeed
                     : playerModel.MoveSpeed;
             }
+
             float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -459,6 +474,7 @@ namespace StarterAssets
                 animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
+
         private void MoveWhileAiming()
         {
             float targetSpeed = 0f;
@@ -731,19 +747,6 @@ namespace StarterAssets
                 }
             }
             _isSlowMoToggle = slowMoInput;
-        }
-
-        private void UpdateStaminaManager(float moveInput, bool aimInput, bool sprintInput)
-        {
-            if (staminaManager._isRegenerating)
-            {
-                _isSprinting = false;
-            }
-            else
-            {
-                _isSprinting = !_isAimingGrenade && sprintInput;
-            }
-            staminaManager.UpdateSprinting(_isSprinting && moveInput > 0.1f);
         }
 
         public void Hit(int damage, Vector3 hitDirection)

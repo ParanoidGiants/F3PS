@@ -1,8 +1,5 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class SelectableSkillHUD : MonoBehaviour
@@ -10,6 +7,7 @@ public class SelectableSkillHUD : MonoBehaviour
     private RectTransform _rectTransform;
     private Image _icon;
     private Sequence _selectAnimation;
+    public CanvasGroup associatedBar;
 
     private void Awake()
     {
@@ -26,6 +24,11 @@ public class SelectableSkillHUD : MonoBehaviour
         _selectAnimation = DOTween.Sequence();
         _selectAnimation.Append(_rectTransform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack));
         _selectAnimation.Join(_icon.DOFade(1f, 0.2f));
+
+        if (associatedBar != null)
+        {
+            _selectAnimation.Insert(0, associatedBar.DOFade(1f, 0.2f));
+        }
     }
 
     public void Deselect()
@@ -37,5 +40,9 @@ public class SelectableSkillHUD : MonoBehaviour
         _selectAnimation = DOTween.Sequence();
         _selectAnimation.Append(_rectTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack));
         _selectAnimation.Join(_icon.DOFade(0.5f, 0.2f));
+        if (associatedBar != null)
+        {
+            _selectAnimation.Insert(0, associatedBar.DOFade(0.2f, 0.2f));
+        }
     }
 }

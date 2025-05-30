@@ -1,6 +1,3 @@
-using DG.Tweening;
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RewindController : MonoBehaviour
@@ -21,7 +18,9 @@ public class RewindController : MonoBehaviour
     public Vector3 contactPoint;
     public bool selectedObjectForRecord = false;
     public bool hasCandidate = false;
+    public bool isRecordingThisFrame = false;
     public bool wasRecordingLastFrame = false;
+    public bool isActivatingPlaybackThisFrame = false;
     public bool wasActivatingPlaybackLastFrame = false;
     public bool isPlaybackActive = false;
     public SelectSkillControllerHUD selectSkillControllerHUD;
@@ -44,13 +43,11 @@ public class RewindController : MonoBehaviour
 
     private void OnDisable()
     {
-        rewindHUD.UpdateRecordEffect(0);
         _lineRenderer.enabled = false;
 
         if (hasCandidate && !selectedObjectForRecord)
         {
             currentCandidate.StopRecording();
-            rewindHUD.UpdateRecordEffect(0);
             hasCandidate = false;
             currentCandidate = null;
         }
@@ -60,72 +57,80 @@ public class RewindController : MonoBehaviour
     {
         _lineRenderer.SetPosition(0, transform.position);
         _lineRenderer.SetPosition(1, contactPoint);
+        wasRecordingLastFrame = isRecordingThisFrame;
+        isRecordingThisFrame = isRecording;
+        wasActivatingPlaybackLastFrame = isActivatingPlaybackThisFrame;
+        isActivatingPlaybackThisFrame = activatePlayback;
 
-        if (hasCandidate)
+        if (!hasCandidate)
         {
-            if (!wasRecordingLastFrame && isRecording)
-            {
-                if (!selectedObjectForRecord)
-                {
-                    rewindHUD.SetRecording();
-                    currentCandidate.StartRecording();
-                    rewindHUD.UpdateRecordEffect(0);
-                    selectedObjectForRecord = true;
-                }
-                else
-                {
-                    rewindHUD.SetNone();
-                    currentCandidate.StopRecording();
-                    currentCandidate.SelectAsCandidate();
-                    rewindHUD.UpdateRecordEffect(0);
-                    selectedObjectForRecord = false;
-                    isPlaybackActive = false;
-                }
-            }
+            return;
+        }
 
-            if (selectedObjectForRecord && !wasActivatingPlaybackLastFrame && activatePlayback)
+        if (!wasRecordingLastFrame && isRecordingThisFrame)
+        {
+            if (!selectedObjectForRecord)
             {
-                if (!isPlaybackActive)
-                {
-                    rewindHUD.SetPausing();
-                    currentCandidate.SetupForPlayback();
-                    rewindHUD.ShowPlaybackBar(true);
-                    isPlaybackActive = true;
-                }
-                else
-                {
-                    rewindHUD.SetRecording();
-                    currentCandidate.SetupForRecording();
-                    rewindHUD.ShowPlaybackBar(false);
-                    isPlaybackActive = false;
-                }
-            }
-
-            if (isPlaybackActive)
-            {
-                if (forwardBackward > 0)
-                {
-                    rewindHUD.SetPlaying();
-                }
-                else if (forwardBackward < 0)
-                {
-                    rewindHUD.SetRewinding();
-                }
-                else
-                {
-                    rewindHUD.SetPausing();
-                }
-                currentCandidate.Playback(rewindSpeed * forwardBackward);
-                rewindHUD.UpdatePlaybackEffect(currentCandidate.GetPlaybackPercentage());
+                rewindHUD.SetRecording();
+                currentCandidate.StartRecording();
+                rewindHUD.UpdateRecordEffect(0);
+                selectedObjectForRecord = true;
             }
             else
             {
-                rewindHUD.UpdateRecordEffect(currentCandidate.GetPlaybackPercentage());
+                rewindHUD.SetNone();
+                currentCandidate.StopRecording();
+                currentCandidate.SelectAsCandidate();
+                rewindHUD.UpdateRecordEffect(0);
+                selectedObjectForRecord = false;
+                isPlaybackActive = false;
             }
         }
-        wasRecordingLastFrame = isRecording;
-        wasActivatingPlaybackLastFrame = activatePlayback;
 
+        if (selectedObjectForRecord && !wasActivatingPlaybackLastFrame && isActivatingPlaybackThisFrame)
+        {
+            if (!isPlaybackActive)
+            {
+                rewindHUD.SetPausing();
+                currentCandidate.SetupForPlayback();
+                rewindHUD.ShowPlaybackBar(true);
+                isPlaybackActive = true;
+            }
+            else
+            {
+                rewindHUD.SetRecording();
+                currentCandidate.SetupForRecording();
+                rewindHUD.ShowPlaybackBar(false);
+                isPlaybackActive = false;
+            }
+        }
+
+        if (isPlaybackActive)
+        {
+            if (forwardBackward > 0)
+            {
+                rewindHUD.SetPlaying();
+            }
+            else if (forwardBackward < 0)
+            {
+                rewindHUD.SetRewinding();
+            }
+            else
+            {
+                rewindHUD.SetPausing();
+            }
+            currentCandidate.Playback(rewindSpeed * forwardBackward);
+        }
+
+        var playbackPercentage = currentCandidate.GetPlaybackPercentage();
+        if (playbackPercentage == 0f && !isPlaybackActive)
+        {
+            rewindHUD.UpdatePlaybackEffect(1f);
+        }
+        else
+        {
+            rewindHUD.UpdatePlaybackEffect(playbackPercentage);
+        }
     }
 
     public void OnFixedUpdate()
@@ -141,7 +146,6 @@ public class RewindController : MonoBehaviour
         {
             return;
         }
-        
 
         if (currentCandidate != physicsRecorder)
         {
@@ -153,7 +157,6 @@ public class RewindController : MonoBehaviour
             currentCandidate = physicsRecorder;
             hasCandidate = true;
         }
-
         contactPoint = physicsRecorder.transform.position;
     }
 
@@ -183,5 +186,10 @@ public class RewindController : MonoBehaviour
             return null;
         }
         return physicsRecorder;
+    }
+
+    public bool IsAiming()
+    {
+        return !wasRecordingLastFrame && isRecordingThisFrame;
     }
 }

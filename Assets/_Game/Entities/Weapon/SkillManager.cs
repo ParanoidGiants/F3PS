@@ -48,8 +48,6 @@ public class SkillManager : MonoBehaviour
             case Skill.Rewind:
                 rewindController.OnFixedUpdate();
                 break;
-            case Skill.TimeBubble:
-                break;
             default:
                 break;
         }
@@ -86,7 +84,6 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-
         if (_isSkillSwitched)
         {
             return;
@@ -121,6 +118,21 @@ public class SkillManager : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    public bool IsAiming()
+    {
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        {
+            case Skill.Telekinesis:
+                return telekinesisController.isMovingObjectThisFrame;
+            case Skill.Rewind:
+                return rewindController.IsAiming();
+            case Skill.TimeBubble:
+                return timeBubbleController.IsAiming();
+            default:
+                return false;
         }
     }
 }

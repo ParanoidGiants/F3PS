@@ -24,6 +24,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     private void Awake()
     {
         hud = FindObjectOfType<TimeBubbleHUD>();
+        hud.SetTimeScale(timeBubble.timeScale);
     }
 
     private void Start()
@@ -46,6 +47,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void ActivateTimeBubble()
     {
+        hud.SetTimeScale(timeBubble.timeScale);
         timeBubble.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
@@ -96,10 +98,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     internal void PitchTimeScale(float v)
     {
-        if (timeBubble.isActiveAndEnabled)
-        {
-            timeBubble.PitchTimeScale(v);
-            hud.SetTimeScale(timeBubble.timeScale);
-        }
+        timeBubble.PitchTimeScale(v);
+        hud.SetTimeScale(timeBubble.timeScale);
     }
 }

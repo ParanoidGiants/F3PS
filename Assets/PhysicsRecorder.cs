@@ -126,19 +126,6 @@ public class PhysicsRecorder : MonoBehaviour
         angularVelocities.RecordIfChanged(currentFrame, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
     }
 
-    private void RecordFutureFramePosition(int frame, Vector3 position)
-    {
-        Log($"Record Specific Frame {frame}: {position}");
-
-        var linePointIndex = frame / 20;
-        rewindLine.positionCount = linePointIndex + 1;
-        rewindLine.SetPosition(linePointIndex, position);
-        positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
-        rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(frame, _rigidbodyHub.GetCurrentUnbiasedVelocity(), MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(frame, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
-    }
-
     public void Playback(float forwardBackward)
     {
         if (state != RecorderState.Playback)
@@ -191,7 +178,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void SetupForRecording()
     {
-        Debug.Log($"Setup For Recording {currentFrame}");
+        Log($"Setup For Recording {currentFrame}");
         transform.position = positions.GetValueAtFrame(currentFrame);
         transform.rotation = rotations.GetValueAtFrame(currentFrame);
 
@@ -208,18 +195,10 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void SetupForPlayback()
     {
-        Debug.Log($"Setup For Playback {currentFrame}");
+        Log($"Setup For Playback {currentFrame}");
         outline.Rewind();
         _rigidbodyHub.SetupForPlayback();
         state = RecorderState.Playback;
-        /*
-        currentRecordingTime += ScaledFixedDeltaTime;
-        var segmentDirection = transform.position - positions.GetValueAtFrame(currentFrame);
-        var segmentDuration = currentRecordingTime % frameDuration;
-        var segmentSpeed = segmentDirection / segmentDuration;
-        var futureFramePosition = transform.position + segmentSpeed * frameDuration;
-        RecordFutureFramePosition(currentFrame + 1, futureFramePosition);
-         */
     }
 
     public void StartRecording()
@@ -246,6 +225,7 @@ public class PhysicsRecorder : MonoBehaviour
         rotations.ClearAll();
         velocities.ClearAll();
         angularVelocities.ClearAll();
+        rewindLine.positionCount = 0;
     }
 
     private void Log(string v)
@@ -255,6 +235,10 @@ public class PhysicsRecorder : MonoBehaviour
 
     internal float GetPlaybackPercentage()
     {
+        if (framesRecorded == 0)
+        {
+            return 0f;
+        }
         return currentFrame / (float)framesRecorded;
     }
 }
