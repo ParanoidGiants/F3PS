@@ -46,6 +46,7 @@ namespace StarterAssets
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
         public SkillManager skillManager;
+        public AttackManager attackManager;
         public CameraShake cameraShake;
         public AnimateMesh animateMesh;
         public HittableManager hittableManager;
@@ -188,6 +189,7 @@ namespace StarterAssets
             fallTime = fallTimer;
             dodgeCoolDownTime = dodgeCoolDownTimer;
             skillManager.Init();
+            attackManager.Init();
         }
         private void Update()
         {
@@ -201,17 +203,17 @@ namespace StarterAssets
             animator.SetBool(_animIDGrounded, _isGrounded);
 
             skillManager.OnUpdate();
-            
+            attackManager.OnUpdate();
+
             // Update Stamina Manager
-            if (staminaManager._isRegenerating)
+            _isSprinting = !staminaManager.isInRestMode 
+                && !_isAimingGrenade
+                && _input.sprint;
+
+            if (_isSprinting)
             {
-                _isSprinting = false;
+                staminaManager.Deplete(playerModel.SprintDepletionRate * Time.deltaTime);
             }
-            else
-            {
-                _isSprinting = !_isAimingGrenade && _input.sprint;
-            }
-            staminaManager.UpdateSprinting(_isSprinting && _input.move.magnitude > 0.1f);
 
 
             UpdateTimeManager(_input.slowmo);
@@ -230,6 +232,7 @@ namespace StarterAssets
             HandleFallAndGravity();
 
             skillManager.OnFixedUpdate();
+            attackManager.OnFixedUpdate();
             if (skillManager.IsAiming())
             {
                 MoveWhileAiming();

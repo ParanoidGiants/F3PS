@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace F3PS.AI.States.Action
 {
-    public class Rush : Attack
+    public class Rush : EnemyAttack
     {
         private Vector3 _chargeStartPosition;
         private Vector3 _chargeEndPosition;

@@ -4,7 +4,7 @@ using Weapon;
 
 namespace F3PS.AI.States.Action
 {
-    public class Shoot : Attack
+    public class Shoot : EnemyAttack
     {
         [Space(10)]
         [Header("Shoot Settings")]

@@ -14,8 +14,8 @@ namespace F3PS.AI.States
         [Header("Specific Watchers")]
         [SerializeField] private bool _isStaying;
         [SerializeField] private Hittable _selectedTarget;
-        [SerializeField] private Attack _currentAttack;
-        [SerializeField] private Attack[] _attacks;
+        [SerializeField] private EnemyAttack _currentAttack;
+        [SerializeField] private EnemyAttack[] _attacks;
         
         [SerializeField] private bool _isAttacking;
         public bool IsAttacking => _isAttacking;
@@ -25,7 +25,7 @@ namespace F3PS.AI.States
         public void Initialize()
         {
             base.Initialize();
-            _attacks = GetComponentsInChildren<Attack>();
+            _attacks = GetComponentsInChildren<EnemyAttack>();
             foreach (var attack in _attacks)
             {
                 attack.Initialize(material);

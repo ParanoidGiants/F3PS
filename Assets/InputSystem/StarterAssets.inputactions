@@ -108,7 +108,16 @@
                     "name": "SwitchWeapon",
                     "type": "PassThrough",
                     "id": "bea0ccb4-c303-49e6-a821-0c358fadb7b1",
-                    "expectedControlType": "DiscreteButton",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchSkill",
+                    "type": "PassThrough",
+                    "id": "99b9fdcb-6e57-4622-abc4-160b3f5e6899",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -407,7 +416,7 @@
                 {
                     "name": "",
                     "id": "13572232-7480-4f90-a0f9-7a8d758035c7",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -440,7 +449,7 @@
                 {
                     "name": "",
                     "id": "afd82b8f-ebf2-40db-82c5-9476045156e8",
-                    "path": "<Keyboard>/z",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -451,7 +460,7 @@
                 {
                     "name": "",
                     "id": "694f6bac-2b05-4748-9d94-022cc36afa6b",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -621,6 +630,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "026523c1-834b-4854-879a-ac9e47fb3a60",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SwitchSkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e13a923-84bd-4f61-81fd-c9d97334d520",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SwitchSkill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

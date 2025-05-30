@@ -17,9 +17,10 @@ public class PhysicsRecorder : MonoBehaviour
     public PropertyRecorder<Vector3> velocities = new();
     public PropertyRecorder<Vector3> angularVelocities = new();
 
-    [Header("Materials")]
+    [Header("References")]
     public RewindOutline outline;
     public LineRenderer rewindLine;
+    public MeshFilter meshFilter;
 
 
     [Space(10)]
@@ -48,7 +49,7 @@ public class PhysicsRecorder : MonoBehaviour
     protected virtual void Awake()
     {
         state = RecorderState.None;
-        outline.Init(GetComponent<MeshFilter>().mesh);
+        outline.Init(meshFilter.mesh);
         _rigidbodyHub = GetComponent<RigidbodyHub>();
     }
 

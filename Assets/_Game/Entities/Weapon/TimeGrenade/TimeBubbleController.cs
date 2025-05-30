@@ -5,7 +5,7 @@ public class TimeBubbleController : MonoBehaviour
     [Header("References")]
     public Transform userSpace;
     public SelectSkillControllerHUD selectSkillControllerHUD;
-    public HittableManager hittableManager;
+    public Collider[] colliders;
     public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
     public LineRenderer throwLine;
     public Transform spawnTransform;
@@ -32,9 +32,9 @@ public class TimeBubbleController : MonoBehaviour
     {
         throwLine.positionCount = lineResolution;
         selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
-        timeBubbleGrenadeProjectile.Init(userSpace.GetInstanceID(), hittableManager);
+        timeBubbleGrenadeProjectile.Init(userSpace.GetInstanceID(), colliders);
         var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
-        foreach (var collider in hittableManager.colliders)
+        foreach (var collider in colliders)
         {
             Physics.IgnoreCollision(projectileCollider, collider);
         }

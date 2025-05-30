@@ -1,6 +1,5 @@
 using F3PS;
 using StarterAssets;
-using System;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour

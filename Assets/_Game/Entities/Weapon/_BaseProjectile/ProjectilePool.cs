@@ -5,7 +5,7 @@ public class ProjectilePool : MonoBehaviour
 {
 
     [Header("Reference")]
-    public HittableManager hittableManager;
+    public Collider[] colliders;
 
     [Header("Settings")]
     public int numberOfPooledObjects = 20;
@@ -20,7 +20,7 @@ public class ProjectilePool : MonoBehaviour
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
             BaseProjectile projectile = Instantiate(projectilePrefab, parent).GetComponent<BaseProjectile>();
-            projectile.Init(userSpace.GetInstanceID(), hittableManager);
+            projectile.Init(userSpace.GetInstanceID(), colliders);
             projectile.gameObject.SetActive(false);
             _projectiles.Add(projectile.GetComponent<BaseProjectile>());
         }

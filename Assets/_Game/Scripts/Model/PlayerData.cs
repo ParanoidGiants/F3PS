@@ -8,6 +8,11 @@ public enum Skill
     TimeBubble = 2,
 }
 
+public enum Attack
+{
+    Melee = 0,
+}
+
 [Serializable]
 public class PlayerData
 {
@@ -20,6 +25,7 @@ public class PlayerData
     public int MaxHealth = 100;
 
     public Skill ActiveSkill = Skill.Telekinesis;
+    public Attack ActiveAttack = Attack.Melee;
 
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
@@ -33,4 +39,6 @@ public class PlayerData
     public float JumpHeight = 1.2f;
     public float DodgeHeight = 1.2f;
     public float DodgeSpeed = 60f;
+
+    public float SprintDepletionRate = 10f;
 }

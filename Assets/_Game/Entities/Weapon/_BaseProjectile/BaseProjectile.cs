@@ -23,12 +23,12 @@ public class BaseProjectile : MonoBehaviour
     private float _speed;
 
     protected bool _isHit = false;
-    private HittableManager _hittableManager;
+    private Collider[] collidersToIgnore;
 
-    public void Init(int userSpaceId, HittableManager hittableManager)
+    public void Init(int userSpaceId, Collider[] colliders)
     {
         hitBox.attackerId = userSpaceId;
-        _hittableManager = hittableManager;
+        collidersToIgnore = colliders;
     }
     
     private void Update()
@@ -45,7 +45,7 @@ public class BaseProjectile : MonoBehaviour
         if (enableCollisionsTime > enableCollisionsTimer && !collisionsEnabled)
         {
             collisionsEnabled = true;
-            foreach (var hittableCollider in _hittableManager.colliders)
+            foreach (var hittableCollider in collidersToIgnore)
             {
                 Physics.IgnoreCollision(col, hittableCollider, false);
             }
@@ -59,7 +59,7 @@ public class BaseProjectile : MonoBehaviour
         _speed = shootSpeed;
         _isHit = false;
         collisionsEnabled = false;
-        foreach (var hittableCollider in _hittableManager.colliders)
+        foreach (var hittableCollider in collidersToIgnore)
         {
             Physics.IgnoreCollision(col, hittableCollider);
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace F3PS.AI.States.Action
 {
-    public abstract class Attack : MonoBehaviour
+    public abstract class EnemyAttack : MonoBehaviour
     {
         [SerializeField] protected Hittable _target;
         
