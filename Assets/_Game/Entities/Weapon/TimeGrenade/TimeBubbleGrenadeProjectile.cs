@@ -93,4 +93,13 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         col.enabled = false;
         ActivateTimeBubble();
     }
+
+    internal void PitchTimeScale(float v)
+    {
+        if (timeBubble.isActiveAndEnabled)
+        {
+            timeBubble.PitchTimeScale(v);
+            hud.SetTimeScale(timeBubble.timeScale);
+        }
+    }
 }

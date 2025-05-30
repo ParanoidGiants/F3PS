@@ -58,7 +58,7 @@ public class TimeBubbleController : MonoBehaviour
 
             if (bubbleTimeScaleChange != 0f)
             {
-                timeBubbleGrenadeProjectile.timeBubble.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
+                timeBubbleGrenadeProjectile.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
             }
         }
         else if (!timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled)

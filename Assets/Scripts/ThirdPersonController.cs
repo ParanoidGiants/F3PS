@@ -817,9 +817,6 @@ namespace StarterAssets
             {
                 return;
             }
-            Debug.Log("Grounded object changed");
-            Debug.Log($"Before: {currentGround}");
-            Debug.Log($"After: {groundedObject}");
             currentGround = groundedObject;
             lastGroundPosition = currentGround.position;
 
