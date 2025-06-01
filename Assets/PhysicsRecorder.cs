@@ -10,7 +10,7 @@ public enum RecorderState
 
 public class PhysicsRecorder : MonoBehaviour
 {
-    private PhysicsTimeObject _timeObject;
+    private RigidbodyHub _rigidbodyHub;
 
     public PropertyRecorder<Vector3> positions = new();
     public PropertyRecorder<Quaternion> rotations = new();
@@ -19,6 +19,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     [Header("Materials")]
     public RewindOutline outline;
+    public LineRenderer rewindLine;
 
 
     [Space(10)]
@@ -27,8 +28,8 @@ public class PhysicsRecorder : MonoBehaviour
     public int amountOfTimeZones = 0;
     public float currentTimeScale = 1;
     public float additionalTimeScale = 1;
-    public float ScaledDeltaTime => currentTimeScale * Time.deltaTime * Time.timeScale;
-    public float ScaledFixedDeltaTime => currentTimeScale * Time.fixedDeltaTime * Time.timeScale;
+    public float ScaledDeltaTime => currentTimeScale * Time.deltaTime * _rigidbodyHub.currentTimeScale;
+    public float ScaledFixedDeltaTime => currentTimeScale * Time.fixedDeltaTime * _rigidbodyHub.currentTimeScale;
 
     public float gravityScale = 1f;
     protected const double TOLERANCE = 0.001f;
@@ -48,7 +49,7 @@ public class PhysicsRecorder : MonoBehaviour
     {
         state = RecorderState.None;
         outline.Init(GetComponent<MeshFilter>().mesh);
-        _timeObject = GetComponent<PhysicsTimeObject>();
+        _rigidbodyHub = GetComponent<RigidbodyHub>();
     }
 
     public void FixedUpdate()
@@ -66,21 +67,16 @@ public class PhysicsRecorder : MonoBehaviour
     public void SelectAsCandidate()
     {
         outline.SetActive(true);
+        outline.Pick();
     }
 
     public void Unpick()
     {
         outline.SetActive(false);
     }
-    public void Pick()
-    {
-        outline.Pick();
-    }
 
     private void FreezeRigidbody()
     {
-        Log("Freeze");
-        _timeObject.FreezeExternally();
     }
 
     private void OnDisable()
@@ -91,44 +87,43 @@ public class PhysicsRecorder : MonoBehaviour
         }
     }
 
+    private const float THRESHOLD = 0.001f;
     private void Record()
     {
-        currentRecordingTime += ScaledFixedDeltaTime;
         var nextFrame = (int) Math.Floor(currentRecordingTime / frameDuration);
         Log($"Next Frame: {nextFrame}");
         Log($"Current Recording Time: {currentRecordingTime}");
         Log($"Current Fixed Delta Time: {ScaledFixedDeltaTime}");
         Log($"Current Time Scale: {currentTimeScale}");
-        if (nextFrame <= currentFrame)
+        if (MathUtils.Vector3Equals(transform.position, positions.GetValueAtFrame(currentFrame), THRESHOLD)
+                && MathUtils.QuaternionEquals(transform.rotation, rotations.GetValueAtFrame(currentFrame), THRESHOLD)
+            )
         {
             return;
         }
         currentFrame = nextFrame;
+        int linePointIndex = currentFrame / 20;
+        rewindLine.positionCount = linePointIndex+1;
+        rewindLine.SetPosition(linePointIndex, transform.position);
         Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _timeObject.Velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _rigidbodyHub.GetCurrentUnbiasedVelocity(), MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
         framesRecorded = currentFrame;
+        currentRecordingTime += ScaledFixedDeltaTime;
     }
 
     private void RecordInitialFrame()
     {
         currentFrame = 0;
+        rewindLine.positionCount = 1;
+        rewindLine.SetPosition(0, transform.position);
         Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(currentFrame, _timeObject.Velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(currentFrame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
-    }
-
-    private void RecordFutureFramePosition(int frame, Vector3 position)
-    {
-        Log($"Record Specific Frame {frame}: {position}");
-        positions.RecordIfChanged(frame, position, MathUtils.Vector3Equals);
-        rotations.RecordIfChanged(frame, transform.rotation, MathUtils.QuaternionEquals);
-        velocities.RecordIfChanged(frame, _timeObject.Velocity, MathUtils.Vector3Equals);
-        angularVelocities.RecordIfChanged(frame, _timeObject.AngularVelocity, MathUtils.Vector3Equals);
+        velocities.RecordIfChanged(currentFrame, _rigidbodyHub.GetCurrentUnbiasedVelocity(), MathUtils.Vector3Equals);
+        angularVelocities.RecordIfChanged(currentFrame, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
     }
 
     public void Playback(float forwardBackward)
@@ -136,7 +131,7 @@ public class PhysicsRecorder : MonoBehaviour
         if (state != RecorderState.Playback)
         {
             state = RecorderState.Playback;
-            ChangeToPlayback();
+            SetupForPlayback();
         }
 
         if (forwardBackward == 0)
@@ -181,32 +176,29 @@ public class PhysicsRecorder : MonoBehaviour
         transform.rotation = Quaternion.Lerp(currentRot, nextRot, lerpFactor);
     }
 
-    public void ChangeToRecord()
+    public void SetupForRecording()
     {
+        Log($"Setup For Recording {currentFrame}");
         transform.position = positions.GetValueAtFrame(currentFrame);
         transform.rotation = rotations.GetValueAtFrame(currentFrame);
 
         outline.Record();
-        _timeObject.FreeFromExternalConstraints();
-        _timeObject.SetVelocity(velocities.GetValueAtFrame(currentFrame), angularVelocities.GetValueAtFrame(currentFrame));
+        _rigidbodyHub.SetupForRecording(velocities.GetValueAtFrame(currentFrame), angularVelocities.GetValueAtFrame(currentFrame));
+
+        positions.ClearAllAfterCurrentFrame(currentFrame);
+        rotations.ClearAllAfterCurrentFrame(currentFrame);
+        velocities.ClearAllAfterCurrentFrame(currentFrame);
+        angularVelocities.ClearAllAfterCurrentFrame(currentFrame);
 
         state = RecorderState.Record;
-        ClearAllAfterCurrentFrame(currentFrame);
     }
 
-    public void ChangeToPlayback()
+    public void SetupForPlayback()
     {
+        Log($"Setup For Playback {currentFrame}");
         outline.Rewind();
-        FreezeRigidbody();
+        _rigidbodyHub.SetupForPlayback();
         state = RecorderState.Playback;
-
-        currentRecordingTime += ScaledFixedDeltaTime;
-        var segmentDirection = transform.position - positions.GetValueAtFrame(currentFrame);
-        var segmentDuration = currentRecordingTime % frameDuration;
-        var segmentSpeed = segmentDirection / segmentDuration;
-        var futureFramePosition = transform.position + segmentSpeed * frameDuration;
-        RecordFutureFramePosition(currentFrame + 1, futureFramePosition);
-        currentFrame++;
     }
 
     public void StartRecording()
@@ -216,6 +208,7 @@ public class PhysicsRecorder : MonoBehaviour
         currentRecordingTime = 0f;
         isRecording = true;
         outline.Record();
+        rewindLine.positionCount = 0;
 
         RecordInitialFrame();
         state = RecorderState.Record;
@@ -223,7 +216,7 @@ public class PhysicsRecorder : MonoBehaviour
 
     public void StopRecording()
     {
-        _timeObject.FreeFromExternalConstraints();
+        _rigidbodyHub.FreeFromConstraints();
         currentFrame = 0;
         state = RecorderState.None;
         isRecording = false;
@@ -232,6 +225,7 @@ public class PhysicsRecorder : MonoBehaviour
         rotations.ClearAll();
         velocities.ClearAll();
         angularVelocities.ClearAll();
+        rewindLine.positionCount = 0;
     }
 
     private void Log(string v)
@@ -239,21 +233,12 @@ public class PhysicsRecorder : MonoBehaviour
         // Debug.Log($"{gameObject.name}: {v}");
     }
 
-    public bool IsMovingForward()
-    {
-        return state == RecorderState.Record && currentFrame > 1;    
-    }
-
-    private void ClearAllAfterCurrentFrame(int currentFrame)
-    {
-        positions.ClearAllAfterCurrentFrame(currentFrame);
-        rotations.ClearAllAfterCurrentFrame(currentFrame);
-        velocities.ClearAllAfterCurrentFrame(currentFrame);
-        angularVelocities.ClearAllAfterCurrentFrame(currentFrame);
-    }
-
     internal float GetPlaybackPercentage()
     {
+        if (framesRecorded == 0)
+        {
+            return 0f;
+        }
         return currentFrame / (float)framesRecorded;
     }
 }

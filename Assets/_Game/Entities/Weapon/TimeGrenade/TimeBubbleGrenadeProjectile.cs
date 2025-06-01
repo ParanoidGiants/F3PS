@@ -11,14 +11,21 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
     public ProjectileTimeObject timeObject;
-    private bool _isActive = false;
+    public TimeBubbleHUD hud;
+    private bool _isUpAndRunning = false;
 
     public float shakePower = 1f;
     public float LifeTimePercentage => lifeTime / maximumLifeTimer;
 
-    public float Gravity => -Physics.gravity.y * timeObject.gravityScale;
-    public bool IsTimeBubbleActive => timeBubble.isActiveAndEnabled;
-    public bool IsProjectileActive => _isActive;
+    public float Gravity => -Physics.gravity.y * timeObject.GravityScale;
+    public bool IsTimeBubbleActiveAndEnabled => timeBubble.isActiveAndEnabled;
+    public bool IsProjectileUpAndRunning => _isUpAndRunning;
+
+    private void Awake()
+    {
+        hud = FindObjectOfType<TimeBubbleHUD>();
+        hud.SetTimeScale(timeBubble.timeScale);
+    }
 
     private void Start()
     {
@@ -27,9 +34,11 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void Update()
     {
-        if (!_isHit || !_isActive) return;
+        if (!_isHit || !_isUpAndRunning) return;
 
         lifeTime += Time.deltaTime;
+        hud.UpdateGrenadeEffect(LifeTimePercentage);
+
         if (lifeTime > maximumLifeTimer)
         {
             DeactivateTimeBubble();
@@ -38,6 +47,7 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
 
     private void ActivateTimeBubble()
     {
+        hud.SetTimeScale(timeBubble.timeScale);
         timeBubble.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
@@ -47,13 +57,14 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
-                 _isActive = true;
+                 _isUpAndRunning = true;
              });
     }
 
     public void DeactivateTimeBubble()
     {
-        _isActive = false;
+        hud.UpdateGrenadeEffect(0f);
+        _isUpAndRunning = false;
         timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
             .OnComplete(() =>
@@ -83,5 +94,11 @@ public class TimeBubbleGrenadeProjectile : BaseProjectile
         rb.constraints = RigidbodyConstraints.FreezeAll;
         col.enabled = false;
         ActivateTimeBubble();
+    }
+
+    internal void PitchTimeScale(float v)
+    {
+        timeBubble.PitchTimeScale(v);
+        hud.SetTimeScale(timeBubble.timeScale);
     }
 }

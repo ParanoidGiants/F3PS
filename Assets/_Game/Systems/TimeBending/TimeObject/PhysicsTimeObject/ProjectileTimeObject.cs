@@ -8,6 +8,7 @@ public class ProjectileTimeObject : PhysicsTimeObject
     [SerializeField] private TrailRenderer _trail;
     [SerializeField] private TrailRenderer _slowMoTrail;
     private float _baseTrailTime;
+    public float GravityScale => _rigidbodyHub.currentGravityScale;
 
     private void Awake()
     {

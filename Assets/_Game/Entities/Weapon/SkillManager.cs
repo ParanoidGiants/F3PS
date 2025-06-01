@@ -1,13 +1,7 @@
 using F3PS;
 using StarterAssets;
+using System;
 using UnityEngine;
-
-public enum Skill
-{
-    Telekinesis = 0,
-    Rewind = 1,
-    TimeBubble = 2
-}
 
 public class SkillManager : MonoBehaviour
 {
@@ -16,61 +10,95 @@ public class SkillManager : MonoBehaviour
     public Crosshair crosshair;
         
     [Header("Skills")]
-    public Skill activeSkill;
     public TelekinesisController telekinesisController;
     public RewindController rewindController;
     public TimeBubbleController timeBubbleController;
 
-    private StarterAssetsInputs _inputs;        
+    private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
-    private bool _isWeaponSwitched;
+    private bool _isSkillSwitched;
 
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
-        SwitchSkill(activeSkill);
+        SetActiveSkill(GameManager.Instance.PlayerData.ActiveSkill);
     }
 
     public void OnUpdate()
     {
-        HandleSwitchSkill();
-        switch (activeSkill)
+        HandleSwitchSkill(_inputs.switchWeapon);
+        HandleActiveSkill(
+            _inputs.skill,
+            _inputs.grab,
+            _inputs.look,
+            _inputs.telekinesisPushPull
+        );
+    }
+
+    public void OnFixedUpdate()
+    {
+        _aimTargetPosition = crosshair.GetTargetPosition();
+
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
-                telekinesisController.OnUpdate(_inputs.shoot, _inputs.telekinesisPushPull);
+                telekinesisController.OnFixedUpdate();
                 break;
             case Skill.Rewind:
-                rewindController.OnUpdate(_inputs.shoot, _inputs.aimGrenade, _inputs.telekinesisPushPull);
-                break;
-            case Skill.TimeBubble:
-                bool isAimingGrenade = _inputs.aimGrenade;
-                timeBubbleController.OnUpdate(_inputs.shoot, _inputs.telekinesisPushPull, _aimTargetPosition);
+                rewindController.OnFixedUpdate();
                 break;
             default:
                 break;
         }
     }
 
-    private void HandleSwitchSkill()
+    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
     {
-        if (!_inputs.switchWeapon)
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
-            _isWeaponSwitched = false;
-            return;
-        }
-
-
-        if (!_isWeaponSwitched)
-        {
-            _isWeaponSwitched = true;
-            var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
-            SwitchSkill(nextSkill);
+            case Skill.Telekinesis:
+                telekinesisController.OnUpdate(
+                    skill,
+                    grab,
+                    look,
+                    telekinesisPushPull
+                );
+                break;
+            case Skill.Rewind:
+                rewindController.OnUpdate(skill, grab, telekinesisPushPull);
+                break;
+            case Skill.TimeBubble:
+                timeBubbleController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
+                break;
+            default:
+                break;
         }
     }
 
-    private void SwitchSkill(Skill nextSkill)
+    private void HandleSwitchSkill(bool switchWeapon)
     {
+        if (!switchWeapon)
+        {
+            _isSkillSwitched = false;
+            return;
+        }
+
+        if (_isSkillSwitched)
+        {
+            return;
+        }
+
+        _isSkillSwitched = true;
+        var activeSkill = GameManager.Instance.PlayerData.ActiveSkill;
+        var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
+        activeSkill = nextSkill;
+        SetActiveSkill(nextSkill);
+    }
+
+    private void SetActiveSkill(Skill nextSkill)
+    {
+        GameManager.Instance.PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {
             case Skill.Telekinesis:
@@ -91,25 +119,20 @@ public class SkillManager : MonoBehaviour
             default:
                 break;
         }
-        activeSkill = nextSkill;
     }
-        
-    public void OnFixedUpdate()
-    {
-        _aimTargetPosition = crosshair.GetTargetPosition();
 
-        switch (activeSkill)
+    public bool IsAiming()
+    {
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
-                telekinesisController.OnFixedUpdate();
-                break;
+                return telekinesisController.isMovingObjectThisFrame;
             case Skill.Rewind:
-                rewindController.OnFixedUpdate();
-                break;
+                return rewindController.IsAiming();
             case Skill.TimeBubble:
-                break;
+                return timeBubbleController.IsAiming();
             default:
-                break;
+                return false;
         }
     }
 }

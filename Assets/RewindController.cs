@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RewindController : MonoBehaviour
@@ -19,9 +18,12 @@ public class RewindController : MonoBehaviour
     public Vector3 contactPoint;
     public bool selectedObjectForRecord = false;
     public bool hasCandidate = false;
+    public bool isRecordingThisFrame = false;
     public bool wasRecordingLastFrame = false;
+    public bool isActivatingPlaybackThisFrame = false;
     public bool wasActivatingPlaybackLastFrame = false;
     public bool isPlaybackActive = false;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
 
     private LineRenderer _lineRenderer;
     private Crosshair _crosshair;
@@ -30,112 +32,164 @@ public class RewindController : MonoBehaviour
     {
         _crosshair = FindObjectOfType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
+        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
     }
 
     private void OnEnable()
     {
-        rewindHUD.gameObject.SetActive(true);
         _lineRenderer.enabled = true;
+        selectSkillControllerHUD.SelectRewindHud();
     }
 
     private void OnDisable()
     {
-        rewindHUD.gameObject.SetActive(false);
         _lineRenderer.enabled = false;
+
+        if (hasCandidate && !selectedObjectForRecord)
+        {
+            currentCandidate.StopRecording();
+            hasCandidate = false;
+            currentCandidate = null;
+        }
     }
 
     public void OnUpdate(bool isRecording, bool activatePlayback, float forwardBackward)
     {
         _lineRenderer.SetPosition(0, transform.position);
         _lineRenderer.SetPosition(1, contactPoint);
+        wasRecordingLastFrame = isRecordingThisFrame;
+        isRecordingThisFrame = isRecording;
+        wasActivatingPlaybackLastFrame = isActivatingPlaybackThisFrame;
+        isActivatingPlaybackThisFrame = activatePlayback;
 
-        if (hasCandidate)
+        if (!hasCandidate)
         {
-            if (!wasRecordingLastFrame && isRecording)
-            {
-                if (!selectedObjectForRecord)
-                {
-                    currentCandidate.StartRecording();
-                    rewindHUD.UpdateRecordEffect(0);
-                    selectedObjectForRecord = true;
-                }
-                else
-                {
-                    currentCandidate.StopRecording();
-                    rewindHUD.UpdateRecordEffect(0);
-                    selectedObjectForRecord = false;
-                    isPlaybackActive = false;
-                }
-            }
+            return;
+        }
 
-            if (selectedObjectForRecord && !wasActivatingPlaybackLastFrame && activatePlayback)
+        if (!wasRecordingLastFrame && isRecordingThisFrame)
+        {
+            if (!selectedObjectForRecord)
             {
-                if (!isPlaybackActive)
-                {
-                    currentCandidate.ChangeToPlayback();
-                    rewindHUD.ShowPlaybackCircle(true);
-                    isPlaybackActive = true;
-                }
-                else
-                {
-                    currentCandidate.ChangeToRecord();
-                    rewindHUD.ShowPlaybackCircle(false);
-                    isPlaybackActive = false;
-                }
-            }
-
-            if (isPlaybackActive)
-            {
-                currentCandidate.Playback(rewindSpeed * forwardBackward);
-                rewindHUD.UpdatePlaybackEffect(currentCandidate.GetPlaybackPercentage());
+                rewindHUD.SetRecording();
+                currentCandidate.StartRecording();
+                rewindHUD.UpdateRecordEffect(0);
+                selectedObjectForRecord = true;
             }
             else
             {
-                rewindHUD.UpdateRecordEffect(currentCandidate.GetPlaybackPercentage());
+                rewindHUD.SetNone();
+                currentCandidate.StopRecording();
+                currentCandidate.SelectAsCandidate();
+                rewindHUD.UpdateRecordEffect(0);
+                selectedObjectForRecord = false;
+                isPlaybackActive = false;
             }
         }
-        wasRecordingLastFrame = isRecording;
-        wasActivatingPlaybackLastFrame = activatePlayback;
 
+        if (selectedObjectForRecord && !wasActivatingPlaybackLastFrame && isActivatingPlaybackThisFrame)
+        {
+            if (!isPlaybackActive)
+            {
+                rewindHUD.SetPausing();
+                currentCandidate.SetupForPlayback();
+                rewindHUD.ShowPlaybackBar(true);
+                isPlaybackActive = true;
+            }
+            else
+            {
+                rewindHUD.SetRecording();
+                currentCandidate.SetupForRecording();
+                rewindHUD.ShowPlaybackBar(false);
+                isPlaybackActive = false;
+            }
+        }
+
+        if (isPlaybackActive)
+        {
+            if (forwardBackward > 0)
+            {
+                rewindHUD.SetPlaying();
+            }
+            else if (forwardBackward < 0)
+            {
+                rewindHUD.SetRewinding();
+            }
+            else
+            {
+                rewindHUD.SetPausing();
+            }
+            currentCandidate.Playback(rewindSpeed * forwardBackward);
+        }
+
+        var playbackPercentage = currentCandidate.GetPlaybackPercentage();
+        if (playbackPercentage == 0f && !isPlaybackActive)
+        {
+            rewindHUD.UpdatePlaybackEffect(1f);
+        }
+        else
+        {
+            rewindHUD.UpdatePlaybackEffect(playbackPercentage);
+        }
     }
 
     public void OnFixedUpdate()
     {
         if (selectedObjectForRecord)
         {
-            // currentCandidate.OnFixedUpdate();
+            contactPoint = currentCandidate.transform.position;
             return;
         }
-        if (!_crosshair.CrosshairRaycast(out var hit))
+
+        var physicsRecorder = GetCandidate();
+        if (physicsRecorder == null)
+        {
+            return;
+        }
+
+        if (currentCandidate != physicsRecorder)
+        {
+            if (currentCandidate != null)
+            {
+                currentCandidate.Unpick();
+            }
+            physicsRecorder.SelectAsCandidate();
+            currentCandidate = physicsRecorder;
+            hasCandidate = true;
+        }
+        contactPoint = physicsRecorder.transform.position;
+    }
+
+    private PhysicsRecorder GetCandidate()
+    {
+        if (!_crosshair.CrosshairRaycast())
         {
             contactPoint = _crosshair.GetInfiniteDirection();
-
             if (hasCandidate)
             {
                 hasCandidate = false;
                 currentCandidate.Unpick();
                 currentCandidate = null;
             }
-            return;
+            return null;
         }
-        contactPoint = hit.point;
-        var movable = hit.transform.GetComponent<PhysicsRecorder>();
-        if (movable == currentCandidate)
+        var physicsRecorder = _crosshair.Target.transform.GetComponent<PhysicsRecorder>();
+        if (physicsRecorder == null)
         {
-            return;
+            contactPoint = _crosshair.GetInfiniteDirection();
+            if (hasCandidate)
+            {
+                hasCandidate = false;
+                currentCandidate.Unpick();
+                currentCandidate = null;
+            }
+            return null;
         }
+        return physicsRecorder;
+    }
 
-        if (hasCandidate)
-        {
-            hasCandidate = false;
-            currentCandidate.Unpick();
-            currentCandidate = null;
-        }
-        if (movable != null)
-        {
-            hasCandidate = true;
-            movable.SelectAsCandidate();
-            currentCandidate = movable;
-        }
+    public bool IsAiming()
+    {
+        return !wasRecordingLastFrame && isRecordingThisFrame;
     }
 }

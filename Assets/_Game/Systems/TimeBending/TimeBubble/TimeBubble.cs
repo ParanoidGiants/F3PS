@@ -7,6 +7,7 @@ public class TimeBubble : MonoBehaviour
     private Renderer _renderer;
     public float timeScale = 1f;
     public float targetSize = 10f;
+    public Color baseColor = Color.white;
 
     private void Awake()
     {
@@ -49,12 +50,15 @@ public class TimeBubble : MonoBehaviour
         timeObjects.Clear();
     }
 
+
     public void PitchTimeScale(float bubbleTimeScaleDirection)
     {
         timeScale += bubbleTimeScaleDirection;
         timeScale = Mathf.Clamp(timeScale, 0f, 1f);
 
-        _renderer.material.SetFloat("_BrackeysMoveSpeed", timeScale*0.25f);
+        var emissionColor = Color.Lerp(Color.white, baseColor, timeScale);
+        _renderer.material.SetFloat("_BrackeysMoveSpeed", timeScale * 0.25f);
+        _renderer.material.SetColor("_BrackeysEmission", emissionColor);
         foreach (var timeObject in timeObjects)
         {
             timeObject.PitchTimeScale(timeScale);
