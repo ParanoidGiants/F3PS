@@ -16,6 +16,7 @@ public class RigidbodyHub : MonoBehaviour
     [Space(10)]
     [Header("Telekinesis Settings")]
     public bool isMovingByTelekinesis = false;
+    public float maximumThrowSpeed = 10.0f;
 
     [Space(10)]
     [Header("Rewind Settings")]
@@ -32,6 +33,7 @@ public class RigidbodyHub : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         defaultMass = _rigidbody.mass;
+        maximumThrowSpeed = FindObjectOfType<TelekinesisController>(true).maximumThrowSpeed;
     }
 
     void FixedUpdate()
@@ -53,7 +55,7 @@ public class RigidbodyHub : MonoBehaviour
             if (isTimeFrozen)
             {
                 isTimeFrozen = false;
-                if (!isMovingByTelekinesis)
+                if (!isMovingByTelekinesis && !isRewinding)
                 {
                     FreeFromConstraints();
                     _rigidbody.velocity = unbiasedTimeFreezeVelocity * timeScale;
@@ -153,6 +155,10 @@ public class RigidbodyHub : MonoBehaviour
         if (isTimeFrozen)
         {
             return unbiasedTimeFreezeVelocity;
+        }
+        if (isMovingByTelekinesis)
+        {
+            return Vector3.ClampMagnitude(_rigidbody.velocity, maximumThrowSpeed) / currentTimeScale;
         }
         return _rigidbody.velocity / currentTimeScale;
     }
