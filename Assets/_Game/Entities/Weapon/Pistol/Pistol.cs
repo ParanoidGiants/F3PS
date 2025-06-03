@@ -37,11 +37,6 @@ namespace Weapon
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                targetPosition,
-                shotSpeed
-            );
             var shootDirection = targetPosition - projectileSpawn.position;
             Shake(-shootDirection);
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);

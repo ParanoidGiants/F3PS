@@ -1,7 +1,5 @@
 using Cinemachine;
-using DarkTonic.MasterAudio;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LongRangeAttackController : MonoBehaviour
@@ -9,7 +7,6 @@ public class LongRangeAttackController : MonoBehaviour
     [Space(10)]
     [Header("Attack Settings")]
     public int numberOfProjectiles;
-    public float spreadAngle;
     public float attackSpeed = 100f;
     public float attackCoolDownTimer = 0.2f;
     public float recoilPower;
@@ -18,13 +15,12 @@ public class LongRangeAttackController : MonoBehaviour
     [Space(10)]
     [Header("References")]
     public Transform origin;
-    public GameObject projectilePrefab;
     public Transform projectileSpawn;
-    public ProjectilePool projectilePool;
+    public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
     public SelectAttackControllerHUD attackControllerHUD;
-    public MeleeAttackHud hud;
+    public LongRangeAttackHUD hud;
 
     [Space(10)]
     [Header("Watchers")]
@@ -38,9 +34,9 @@ public class LongRangeAttackController : MonoBehaviour
         attackControllerHUD.SelectMeleeAttackHud();
     }
 
-    public void Init(Transform userSpace)
+    public void Init()
     {
-        projectilePool.Init(projectilePrefab, userSpace);
+        projectilePool.Init(origin);
     }
 
     public void UpdateRotation(Quaternion rotation)
@@ -53,18 +49,14 @@ public class LongRangeAttackController : MonoBehaviour
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
-        for (int i = 0; i < numberOfProjectiles; i++)
-        {
-            float xRotation = Random.Range(-spreadAngle, spreadAngle);
-            float yRotation = Random.Range(-spreadAngle, spreadAngle);
-            Quaternion projectileOrientation = Quaternion.Euler(xRotation, yRotation, 0f) * projectileSpawn.rotation;
-            var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - projectileSpawn.position);
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                projectileSpawn.position + targetDirection,
-                attackSpeed
-            );
-        }
+        var targetDirection = projectileSpawn.rotation * (targetPosition - projectileSpawn.position).normalized;
+        var projectileObject = projectilePool.GetObject();
+        var projectileTransform = projectileObject.transform;
+        projectileTransform.position = projectileSpawn.position;
+        projectileTransform.rotation = projectileSpawn.rotation;
+        var meleeProjectile = projectileObject.GetComponent<MeleeProjectile>();
+        meleeProjectile.BeforeSetActive(attackSpeed);
+        projectileObject.SetActive(true);
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);
         while (attackCoolDownTime > 0f)

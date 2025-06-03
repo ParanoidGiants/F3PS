@@ -897,6 +897,89 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &190968824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190968825}
+  - component: {fileID: 190968827}
+  - component: {fileID: 190968826}
+  m_Layer: 8
+  m_Name: ProjectileSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &190968825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190968824}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1381192703}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &190968826
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190968824}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &190968827
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190968824}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &204944809
 GameObject:
   m_ObjectHideFlags: 0
@@ -5200,6 +5283,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectileShotgun
       objectReference: {fileID: 0}
+    - target: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
         type: 3}
       propertyPath: m_RootOrder
@@ -7083,6 +7171,155 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &1381192702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1381192703}
+  - component: {fileID: 1381192706}
+  - component: {fileID: 1381192705}
+  - component: {fileID: 1381192704}
+  m_Layer: 8
+  m_Name: LongRangeAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1381192703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381192702}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 190968825}
+  - {fileID: 2119198797}
+  m_Father: {fileID: 2017168079}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1381192704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381192702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 1
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.3
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &1381192705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381192702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e3ae162d7593d43a69bad4352f796e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfProjectiles: 10
+  spreadAngle: 20
+  attackSpeed: 100
+  attackCoolDownTimer: 0.2
+  recoilPower: 0.2
+  staminaCost: 10
+  origin: {fileID: 1381192703}
+  projectilePrefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
+    type: 3}
+  projectileSpawn: {fileID: 190968825}
+  projectilePool: {fileID: 0}
+  staminaManager: {fileID: 8154856271147510807}
+  screenShakeSource: {fileID: 1381192704}
+  attackControllerHUD: {fileID: 613760900}
+  hud: {fileID: 1492468131}
+  collidersToIgnore: []
+  attackCoolDownTime: 0
+  isAttackingPressedThisFrame: 0
+  wasAttackingPressedLastFrame: 0
+  isAttacking: 0
+--- !u!114 &1381192706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381192702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3123d104a9b2034987e52cf90d53408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfProjectiles: 1
+  attackSpeed: 100
+  attackCoolDownTimer: 0.2
+  recoilPower: 0
+  staminaCost: 10
+  origin: {fileID: 3893294199639930361}
+  projectileSpawn: {fileID: 190968825}
+  projectilePool: {fileID: 2119198798}
+  staminaManager: {fileID: 8154856271147510807}
+  screenShakeSource: {fileID: 1381192704}
+  attackControllerHUD: {fileID: 613760900}
+  hud: {fileID: 1662334573}
+  attackCoolDownTime: 0
+  isAttackingPressedThisFrame: 0
+  wasAttackingPressedLastFrame: 0
+  isAttacking: 0
 --- !u!1 &1382234221
 GameObject:
   m_ObjectHideFlags: 0
@@ -9161,9 +9398,10 @@ GameObject:
   - component: {fileID: 1662334572}
   - component: {fileID: 1662334571}
   - component: {fileID: 1662334570}
+  - component: {fileID: 1662334573}
   - component: {fileID: 1662334569}
   m_Layer: 5
-  m_Name: RangeAttack
+  m_Name: LongRangeAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9253,6 +9491,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662334567}
   m_CullTransparentMesh: 1
+--- !u!114 &1662334573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662334567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd6f9e0a01a4eb47abd17c895213bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolDownCircle: {fileID: 1542050021}
+  icon: {fileID: 1662334571}
 --- !u!1 &1712685054
 GameObject:
   m_ObjectHideFlags: 0
@@ -11509,6 +11761,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 929809373828350827}
+  - {fileID: 1381192703}
   m_Father: {fileID: 7137088973241539434}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11524,9 +11777,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0091e0c9591b1664c88ce22b15befbc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpace: {fileID: 3893294199639930361}
   crosshair: {fileID: 3258596987015465067}
   meleeAttackController: {fileID: 6161785317819064583}
+  longRangeAttackController: {fileID: 0}
 --- !u!1 &2029672813
 GameObject:
   m_ObjectHideFlags: 0
@@ -11990,6 +12243,52 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2119198796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119198797}
+  - component: {fileID: 2119198798}
+  m_Layer: 8
+  m_Name: LongRangeAttackProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2119198797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119198796}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.518, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1381192703}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2119198798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119198796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da640ebcede83a648885783f11ad8774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 2149979966636889756, guid: e8efb1a7f42f0694e9432be1dc2d68a1, type: 3}
+  numberOfPooledObjects: 20
 --- !u!1 &2132109395
 GameObject:
   m_ObjectHideFlags: 0
@@ -13244,20 +13543,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1158893946218182622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158893946218182624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aff6148274c5274f9cf7c0c70f6d7bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colliders: []
-  numberOfPooledObjects: 100
 --- !u!1 &1158893946218182624
 GameObject:
   m_ObjectHideFlags: 0
@@ -13267,9 +13552,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1158893946218182625}
-  - component: {fileID: 1158893946218182622}
+  - component: {fileID: 1158893946218182626}
   m_Layer: 8
-  m_Name: ProjectilePool
+  m_Name: MeleeAttackProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13290,6 +13575,20 @@ Transform:
   m_Father: {fileID: 929809373828350827}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1158893946218182626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158893946218182624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da640ebcede83a648885783f11ad8774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660, type: 3}
+  numberOfPooledObjects: 20
 --- !u!114 &1415825446874560716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20495,15 +20794,17 @@ MonoBehaviour:
   attackCoolDownTimer: 0.2
   recoilPower: 0.2
   staminaCost: 10
-  origin: {fileID: 929809373828350827}
+  origin: {fileID: 3893294199639930361}
   projectilePrefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
     type: 3}
   projectileSpawn: {fileID: 6842764868262146175}
-  projectilePool: {fileID: 1158893946218182622}
+  projectilePool: {fileID: 1158893946218182626}
   staminaManager: {fileID: 8154856271147510807}
   screenShakeSource: {fileID: 7323334676737016985}
   attackControllerHUD: {fileID: 613760900}
   hud: {fileID: 1492468131}
+  collidersToIgnore:
+  - {fileID: 4838348546220147285}
   attackCoolDownTime: 0
   isAttackingPressedThisFrame: 0
   wasAttackingPressedLastFrame: 0
@@ -26770,6 +27071,7 @@ MonoBehaviour:
   currentTimeScale: 1
   isTimeFrozen: 0
   isMovingByTelekinesis: 0
+  maximumThrowSpeed: 10
   isRewinding: 0
   constraintsFreezeAllCommandCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}

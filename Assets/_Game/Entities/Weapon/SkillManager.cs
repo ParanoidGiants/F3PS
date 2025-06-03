@@ -26,7 +26,7 @@ public class SkillManager : MonoBehaviour
 
     public void OnUpdate()
     {
-        HandleSwitchSkill(_inputs.switchWeapon);
+        HandleSwitchSkill(_inputs.switchSkill);
         HandleActiveSkill(
             _inputs.skill,
             _inputs.grab,
@@ -91,7 +91,6 @@ public class SkillManager : MonoBehaviour
         _isSkillSwitched = true;
         var activeSkill = GameManager.Instance.PlayerData.ActiveSkill;
         var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
-        activeSkill = nextSkill;
         SetActiveSkill(nextSkill);
     }
 

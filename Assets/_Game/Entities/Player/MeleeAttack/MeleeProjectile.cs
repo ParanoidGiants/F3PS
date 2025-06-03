@@ -1,17 +1,17 @@
 using System.Collections;
 using F3PS.Damage.Take;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class BaseProjectile : MonoBehaviour
+public class MeleeProjectile : MonoBehaviour
 {
+    private HitBox _hitBox;
+    private Rigidbody _rigidbody;
+    private Collider _collider;
+
     [Header("Reference")]
     public ParticleSystem hitParticleSystem;
     public ParticleSystem noHitParticleSystem;
     public GameObject mesh;
-    public HitBox hitBox;
-    public Rigidbody rb;
-    public Collider col;
 
     [Header("Settings")]
     public int damage = 50;
@@ -26,9 +26,16 @@ public class BaseProjectile : MonoBehaviour
     protected bool _isHit = false;
     private Collider[] collidersToIgnore;
 
+    private void Awake()
+    {
+        _hitBox = GetComponent<HitBox>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
+    }
+
     public void Init(int userSpaceId, Collider[] colliders)
     {
-        hitBox.attackerId = userSpaceId;
+        _hitBox.attackerId = userSpaceId;
         collidersToIgnore = colliders;
     }
     
@@ -48,31 +55,29 @@ public class BaseProjectile : MonoBehaviour
             collisionsEnabled = true;
             foreach (var hittableCollider in collidersToIgnore)
             {
-                Physics.IgnoreCollision(col, hittableCollider, false);
+                Physics.IgnoreCollision(_collider, hittableCollider, false);
             }
         }
     }
 
-    public virtual void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
+    public virtual void BeforeSetActive(float shootSpeed)
     {
-        transform.position = position;
-        transform.forward = targetPosition - position;
         _speed = shootSpeed;
-    }
-    
-    private void OnEnable()
-    {
         _isHit = false;
         collisionsEnabled = false;
         foreach (var hittableCollider in collidersToIgnore)
         {
-            Physics.IgnoreCollision(col, hittableCollider);
+            Physics.IgnoreCollision(_collider, hittableCollider);
         }
-        rb.isKinematic = false;
-        rb.velocity = transform.forward * _speed;
+    }
+    
+    private void OnEnable()
+    {
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = transform.forward * _speed;
         lifeTime = 0f;
         enableCollisionsTime = 0f;
-        col.enabled = true;
+        _collider.enabled = true;
     }
 
     private void OnDisable()
@@ -93,9 +98,9 @@ public class BaseProjectile : MonoBehaviour
         mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null 
-            && hittable.HittableId != hitBox.attackerId
+            && hittable.HittableId != _hitBox.attackerId
         ) {
-            hittable.OnHit(hitBox, transform.forward);
+            hittable.OnHit(_hitBox, transform.forward);
             hitParticleSystem.gameObject.SetActive(true);
         }
         else
@@ -113,9 +118,9 @@ public class BaseProjectile : MonoBehaviour
     private IEnumerator SetInactiveAfterSeconds()
     {
         yield return new WaitForFixedUpdate();
-        col.enabled = false;
+        _collider.enabled = false;
         yield return new WaitForFixedUpdate();
-        rb.isKinematic = true;
+        _rigidbody.isKinematic = true;
 
         yield return new WaitForSeconds(hitParticleSystem.main.duration);
         gameObject.SetActive(false);

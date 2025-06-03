@@ -19,11 +19,12 @@ public class MeleeAttackController : MonoBehaviour
     public Transform origin;
     public GameObject projectilePrefab;
     public Transform projectileSpawn;
-    public ProjectilePool projectilePool;
+    public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
     public SelectAttackControllerHUD attackControllerHUD;
     public MeleeAttackHud hud;
+    public Collider[] collidersToIgnore;
 
     [Space(10)]
     [Header("Watchers")]
@@ -37,14 +38,9 @@ public class MeleeAttackController : MonoBehaviour
         attackControllerHUD.SelectMeleeAttackHud();
     }
 
-    public void Init(Transform userSpace)
+    public void Init()
     {
-        projectilePool.Init(projectilePrefab, userSpace);
-    }
-
-    public void UpdateRotation(Quaternion rotation)
-    {
-        origin.rotation = rotation;
+        projectilePool.Init(origin);
     }
 
     protected IEnumerator Shoot(Vector3 targetPosition)
@@ -58,11 +54,14 @@ public class MeleeAttackController : MonoBehaviour
             float yRotation = Random.Range(-spreadAngle, spreadAngle);
             Quaternion projectileOrientation = Quaternion.Euler(xRotation, yRotation, 0f) * projectileSpawn.rotation;
             var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - projectileSpawn.position);
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                projectileSpawn.position + targetDirection,
-                attackSpeed
-            );
+            var projectileObject = projectilePool.GetObject();
+            var projectileTransform = projectileObject.transform;
+            projectileTransform.position = projectileSpawn.position;
+            projectileTransform.rotation = projectileOrientation;
+            var meleeProjectile = projectileObject.GetComponent<MeleeProjectile>();
+            meleeProjectile.Init(origin.GetInstanceID(), collidersToIgnore);
+            meleeProjectile.BeforeSetActive(attackSpeed);
+            projectileObject.SetActive(true);
         }
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);

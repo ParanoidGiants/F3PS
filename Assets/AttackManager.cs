@@ -5,10 +5,11 @@ using UnityEngine;
 public class AttackManager : MonoBehaviour
 {
     [Header("References")]
-    public Transform playerSpace;
     public Crosshair crosshair;
     [Header("Attacks")]
     public MeleeAttackController meleeAttackController;
+    public LongRangeAttackController longRangeAttackController;
+
     private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
     private bool _isAttackSwitched;
@@ -17,7 +18,8 @@ public class AttackManager : MonoBehaviour
     {
         _inputs = GameManager.Instance.inputs;
         SetActiveAttack(GameManager.Instance.PlayerData.ActiveAttack);
-        meleeAttackController.Init(playerSpace);
+        meleeAttackController.Init();
+        longRangeAttackController.Init();
     }
     public void OnUpdate()
     {
@@ -38,8 +40,10 @@ public class AttackManager : MonoBehaviour
         switch (GameManager.Instance.PlayerData.ActiveAttack)
         {
             case Attack.Melee:
-                var targetPosition = _aimTargetPosition;
-                meleeAttackController.OnUpdate(attack, targetPosition);
+                meleeAttackController.OnUpdate(attack, targetPosition: _aimTargetPosition);
+                break;
+            case Attack.LongRange:
+                longRangeAttackController.OnUpdate(attack, targetPosition: _aimTargetPosition);
                 break;
             default:
                 break;
@@ -47,20 +51,27 @@ public class AttackManager : MonoBehaviour
     }
     private void HandleSwitchAttack(bool switchWeapon)
     {
-        if (switchWeapon && !_isAttackSwitched)
-        {
-            _isAttackSwitched = true;
-            SetActiveAttack(Attack.Melee);
-        }
-        else if (!switchWeapon)
+        if (!switchWeapon)
         {
             _isAttackSwitched = false;
+            return;
         }
+
+        if (_isAttackSwitched)
+        {
+            return;
+        }
+
+        _isAttackSwitched = true;
+        var currentAttack = GameManager.Instance.PlayerData.ActiveAttack;
+        var nextAttack = currentAttack == Attack.Melee ? Attack.LongRange : Attack.Melee;
+        SetActiveAttack(nextAttack);
     }
 
     private void SetActiveAttack(Attack attack)
     {
         meleeAttackController.gameObject.SetActive(attack == Attack.Melee);
+        longRangeAttackController.gameObject.SetActive(attack == Attack.LongRange);
         GameManager.Instance.PlayerData.ActiveAttack = attack;
     }
 }

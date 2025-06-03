@@ -37,11 +37,6 @@ namespace Weapon
                 else
                 {
                     currentMagazineAmount--;
-                    projectilePool.ShootBullet(
-                        projectileSpawn.position,
-                        _recentTargetPosition,
-                        shotSpeed
-                    );
                     var shootDirection = _recentTargetPosition - projectileSpawn.position;
                     skillUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                     Shake(-shootDirection);

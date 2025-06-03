@@ -24,7 +24,8 @@ namespace StarterAssets
 		public bool reload;
 		public bool slowmo;
 		public bool dodge;
-		public bool switchWeapon;
+        public bool switchWeapon;
+        public bool switchSkill;
         public bool pause;
         public bool menu;
         public bool freeCamera;
@@ -101,12 +102,17 @@ namespace StarterAssets
 		public void OnPause(InputValue value)
 		{
 			PauseInput(value.isPressed);
-		}
+        }
 
-		public void OnSwitchWeapon(InputValue value)
-		{
-			SwitchWeaponInput(value.isPressed);
-		}
+        public void OnSwitchWeapon(InputValue value)
+        {
+            SwitchWeaponInput(value.isPressed);
+        }
+
+        public void OnSwitchSkill(InputValue value)
+        {
+            SwitchSkillInput(value.isPressed);
+        }
 
         public void OnMenu(InputValue value)
         {
@@ -187,9 +193,14 @@ namespace StarterAssets
 		private void SwitchWeaponInput(bool valueIsPressed)
 		{
 			switchWeapon = valueIsPressed;
-		}
+        }
 
-		private void SkillInput(bool valueIsPressed)
+        private void SwitchSkillInput(bool isPressed)
+        {
+			switchSkill = isPressed;
+        }
+
+        private void SkillInput(bool valueIsPressed)
 		{
 			skill = valueIsPressed;
         }

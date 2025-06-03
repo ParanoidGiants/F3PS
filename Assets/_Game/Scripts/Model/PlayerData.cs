@@ -11,6 +11,7 @@ public enum Skill
 public enum Attack
 {
     Melee = 0,
+    LongRange = 1,
 }
 
 [Serializable]

@@ -14,7 +14,7 @@ namespace Weapon
         [Header("Projectile References")]
         public GameObject projectilePrefab;
         public Transform projectileSpawn;
-        public ProjectilePool projectilePool;
+        public ObjectPool projectilePool;
 
         [Space(10)]
         [Header("Settings")]
@@ -48,7 +48,7 @@ namespace Weapon
 
         public void Init(Transform userSpace)
         {
-            projectilePool.Init(projectilePrefab, userSpace);
+            projectilePool.Init(userSpace);
             totalAmount = maxAmmo;
             currentMagazineAmount = maxMagazineAmmo;
             origin.gameObject.SetActive(false);

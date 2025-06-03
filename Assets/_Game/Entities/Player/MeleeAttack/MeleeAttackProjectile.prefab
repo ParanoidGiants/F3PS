@@ -5398,7 +5398,7 @@ GameObject:
   - component: {fileID: 7615002434370928052}
   - component: {fileID: 7057858510028837911}
   - component: {fileID: 8917271109250969741}
-  - component: {fileID: 8548541663619080618}
+  - component: {fileID: 3943370298523652051}
   - component: {fileID: 6922934115357786835}
   - component: {fileID: 1002956380}
   - component: {fileID: 1002956379}
@@ -5581,7 +5581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackerId: 0
---- !u!114 &8548541663619080618
+--- !u!114 &3943370298523652051
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5590,18 +5590,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5910657032164378920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f730b930e8891041a39f403c7a54678, type: 3}
+  m_Script: {fileID: 11500000, guid: 36493b538b6d5ad459fa69e910dfa0ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hitParticleSystem: {fileID: 585610685496896310}
   noHitParticleSystem: {fileID: 7341206973630024992}
   mesh: {fileID: 5286100723686431892}
-  hitBox: {fileID: 8917271109250969741}
-  rb: {fileID: 5910657032164378923}
-  col: {fileID: 7057858510028837911}
   damage: 2
   lifeTime: 0
-  maximumLifeTimer: 0.1
+  maximumLifeTimer: 5
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
 --- !u!114 &6922934115357786835
@@ -5667,6 +5664,7 @@ MonoBehaviour:
   currentTimeScale: 1
   isTimeFrozen: 0
   isMovingByTelekinesis: 0
+  maximumThrowSpeed: 10
   isRewinding: 0
   constraintsFreezeAllCommandCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}

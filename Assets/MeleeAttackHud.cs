@@ -19,17 +19,7 @@ public class MeleeAttackHud : MonoBehaviour
         }
     }
 
-    public void ShowGrenade()
-    {
-        icon.gameObject.SetActive(true);
-    }
-
-    public void SetGrenadeVisible(bool visible)
-    {
-        icon.gameObject.SetActive(visible);
-    }
-
-    internal void OnTryAttackWithoutStamina()
+    public void OnTryAttackWithoutStamina()
     {
         throw new NotImplementedException();
     }
