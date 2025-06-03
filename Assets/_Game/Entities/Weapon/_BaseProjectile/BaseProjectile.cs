@@ -1,7 +1,6 @@
 using System.Collections;
 using F3PS.Damage.Take;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BaseProjectile : MonoBehaviour
 {
@@ -25,11 +24,13 @@ public class BaseProjectile : MonoBehaviour
 
     protected bool _isHit = false;
     private Collider[] collidersToIgnore;
+    private bool _isInitialized = false;
 
     public void Init(int userSpaceId, Collider[] colliders)
     {
         hitBox.attackerId = userSpaceId;
         collidersToIgnore = colliders;
+        _isInitialized = true;
     }
     
     private void Update()
@@ -59,8 +60,9 @@ public class BaseProjectile : MonoBehaviour
         transform.forward = targetPosition - position;
         _speed = shootSpeed;
     }
-    
-    private void OnEnable()
+
+
+    private void SetupProjectile()
     {
         _isHit = false;
         collisionsEnabled = false;
@@ -73,6 +75,15 @@ public class BaseProjectile : MonoBehaviour
         lifeTime = 0f;
         enableCollisionsTime = 0f;
         col.enabled = true;
+    }
+    
+    private void OnEnable()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+        SetupProjectile();
     }
 
     private void OnDisable()

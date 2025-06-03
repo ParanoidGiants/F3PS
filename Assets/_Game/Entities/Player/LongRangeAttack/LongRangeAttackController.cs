@@ -31,7 +31,7 @@ public class LongRangeAttackController : MonoBehaviour
 
     private void OnEnable()
     {
-        attackControllerHUD.SelectMeleeAttackHud();
+        attackControllerHUD.SelectLongRangeAttackHud();
     }
 
     public void Init()

@@ -3,17 +3,17 @@ using UnityEngine;
 public class SelectAttackControllerHUD : MonoBehaviour
 {
     public SelectableAttackHUD meleeAttackHud;
-    public SelectableAttackHUD rangeAttackHud;
+    public SelectableAttackHUD longRangeAttackHud;
 
     public void SelectMeleeAttackHud()
     {
         meleeAttackHud.Select();
-        rangeAttackHud.Deselect();
+        longRangeAttackHud.Deselect();
     }
 
-    public void SelectRangeAttackHud()
+    public void SelectLongRangeAttackHud()
     {
-        rangeAttackHud.Select();
+        longRangeAttackHud.Select();
         meleeAttackHud.Deselect();
     }
 }

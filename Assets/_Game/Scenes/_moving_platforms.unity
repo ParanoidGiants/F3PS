@@ -2707,7 +2707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeAttackHud: {fileID: 1492468132}
-  rangeAttackHud: {fileID: 1662334569}
+  longRangeAttackHud: {fileID: 1662334569}
 --- !u!114 &613760902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9398,8 +9398,8 @@ GameObject:
   - component: {fileID: 1662334572}
   - component: {fileID: 1662334571}
   - component: {fileID: 1662334570}
-  - component: {fileID: 1662334573}
   - component: {fileID: 1662334569}
+  - component: {fileID: 1662334573}
   m_Layer: 5
   m_Name: LongRangeAttack
   m_TagString: Untagged
@@ -11779,7 +11779,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshair: {fileID: 3258596987015465067}
   meleeAttackController: {fileID: 6161785317819064583}
-  longRangeAttackController: {fileID: 0}
+  longRangeAttackController: {fileID: 1381192706}
 --- !u!1 &2029672813
 GameObject:
   m_ObjectHideFlags: 0
