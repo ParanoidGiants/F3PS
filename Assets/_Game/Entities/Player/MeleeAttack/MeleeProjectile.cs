@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class MeleeProjectile : MonoBehaviour
 {
+    private Collider[] _ownerColliders;
     private HitBox _hitBox;
     private Rigidbody _rigidbody;
     private Collider _collider;
+    private bool collisionsEnabled = false;
+    private bool _isHit = false;
 
     [Header("Reference")]
     public ParticleSystem hitParticleSystem;
@@ -19,12 +22,6 @@ public class MeleeProjectile : MonoBehaviour
     public float maximumLifeTimer = 5f;
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
-    private bool collisionsEnabled = false;
-
-    private float _speed;
-
-    protected bool _isHit = false;
-    private Collider[] collidersToIgnore;
 
     private void Awake()
     {
@@ -33,12 +30,6 @@ public class MeleeProjectile : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
-    public void Init(int userSpaceId, Collider[] colliders)
-    {
-        _hitBox.attackerId = userSpaceId;
-        collidersToIgnore = colliders;
-    }
-    
     private void Update()
     {
         if (_isHit) return;
@@ -50,36 +41,16 @@ public class MeleeProjectile : MonoBehaviour
         }
 
         enableCollisionsTime += Time.deltaTime;
-        if (enableCollisionsTime > enableCollisionsTimer && !collisionsEnabled)
+        if (enableCollisionsTime <= enableCollisionsTimer || collisionsEnabled)
         {
-            collisionsEnabled = true;
-            foreach (var hittableCollider in collidersToIgnore)
-            {
-                Physics.IgnoreCollision(_collider, hittableCollider, false);
-            }
+            return;
+        }
+        collisionsEnabled = true;
+        foreach (var hittableCollider in _ownerColliders)
+        {
+            Physics.IgnoreCollision(_collider, hittableCollider, false);
         }
     }
-
-    public virtual void BeforeSetActive(float shootSpeed)
-    {
-        _speed = shootSpeed;
-        _isHit = false;
-        collisionsEnabled = false;
-        foreach (var hittableCollider in collidersToIgnore)
-        {
-            Physics.IgnoreCollision(_collider, hittableCollider);
-        }
-    }
-    
-    private void OnEnable()
-    {
-        _rigidbody.isKinematic = false;
-        _rigidbody.velocity = transform.forward * _speed;
-        lifeTime = 0f;
-        enableCollisionsTime = 0f;
-        _collider.enabled = true;
-    }
-
     private void OnDisable()
     {
         mesh.SetActive(true);
@@ -97,9 +68,10 @@ public class MeleeProjectile : MonoBehaviour
 
         mesh.SetActive(false);
         var hittable = other.gameObject.GetComponent<Hittable>();
-        if (hittable != null 
+        if (hittable != null
             && hittable.HittableId != _hitBox.attackerId
-        ) {
+        )
+        {
             hittable.OnHit(_hitBox, transform.forward);
             hitParticleSystem.gameObject.SetActive(true);
         }
@@ -107,12 +79,29 @@ public class MeleeProjectile : MonoBehaviour
         {
             noHitParticleSystem.gameObject.SetActive(true);
         }
-        ProjectileSpecificActions();
+        StartCoroutine(SetInactiveAfterSeconds());
     }
 
-    protected virtual void ProjectileSpecificActions()
+    public void Init(int userSpaceId, Collider[] ownerColliders)
     {
-        StartCoroutine(SetInactiveAfterSeconds());
+        _hitBox.attackerId = userSpaceId;
+        _ownerColliders = ownerColliders;
+    }
+
+    public void Shoot(float shootSpeed)
+    {
+        _isHit = false;
+        collisionsEnabled = false;
+        foreach (var hittableCollider in _ownerColliders)
+        {
+            Physics.IgnoreCollision(_collider, hittableCollider);
+        }
+
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = transform.forward * shootSpeed;
+        lifeTime = 0f;
+        enableCollisionsTime = 0f;
+        _collider.enabled = true;
     }
 
     private IEnumerator SetInactiveAfterSeconds()

@@ -16,15 +16,18 @@ public class MeleeAttackController : MonoBehaviour
 
     [Space(10)]
     [Header("References")]
-    public Transform origin;
+    public Transform userSpace;
     public GameObject projectilePrefab;
     public Transform projectileSpawn;
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
+    public Collider[] ownColliders;
+
+    [Space(10)]
+    [Header("HUD")]
     public SelectAttackControllerHUD attackControllerHUD;
-    public MeleeAttackHud hud;
-    public Collider[] collidersToIgnore;
+    public MeleeAttackHUD hud;
 
     [Space(10)]
     [Header("Watchers")]
@@ -40,7 +43,14 @@ public class MeleeAttackController : MonoBehaviour
 
     public void Init()
     {
-        projectilePool.Init(origin);
+        projectilePool.Init(userSpace);
+        var projectiles = projectilePool.GetObjects();
+        foreach (var projectile in projectiles)
+        {
+            var meleeProjectile = projectile.GetComponent<MeleeProjectile>();
+            meleeProjectile.Init(userSpace.GetInstanceID(), ownColliders);
+            projectile.SetActive(false);
+        }
     }
 
     protected IEnumerator Shoot(Vector3 targetPosition)
@@ -59,9 +69,8 @@ public class MeleeAttackController : MonoBehaviour
             projectileTransform.position = projectileSpawn.position;
             projectileTransform.rotation = projectileOrientation;
             var meleeProjectile = projectileObject.GetComponent<MeleeProjectile>();
-            meleeProjectile.Init(origin.GetInstanceID(), collidersToIgnore);
-            meleeProjectile.BeforeSetActive(attackSpeed);
             projectileObject.SetActive(true);
+            meleeProjectile.Shoot(attackSpeed);
         }
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);

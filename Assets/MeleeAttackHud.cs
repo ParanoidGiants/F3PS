@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MeleeAttackHud : MonoBehaviour
+public class MeleeAttackHUD : MonoBehaviour
 {
     public Image coolDownCircle;
     public Image icon;

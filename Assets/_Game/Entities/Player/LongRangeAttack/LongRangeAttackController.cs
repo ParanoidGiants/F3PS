@@ -1,4 +1,5 @@
 using Cinemachine;
+using StarterAssets;
 using System.Collections;
 using UnityEngine;
 
@@ -14,11 +15,15 @@ public class LongRangeAttackController : MonoBehaviour
 
     [Space(10)]
     [Header("References")]
-    public Transform origin;
+    public Transform userSpace;
     public Transform projectileSpawn;
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
+    public Collider[] ownColliders;
+
+    [Space(10)]
+    [Header("HUD")]
     public SelectAttackControllerHUD attackControllerHUD;
     public LongRangeAttackHUD hud;
 
@@ -36,12 +41,19 @@ public class LongRangeAttackController : MonoBehaviour
 
     public void Init()
     {
-        projectilePool.Init(origin);
+        projectilePool.Init(userSpace);
+        var projectiles = projectilePool.GetObjects();
+        foreach (var projectile in projectiles)
+        {
+            var longRangeProjectile = projectile.GetComponent<LongRangeProjectile>();
+            longRangeProjectile.Init(userSpace.GetInstanceID(), ownColliders);
+            projectile.SetActive(false);
+        }
     }
 
     public void UpdateRotation(Quaternion rotation)
     {
-        origin.rotation = rotation;
+        userSpace.rotation = rotation;
     }
 
     protected IEnumerator Shoot(Vector3 targetPosition)
@@ -54,9 +66,9 @@ public class LongRangeAttackController : MonoBehaviour
         var projectileTransform = projectileObject.transform;
         projectileTransform.position = projectileSpawn.position;
         projectileTransform.rotation = projectileSpawn.rotation;
-        var meleeProjectile = projectileObject.GetComponent<MeleeProjectile>();
-        meleeProjectile.BeforeSetActive(attackSpeed);
+        var meleeProjectile = projectileObject.GetComponent<LongRangeProjectile>();
         projectileObject.SetActive(true);
+        meleeProjectile.Shoot(attackSpeed);
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);
         while (attackCoolDownTime > 0f)

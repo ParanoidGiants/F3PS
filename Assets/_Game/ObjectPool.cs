@@ -10,10 +10,11 @@ public class ObjectPool : MonoBehaviour
     private List<GameObject> _objects;
     public void Init(Transform parent)
     {
+        transform.SetParent(parent);
         _objects = new List<GameObject>();
         for (int i = 0; i < numberOfPooledObjects; i++)
         {
-            GameObject obj = Instantiate(prefab, parent);
+            GameObject obj = Instantiate(prefab, transform);
             obj.gameObject.SetActive(false);
             _objects.Add(obj);
         }
@@ -30,5 +31,10 @@ public class ObjectPool : MonoBehaviour
 
         Debug.LogWarning("There are no available objects in pool!");
         return null;
+    }
+
+    public List<GameObject> GetObjects()
+    {
+        return _objects;
     }
 }
