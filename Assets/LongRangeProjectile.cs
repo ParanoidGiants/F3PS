@@ -1,4 +1,5 @@
 using F3PS.Damage.Take;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public class LongRangeProjectile : MonoBehaviour
     public float maximumLifeTimer = 5f;
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
+    public float impactForceMultiplier = 1.0f;
 
     private void Awake()
     {
@@ -67,6 +69,8 @@ public class LongRangeProjectile : MonoBehaviour
         _isHit = true;
 
         mesh.SetActive(false);
+        ModifyImpact(other);
+
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null
             && hittable.HittableId != _hitBox.attackerId
@@ -82,14 +86,26 @@ public class LongRangeProjectile : MonoBehaviour
         StartCoroutine(SetInactiveAfterSeconds());
     }
 
+    private void ModifyImpact(Collision collision)
+    {
+        Rigidbody otherRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+        if (otherRigidbody != null)
+        {
+            // Get the impact force (relative velocity)
+            float impactForce = collision.relativeVelocity.magnitude * impactForceMultiplier;
+            otherRigidbody.AddForce(-collision.relativeVelocity * impactForce, ForceMode.Impulse);
+        }
+    }
+
     public void Init(int userSpaceId, Collider[] ownerColliders)
     {
         _hitBox.attackerId = userSpaceId;
         _ownerColliders = ownerColliders;
     }
 
-    public void Shoot(float shootSpeed)
+    public void Shoot(float shootSpeed, float impactForce)
     {
+        impactForceMultiplier = impactForce;
         _isHit = false;
         collisionsEnabled = false;
         foreach (var hittableCollider in _ownerColliders)

@@ -9,6 +9,7 @@ public class LongRangeAttackController : MonoBehaviour
     [Header("Attack Settings")]
     public int numberOfProjectiles;
     public float attackSpeed = 100f;
+    public float impactForceMultiplier = 1.0f;
     public float attackCoolDownTimer = 0.2f;
     public float recoilPower;
     public float staminaCost = 10f;
@@ -68,7 +69,7 @@ public class LongRangeAttackController : MonoBehaviour
         projectileTransform.rotation = projectileSpawn.rotation;
         var meleeProjectile = projectileObject.GetComponent<LongRangeProjectile>();
         projectileObject.SetActive(true);
-        meleeProjectile.Shoot(attackSpeed);
+        meleeProjectile.Shoot(attackSpeed, impactForceMultiplier);
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);
         while (attackCoolDownTime > 0f)

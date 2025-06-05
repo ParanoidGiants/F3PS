@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using F3PS.Damage.Take;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class MeleeProjectile : MonoBehaviour
     [Header("Reference")]
     public ParticleSystem hitParticleSystem;
     public ParticleSystem noHitParticleSystem;
-    public GameObject mesh;
+    public GameObject[] meshes;
 
     [Header("Settings")]
     public int damage = 50;
@@ -53,7 +54,7 @@ public class MeleeProjectile : MonoBehaviour
     }
     private void OnDisable()
     {
-        mesh.SetActive(true);
+        Array.ForEach(meshes, m => m.SetActive(true));
         hitParticleSystem.gameObject.SetActive(false);
         noHitParticleSystem.gameObject.SetActive(false);
     }
@@ -66,7 +67,8 @@ public class MeleeProjectile : MonoBehaviour
         }
         _isHit = true;
 
-        mesh.SetActive(false);
+        Array.ForEach(meshes, m => m.SetActive(false));
+
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null
             && hittable.HittableId != _hitBox.attackerId

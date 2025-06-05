@@ -9,7 +9,7 @@ public class RigidbodyHub : MonoBehaviour
     [Header("Time Bubble Settings")]
     public bool useGravity = true;
     public float defaultMass;
-    public float currentGravityScale = 1.0f;
+    public float gravityScale = 1.0f;
     public float currentTimeScale = 1.0f;
     public bool isTimeFrozen = false;
 
@@ -38,8 +38,11 @@ public class RigidbodyHub : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!useGravity || isTimeFrozen) return;
-        var force = Physics.gravity * (currentTimeScale * currentTimeScale * currentGravityScale);
+        if (gravityScale == 0f || !useGravity || isTimeFrozen)
+        {
+            return;
+        }
+        var force = Physics.gravity * (currentTimeScale * currentTimeScale * gravityScale);
         _rigidbody.AddForce(
             force,
             ForceMode.Acceleration

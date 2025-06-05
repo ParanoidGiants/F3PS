@@ -3382,75 +3382,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!1001 &776249880
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889755, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2149979966636889756, guid: e8efb1a7f42f0694e9432be1dc2d68a1,
-        type: 3}
-      propertyPath: m_Name
-      value: LongRangeProjectile
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e8efb1a7f42f0694e9432be1dc2d68a1, type: 3}
 --- !u!1 &795845608
 GameObject:
   m_ObjectHideFlags: 0
@@ -7341,7 +7272,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfProjectiles: 1
-  attackSpeed: 100
+  attackSpeed: 5
+  impactForceMultiplier: 5
   attackCoolDownTimer: 0.2
   recoilPower: 0
   staminaCost: 10
@@ -7859,75 +7791,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492468129}
   m_CullTransparentMesh: 1
---- !u!1001 &1493284636
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_Name
-      value: MeleeAttackProjectile
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5910657032164378927, guid: e0d4101f6a7f81843845695b40151660,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e0d4101f6a7f81843845695b40151660, type: 3}
 --- !u!1 &1507965673
 GameObject:
   m_ObjectHideFlags: 0
@@ -12394,7 +12257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2149979966636889756, guid: e8efb1a7f42f0694e9432be1dc2d68a1, type: 3}
-  numberOfPooledObjects: 20
+  numberOfPooledObjects: 100
 --- !u!1 &2132109395
 GameObject:
   m_ObjectHideFlags: 0
@@ -13694,7 +13557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660, type: 3}
-  numberOfPooledObjects: 20
+  numberOfPooledObjects: 100
 --- !u!114 &1415825446874560716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20897,7 +20760,7 @@ MonoBehaviour:
   numberOfProjectiles: 10
   spreadAngle: 20
   attackSpeed: 100
-  attackCoolDownTimer: 0.2
+  attackCoolDownTimer: 1
   recoilPower: 0.2
   staminaCost: 10
   userSpace: {fileID: 3893294199639930361}
@@ -27172,7 +27035,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   useGravity: 1
   defaultMass: 0
-  currentGravityScale: 1
+  gravityScale: 1
   currentTimeScale: 1
   isTimeFrozen: 0
   isMovingByTelekinesis: 0
