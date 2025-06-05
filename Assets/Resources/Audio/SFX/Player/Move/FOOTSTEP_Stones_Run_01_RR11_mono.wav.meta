@@ -1,26 +1,14 @@
 fileFormatVersion: 2
-guid: c0efd40cda7fcfd4d9cd1025cffa8189
-labels:
-- usfx
-- imphenzia
-- stereo
-- weapon
-- scifi
-- blaster
-- energy
-- fire
-- firing
-- shoot
-- shooting
+guid: e2ad1dbc779d807938a4f7add3fd0305
 AudioImporter:
   externalObjects: {}
   serializedVersion: 6
   defaultSettings:
     loadType: 0
     sampleRateSetting: 0
-    sampleRateOverride: 0
-    compressionFormat: 0
-    quality: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
     conversionMode: 0
   platformSettingOverrides: {}
   forceToMono: 0

@@ -17,6 +17,6 @@ public class VelocityLine : MonoBehaviour
     private void Update()
     {
         velocityLine.SetPosition(0, transform.position);
-        velocityLine.SetPosition(1, transform.position + rb.velocity);
+        velocityLine.SetPosition(1, transform.position + rb.linearVelocity);
     }
 }

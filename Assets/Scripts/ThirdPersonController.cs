@@ -415,7 +415,7 @@ namespace StarterAssets
                     : playerModel.MoveSpeed;
             }
 
-            float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
+            float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
             if (currentHorizontalSpeed < targetSpeed - speedOffset
@@ -462,11 +462,11 @@ namespace StarterAssets
             var moveDirection = (verticalVelocity + moveVelocity);
             if (_input.move.magnitude > 0f)
             {
-                _rigidbody.velocity = moveDirection;
+                _rigidbody.linearVelocity = moveDirection;
             }
             else
             {
-                _rigidbody.velocity = new Vector3(0f, _verticalVelocity, 0f);
+                _rigidbody.linearVelocity = new Vector3(0f, _verticalVelocity, 0f);
             }
             if (_hasAnimator)
             {
@@ -482,7 +482,7 @@ namespace StarterAssets
             {
                 targetSpeed = playerModel.MoveSpeed * 0.5f;
             }
-            float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
+            float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
             if (currentHorizontalSpeed < targetSpeed - speedOffset
@@ -529,11 +529,11 @@ namespace StarterAssets
             var moveDirection = (verticalVelocity + moveVelocity);
             if (_input.move.magnitude > 0f)
             {
-                _rigidbody.velocity = moveDirection;
+                _rigidbody.linearVelocity = moveDirection;
             }
             else
             {
-                _rigidbody.velocity = new Vector3(0f, _verticalVelocity, 0f);
+                _rigidbody.linearVelocity = new Vector3(0f, _verticalVelocity, 0f);
             }
             if (_hasAnimator)
             {
@@ -583,7 +583,7 @@ namespace StarterAssets
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
 
-            _rigidbody.velocity = lookDirection.normalized * (_speed * Time.deltaTime)
+            _rigidbody.linearVelocity = lookDirection.normalized * (_speed * Time.deltaTime)
                 + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
         }
 
