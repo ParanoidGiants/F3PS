@@ -84,7 +84,6 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         col.enabled = false;
         ActivateTimeBubble();
         _touchedTransform = other.transform;
-        Debug.Log($"Touched object {_touchedTransform}");
         _stickToLocalPosition = _touchedTransform.InverseTransformPoint(transform.position);
     }
 
