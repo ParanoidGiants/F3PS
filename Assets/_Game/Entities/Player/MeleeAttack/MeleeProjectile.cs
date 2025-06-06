@@ -18,7 +18,6 @@ public class MeleeProjectile : MonoBehaviour
     public GameObject[] meshes;
 
     [Header("Settings")]
-    public int damage = 50;
     public float lifeTime = 0f;
     public float maximumLifeTimer = 5f;
     public float enableCollisionsTime = 0f;

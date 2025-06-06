@@ -173,7 +173,7 @@ namespace F3PS.AI.States.Action
             }
             else
             {
-                attackTime += Mathf.Pow(enemy.timeObject.currentTimeScale, 4) * Time.deltaTime;
+                attackTime += enemy.ScaledDeltaTime;
                 isAttacking = attackTime < attackTimer;
                 _enemyTransform.position = Vector3.Lerp(_attackStartPosition, _attackEndPosition, attackTime / attackTimer);
             }

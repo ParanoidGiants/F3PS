@@ -17,9 +17,9 @@ public class AttackManager : MonoBehaviour
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
-        SetActiveAttack(GameManager.Instance.PlayerData.ActiveAttack);
         meleeAttackController.Init();
         longRangeAttackController.Init();
+        SetActiveAttack(GameManager.Instance.PlayerData.ActiveAttack);
     }
     public void OnUpdate()
     {
