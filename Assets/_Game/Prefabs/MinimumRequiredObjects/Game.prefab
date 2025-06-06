@@ -1802,7 +1802,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 509, y: -26.4}
+  m_AnchoredPosition: {x: 509, y: -26.400024}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1717960512
@@ -2794,6 +2794,21 @@ MonoBehaviour:
   inputs: {fileID: 5736421558823638681}
   timeManager: {fileID: 6378548071466319856}
   inGameMenu: {fileID: 1444532230}
+  PlayerData:
+    CurrentHealth: 0
+    MaxHealth: 100
+    ActiveSkill: 0
+    ActiveAttack: 0
+    RotationSmoothTime: 0.12
+    RotationSpeedPitch: 0.2
+    RotationSpeedYaw: 0.2
+    MoveSpeed: 30
+    SprintSpeed: 50
+    SpeedChangeRate: 10
+    JumpHeight: 1.2
+    DodgeHeight: 1.2
+    DodgeSpeed: 60
+    SprintDepletionRate: 10
   _isGamePaused: 0
   _fps: 60
 --- !u!1 &6633928464503870051
@@ -2844,20 +2859,23 @@ MonoBehaviour:
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
   bubbleTimeScale: 0
+  telekinesisPushPull: 0
   jump: 0
   sprint: 0
   shoot: 0
+  skill: 0
+  grab: 0
   aim: 0
   reload: 0
   slowmo: 0
   dodge: 0
   switchWeapon: 0
-  aimGrenade: 0
+  switchSkill: 0
   pause: 0
   menu: 0
   freeCamera: 0
   analogMovement: 0
-  cursorLocked: 0
+  cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &5871156267789381035
 MonoBehaviour:

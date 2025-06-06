@@ -17,10 +17,8 @@ namespace StarterAssets
     {
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
-
-        [Header("Data")]
-        public PlayerData playerModel;
-        public PlayerEventController playerEventController;
+        private PlayerData _playerModel;
+        private PlayerEventController _playerEventController;
 
         #region DEBUG_TOOLS
         [Space(20)]
@@ -177,8 +175,8 @@ namespace StarterAssets
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
-            playerModel = GameManager.Instance.PlayerData;
-            playerEventController = GameManager.Instance.PlayerEventController;
+            _playerModel = GameManager.Instance.PlayerData;
+            _playerEventController = GameManager.Instance.PlayerEventController;
         }
 
         private void Start()
@@ -213,7 +211,7 @@ namespace StarterAssets
 
             if (_isSprinting)
             {
-                staminaManager.Deplete(playerModel.SprintDepletionRate * Time.deltaTime);
+                staminaManager.Deplete(_playerModel.SprintDepletionRate * Time.deltaTime);
             }
 
 
@@ -392,10 +390,10 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplierPitch = IsCurrentDeviceMouse 
                     ? 1.0f 
-                    : Time.unscaledDeltaTime * playerModel.RotationSpeedPitch;
+                    : Time.unscaledDeltaTime * _playerModel.RotationSpeedPitch;
                 float deltaTimeMultiplierYaw = IsCurrentDeviceMouse
                     ? 1.0f
-                    : Time.unscaledDeltaTime * playerModel.RotationSpeedYaw;
+                    : Time.unscaledDeltaTime * _playerModel.RotationSpeedYaw;
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplierYaw;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplierPitch;
@@ -415,8 +413,8 @@ namespace StarterAssets
             if (_input.move.magnitude > 0f)
             {
                 targetSpeed = _isSprinting
-                    ? playerModel.SprintSpeed
-                    : playerModel.MoveSpeed;
+                    ? _playerModel.SprintSpeed
+                    : _playerModel.MoveSpeed;
             }
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
@@ -429,7 +427,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
                     targetSpeed * inputMagnitude,
-                    Time.deltaTime * playerModel.SpeedChangeRate
+                    Time.deltaTime * _playerModel.SpeedChangeRate
                 );
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
@@ -441,7 +439,7 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(
                 _animationBlend,
                 targetSpeed,
-                Time.deltaTime * playerModel.SpeedChangeRate
+                Time.deltaTime * _playerModel.SpeedChangeRate
             );
             if (_animationBlend < 0.01f) _animationBlend = 0f;
             if (_input.move.sqrMagnitude > 0f)
@@ -454,7 +452,7 @@ namespace StarterAssets
                 transform.eulerAngles.y,
                 _targetYaw,
                 ref _rotationVelocity,
-                playerModel.RotationSmoothTime * Time.unscaledDeltaTime
+                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
             if (_input.move.magnitude > 0f)
             {
@@ -484,7 +482,7 @@ namespace StarterAssets
             float targetSpeed = 0f;
             if (_input.move.magnitude > 0f)
             {
-                targetSpeed = playerModel.MoveSpeed * 0.5f;
+                targetSpeed = _playerModel.MoveSpeed * 0.5f;
             }
             float currentHorizontalSpeed = new Vector3(_rigidbody.velocity.x, 0.0f, _rigidbody.velocity.z).magnitude;
             float speedOffset = 0.1f;
@@ -496,7 +494,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
                     targetSpeed * inputMagnitude,
-                    Time.deltaTime * playerModel.SpeedChangeRate
+                    Time.deltaTime * _playerModel.SpeedChangeRate
                 );
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
@@ -508,7 +506,7 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(
                 _animationBlend,
                 targetSpeed,
-                Time.deltaTime * playerModel.SpeedChangeRate
+                Time.deltaTime * _playerModel.SpeedChangeRate
             );
             if (_animationBlend < 0.01f) _animationBlend = 0f;
             if (_input.move.sqrMagnitude > 0f)
@@ -521,7 +519,7 @@ namespace StarterAssets
                 transform.eulerAngles.y,
                 _targetYaw,
                 ref _rotationVelocity,
-                playerModel.RotationSmoothTime * Time.unscaledDeltaTime
+                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
 
             var cameraForward = defaultCamera.transform.forward;
@@ -571,8 +569,8 @@ namespace StarterAssets
             var speedFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
             speedFactor = Mathf.Max(speedFactor, 0f);
             _speed = Mathf.Lerp(
-                playerModel.DodgeSpeed /2f,
-                playerModel.DodgeSpeed,
+                _playerModel.DodgeSpeed /2f,
+                _playerModel.DodgeSpeed,
                 Mathf.Pow(speedFactor,4f)
             );
             _targetYaw = Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z) * Mathf.Rad2Deg
@@ -581,7 +579,7 @@ namespace StarterAssets
                 transform.eulerAngles.y,
                 _targetYaw,
                 ref _rotationVelocity,
-                playerModel.RotationSmoothTime * Time.unscaledDeltaTime
+                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
 
             transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
@@ -650,7 +648,7 @@ namespace StarterAssets
                 }
                 if (dodgeCoolDownTime >= 0.0f)
                 {
-                    _verticalVelocity = Mathf.Max(_verticalVelocity, playerModel.DodgeHeight);
+                    _verticalVelocity = Mathf.Max(_verticalVelocity, _playerModel.DodgeHeight);
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
@@ -682,7 +680,7 @@ namespace StarterAssets
         private void DoJump()
         {
             // the square root of H * -2 * G = how much velocity needed to reach desired height
-            _verticalVelocity = Mathf.Sqrt(playerModel.JumpHeight * -2f * Gravity);
+            _verticalVelocity = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
             // update animator if using character
             if (_hasAnimator)
             {
@@ -694,7 +692,7 @@ namespace StarterAssets
         private void DoDodge()
         {
             // the square root of H * -2 * G = how much velocity needed to reach desired height
-            _verticalVelocity = Mathf.Sqrt(playerModel.DodgeHeight * -2f * Gravity);
+            _verticalVelocity = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
             _isDodging = true;
             _dodgeAscendTime = DodgeAscendTimer;
             _dodgeLandTime = DodgeLandTimer;
@@ -759,9 +757,9 @@ namespace StarterAssets
             {
                 return;
             }
-            playerEventController.UpdateCurrentHealth(playerModel.CurrentHealth - damage);
+            _playerEventController.UpdateCurrentHealth(_playerModel.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
-            if (playerModel.CurrentHealth <= 0 && !_isDying)
+            if (_playerModel.CurrentHealth <= 0 && !_isDying)
             {
                 _isDying = true;
                 Die(hitDirection);
