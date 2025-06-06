@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace F3PS.Damage.Take

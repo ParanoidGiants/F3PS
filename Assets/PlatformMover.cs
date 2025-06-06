@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class PlatformMover : MonoBehaviour
 {
-    public MovePath path;  // Assign these in the Inspector
+    public MovePath path;
     public float speed = 5f;
-    private int _currentWaypointIndex = 0;
-    
 
+    private int _currentWaypointIndex = 0;
     private float waitDuration = 2f;
     private float waitTimer = 0f;
     private bool moveBackwards = false;
+    private PlatformTimeObject _timeObject;
 
     public int CurrentWayPointIndex { get { return _currentWaypointIndex; } set { _currentWaypointIndex = value; } }
+    private float DeltaTime => _timeObject.ScaledDeltaTime;
+
+    private void Awake()
+    {
+        _timeObject = GetComponent<PlatformTimeObject>();
+    }
 
     private void Start()
     {
@@ -24,7 +30,7 @@ public class PlatformMover : MonoBehaviour
     {
         if (waitTimer > 0f)
         {
-            waitTimer -= Time.deltaTime;
+            waitTimer -= DeltaTime;
             return;
         }
 
@@ -34,7 +40,7 @@ public class PlatformMover : MonoBehaviour
         // Move towards the current waypoint
         Transform targetWaypoint = waypoints[_currentWaypointIndex];
         Vector3 direction = targetWaypoint.position - transform.position;
-        float distanceThisFrame = speed * Time.deltaTime;
+        float distanceThisFrame = speed * DeltaTime;
 
         if (direction.magnitude <= distanceThisFrame)
         {
