@@ -6,9 +6,9 @@ public class PlatformMover : MonoBehaviour
 {
     public MovePath path;
     public float speed = 5f;
+    public float waitDuration = 2f;
 
     private int _currentWaypointIndex = 0;
-    private float waitDuration = 2f;
     private float waitTimer = 0f;
     private bool moveBackwards = false;
     private PlatformTimeObject _timeObject;

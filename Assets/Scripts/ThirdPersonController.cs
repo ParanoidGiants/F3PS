@@ -781,9 +781,14 @@ namespace StarterAssets
             SceneLoader.Instance.ReloadScene(5f);
         }
 
+        public Vector3 lastValidGroundPosition = Vector3.zero;
+        public Vector3 beforeLastValidGroundPosition = Vector3.zero;
+        public float checkGroundTimer = 1f;
+        public float checkGroundTime = 0f;
+
         private void GroundedCheck()
         {
-            // set sphere position, with offset
+
             Vector3 spherePosition = new Vector3(
                 transform.position.x,
                 transform.position.y - GroundedOffset,
@@ -800,6 +805,7 @@ namespace StarterAssets
             {
                 currentGround = null;
                 groundNormal = Vector3.up;
+                checkGroundTime = 0f;
                 return;
             }
             Ray groundRay = new Ray(
@@ -813,18 +819,25 @@ namespace StarterAssets
             {
                 groundNormal = Vector3.up;
                 _isGrounded = false;
+                checkGroundTime = 0f;
                 return;
             }
 
             var groundedObject = hit.transform;
             groundNormal = hit.normal;
-            if (groundedObject == currentGround)
+            if (groundedObject != currentGround)
             {
-                return;
+                currentGround = groundedObject;
+                lastGroundPosition = currentGround.position;
             }
-            currentGround = groundedObject;
-            lastGroundPosition = currentGround.position;
 
+            checkGroundTime += Time.deltaTime;
+            if (checkGroundTime >= checkGroundTimer)
+            {
+                beforeLastValidGroundPosition = lastValidGroundPosition;
+                lastValidGroundPosition = transform.position;
+                checkGroundTime = 0f;
+            }
         }
 
         private void OnDrawGizmosSelected()
@@ -840,6 +853,12 @@ namespace StarterAssets
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius
             );
+        }
+
+        public void ResetToLastGroundPosition()
+        {
+            transform.position = lastValidGroundPosition + Vector3.up;
+            _rigidbody.velocity = Vector3.zero;
         }
     }
 }
