@@ -2259,7 +2259,7 @@ MonoBehaviour:
     IsEditing: 0
     IsTemporary: 0
     ProspectiveName: '[Uncategorized]'
-  frames: 132
+  frames: 92
   showUnityMixerGroupAssignment: 1
 --- !u!1 &4320340474401313607
 GameObject:

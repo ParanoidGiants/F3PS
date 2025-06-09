@@ -13,7 +13,6 @@ namespace F3PS
         
         public StarterAssetsInputs inputs;
         public TimeManager timeManager;
-        public InGameMenu inGameMenu;
         public PlayerData PlayerData;
         public PlayerEventController PlayerEventController;
 
@@ -50,18 +49,6 @@ namespace F3PS
         {
             timeManager.ResumeTime();
             _isGamePaused = false;
-        }
-
-        public void OpenMenu()
-        {
-            inGameMenu.OpenMenu();
-            inputs.SetCursorLockedState(false);
-        }
-
-        internal void CloseMenu()
-        {
-            inGameMenu.CloseMenu();
-            inputs.SetCursorLockedState(true);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using F3PS;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Windows;
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -15,6 +17,7 @@ namespace StarterAssets
     [RequireComponent(typeof(Rigidbody))]
     public class ThirdPersonController : MonoBehaviour
     {
+        private bool _hasAnimator;
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
         private PlayerData _playerModel;
@@ -39,7 +42,7 @@ namespace StarterAssets
 
         [Space(20)]
         [Header("References")]
-        private bool _hasAnimator;
+        public InGameMenu inGameMenu;
         public Animator animator;
         public CinemachineVirtualCamera defaultCamera;
         public StaminaManager staminaManager;
@@ -307,7 +310,8 @@ namespace StarterAssets
         public void OpenMenu()
         {
             GameManager.Instance.PauseGame();
-            GameManager.Instance.OpenMenu();
+            inGameMenu.OpenMenu();
+            _input.SetCursorLockedState(false);
             canControlPlayer = false;
             _isMenuOpen = true;
         }
@@ -318,7 +322,8 @@ namespace StarterAssets
             {
                 GameManager.Instance.ResumeGame();
             }
-            GameManager.Instance.CloseMenu();
+            inGameMenu.CloseMenu();
+            _input.SetCursorLockedState(true);
             canControlPlayer = true;
             _isMenuOpen = false;
         }
