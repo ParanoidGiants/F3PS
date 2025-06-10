@@ -13,6 +13,8 @@ on:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  BLENDER_SHORT_VERSION: 4.2
+  BLENDER_FULL_VERSION: 4.2.7
 
 jobs:
   checkLicense:
@@ -23,18 +25,67 @@ jobs:
         if: ${{ !startsWith(env.UNITY_LICENSE, '<') }}
         run: exit 1
 
+  cacheBlender:
+    name: Cache Blender Binary 📦
+    runs-on: ubuntu-latest
+    outputs:
+      blenderCached: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Cache Blender Archive
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+          key: blender-${{ env.BLENDER_FULL_VERSION }}
+
+      - name: Download Blender if not cached
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          wget https://download.blender.org/release/Blender${{ env.BLENDER_SHORT_VERSION }}/blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+
+      - name: Upload Blender tarball (debug only)
+        uses: actions/upload-artifact@v4
+        with:
+          name: blender-tarball
+          path: blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+
   buildWebGL:
     name: Build for WebGL 🖥️ and Deploy to Itch.io 🚀
     runs-on: ubuntu-latest
+    needs: [checkLicense, cacheBlender]
     strategy:
       fail-fast: false
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Download Blender archive artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: blender-tarball
+
+      - name: Verify Blender archive presence
+        run: |
+          echo "Current dir: $(pwd)"
+          ls -lh blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+
+      - name: Prepare Docker build context
+        run: |
+          mkdir -p /tmp/docker-context
+          mv blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz /tmp/docker-context/
 
       - name: Build UnityCI image with Blender
-        run: docker build -f Dockerfile.unity-blender -t unityci/editor:blender-added .
-        
+        run: |
+          docker build \
+            --build-arg BLENDER_SHORT_VERSION=${{ env.BLENDER_SHORT_VERSION }} \
+            --build-arg BLENDER_FULL_VERSION=${{ env.BLENDER_FULL_VERSION }} \
+            -f Dockerfile.unity-blender \
+            -t unityci/editor:blender-added \
+            /tmp/docker-context
+
       - name: Build Unity project (WebGL)
         uses: game-ci/unity-builder@v4
         env:
@@ -55,56 +106,27 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: |
           cd ~
-          echo "------------------------------------------------------------------------"
-          echo "Downloading Butler...."
-          echo "------------------------------------------------------------------------"
           curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-          echo "------------------------------------------------------------------------"
-          echo "Unzipping Butler...."
-          echo "------------------------------------------------------------------------"
           unzip butler.zip
           chmod +x butler
-          echo "------------------------------------------------------------------------"
-          echo "Packaging WebGL build into current-build.zip"
-          echo "------------------------------------------------------------------------"
+
           cd work/$PROJECT_NAME/$PROJECT_NAME/build/WebGL/WebGL
           zip -r ~/current-build.zip .
-          chmod +x ~/butler
-          echo "------------------------------------------------------------------------"
-          echo "Determining branch for deploy suffix"
-          echo "------------------------------------------------------------------------"
-          # Extract the branch name from the full ref
+
           BRANCH=${GITHUB_REF#refs/heads/}
-          echo "Detected branch: $BRANCH"
-          # Set the suffix based on branch prefix or exact match
-          if [[ "$BRANCH" == locojoetive/* ]]; then
-            SUFFIX="locojoetive"
-          elif [[ "$BRANCH" == wildcard/* ]]; then
-            SUFFIX="wildcard"
-          elif [[ "$BRANCH" == fabaone/* ]]; then
-            SUFFIX="fabaone"
-          elif [[ "$BRANCH" == herrnock/* ]]; then
-            SUFFIX="herrnock"
-          elif [[ "$BRANCH" == development ]]; then
-            SUFFIX="development"
-          elif [[ "$BRANCH" == release/* ]]; then
-            SUFFIX="release"
-          elif [[ "$BRANCH" == main ]]; then
-            SUFFIX=""
-          else
-            echo "Branch not matched for deployment rules, exiting."
-            exit 1
-          fi
-          echo "Using suffix: '$SUFFIX'"
-          echo "------------------------------------------------------------------------"
-          echo "Pushing current-build.zip to itch.io"
-          echo "------------------------------------------------------------------------"
-          # Build the full game id with suffix if not empty
+          if [[ "$BRANCH" == locojoetive/* ]]; then SUFFIX="locojoetive"
+          elif [[ "$BRANCH" == wildcard/* ]]; then SUFFIX="wildcard"
+          elif [[ "$BRANCH" == fabaone/* ]]; then SUFFIX="fabaone"
+          elif [[ "$BRANCH" == herrnock/* ]]; then SUFFIX="herrnock"
+          elif [[ "$BRANCH" == development ]]; then SUFFIX="development"
+          elif [[ "$BRANCH" == release/* ]]; then SUFFIX="release"
+          elif [[ "$BRANCH" == main ]]; then SUFFIX=""
+          else echo "Branch not matched for deployment rules, exiting."; exit 1; fi
+
           if [ -n "$SUFFIX" ]; then
             TARGET="$BUTLER_GAME_ID-$SUFFIX:html5"
           else
             TARGET="$BUTLER_GAME_ID:html5"
           fi
 
-          echo "Uploading to game '$BUTLER_USER_NAME/$TARGET'"
           ~/butler push ~/current-build.zip $BUTLER_USER_NAME/$TARGET
