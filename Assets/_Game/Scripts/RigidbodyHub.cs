@@ -61,7 +61,7 @@ public class RigidbodyHub : MonoBehaviour
                 if (!isMovingByTelekinesis && !isRewinding)
                 {
                     FreeFromConstraints();
-                    _rigidbody.velocity = unbiasedTimeFreezeVelocity * timeScale;
+                    _rigidbody.linearVelocity = unbiasedTimeFreezeVelocity * timeScale;
                     _rigidbody.angularVelocity = unbiasedTimeFreezeAngularVelocity * timeScale;
                 }
             }
@@ -69,7 +69,7 @@ public class RigidbodyHub : MonoBehaviour
             {
                 if (!isMovingByTelekinesis)
                 {
-                    _rigidbody.velocity *= relation;
+                    _rigidbody.linearVelocity *= relation;
                     _rigidbody.angularVelocity *= relation;
                 }
             }
@@ -83,7 +83,7 @@ public class RigidbodyHub : MonoBehaviour
             isTimeFrozen = true;
             if (!isMovingByTelekinesis)
             {
-                unbiasedTimeFreezeVelocity = _rigidbody.velocity / currentTimeScale;
+                unbiasedTimeFreezeVelocity = _rigidbody.linearVelocity / currentTimeScale;
                 unbiasedTimeFreezeAngularVelocity = _rigidbody.angularVelocity / currentTimeScale;
                 FreezeAll();
             }
@@ -95,7 +95,7 @@ public class RigidbodyHub : MonoBehaviour
     #region TELEKINESIS
     public void SetTelekinesisVelocity(Vector3 velocity)
     {
-        _rigidbody.velocity = velocity;
+        _rigidbody.linearVelocity = velocity;
     }
 
     public void StartTelekinesisMoving()
@@ -104,7 +104,7 @@ public class RigidbodyHub : MonoBehaviour
         useGravity = false;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.angularVelocity = Vector3.zero;
-        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.mass = defaultMass;
     }
 
@@ -112,7 +112,7 @@ public class RigidbodyHub : MonoBehaviour
     {
         isMovingByTelekinesis = false;
         useGravity = true;
-        var throwVelocity = Vector3.ClampMagnitude(_rigidbody.velocity, maximumThrowSpeed);
+        var throwVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed);
         if (isTimeFrozen)
         {
             FreezeAll();
@@ -122,7 +122,7 @@ public class RigidbodyHub : MonoBehaviour
         {
             FreeFromConstraints();
             _rigidbody.mass = defaultMass / (currentTimeScale * currentTimeScale);
-            _rigidbody.velocity = throwVelocity * currentTimeScale;
+            _rigidbody.linearVelocity = throwVelocity * currentTimeScale;
             _rigidbody.angularVelocity = Vector3.zero;
         }
     }
@@ -161,9 +161,9 @@ public class RigidbodyHub : MonoBehaviour
         }
         if (isMovingByTelekinesis)
         {
-            return Vector3.ClampMagnitude(_rigidbody.velocity, maximumThrowSpeed) / currentTimeScale;
+            return Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed) / currentTimeScale;
         }
-        return _rigidbody.velocity / currentTimeScale;
+        return _rigidbody.linearVelocity / currentTimeScale;
     }
 
     public void SetUnbiasedVelocity(Vector3 unbiasedVelocity)
@@ -174,7 +174,7 @@ public class RigidbodyHub : MonoBehaviour
         }
         else
         {
-            _rigidbody.velocity = unbiasedVelocity / currentTimeScale;
+            _rigidbody.linearVelocity = unbiasedVelocity / currentTimeScale;
         }
     }
 

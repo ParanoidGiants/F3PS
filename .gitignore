@@ -78,3 +78,7 @@ crashlytics-build.properties
 # Packages bought from the Unity Store
 /[Aa]ssets/Universal Sound FX/*
 /[Aa]ssets/EgyptMonsters/*
+
+# VSCode workspace files
+.vscode/
+.vscode/*
