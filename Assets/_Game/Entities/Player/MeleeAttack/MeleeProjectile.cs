@@ -99,7 +99,7 @@ public class MeleeProjectile : MonoBehaviour
         }
 
         _rigidbody.isKinematic = false;
-        _rigidbody.velocity = transform.forward * shootSpeed;
+        _rigidbody.linearVelocity = transform.forward * shootSpeed;
         lifeTime = 0f;
         enableCollisionsTime = 0f;
         _collider.enabled = true;

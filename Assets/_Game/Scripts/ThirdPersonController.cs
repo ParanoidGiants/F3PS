@@ -863,7 +863,7 @@ namespace StarterAssets
         public void ResetToLastGroundPosition()
         {
             transform.position = lastValidGroundPosition + Vector3.up;
-            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
     }
 }

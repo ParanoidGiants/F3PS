@@ -116,7 +116,7 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
             Physics.IgnoreCollision(col, hittableCollider);
         }
         rb.isKinematic = false;
-        rb.velocity = transform.forward * _speed;
+        rb.linearVelocity = transform.forward * _speed;
         lifeTime = 0f;
         enableCollisionsTime = 0f;
         col.enabled = true;
