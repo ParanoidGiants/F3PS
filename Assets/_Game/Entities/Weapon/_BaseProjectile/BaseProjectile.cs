@@ -23,12 +23,14 @@ public class BaseProjectile : MonoBehaviour
     private float _speed;
 
     protected bool _isHit = false;
-    private HittableManager _hittableManager;
+    private Collider[] collidersToIgnore;
+    private bool _isInitialized = false;
 
-    public void Init(int userSpaceId, HittableManager hittableManager)
+    public void Init(int userSpaceId, Collider[] colliders)
     {
         hitBox.attackerId = userSpaceId;
-        _hittableManager = hittableManager;
+        collidersToIgnore = colliders;
+        _isInitialized = true;
     }
     
     private void Update()
@@ -45,7 +47,7 @@ public class BaseProjectile : MonoBehaviour
         if (enableCollisionsTime > enableCollisionsTimer && !collisionsEnabled)
         {
             collisionsEnabled = true;
-            foreach (var hittableCollider in _hittableManager.colliders)
+            foreach (var hittableCollider in collidersToIgnore)
             {
                 Physics.IgnoreCollision(col, hittableCollider, false);
             }
@@ -57,21 +59,31 @@ public class BaseProjectile : MonoBehaviour
         transform.position = position;
         transform.forward = targetPosition - position;
         _speed = shootSpeed;
+    }
+
+
+    private void SetupProjectile()
+    {
         _isHit = false;
         collisionsEnabled = false;
-        foreach (var hittableCollider in _hittableManager.colliders)
+        foreach (var hittableCollider in collidersToIgnore)
         {
             Physics.IgnoreCollision(col, hittableCollider);
         }
+        rb.isKinematic = false;
+        rb.linearVelocity = transform.forward * _speed;
+        lifeTime = 0f;
+        enableCollisionsTime = 0f;
+        col.enabled = true;
     }
     
     private void OnEnable()
     {
-        rb.isKinematic = false;
-        rb.velocity = transform.forward * _speed;
-        lifeTime = 0f;
-        enableCollisionsTime = 0f;
-        col.enabled = true;
+        if (!_isInitialized)
+        {
+            return;
+        }
+        SetupProjectile();
     }
 
     private void OnDisable()

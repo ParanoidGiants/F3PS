@@ -1,18 +1,23 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class PropertyRecorder<T>
 {
     // List storing only the frames where the property changed.
     private List<FrameRecord<T>> records = new List<FrameRecord<T>>();
     private T lastValue;
+    private int _framesRecorded = 0;
+    public int FramesRecorded => _framesRecorded;
     private bool hasValue = false;
+
+    public int Count => records.Count;
 
     // This delegate lets you decide what “changed” means for type T.
     // For instance, for Vector3 you might use the == operator (or consider an epsilon tolerance).
     public void RecordIfChanged(int frame, T newValue, Func<T, T, bool> equals)
     {
-        // Record if this is the first value or if the new value is different.
+        _framesRecorded = frame;
         if (!hasValue || !equals(lastValue, newValue))
         {
             records.Add(new FrameRecord<T>(frame, newValue));
@@ -25,6 +30,12 @@ public class PropertyRecorder<T>
     // This uses binary search to quickly find the most recent change at or before the specified frame.
     public T GetValueAtFrame(int frame)
     {
+        int resultIndex = GetIndexAtFrame(frame);
+        return resultIndex >= 0 ? records[resultIndex].Value : default(T);
+    }
+
+    public int GetIndexAtFrame(int frame)
+    {
         int low = 0;
         int high = records.Count - 1;
         int resultIndex = -1;
@@ -34,11 +45,11 @@ public class PropertyRecorder<T>
             int mid = (low + high) / 2;
             if (records[mid].Frame == frame)
             {
-                return records[mid].Value;
+                return mid;
             }
             else if (records[mid].Frame < frame)
             {
-                resultIndex = mid; // possible candidate
+                resultIndex = mid;
                 low = mid + 1;
             }
             else
@@ -47,9 +58,7 @@ public class PropertyRecorder<T>
             }
         }
 
-        // If no record exists before this frame, you might choose a default value.
-        // Here, we return default(T) if no record is found.
-        return resultIndex >= 0 ? records[resultIndex].Value : default(T);
+        return resultIndex >= 0 ? resultIndex : -1;
     }
 
     public void ClearAllExceptFirstFrame()
@@ -65,5 +74,16 @@ public class PropertyRecorder<T>
     {
         records.Clear();
         hasValue = false;
+    }
+
+    internal void ClearAllAfterCurrentFrame(int currentFrame)
+    {
+        var index = GetIndexAtFrame(currentFrame);
+        if (records.Count > index)
+        {
+            records.RemoveRange(index, records.Count - index - 1);
+        }
+        lastValue = records[index].Value;
+        _framesRecorded = currentFrame;
     }
 }

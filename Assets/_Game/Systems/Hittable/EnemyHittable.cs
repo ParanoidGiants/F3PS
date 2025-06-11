@@ -14,7 +14,7 @@ namespace F3PS.Damage.Take
         {
             _collider = GetComponent<Collider>();
             _hittableId = enemy.GetInstanceID();
-            _playerId = FindObjectOfType<ThirdPersonController>().GetInstanceID();
+            _playerId = FindObjectOfType<ThirdPersonController>().transform.parent.GetInstanceID();
         }
 
         private void OnEnable()
@@ -34,21 +34,7 @@ namespace F3PS.Damage.Take
             {
                 return;
             }
-            // Hit by projectile
-            var damage = 0;
-            var projectile = hitBy.GetComponent<BaseProjectile>();
-            if (projectile)
-            {
-                damage = (int)(damageMultiplier * projectile.damage);
-            }
-            
-            // Hit by rush
-            var rush = hitBy.GetComponent<Rush>();
-            if (rush)
-            {
-                damage = (int)(damageMultiplier * rush.damage);
-            }
-            enemy.Hit(damage);
+            enemy.Hit((int)(damageMultiplier * hitBy.damage));
             if (hitBy.attackerId == _playerId)
             {
                 OnHitByPlayer(hitDirection);
@@ -59,7 +45,7 @@ namespace F3PS.Damage.Take
         {
             if (enemy.StateManager.IsAggressive() || enemy.IsDead) return;
 
-            enemy.navMeshAgent.destination = enemy.transform.position - hitDirection;
+            enemy.navMeshAgent.destination = enemy.navMeshAgent.transform.position - hitDirection;
             enemy.StateManager.SwitchState(StateType.CHECKING);
         }
     }

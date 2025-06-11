@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -11,16 +12,21 @@ namespace StarterAssets
 		public Vector2 move;
 		public Vector2 look;
 		public float bubbleTimeScale;
+        public float telekinesisPushPull;
         public bool jump;
 		public bool sprint;
 		public bool shoot;
-		public bool aim;
+        public bool skill;
+        public bool grab;
+
+
+        public bool aim;
 		public bool reload;
 		public bool slowmo;
 		public bool dodge;
-		public bool switchWeapon;
-		public bool aimGrenade;
-		public bool pause;
+        public bool switchWeapon;
+        public bool switchSkill;
+        public bool pause;
         public bool menu;
         public bool freeCamera;
 
@@ -39,6 +45,10 @@ namespace StarterAssets
         public void OnBubbleTimeScale(InputValue value)
         {
             BubbleTimeScale(value.Get<float>());
+        }
+        public void OnTelekinesisPushPull(InputValue value)
+        {
+            TelekinesisPushPull(value.Get<float>());
         }
 
         public void OnLook(InputValue value)
@@ -61,10 +71,15 @@ namespace StarterAssets
 		
 		public void OnShoot(InputValue value)
 		{
-			ShootInput(shoot = value.isPressed);		
-		}
+			ShootInput(shoot = value.isPressed);
+        }
 
-		public void OnAim(InputValue value)
+        public void OnSkill(InputValue value)
+        {
+            SkillInput(value.isPressed);
+        }
+
+        public void OnAim(InputValue value)
 		{
 			AimInput(value.isPressed);
 		}
@@ -87,16 +102,16 @@ namespace StarterAssets
 		public void OnPause(InputValue value)
 		{
 			PauseInput(value.isPressed);
-		}
+        }
 
-		public void OnSwitchWeapon(InputValue value)
-		{
-			SwitchWeaponInput(value.isPressed);
-		}
+        public void OnSwitchWeapon(InputValue value)
+        {
+            SwitchWeaponInput(value.isPressed);
+        }
 
-		public void OnAimGrenade(InputValue value)
-		{
-			AimGrenadeInput(value.isPressed);
+        public void OnSwitchSkill(InputValue value)
+        {
+            SwitchSkillInput(value.isPressed);
         }
 
         public void OnMenu(InputValue value)
@@ -108,6 +123,11 @@ namespace StarterAssets
         {
             FreeCameraInput(value.isPressed);
         }
+
+        public void OnGrab(InputValue value)
+        {
+            GrabInput(value.isPressed);
+        }
 #endif
 
 
@@ -118,6 +138,11 @@ namespace StarterAssets
         public void BubbleTimeScale(float direction)
 		{
 			bubbleTimeScale = direction == 0f ? 0f : Mathf.Sign(direction);
+        }
+
+        private void TelekinesisPushPull(float direction)
+        {
+            telekinesisPushPull = direction;
         }
 
         public void LookInput(Vector2 newLookDirection)
@@ -168,11 +193,16 @@ namespace StarterAssets
 		private void SwitchWeaponInput(bool valueIsPressed)
 		{
 			switchWeapon = valueIsPressed;
-		}
+        }
 
-		private void AimGrenadeInput(bool valueIsPressed)
+        private void SwitchSkillInput(bool isPressed)
+        {
+			switchSkill = isPressed;
+        }
+
+        private void SkillInput(bool valueIsPressed)
 		{
-			aimGrenade = valueIsPressed;
+			skill = valueIsPressed;
         }
 
         private void MenuInput(bool valueIsPressed)
@@ -185,14 +215,20 @@ namespace StarterAssets
             freeCamera = valueIsPressed;
         }
 
+        private void GrabInput(bool valueIsPressed)
+        {
+            grab = valueIsPressed;
+        }
+
         private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorLockedState(cursorLocked);
 		}
 
-		private void SetCursorState(bool newState)
+		public void SetCursorLockedState(bool newState)
 		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+            cursorLocked = newState;
 		}
 	}
 	

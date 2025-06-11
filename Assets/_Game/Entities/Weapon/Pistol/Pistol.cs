@@ -4,20 +4,18 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class Pistol : BaseGun
+    public class Pistol : BaseProjectileShooter
     {
         [SerializeField] private bool _wasShootingPressedLastFrame = false;
-        private Vector3 currentTargetPosition;
 
         override
         public void HandleShoot(bool isShootingPressed, Vector3 targetPosition)
         {
-            currentTargetPosition = targetPosition;
             if (!_wasShootingPressedLastFrame && isShootingPressed)
             {
                 if (IsMagazineEmpty())
                 {
-                    weaponUI?.OnTryShootWithEmptyClip();
+                    skillUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {
@@ -39,11 +37,6 @@ namespace Weapon
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                targetPosition,
-                shotSpeed
-            );
             var shootDirection = targetPosition - projectileSpawn.position;
             Shake(-shootDirection);
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);

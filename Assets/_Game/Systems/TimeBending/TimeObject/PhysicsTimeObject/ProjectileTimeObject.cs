@@ -7,13 +7,18 @@ public class ProjectileTimeObject : PhysicsTimeObject
     [Header("Projectile References")]
     [SerializeField] private TrailRenderer _trail;
     [SerializeField] private TrailRenderer _slowMoTrail;
-    private float _baseTrailTime; 
-    
-    override
-    protected void Awake()
+    private float _baseTrailTime;
+    public float GravityScale => _rigidbodyHub.gravityScale;
+
+    private void Awake()
     {
+        InitReferences();
+    }
+
+    override protected void InitReferences()
+    {
+        base.InitReferences();
         _baseTrailTime = _trail.time;
-        base.Awake();
     }
 
     override

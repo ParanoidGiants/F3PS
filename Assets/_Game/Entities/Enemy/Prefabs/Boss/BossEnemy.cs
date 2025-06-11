@@ -141,10 +141,12 @@ namespace F3PS.Enemy
             rushersHittable.SetActive(false);
             shootersHittable.SetActive(false);
             shieldShootersHittable.SetActive(true);
+            /*
             foreach (var shieldShooter in shieldShooters)
             {
                 shieldShooter.shield.SetActive(true);
             }
+             */
             
             shieldShooterLayer.localPosition = Vector3.zero;
             timeObject = shieldShootersHittable.GetComponent<AgentTimeObject>();

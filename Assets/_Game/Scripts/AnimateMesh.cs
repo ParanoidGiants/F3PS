@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimateMesh : MonoBehaviour
 {
-    private Renderer _renderer;
+    [SerializeField]private Renderer[] _renderers;
 
     private bool setEmission = false;
     private Color CurrentEmissionColor => currentTimeEmissionColor + currentHitFlashEmissionColor;
@@ -40,10 +40,12 @@ public class AnimateMesh : MonoBehaviour
 
     private void Awake()
     {
-        _renderer = GetComponent<Renderer>();
-        foreach (var material in _renderer.materials)
+        foreach (var renderer in _renderers)
         {
-            material.EnableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION);
+            foreach (var material in renderer.materials)
+            {
+                material.EnableKeyword(GlobalConstants.MATERIAL_KEYWORD_EMISSION);
+            }
         }
     }
 
@@ -84,9 +86,13 @@ public class AnimateMesh : MonoBehaviour
 
     private void SetEmission(Color color)
     {
-        foreach (var material in _renderer.materials)
+        foreach (var renderer in _renderers)
         {
-            material.SetColor(GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, color);
+
+            foreach (var material in renderer.materials)
+            {
+                material.SetColor(GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, color);
+            }
         }
     }
 
@@ -194,9 +200,12 @@ public class AnimateMesh : MonoBehaviour
             () => currentAlpha,
             x => {
                 currentAlpha = x;
-                foreach (var material in _renderer.materials)
+                foreach (var renderer in _renderers)
                 {
-                    material.SetFloat("_Alpha", currentAlpha);
+                    foreach (var material in renderer.materials)
+                    {
+                        material.SetFloat("_Alpha", currentAlpha);
+                    }
                 }
             },
             0f,

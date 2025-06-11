@@ -1,56 +1,46 @@
-using UnityEngine;
-
 public class PhysicsTimeObject : TimeObject
 {
     protected const double TOLERANCE = 0.001f;
     protected float _defaultMass;
-    private Rigidbody _rb;
+    protected RigidbodyHub _rigidbodyHub;
 
-    [Space(10)]
-    [Header("Physics Settings")]
-    public float gravityScale = 1f;
+    public OutlineTimeObject outline;
 
-    protected virtual void Awake()
+    private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
-        _rb.useGravity = false;
-        _defaultMass = _rb.mass;
+        InitReferences();
     }
 
-    void FixedUpdate()
+    override protected void InitReferences()
     {
-        if (_rb.isKinematic) return;
-        
-        var force = Physics.gravity * (currentTimeScale * currentTimeScale * gravityScale);
-        _rb.AddForce(
-            force,
-            ForceMode.Acceleration
-        );
+        base.InitReferences();
+        outline.Init();
+        _rigidbodyHub = GetComponent<RigidbodyHub>();
     }
 
     override
     public void PitchTimeScale(float newTimeScale)
     {
-        if (_rb == null) return;
-
         if (newTimeScale != 1f)
         {
             newTimeScale *= additionalTimeScale;
         }
-        float relation = currentTimeScale == 0f ? 1f : newTimeScale / currentTimeScale;
-        currentTimeScale = newTimeScale;
-        if (newTimeScale > TOLERANCE)
-        {
-            _rb.isKinematic = false;
-            _rb.constraints = RigidbodyConstraints.None;
-            _rb.mass = _defaultMass / (newTimeScale*newTimeScale);
-            _rb.velocity *= relation;
-            _rb.angularVelocity *= relation;
-        }
-        else
-        {
-            _rb.isKinematic = true;
-            _rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
+        base.PitchTimeScale(newTimeScale);
+        outline.Pitch(newTimeScale);
+        _rigidbodyHub.SetTimeScale(newTimeScale);
+    }
+
+    override
+    public void Deactivate()
+    {
+        outline.Deactivate();
+        base.Deactivate();
+    }
+
+    override
+    public void Activate(float initialTimeScale)
+    {
+        outline.Activate();
+        base.Activate(initialTimeScale);
     }
 }

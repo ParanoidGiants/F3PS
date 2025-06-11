@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class MachineGun : BaseGun
+    public class MachineGun : BaseProjectileShooter
     {
         private Vector3 _recentTargetPosition;
         override
@@ -32,18 +32,13 @@ namespace Weapon
                 if (currentMagazineAmount <= 0)
                 {
                     // TODO: Play empty clip sound
-                    weaponUI?.OnTryShootWithEmptyClip();
+                    skillUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {
                     currentMagazineAmount--;
-                    projectilePool.ShootBullet(
-                        projectileSpawn.position,
-                        _recentTargetPosition,
-                        shotSpeed
-                    );
                     var shootDirection = _recentTargetPosition - projectileSpawn.position;
-                    weaponUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
+                    skillUI?.UpdateAmmoText(currentMagazineAmount, totalAmount);
                     Shake(-shootDirection);
                     MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
                 }

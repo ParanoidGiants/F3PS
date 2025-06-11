@@ -12,7 +12,7 @@ namespace F3PS.Enemy
     {
         public Rigidbody body;
 
-        [Header("References")] public GameObject shield;
+        [Header("References")]
         public Hittable[] _hittables;
         public MeshRenderer meshRenderer;
         public NavMeshAgent navMeshAgent;
@@ -100,7 +100,6 @@ namespace F3PS.Enemy
                 return;
             }
             health -= damage;
-            Debug.Log("Took " + damage + " damage");
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", body.transform);
             if (health <= 0)
             {
@@ -134,7 +133,7 @@ namespace F3PS.Enemy
             }
         }
 
-        internal void Died()
+        public void Died()
         {
             Dead?.Invoke();
             Destroy(gameObject);
