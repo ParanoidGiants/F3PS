@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Game/Scenes/_level_blockout_merge.unity
-    guid: da42d25bf2bc0f744933d88bf77aac3c
-  - enabled: 1
     path: Assets/_Game/Scenes/_moving_platforms.unity
     guid: 202bd8b43a89c40488787f4c6055d432
+  - enabled: 1
+    path: Assets/_Game/Scenes/_level_blockout_merge.unity
+    guid: da42d25bf2bc0f744933d88bf77aac3c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7,
       type: 2}
