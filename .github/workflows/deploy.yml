@@ -105,14 +105,23 @@ jobs:
           BUTLER_USER_NAME: ${{ secrets.BUTLER_USER_NAME }}
           GITHUB_REF: ${{ github.ref }}
         run: |
+          echo "------------------------------------------------------------------------"
+          echo "Download Butler and unzip butler"
+          echo "------------------------------------------------------------------------"
           cd ~
           curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
           unzip butler.zip
           chmod +x butler
 
+          echo "------------------------------------------------------------------------"
+          echo "Package WebGL build into current-build.zip"
+          echo "------------------------------------------------------------------------"
           cd work/$PROJECT_NAME/$PROJECT_NAME/build/WebGL/WebGL
           zip -r ~/current-build.zip .
 
+          echo "------------------------------------------------------------------------"
+          echo "Determine target for itch.io deployment based on branch"
+          echo "------------------------------------------------------------------------"
           BRANCH=${GITHUB_REF#refs/heads/}
           if [[ "$BRANCH" == locojoetive/* ]]; then SUFFIX="locojoetive"
           elif [[ "$BRANCH" == wildcard/* ]]; then SUFFIX="wildcard"
@@ -122,11 +131,13 @@ jobs:
           elif [[ "$BRANCH" == release/* ]]; then SUFFIX="release"
           elif [[ "$BRANCH" == main ]]; then SUFFIX=""
           else echo "Branch not matched for deployment rules, exiting."; exit 1; fi
-
           if [ -n "$SUFFIX" ]; then
             TARGET="$BUTLER_GAME_ID-$SUFFIX:html5"
           else
             TARGET="$BUTLER_GAME_ID:html5"
           fi
-
+          
+          echo "------------------------------------------------------------------------"
+          echo "Pushing current build to itch.io to project $BUTLER_USER_NAME/$TARGET"
+          echo "------------------------------------------------------------------------"
           ~/butler push ~/current-build.zip $BUTLER_USER_NAME/$TARGET
