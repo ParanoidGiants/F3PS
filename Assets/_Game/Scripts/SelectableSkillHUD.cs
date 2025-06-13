@@ -39,12 +39,4 @@ public class SelectableSkillHUD : MonoBehaviour
             _selectAnimation.Insert(0, canvasGroup.DOFade(0.2f, 0.2f));
         }
     }
-
-    private void OnDestroy()
-    {
-        if (_selectAnimation != null && _selectAnimation.IsActive() && _selectAnimation.IsPlaying())
-        {
-            _selectAnimation.Kill();
-        }
-    }
 }

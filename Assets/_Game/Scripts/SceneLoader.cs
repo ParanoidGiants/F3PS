@@ -61,13 +61,20 @@ public class SceneLoader : MonoBehaviour
             });
     }
 
+    private void OnSceneUnloaded(Scene arg0)
+    {
+        DOTween.KillAll();
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 }
