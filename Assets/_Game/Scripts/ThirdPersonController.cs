@@ -144,6 +144,11 @@ namespace StarterAssets
         [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _lastInputDirection;
 
+        private bool _wasMenuPressedLastFrame = false;
+        private bool _isMenuOpen = false;
+        private bool _wasFreeCameraLastFrame = false;
+        private bool isFreeCameraActive = false;
+
         private const float _threshold = 0.01f;
         private const float _terminalVelocity = 53.0f;
 
@@ -294,9 +299,6 @@ namespace StarterAssets
             canControlPlayer = true;
         }
 
-
-        private bool _wasMenuPressedLastFrame = false;
-        private bool _isMenuOpen = false;
         private void HandleMenu()
         {
             if (SceneLoader.Instance.isLoading) return;
@@ -310,6 +312,9 @@ namespace StarterAssets
             }
             else if (isKeyDown && _isMenuOpen)
             {
+                inGameMenu.CloseMenu();
+                _input.SetCursorLockedState(true);
+                GameManager.Instance.ResumeGame();
                 ResumeGame();
             }
         }
@@ -325,12 +330,6 @@ namespace StarterAssets
 
         public void ResumeGame()
         {
-            if (!_isTimeStopped)
-            {
-                GameManager.Instance.ResumeGame();
-            }
-            inGameMenu.CloseMenu();
-            _input.SetCursorLockedState(true);
             canControlPlayer = true;
             _isMenuOpen = false;
         }
@@ -355,8 +354,7 @@ namespace StarterAssets
                 _isTimeStopped = false;
             }
         }
-        private bool _wasFreeCameraLastFrame = false;
-        private bool isFreeCameraActive = false;
+
         private void HandleFreeCamera()
         {
             if (_isMenuOpen) return;

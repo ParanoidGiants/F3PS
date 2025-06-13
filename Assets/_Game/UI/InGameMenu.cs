@@ -1,6 +1,7 @@
 using F3PS;
 using StarterAssets;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class InGameMenu : MonoBehaviour
 {
@@ -20,7 +21,10 @@ public class InGameMenu : MonoBehaviour
 
     public void ResumeGame()
     {
+        GameManager.Instance.ResumeGame();
+        GameManager.Instance.inputs.SetCursorLockedState(true);
         FindFirstObjectByType<ThirdPersonController>().ResumeGame();
+        CloseMenu();
     }
 
     public void CloseMenu()
@@ -49,6 +53,5 @@ public class InGameMenu : MonoBehaviour
     {
         FindFirstObjectByType<ThirdPersonController>().ResumeGame();
         SceneLoader.Instance.ReloadScene();
-        CloseMenu();
     }
 }

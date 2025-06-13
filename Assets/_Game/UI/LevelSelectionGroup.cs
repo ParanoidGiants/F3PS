@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectionGroup : MonoBehaviour
 {
+    public InGameMenu inGameMenu;
     public GameObject LevelSelectionPrefab;
     public List<LevelSelection> levelSelections = new List<LevelSelection>();
 
@@ -14,7 +13,7 @@ public class LevelSelectionGroup : MonoBehaviour
         foreach (string sceneName in SceneLoader.Instance.sceneNames)
         {
             var levelSelection = Instantiate(LevelSelectionPrefab, transform).GetComponent<LevelSelection>();
-            levelSelection.Init(sceneName);
+            levelSelection.Init(sceneName, inGameMenu);
             levelSelections.Add(levelSelection);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent as RectTransform);
