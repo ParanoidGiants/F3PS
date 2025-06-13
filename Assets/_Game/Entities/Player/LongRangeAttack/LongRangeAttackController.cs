@@ -35,7 +35,7 @@ public class LongRangeAttackController : MonoBehaviour
     public bool wasAttackingPressedLastFrame;
     public bool isAttacking;
 
-    private void OnEnable()
+    private void Start()
     {
         attackControllerHUD.SelectLongRangeAttackHud();
     }

@@ -40,7 +40,7 @@ public class TimeBubbleController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
         selectSkillControllerHUD.SelectTimeBubbleHud();
     }

@@ -36,7 +36,7 @@ public class MeleeAttackController : MonoBehaviour
     public bool wasAttackingPressedLastFrame;
     public bool isAttacking;
 
-    private void OnEnable()
+    private void Start()
     {
         attackControllerHUD.SelectMeleeAttackHud();
     }
