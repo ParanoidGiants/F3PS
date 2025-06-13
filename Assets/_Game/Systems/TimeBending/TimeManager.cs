@@ -66,7 +66,7 @@ namespace TimeBending
 
         public IEnumerator PitchSoundtrack (float pitch_src, float pitch_dst)
         {
-            PlaylistController pc = FindObjectOfType<PlaylistController>();
+            PlaylistController pc = FindFirstObjectByType<PlaylistController>();
             AudioSource audio = pc.ActiveAudioSource;
             while (_pitchTime < duration)
             {

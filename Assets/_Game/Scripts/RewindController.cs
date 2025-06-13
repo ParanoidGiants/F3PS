@@ -30,7 +30,7 @@ public class RewindController : MonoBehaviour
 
     private void Awake()
     {
-        _crosshair = FindObjectOfType<Crosshair>();
+        _crosshair = FindFirstObjectByType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
     }
 

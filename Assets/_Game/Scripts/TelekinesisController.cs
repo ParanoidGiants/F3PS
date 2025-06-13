@@ -1,4 +1,4 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using StarterAssets;
 using System;
 using System.Collections.Generic;
@@ -184,7 +184,7 @@ public class TelekinesisController : MonoBehaviour
 
     private bool PlayerIsGrounded()
     {
-        return FindObjectOfType<ThirdPersonController>().IsGrounded;
+        return FindFirstObjectByType<ThirdPersonController>().IsGrounded;
     }
 
     public void OnFixedUpdate()

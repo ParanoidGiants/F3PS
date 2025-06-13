@@ -18,7 +18,7 @@ namespace F3PS.Damage.Take
 
         void Awake()
         {
-            _controller = FindObjectOfType<ThirdPersonController>();
+            _controller = FindFirstObjectByType<ThirdPersonController>();
             _collider = GetComponent<Collider>();
             _hittableId = _controller.GetInstanceID();
         }

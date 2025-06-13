@@ -8758,7 +8758,7 @@ namespace DarkTonic.MasterAudio {
                 }
 
                 // ReSharper disable once ArrangeStaticMemberQualifier
-                _instance = (MasterAudio)GameObject.FindObjectOfType(typeof(MasterAudio));
+                _instance = FindFirstObjectByType<MasterAudio>();
                 return _instance;
             }
         }
@@ -8772,7 +8772,7 @@ namespace DarkTonic.MasterAudio {
                     return _instance;
                 }
                 // ReSharper disable once ArrangeStaticMemberQualifier
-                _instance = (MasterAudio)GameObject.FindObjectOfType(typeof(MasterAudio));
+                _instance = FindFirstObjectByType<MasterAudio>();
 
                 if (_instance == null && Application.isPlaying) {
                     Debug.LogError("There is no Master Audio prefab in this Scene. Subsequent method calls will fail.");

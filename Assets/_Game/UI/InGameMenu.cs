@@ -20,7 +20,7 @@ public class InGameMenu : MonoBehaviour
 
     public void ResumeGame()
     {
-        FindObjectOfType<ThirdPersonController>().ResumeGame();
+        FindFirstObjectByType<ThirdPersonController>().ResumeGame();
     }
 
     public void CloseMenu()
@@ -47,7 +47,7 @@ public class InGameMenu : MonoBehaviour
 
     public void RestartLevel()
     {
-        FindObjectOfType<ThirdPersonController>().ResumeGame();
+        FindFirstObjectByType<ThirdPersonController>().ResumeGame();
         SceneLoader.Instance.ReloadScene();
         CloseMenu();
     }

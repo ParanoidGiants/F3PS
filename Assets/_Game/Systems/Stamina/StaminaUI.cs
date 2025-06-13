@@ -9,7 +9,7 @@ public class StaminaUI : MonoBehaviour
     
     void Start()
     {
-        _staminaManager = FindObjectOfType<StaminaManager>();
+        _staminaManager = FindFirstObjectByType<StaminaManager>();
     }
 
     void Update()

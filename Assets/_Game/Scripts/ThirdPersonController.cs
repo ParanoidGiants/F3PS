@@ -1,6 +1,6 @@
 ﻿using F3PS;
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine.Windows;
 
 
@@ -185,7 +185,7 @@ namespace StarterAssets
 
         private void Awake()
         {
-            _mainCamera = FindObjectOfType<Camera>().gameObject;
+            _mainCamera = FindFirstObjectByType<Camera>().gameObject;
             _hasAnimator = animator != null;
             _rigidbody = GetComponent<Rigidbody>();
             _input = GameManager.Instance.inputs;

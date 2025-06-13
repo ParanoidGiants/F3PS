@@ -1,4 +1,4 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using DarkTonic.MasterAudio;
 using System.Collections;
 using UnityEngine;

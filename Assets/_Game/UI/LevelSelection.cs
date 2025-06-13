@@ -9,7 +9,7 @@ public class LevelSelection : MonoBehaviour
     public void OnSelectLevel()
     {
         SceneLoader.Instance.LoadScene(sceneName);
-        FindObjectOfType<InGameMenu>().CloseMenu();
+        FindFirstObjectByType<InGameMenu>().CloseMenu();
     }
 
     public void Init(string sceneName)

@@ -1,6 +1,5 @@
-using Cinemachine;
-using StarterAssets;
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class LongRangeAttackController : MonoBehaviour
