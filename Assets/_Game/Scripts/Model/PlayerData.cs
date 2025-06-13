@@ -35,6 +35,7 @@ public class PlayerData
     [Range(0.0f, 1f)]
     public float RotationSpeedYaw = 0.2f;
     public float MoveSpeed = 2.0f;
+    public float AimSpeed = 2.0f;
     public float SprintSpeed = 5.335f;
     public float SpeedChangeRate = 10.0f;
     public float JumpHeight = 1.2f;

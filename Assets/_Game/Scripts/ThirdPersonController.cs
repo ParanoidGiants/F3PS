@@ -235,22 +235,13 @@ namespace StarterAssets
 
             skillManager.OnFixedUpdate();
             attackManager.OnFixedUpdate();
-            if (skillManager.IsAiming())
-            {
-                MoveWhileAiming();
-                return;
-            }
 
-            JumpAndDodge();
-
-            if (_isDodging)
+            if (!skillManager.IsAiming())
             {
+                JumpAndDodge();
                 HandleDodgeRoll();
             }
-            else
-            {
-                Move();
-            }
+            Move(skillManager.IsAiming());
         }
 
         private void LateUpdate()
@@ -412,14 +403,23 @@ namespace StarterAssets
             _currentCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
         }
 
-        private void Move()
+        private void Move(bool isAiming)
         {
             float targetSpeed = 0f;
             if (_input.move.magnitude > 0f)
             {
-                targetSpeed = _isSprinting
-                    ? _playerModel.SprintSpeed
-                    : _playerModel.MoveSpeed;
+                if (isAiming)
+                {
+                    targetSpeed = _playerModel.AimSpeed;
+                }
+                else if (_isSprinting)
+                {
+                    targetSpeed = _playerModel.SprintSpeed;
+                }
+                else
+                {
+                    targetSpeed = _playerModel.MoveSpeed;
+                }
             }
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
@@ -461,86 +461,28 @@ namespace StarterAssets
             );
             if (_input.move.magnitude > 0f)
             {
-                armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+                if (isAiming)
+                {
+                    var cameraForward = defaultCamera.transform.forward;
+                    var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
+                    armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
+                }
+                else
+                {
+                    armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
+                }
             }
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
+
             var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
-            var moveDirection = (verticalVelocity + moveVelocity);
             if (_input.move.magnitude > 0f)
             {
-                _rigidbody.linearVelocity = moveDirection;
+                Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+                var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
+                _rigidbody.linearVelocity = (verticalVelocity + moveVelocity);
             }
             else
             {
-                _rigidbody.linearVelocity = new Vector3(0f, _verticalVelocity, 0f);
-            }
-            if (_hasAnimator)
-            {
-                animator.SetFloat(_animIDSpeed, _animationBlend);
-                animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-            }
-        }
-
-        private void MoveWhileAiming()
-        {
-            float targetSpeed = 0f;
-            if (_input.move.magnitude > 0f)
-            {
-                targetSpeed = _playerModel.MoveSpeed * 0.5f;
-            }
-            float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
-            float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-            if (currentHorizontalSpeed < targetSpeed - speedOffset
-                || currentHorizontalSpeed > targetSpeed + speedOffset
-            )
-            {
-                _speed = Mathf.Lerp(
-                    currentHorizontalSpeed,
-                    targetSpeed * inputMagnitude,
-                    Time.deltaTime * _playerModel.SpeedChangeRate
-                );
-                _speed = Mathf.Round(_speed * 1000f) / 1000f;
-            }
-            else
-            {
-                _speed = targetSpeed;
-            }
-
-            _animationBlend = Mathf.Lerp(
-                _animationBlend,
-                targetSpeed,
-                Time.deltaTime * _playerModel.SpeedChangeRate
-            );
-            if (_animationBlend < 0.01f) _animationBlend = 0f;
-            if (_input.move.sqrMagnitude > 0f)
-            {
-                _lastInputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-            }
-            _targetYaw = Mathf.Rad2Deg * Mathf.Atan2(_lastInputDirection.x, _lastInputDirection.z)
-                + _mainCamera.transform.rotation.eulerAngles.y;
-            _lookYaw = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y,
-                _targetYaw,
-                ref _rotationVelocity,
-                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
-            );
-
-            var cameraForward = defaultCamera.transform.forward;
-            var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
-            armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
-            var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
-            var moveDirection = (verticalVelocity + moveVelocity);
-            if (_input.move.magnitude > 0f)
-            {
-                _rigidbody.linearVelocity = moveDirection;
-            }
-            else
-            {
-                _rigidbody.linearVelocity = new Vector3(0f, _verticalVelocity, 0f);
+                _rigidbody.linearVelocity = verticalVelocity;
             }
             if (_hasAnimator)
             {
@@ -552,6 +494,11 @@ namespace StarterAssets
         // TODO: fix dodge
         private void HandleDodgeRoll()
         {
+            if (!_isDodging)
+            {
+                return;
+            }
+
             if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
             {
                 _isDodging = false;
@@ -793,7 +740,6 @@ namespace StarterAssets
 
         private void GroundedCheck()
         {
-
             Vector3 spherePosition = new Vector3(
                 transform.position.x,
                 transform.position.y - GroundedOffset,
