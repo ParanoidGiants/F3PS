@@ -26,7 +26,6 @@ public class MeleeAttackController : MonoBehaviour
 
     [Space(10)]
     [Header("HUD")]
-    public SelectAttackControllerHUD attackControllerHUD;
     public MeleeAttackHUD hud;
 
     [Space(10)]
@@ -35,11 +34,6 @@ public class MeleeAttackController : MonoBehaviour
     public bool isAttackingPressedThisFrame;
     public bool wasAttackingPressedLastFrame;
     public bool isAttacking;
-
-    private void Start()
-    {
-        attackControllerHUD.SelectMeleeAttackHud();
-    }
 
     public void Init()
     {

@@ -4,7 +4,6 @@ public class TimeBubbleController : MonoBehaviour
 {
     [Header("References")]
     public Transform userSpace;
-    public SelectSkillControllerHUD selectSkillControllerHUD;
     public Collider[] ownColliders;
     public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
     public LineRenderer throwLine;
@@ -31,18 +30,12 @@ public class TimeBubbleController : MonoBehaviour
     private void Awake()
     {
         throwLine.positionCount = lineResolution;
-        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
         timeBubbleGrenadeProjectile.Init(ownColliders);
         var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
         foreach (var collider in ownColliders)
         {
             Physics.IgnoreCollision(projectileCollider, collider);
         }
-    }
-
-    private void Start()
-    {
-        selectSkillControllerHUD.SelectTimeBubbleHud();
     }
 
     public void OnUpdate(bool isAiming, float bubbleTimeScaleChange, Vector3 targetPosition)

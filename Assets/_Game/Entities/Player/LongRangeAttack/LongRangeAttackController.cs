@@ -25,7 +25,6 @@ public class LongRangeAttackController : MonoBehaviour
 
     [Space(10)]
     [Header("HUD")]
-    public SelectAttackControllerHUD attackControllerHUD;
     public LongRangeAttackHUD hud;
 
     [Space(10)]
@@ -34,11 +33,6 @@ public class LongRangeAttackController : MonoBehaviour
     public bool isAttackingPressedThisFrame;
     public bool wasAttackingPressedLastFrame;
     public bool isAttacking;
-
-    private void Start()
-    {
-        attackControllerHUD.SelectLongRangeAttackHud();
-    }
 
     public void Init()
     {

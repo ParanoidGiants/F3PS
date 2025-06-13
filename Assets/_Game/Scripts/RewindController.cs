@@ -32,13 +32,11 @@ public class RewindController : MonoBehaviour
     {
         _crosshair = FindObjectOfType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
-        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
     }
 
     private void OnEnable()
     {
         _lineRenderer.enabled = true;
-        selectSkillControllerHUD.SelectRewindHud();
     }
 
     private void OnDisable()

@@ -279,7 +279,7 @@ MonoBehaviour:
   PlayerData:
     CurrentHealth: 0
     MaxHealth: 100
-    ActiveSkill: 2
+    ActiveSkill: 0
     ActiveAttack: 0
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5

@@ -7,6 +7,7 @@ public class SkillManager : MonoBehaviour
     [Header("References")]
     public Transform playerSpace;
     public Crosshair crosshair;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
         
     [Header("Skills")]
     public TelekinesisController telekinesisController;
@@ -96,6 +97,7 @@ public class SkillManager : MonoBehaviour
 
     private void SetActiveSkill(Skill nextSkill)
     {
+        selectSkillControllerHUD.SelectSkillHud((int)nextSkill);
         GameManager.Instance.PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {

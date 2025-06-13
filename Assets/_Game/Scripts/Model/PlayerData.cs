@@ -3,9 +3,9 @@ using UnityEngine;
 
 public enum Skill
 {
-    Telekinesis = 0,
-    Rewind = 1,
-    TimeBubble = 2,
+    Telekinesis = 1,
+    Rewind = 2,
+    TimeBubble = 0,
 }
 
 public enum Attack
