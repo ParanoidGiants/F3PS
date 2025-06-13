@@ -72,7 +72,22 @@ namespace StarterAssets
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
+        [Space(10)]
+        [Header("Stair Climbing")]
+        [Tooltip("The maximum height of a step the character can climb.")]
+        public float MaxStepHeight = 0.4f;
 
+        [Tooltip("How far in front of the player to check for steps.")]
+        public float StepCheckDistance = 0.4f;
+
+        [Tooltip("How fast the player will move up the step. This is an upward force.")]
+        public float StepUpForce = 10f;
+
+        public bool isStairsClimbing = false;
+        public bool isStairAtLower = false;
+        public bool isStairAtUpper = false;
+
+        [Space(10)]
         [Tooltip("The time it takes for the dodge speed to cool off")]
         public float DodgeAscendTimer = 0.5f;
 
@@ -242,6 +257,7 @@ namespace StarterAssets
                 HandleDodgeRoll();
             }
             Move(skillManager.IsAiming());
+            HandleClimbingStairs();
         }
 
         private void LateUpdate()
@@ -488,6 +504,47 @@ namespace StarterAssets
             {
                 animator.SetFloat(_animIDSpeed, _animationBlend);
                 animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+        }
+
+        private void HandleClimbingStairs()
+        {
+            if (_input.move == Vector2.zero)
+            {
+                isStairsClimbing = false;
+                return;
+            }
+
+            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
+            Vector3 moveDirection = new Vector3(_input.move.x, 0, _input.move.y);
+            Vector3 forwardDirection = moveVelocity.normalized;
+
+            Vector3 lowerRayStart = transform.position + Vector3.up * 0.05f;
+
+            RaycastHit lowerHit;
+            Debug.DrawLine(lowerRayStart, lowerRayStart + forwardDirection * StepCheckDistance, Color.blue);
+            isStairAtLower = Physics.Raycast(lowerRayStart, forwardDirection, out lowerHit, StepCheckDistance, GroundLayers);
+
+            Vector3 upperRayStart = lowerRayStart + Vector3.up * (MaxStepHeight - 0.05f);
+            Debug.DrawLine(upperRayStart, upperRayStart + forwardDirection * StepCheckDistance, Color.green);
+            isStairAtUpper = Physics.Raycast(upperRayStart, forwardDirection, StepCheckDistance, GroundLayers);
+
+            if (!isStairsClimbing && isStairAtLower && !isStairAtUpper)
+            {
+                isStairsClimbing = true;
+            }
+            else if (isStairsClimbing && !isStairAtLower)
+            {
+                isStairsClimbing = false;
+            }
+            else if (isStairsClimbing)
+            {
+                _rigidbody.linearVelocity = new Vector3(
+                    _rigidbody.linearVelocity.x,
+                    StepUpForce,
+                    _rigidbody.linearVelocity.z
+                );
             }
         }
 
