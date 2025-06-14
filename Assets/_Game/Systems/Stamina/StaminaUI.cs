@@ -15,7 +15,7 @@ public class StaminaUI : MonoBehaviour
     void Update()
     {
         staminaBar.fillAmount = _staminaManager.StaminaPercentage;
-        animator.SetBool("isReloading", _staminaManager.isInRestMode);
+        animator.SetBool("isReloading", _staminaManager.isRecovering);
         animator.SetBool("isUsing", _staminaManager.isDepleting);
     }
 }

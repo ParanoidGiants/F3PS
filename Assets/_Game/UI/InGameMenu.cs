@@ -5,13 +5,47 @@ using UnityEngine.Windows;
 
 public class InGameMenu : MonoBehaviour
 {
+    [Header("References")]
     public GameObject parent;
     public GameObject menuSelection;
     public GameObject settings;
     public GameObject levelSelection;
-    public bool isReloading = false;
 
-    public void OpenMenu()
+    [Space(10)]
+    [Header("Watchers")]
+    public bool isReloading = false;
+    public bool wasMenuPressedLastFrame = false;
+    public bool isMenuOpen = false;
+
+    private void Update()
+    {
+        if (SceneLoader.Instance.isLoading) return;
+
+        var isMenuPressedThisFrame = GameManager.Instance.inputs.menu;
+        var isKeyDown = !wasMenuPressedLastFrame && isMenuPressedThisFrame;
+        wasMenuPressedLastFrame = isMenuPressedThisFrame;
+        if (isKeyDown && !isMenuOpen)
+        {
+            OnShowMainMenu();
+            isMenuOpen = true;
+            GameManager.Instance.StopGameAfterMenuOpened();
+        }
+        else if (isKeyDown && isMenuOpen)
+        {
+            HideAll();
+            isMenuOpen = false;
+            GameManager.Instance.ResumeGameAfterMenuClosed();
+        }
+    }
+
+    public void OnResumeGame()
+    {
+        HideAll();
+        isMenuOpen = false;
+        GameManager.Instance.ResumeGameAfterMenuClosed();
+    }
+
+    public void OnShowMainMenu()
     {
         parent.SetActive(true);
         menuSelection.SetActive(true);
@@ -19,15 +53,7 @@ public class InGameMenu : MonoBehaviour
         levelSelection.SetActive(false);
     }
 
-    public void ResumeGame()
-    {
-        GameManager.Instance.ResumeGame();
-        GameManager.Instance.inputs.SetCursorLockedState(true);
-        FindFirstObjectByType<ThirdPersonController>().ResumeGame();
-        CloseMenu();
-    }
-
-    public void CloseMenu()
+    public void HideAll()
     {
         parent.SetActive(false);
         menuSelection.SetActive(false);
@@ -35,23 +61,22 @@ public class InGameMenu : MonoBehaviour
         levelSelection.SetActive(false);
     }
 
-    public void OpenSettings()
+    public void OnShowSettings()
     {
         menuSelection.SetActive(false);
         settings.SetActive(true);
         levelSelection.SetActive(false);
     }
 
-    public void OpenLevelSelection()
+    public void OnShowLevelSelection()
     {
         menuSelection.SetActive(false);
         settings.SetActive(false);
         levelSelection.SetActive(true);
     }
 
-    public void RestartLevel()
+    public void OnRestartLevel()
     {
-        FindFirstObjectByType<ThirdPersonController>().ResumeGame();
         SceneLoader.Instance.ReloadScene();
     }
 }

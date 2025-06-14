@@ -1,3 +1,5 @@
+using F3PS;
+using System;
 using TimeBending;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ public class StaminaManager : MonoBehaviour
     public float staminaRegenRate = 10f;
     public float staminaDepletionRate = 10f;
     public bool isDepleting;
-    public bool isInRestMode;
+    public bool isRecovering;
     public float StaminaPercentage => stamina / staminaMax;
 
     private void Start()
@@ -18,7 +20,7 @@ public class StaminaManager : MonoBehaviour
 
     private void Update()
     {
-        if (isInRestMode)
+        if (isRecovering)
         {
             if (stamina < staminaMax)
             {
@@ -27,7 +29,7 @@ public class StaminaManager : MonoBehaviour
             else
             {
                 stamina = staminaMax;
-                isInRestMode = false;
+                isRecovering = false;
             }
             return;
         }
@@ -57,12 +59,23 @@ public class StaminaManager : MonoBehaviour
 
     public bool HasEnoughStamina(float required)
     {
-        return !isInRestMode && stamina >= required;
+        return !isRecovering && stamina >= required;
     }
 
     private void EnterRestMode()
     {
         isDepleting = false;
-        isInRestMode = true;
+        isRecovering = true;
+    }
+
+    public bool Sprint()
+    {
+        if (isRecovering || !GameManager.Instance.inputs.sprint)
+        {
+            return false;
+        }
+
+        Deplete(GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime);
+        return true;
     }
 }
