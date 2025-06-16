@@ -33,54 +33,43 @@ namespace StarterAssets
 
 
         [Space(10)]
-        [Header("Settings")]
         [Header("Camera Settings")]
         public ThirdPersonCameraSettings cameraSettings;
-        public float jumpCoolDownTimer = 0.25f;
-        public float jumpCoolDownTime;
-        public float dodgeCoolDownTimer = 0.25f;
-        public float dodgeCoolDownTime;
-        public float fallTimer = 0.15f;
-        public float fallTime;
 
         [Space(10)]
-        [Tooltip("Useful for rough ground")]
-        public float GroundedOffset = -0.14f;
+        [Header("Jump Settings")]
+        public float jumpCoolDownTimer = 0.25f;
+        public float jumpCoolDownTime;
 
-        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-        public float GroundedRadius = 0.28f;
 
-        [Tooltip("What layers the character uses as ground")]
-        public LayerMask GroundLayers;
+        [Space(10)]
+        [Header("Dodge Settings")]
+        public float _dodgeAscendTime;
+        public float DodgeAscendTimer = 0.5f;
+        public float _dodgeLandTime;
+        public float DodgeLandTimer = 0.5f;
+        public Vector3 dodgeDirection = Vector3.forward;
+        public float dodgeCoolDownTimer = 0.25f;
+        public float dodgeCoolDownTime;
 
         [Space(10)]
         [Header("Stair Climbing")]
-        [Tooltip("The maximum height of a step the character can climb.")]
         public float MaxStepHeight = 0.4f;
-
-        [Tooltip("How far in front of the player to check for steps.")]
         public float StepCheckDistance = 0.4f;
-
-        [Tooltip("How fast the player will move up the step. This is an upward force.")]
         public float StepUpForce = 10f;
         public bool isStairsClimbing = false;
         public bool isStairAtLower = false;
         public bool isStairAtUpper = false;
 
-        [Space(10)]
-        [Tooltip("The time it takes for the dodge speed to cool off")]
-        public float DodgeAscendTimer = 0.5f;
-
-        [Header("Gravity, Jump & Dodge")]
+        [Header("Gravity & Ground")]
+        public float Gravity = -15.0f;
+        public float currentVerticalSpeed;
+        public float maximumVerticalFallSpeed = 53.0f;
         public float groundedCoyoteDuration = 0.3f;
         public float _groundedCoyoteTime = 0f;
-        public float _dodgeAscendTime;
-        [Tooltip("The time it takes for the dodge roll landing animation speed to cool off")]
-        public float DodgeLandTimer = 0.5f;
-        public float _dodgeLandTime;
-
-        [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-        public float Gravity = -15.0f;
+        public float GroundedOffset = -0.14f;
+        public float GroundedRadius = 0.28f;
+        public LayerMask GroundLayers;
 
         [Space(10)]
         [Header("Platform")]
@@ -102,7 +91,6 @@ namespace StarterAssets
         [SerializeField] private float _animationBlend;
         [SerializeField] private float _targetYaw;
         [SerializeField] private float _lookYaw;
-        [SerializeField] private float _verticalVelocity;
         [SerializeField] private Vector3 _lastInputDirection;
 
         [Header("Audio")]
@@ -118,7 +106,6 @@ namespace StarterAssets
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
-        private const float _terminalVelocity = 53.0f;
 
         public Vector3 lastValidGroundPosition = Vector3.zero;
         public Vector3 beforeLastValidGroundPosition = Vector3.zero;
@@ -140,29 +127,25 @@ namespace StarterAssets
         private void Start()
         {
             cameraSettings.Start();
-            // reset our timeouts on start
             jumpCoolDownTime = jumpCoolDownTimer;
-            fallTime = fallTimer;
             dodgeCoolDownTime = dodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
         }
         private void Update()
         {
-
             if (GameManager.Instance.isMenuOpen) return;
             
             cameraSettings.HandleFreeCamera();
 
             if (!GameManager.Instance.inputs.canControlPlayer) return;
-            if (_isDying) return;
             if (timeManager.isPaused) return;
+            if (_isDying) return;
 
             animator.SetBool(_animIDGrounded, _isGrounded);
 
             skillManager.OnUpdate();
             attackManager.OnUpdate();
-
             
             _isSprinting = staminaManager.Sprint();
             HandlePlatformTransform();
@@ -171,7 +154,6 @@ namespace StarterAssets
         private void FixedUpdate()
         {
             if (!GameManager.Instance.inputs.canControlPlayer) return;
-            if (GameManager.Instance.isGamePaused) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
 
@@ -185,19 +167,23 @@ namespace StarterAssets
             if (!skillManager.IsAiming())
             {
                 JumpAndDodge();
+            }
+
+            if (_isDodging)
+            {
                 HandleDodgeRoll();
             }
-            Move(skillManager.IsAiming());
-            HandleClimbingStairs();
+            else
+            {
+                Move(skillManager.IsAiming());
+                HandleClimbingStairs();
+            }
         }
 
         private void LateUpdate()
         {
-            if (GameManager.Instance.isMenuOpen)
-                return;
-
-            if (skillManager.telekinesisController.isRotatingObjectThisFrame)
-                return;
+            if (GameManager.Instance.isMenuOpen) return;
+            if (skillManager.telekinesisController.isRotatingObjectThisFrame) return;
 
             cameraSettings.CameraTargetRotation();
         }
@@ -284,7 +270,7 @@ namespace StarterAssets
                 }
             }
 
-            var verticalVelocity = new Vector3(0.0f, _verticalVelocity, 0.0f);
+            var verticalVelocity = new Vector3(0.0f, currentVerticalSpeed, 0.0f);
             if (GameManager.Instance.inputs.move.magnitude > 0f)
             {
                 Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
@@ -341,39 +327,47 @@ namespace StarterAssets
             }
         }
 
-        // TODO: fix dodge
+        private void DoDodge()
+        {
+            currentVerticalSpeed = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
+            _isDodging = true;
+            _dodgeAscendTime = DodgeAscendTimer;
+            _dodgeLandTime = DodgeLandTimer;
+            _groundedCoyoteTime = groundedCoyoteDuration;
+
+            _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
+            dodgeDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+            animator.SetBool(_animIDDodge, true);
+            MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+        }
+
         private void HandleDodgeRoll()
         {
-            if (!_isDodging)
-            {
-                return;
-            }
-
             if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
             {
                 _isDodging = false;
                 return;
+            }
+            else if (_dodgeAscendTime > 0f)
+            {
+                _dodgeAscendTime -= Time.deltaTime;
             }
             else if (_isGrounded)
             {
                 _dodgeAscendTime = 0;
                 _dodgeLandTime -= Time.deltaTime;
             }
-            else if (_dodgeAscendTime > 0f)
-            {
-                _dodgeAscendTime -= Time.deltaTime;
-            }
             else
             {
                 _dodgeAscendTime = 0f;
             }
 
-            var speedFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
-            speedFactor = Mathf.Max(speedFactor, 0f);
-            _speed = Mathf.Lerp(
-                _playerModel.DodgeSpeed /2f,
+            var timeFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
+            timeFactor = Mathf.Max(timeFactor, 0f);
+            var speed = Mathf.Lerp(
+                0f,
                 _playerModel.DodgeSpeed,
-                Mathf.Pow(speedFactor,4f)
+                Mathf.Pow(timeFactor,4f)
             );
             _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
             _lookYaw = Mathf.SmoothDampAngle(
@@ -382,40 +376,22 @@ namespace StarterAssets
                 ref _rotationVelocity,
                 _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
-
-            transform.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-
-            _rigidbody.linearVelocity = lookDirection.normalized * (_speed * Time.deltaTime)
-                + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            _rigidbody.linearVelocity = dodgeDirection * speed
+                + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
         }
 
         private void JumpAndDodge()
         {
             var jumpInput = GameManager.Instance.inputs.jump;
             var dodgeInput = GameManager.Instance.inputs.dodge;
-            var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
-            if (_isGrounded)
+            if (_isGrounded || groundedCoyoteDuration > _groundedCoyoteTime)
             {
-                _groundedCoyoteTime = 0f;
-                if (jumpInput && cooledDown)
-                {
-                    DoJump();
-                }
-                else if (!_isDodging && dodgeInput && cooledDown)
-                {
-                    DoDodge();
-                }
-            }
-            else if (_groundedCoyoteTime < groundedCoyoteDuration && cooledDown)
-            {
-                _groundedCoyoteTime += Time.deltaTime;
-                if (jumpInput)
+                if (jumpInput && jumpCoolDownTime <= 0.0f)
                 {
                     DoJump();
                     _groundedCoyoteTime = groundedCoyoteDuration;
                 }
-                else if (!_isDodging && dodgeInput)
+                else if (dodgeInput && dodgeCoolDownTime <= 0.0f)
                 {
                     DoDodge();
                     _groundedCoyoteTime = groundedCoyoteDuration;
@@ -428,66 +404,39 @@ namespace StarterAssets
             var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
             if (_isGrounded)
             {
-                _groundedCoyoteTime = 0f;
-                fallTime = fallTimer;
                 animator.SetBool(_animIDJump, false);
                 animator.SetBool(_animIDFreeFall, false);
                 animator.SetBool(_animIDDodge, false);
 
-                if (_verticalVelocity < 0.0f)
-                {
-                    _verticalVelocity = 0f;
-                }
+                _groundedCoyoteTime = 0f;
+                currentVerticalSpeed = 0f;
+
                 if (jumpCoolDownTime >= 0.0f)
                 {
                     jumpCoolDownTime -= Time.deltaTime;
                 }
                 if (dodgeCoolDownTime >= 0.0f)
                 {
-                    _verticalVelocity = Mathf.Max(_verticalVelocity, _playerModel.DodgeHeight);
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
-            else if (_groundedCoyoteTime >= groundedCoyoteDuration || !cooledDown)
+            else
             {
-                if (_isDodging)
-                {
-                    dodgeCoolDownTime = dodgeCoolDownTimer;
-                }
-                else
-                {
-                    jumpCoolDownTime = jumpCoolDownTimer;
-                }
-                if (fallTime >= 0.0f)
-                {
-                    fallTime -= Time.deltaTime;
-                }
                 animator.SetBool(_animIDFreeFall, true);
-            }
-            if (_verticalVelocity < _terminalVelocity && _dodgeAscendTime <= 0f)
-            {
-                _verticalVelocity += Gravity * Time.deltaTime;
+                _groundedCoyoteTime += Time.deltaTime;
+
+                dodgeCoolDownTime = dodgeCoolDownTimer;
+                jumpCoolDownTime = jumpCoolDownTimer;
+                currentVerticalSpeed += Gravity * Time.deltaTime;
+                currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
             }
         }
 
         private void DoJump()
         {
             // the square root of H * -2 * G = how much velocity needed to reach desired height
-            _verticalVelocity = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
+            currentVerticalSpeed = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
             animator.SetBool(_animIDJump, true);
-            MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-        }
-
-        private void DoDodge()
-        {
-            // the square root of H * -2 * G = how much velocity needed to reach desired height
-            _verticalVelocity = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
-            _isDodging = true;
-            _dodgeAscendTime = DodgeAscendTimer;
-            _dodgeLandTime = DodgeLandTimer;
-            _groundedCoyoteTime = groundedCoyoteDuration;
-
-            animator.SetBool(_animIDDodge, true);
             MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
         }
 

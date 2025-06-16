@@ -32,9 +32,7 @@ namespace F3PS
         public PlayerData PlayerData;
         public PlayerEventController PlayerEventController;
         [SerializeField] private int _fps = 60;
-        internal bool isMenuOpen;
-        internal bool isGamePaused;
-        private bool isTimeStopped;
+        public bool isMenuOpen;
 
         public int Fps => _fps;
 
@@ -75,7 +73,6 @@ namespace F3PS
             inputs.canControlPlayer = true;
             inputs.SetCursorLockedState(true);
             isMenuOpen = false;
-            isTimeStopped = false;
         }
 
         public void ResumeGameAfterMenuClosed()
@@ -111,13 +108,11 @@ namespace F3PS
         public void PauseTime()
         {
             FindFirstObjectByType<DebugUIController>().ShowPauseText();
-            isTimeStopped = true;
         }
 
         internal void ResumeTime()
         {
             FindFirstObjectByType<DebugUIController>().HidePauseText();
-            isTimeStopped = false;
         }
 
         internal void StartSlowMotion()
