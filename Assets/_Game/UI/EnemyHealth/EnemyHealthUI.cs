@@ -1,4 +1,4 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +17,7 @@ public class EnemyHealthUI : MonoBehaviour
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
-        _canvasRectTransform = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
+        _canvasRectTransform = FindFirstObjectByType<Canvas>().GetComponent<RectTransform>();
         _cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
     }
     

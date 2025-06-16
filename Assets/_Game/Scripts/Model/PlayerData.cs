@@ -3,9 +3,9 @@ using UnityEngine;
 
 public enum Skill
 {
-    Telekinesis = 0,
-    Rewind = 1,
-    TimeBubble = 2,
+    Telekinesis = 1,
+    Rewind = 2,
+    TimeBubble = 0,
 }
 
 public enum Attack
@@ -35,6 +35,7 @@ public class PlayerData
     [Range(0.0f, 1f)]
     public float RotationSpeedYaw = 0.2f;
     public float MoveSpeed = 2.0f;
+    public float AimSpeed = 2.0f;
     public float SprintSpeed = 5.335f;
     public float SpeedChangeRate = 10.0f;
     public float JumpHeight = 1.2f;

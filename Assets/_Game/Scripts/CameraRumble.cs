@@ -1,5 +1,5 @@
 using UnityEngine;
-using Cinemachine;
+using Unity.Cinemachine;
 using System.Collections;
 
 public class CameraRumble : MonoBehaviour

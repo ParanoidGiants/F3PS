@@ -14,7 +14,7 @@ namespace F3PS.Damage.Take
         {
             _collider = GetComponent<Collider>();
             _hittableId = enemy.GetInstanceID();
-            _playerId = FindObjectOfType<ThirdPersonController>().transform.parent.GetInstanceID();
+            _playerId = FindFirstObjectByType<ThirdPersonController>().transform.parent.GetInstanceID();
         }
 
         private void OnEnable()

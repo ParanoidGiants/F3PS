@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class RewindController : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("References")]
     public RewindHUD rewindHUD;
+    public SelectSkillControllerHUD selectSkillControllerHUD;
+    public Animator animator;
 
     [Space(10)]
     [Header("Settings")]
@@ -23,22 +25,19 @@ public class RewindController : MonoBehaviour
     public bool isActivatingPlaybackThisFrame = false;
     public bool wasActivatingPlaybackLastFrame = false;
     public bool isPlaybackActive = false;
-    public SelectSkillControllerHUD selectSkillControllerHUD;
 
     private LineRenderer _lineRenderer;
     private Crosshair _crosshair;
 
     private void Awake()
     {
-        _crosshair = FindObjectOfType<Crosshair>();
+        _crosshair = FindFirstObjectByType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
-        selectSkillControllerHUD = FindObjectOfType<SelectSkillControllerHUD>();
     }
 
     private void OnEnable()
     {
         _lineRenderer.enabled = true;
-        selectSkillControllerHUD.SelectRewindHud();
     }
 
     private void OnDisable()
@@ -71,6 +70,7 @@ public class RewindController : MonoBehaviour
         {
             if (!selectedObjectForRecord)
             {
+                animator.SetTrigger("Rewind");
                 rewindHUD.SetRecording();
                 currentCandidate.StartRecording();
                 rewindHUD.UpdateRecordEffect(0);
@@ -78,6 +78,7 @@ public class RewindController : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("Rewind");
                 rewindHUD.SetNone();
                 currentCandidate.StopRecording();
                 currentCandidate.SelectAsCandidate();

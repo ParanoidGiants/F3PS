@@ -1,4 +1,4 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using DarkTonic.MasterAudio;
 using System.Collections;
 using UnityEngine;
@@ -22,11 +22,11 @@ public class MeleeAttackController : MonoBehaviour
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
+    public Animator animator;
     public Collider[] ownColliders;
 
     [Space(10)]
     [Header("HUD")]
-    public SelectAttackControllerHUD attackControllerHUD;
     public MeleeAttackHUD hud;
 
     [Space(10)]
@@ -35,11 +35,6 @@ public class MeleeAttackController : MonoBehaviour
     public bool isAttackingPressedThisFrame;
     public bool wasAttackingPressedLastFrame;
     public bool isAttacking;
-
-    private void OnEnable()
-    {
-        attackControllerHUD.SelectMeleeAttackHud();
-    }
 
     public void Init()
     {
@@ -57,7 +52,7 @@ public class MeleeAttackController : MonoBehaviour
     {
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
-            
+
         for (int i = 0; i < numberOfProjectiles; i++)
         {
             float xRotation = Random.Range(-spreadAngle, spreadAngle);
@@ -99,6 +94,7 @@ public class MeleeAttackController : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("MeleeAttack");
                 StartCoroutine(Shoot(targetPosition));
                 staminaManager.Deplete(staminaCost);
             }

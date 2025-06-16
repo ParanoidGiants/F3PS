@@ -7,6 +7,8 @@ public class AttackManager : MonoBehaviour
 {
     [Header("References")]
     public Crosshair crosshair;
+    public SelectSkillControllerHUD attackControllerHUD;
+
     [Header("Attacks")]
     public MeleeAttackController meleeAttackController;
     public LongRangeAttackController longRangeAttackController;
@@ -84,6 +86,7 @@ public class AttackManager : MonoBehaviour
 
     private void SetActiveAttack(Attack attack)
     {
+        attackControllerHUD.SelectSkillHud((int)attack);
         meleeAttackController.gameObject.SetActive(attack == Attack.Melee);
         longRangeAttackController.gameObject.SetActive(attack == Attack.LongRange);
         GameManager.Instance.PlayerData.ActiveAttack = attack;

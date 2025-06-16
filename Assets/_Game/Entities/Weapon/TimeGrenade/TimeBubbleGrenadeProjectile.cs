@@ -1,6 +1,5 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using DG.Tweening;
-using System.Collections;
 using UnityEngine;
 
 public class TimeBubbleGrenadeProjectile : MonoBehaviour
@@ -38,7 +37,7 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
 
     private void Awake()
     {
-        hud = FindObjectOfType<TimeBubbleHUD>();
+        hud = FindFirstObjectByType<TimeBubbleHUD>();
         hud.SetTimeScale(timeBubble.timeScale);
     }
 

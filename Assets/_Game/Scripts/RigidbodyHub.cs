@@ -33,7 +33,7 @@ public class RigidbodyHub : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         defaultMass = _rigidbody.mass;
-        maximumThrowSpeed = FindObjectOfType<TelekinesisController>(true).maximumThrowSpeed;
+        maximumThrowSpeed = FindFirstObjectByType<TelekinesisController>(FindObjectsInactive.Include).maximumThrowSpeed;
     }
 
     void FixedUpdate()

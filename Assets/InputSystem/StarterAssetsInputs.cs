@@ -8,7 +8,11 @@ namespace StarterAssets
 {
 	public class StarterAssetsInputs : MonoBehaviour
 	{
-		[Header("Character Input Values")]
+		[Header("Watchers")]
+        public bool canControlPlayer = true;
+
+		[Space(10)]
+        [Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
 		public float bubbleTimeScale;
@@ -33,7 +37,7 @@ namespace StarterAssets
         [Header("Movement Settings")]
 		public bool analogMovement;
 
-		[Header("Mouse Cursor Settings")]
+        [Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
@@ -230,6 +234,11 @@ namespace StarterAssets
             Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
             cursorLocked = newState;
 		}
-	}
+
+        internal void Reset()
+        {
+            throw new NotImplementedException();
+        }
+    }
 	
 }

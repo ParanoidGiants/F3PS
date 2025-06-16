@@ -90,7 +90,7 @@
                     "name": "SlowMo",
                     "type": "Value",
                     "id": "aef0cd7d-937e-4803-a235-108a317d3a25",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -99,7 +99,7 @@
                     "name": "Dodge",
                     "type": "PassThrough",
                     "id": "24ceefe5-fea3-4336-b9b3-00db0c1eaaca",
-                    "expectedControlType": "",
+                    "expectedControlType": "DiscreteButton",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -427,7 +427,7 @@
                 {
                     "name": "",
                     "id": "db134118-c92f-405c-bc29-cadc5620656e",
-                    "path": "<Keyboard>/y",
+                    "path": "<Keyboard>/capsLock",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",

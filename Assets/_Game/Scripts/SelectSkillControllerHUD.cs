@@ -2,29 +2,20 @@ using UnityEngine;
 
 public class SelectSkillControllerHUD : MonoBehaviour
 {
-    public SelectableSkillHUD timeBubbleHud;
-    public SelectableSkillHUD rewindHud;
-    public SelectableSkillHUD telekinesisHud;
+    public SelectableSkillHUD[] skillHuds;
 
-    public void SelectTimeBubbleHud()
+    public void SelectSkillHud(int index)
     {
-        timeBubbleHud.Select();
-        rewindHud.Deselect();
-        telekinesisHud.Deselect();
+        for (int i = 0; i < skillHuds.Length; i++)
+        {
+            if (i == index)
+            {
+                skillHuds[i].Select();
+            }
+            else
+            {
+                skillHuds[i].Deselect();
+            }
+        }
     }
-
-    public void SelectRewindHud()
-    {
-        rewindHud.Select();
-        timeBubbleHud.Deselect();
-        telekinesisHud.Deselect();
-    }
-
-    public void SelectTelekinesisHud()
-    {
-        telekinesisHud.Select();
-        timeBubbleHud.Deselect();
-        rewindHud.Deselect();
-    }
-
 }

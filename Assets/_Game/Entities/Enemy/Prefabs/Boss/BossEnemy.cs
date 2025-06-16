@@ -30,7 +30,7 @@ namespace F3PS.Enemy
         
         private new void Awake()
         {
-            _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+            _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
             rushers = rusherLayer.GetComponentsInChildren<BaseEnemy>().ToList();
             shooters = shooterLayer.GetComponentsInChildren<BaseEnemy>().ToList();
             shieldShooters = shieldShooterLayer.GetComponentsInChildren<BaseEnemy>().ToList();

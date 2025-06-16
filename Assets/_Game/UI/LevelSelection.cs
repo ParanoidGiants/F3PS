@@ -1,15 +1,14 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LevelSelection : MonoBehaviour
 {
     public string sceneName;
     public TextMeshProUGUI levelName;
+    public InGameMenu inGameMenu;
     public void OnSelectLevel()
     {
         SceneLoader.Instance.LoadScene(sceneName);
-        FindObjectOfType<InGameMenu>().CloseMenu();
     }
 
     public void Init(string sceneName)

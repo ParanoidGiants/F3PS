@@ -10,31 +10,42 @@ public class SetCurrentHealthView : MonoBehaviour
 
     public Slider slider;
     public TextMeshProUGUI healthText;
-    private int _currentHealth;
-    private int _maxHealth;
+    private bool initialized = false;
 
-    private void Start()
+    private void OnEnable()
     {
         slider.minValue = 1;
-        slider.maxValue = 3000;
-        SetCurrentHealthSlider(PlayerData.CurrentHealth);
+        slider.maxValue = PlayerData.MaxHealth;
+        slider.value = PlayerData.CurrentHealth;
+
         PlayerEventController.OnCurrentHealthChanged += SetCurrentHealthSlider;
+        PlayerEventController.OnMaxHealthChanged += SetMaxHealth;
+        initialized = true;
+    }
+
+    private void OnDisable()
+    {
+        initialized = false;
+        PlayerEventController.OnCurrentHealthChanged -= SetCurrentHealthSlider;
+        PlayerEventController.OnMaxHealthChanged -= SetMaxHealth;
     }
 
     private void SetCurrentHealthSlider(int currentHealth)
     {
-        _currentHealth = currentHealth;
+        slider.maxValue = PlayerData.MaxHealth;
         slider.value = currentHealth;
-        UpdateText();
+        healthText.text = $"{PlayerData.CurrentHealth}/{PlayerData.MaxHealth}";
+    }
+
+    private void SetMaxHealth(int maxHealth)
+    {
+        SetCurrentHealthSlider(PlayerData.CurrentHealth);
     }
 
     public void OnValueChanged(float value)
     {
-        PlayerEventController.UpdateCurrentHealth((int)value);
-    }
+        if (!initialized) return;
 
-    private void UpdateText()
-    {
-        healthText.text = $"{_currentHealth}/{_maxHealth}";
+        PlayerEventController.UpdateCurrentHealth((int)value);
     }
 }

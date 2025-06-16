@@ -58,7 +58,7 @@ namespace F3PS.Enemy
         
         protected void Awake()
         {
-            _healthUIPool = FindObjectOfType<EnemyHealthUIPool>();
+            _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
         }
 
         private void Start()
