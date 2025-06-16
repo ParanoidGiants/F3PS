@@ -256,18 +256,16 @@ namespace StarterAssets
                 ref _rotationVelocity,
                 _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
             );
-            if (GameManager.Instance.inputs.move.magnitude > 0f)
+            
+            if (isAiming)
             {
-                if (isAiming)
-                {
-                    var cameraForward = cameraSettings.defaultCamera.transform.forward;
-                    var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
-                    armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
-                }
-                else
-                {
-                    armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
-                }
+                var cameraForward = cameraSettings.defaultCamera.transform.forward;
+                var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
+                armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
+            }
+            else if(GameManager.Instance.inputs.move.magnitude > 0f)
+            {
+                armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             }
 
             var verticalVelocity = new Vector3(0.0f, currentVerticalSpeed, 0.0f);

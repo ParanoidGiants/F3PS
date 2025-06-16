@@ -20,6 +20,7 @@ public class LongRangeAttackController : MonoBehaviour
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
+    public Animator animator;
     public Collider[] ownColliders;
 
     [Space(10)]
@@ -90,6 +91,7 @@ public class LongRangeAttackController : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("LongRangeAttack");
                 StartCoroutine(Shoot(targetPosition));
                 staminaManager.Deplete(staminaCost);
             }

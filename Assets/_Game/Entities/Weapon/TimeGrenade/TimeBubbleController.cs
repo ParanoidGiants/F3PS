@@ -8,7 +8,8 @@ public class TimeBubbleController : MonoBehaviour
     public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
     public LineRenderer throwLine;
     public Transform spawnTransform;
-        
+    public Animator animator;
+
     [Space(10)]
     [Header("Settings")]
     public float throwPower;
@@ -96,6 +97,7 @@ public class TimeBubbleController : MonoBehaviour
             throwPower
         );
         timeBubbleGrenadeProjectile.gameObject.SetActive(true);
+        animator.SetTrigger("TimeBubble");
     }
 
     private void ShowThrowLine()

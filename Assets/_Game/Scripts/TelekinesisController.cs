@@ -1,6 +1,4 @@
-using Unity.Cinemachine;
 using StarterAssets;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,6 +21,7 @@ public class TelekinesisController : MonoBehaviour
     public LineRenderer lineRenderer;
     public Transform target;
     public Transform playerCameraTransform;
+    public Animator animator;
 
     [Space(10)]
     [Header("Settings")]
@@ -82,6 +81,7 @@ public class TelekinesisController : MonoBehaviour
 
         currentCandidate.UnselectAsCandidate();
         isActuallyMovingObject = false;
+        animator.SetBool("Telekinesis", false);
         isRotatingObjectThisFrame = false;
         hasCandidate = false;
     }
@@ -97,6 +97,7 @@ public class TelekinesisController : MonoBehaviour
         if (!PlayerIsGrounded() || !hasCandidate || currentCandidate.IsLocked)
         {
             isActuallyMovingObject = false;
+            animator.SetBool("Telekinesis", false);
             return;
         }
 
@@ -108,8 +109,8 @@ public class TelekinesisController : MonoBehaviour
         {
             if (isActuallyMovingObject)
             {
-                // Stop Moving Object
                 isActuallyMovingObject = false;
+                animator.SetBool("Telekinesis", false);
                 isActuallyRotatingObject = false;
                 target.gameObject.SetActive(false);
                 currentCandidate.StopMoving(maximumThrowSpeed);
@@ -127,6 +128,7 @@ public class TelekinesisController : MonoBehaviour
         if (startMovingObject)
         {
             isActuallyMovingObject = true;
+            animator.SetBool("Telekinesis", true);
             target.gameObject.SetActive(true);
             SetTargetPosition(targetPosition);
             currentCandidate.SnapToRelativeRotation(SubjectOrientation);
@@ -138,6 +140,7 @@ public class TelekinesisController : MonoBehaviour
         {
             // Stop Moving Object
             isActuallyMovingObject = false;
+            animator.SetBool("Telekinesis", false);
             isActuallyRotatingObject = false;
             target.gameObject.SetActive(false);
             currentCandidate.StopMoving(maximumThrowSpeed);

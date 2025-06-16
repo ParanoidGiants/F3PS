@@ -22,6 +22,7 @@ public class MeleeAttackController : MonoBehaviour
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
+    public Animator animator;
     public Collider[] ownColliders;
 
     [Space(10)]
@@ -51,7 +52,7 @@ public class MeleeAttackController : MonoBehaviour
     {
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
-            
+
         for (int i = 0; i < numberOfProjectiles; i++)
         {
             float xRotation = Random.Range(-spreadAngle, spreadAngle);
@@ -93,6 +94,7 @@ public class MeleeAttackController : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("MeleeAttack");
                 StartCoroutine(Shoot(targetPosition));
                 staminaManager.Deplete(staminaCost);
             }

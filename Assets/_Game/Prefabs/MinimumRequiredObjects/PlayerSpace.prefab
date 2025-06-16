@@ -542,6 +542,7 @@ MonoBehaviour:
   projectilePool: {fileID: 8721933962685097986}
   staminaManager: {fileID: 1744126499951277047}
   screenShakeSource: {fileID: 918181593482795897}
+  animator: {fileID: 3756245146727236597}
   ownColliders:
   - {fileID: 7574983506362488686}
   - {fileID: 7574983505495882432}
@@ -5660,7 +5661,7 @@ Transform:
   m_GameObject: {fileID: 1634472901277285006}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.6, y: 9.117999, z: 98.7}
+  m_LocalPosition: {x: 0.5, y: 11.94, z: 44.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5732,7 +5733,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 1
     IgnoreTag: 
-    CameraRadius: 0.2
+    CameraRadius: 0.001
     DampingIntoCollision: 0.05
     DampingFromCollision: 0.05
 --- !u!114 &1634472901277285007
@@ -6842,7 +6843,7 @@ Transform:
   m_GameObject: {fileID: 3022957628131920240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.1, y: 7.568, z: 100.7}
+  m_LocalPosition: {x: 0, y: 10.39, z: 46.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6965,28 +6966,29 @@ MonoBehaviour:
     isFreeCameraActive: 0
   jumpCoolDownTimer: 0.25
   jumpCoolDownTime: 0
+  _dodgeAscendTime: 0
+  DodgeAscendTimer: 0.3
+  _dodgeLandTime: 0
+  DodgeLandTimer: 0.3
+  dodgeDirection: {x: 0, y: 0, z: 1}
   dodgeCoolDownTimer: 0.25
   dodgeCoolDownTime: 0
-  fallTimer: 0.15
-  fallTime: 0
-  GroundedOffset: -0.11
-  GroundedRadius: 0.16
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 32769
   MaxStepHeight: 0.4
   StepCheckDistance: 0.4
   StepUpForce: 20
   isStairsClimbing: 0
   isStairAtLower: 0
   isStairAtUpper: 0
-  DodgeAscendTimer: 0.3
+  Gravity: -100
+  currentVerticalSpeed: 0
+  maximumVerticalFallSpeed: 53
   groundedCoyoteDuration: 0.3
   _groundedCoyoteTime: 0
-  _dodgeAscendTime: 0
-  DodgeLandTimer: 0.3
-  _dodgeLandTime: 0
-  Gravity: -100
+  GroundedOffset: -0.11
+  GroundedRadius: 0.16
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 32769
   currentGround: {fileID: 0}
   groundNormal: {x: 0, y: 0, z: 0}
   lastGroundPosition: {x: 0, y: 0, z: 0}
@@ -7003,7 +7005,6 @@ MonoBehaviour:
   _animationBlend: 0
   _targetYaw: 0
   _lookYaw: 0
-  _verticalVelocity: 0
   _lastInputDirection: {x: 0, y: 0, z: 0}
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   FootstepAudioClips:
@@ -15721,6 +15722,7 @@ MonoBehaviour:
   timeBubbleGrenadeProjectile: {fileID: 6326605106768036180}
   throwLine: {fileID: 6324198978507387220}
   spawnTransform: {fileID: 6464183184900770139}
+  animator: {fileID: 3756245146727236597}
   throwPower: 20
   lineResolution: 200
   lineStepSize: 0.05
@@ -18624,6 +18626,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 7574983505477571673}
   target: {fileID: 7574983505898908273}
   playerCameraTransform: {fileID: 1634472901277285233}
+  animator: {fileID: 3756245146727236597}
   pushPullSpeed: 10
   rotateTimer: 0.5
   moveSpeed: 10
@@ -19568,6 +19571,7 @@ MonoBehaviour:
   projectilePool: {fileID: 7574983506069927854}
   staminaManager: {fileID: 1744126499951277047}
   screenShakeSource: {fileID: 7574983505734437856}
+  animator: {fileID: 3756245146727236597}
   ownColliders:
   - {fileID: 7574983506362488686}
   - {fileID: 7574983505495882432}
@@ -21097,6 +21101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewindHUD: {fileID: 7574983506523566341}
+  selectSkillControllerHUD: {fileID: 4911003786119444408}
+  animator: {fileID: 3756245146727236597}
   rewindableLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -21112,7 +21118,6 @@ MonoBehaviour:
   isActivatingPlaybackThisFrame: 0
   wasActivatingPlaybackLastFrame: 0
   isPlaybackActive: 0
-  selectSkillControllerHUD: {fileID: 4911003786119444408}
 --- !u!1 &7574983506500630211
 GameObject:
   m_ObjectHideFlags: 0
