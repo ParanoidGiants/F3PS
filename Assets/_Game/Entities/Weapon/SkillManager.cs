@@ -1,5 +1,6 @@
 using F3PS;
 using StarterAssets;
+using System;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -133,6 +134,24 @@ public class SkillManager : MonoBehaviour
                 return timeBubbleController.IsAiming();
             default:
                 return false;
+        }
+    }
+
+    internal void OnLateUpdate()
+    {
+
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        {
+            case Skill.Telekinesis:
+                telekinesisController.OnLateUpdate();
+                break;
+
+            case Skill.Rewind:
+                rewindController.OnLateUpdate();
+                break;
+
+            default:
+                break;
         }
     }
 }

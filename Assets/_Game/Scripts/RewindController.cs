@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RewindController : MonoBehaviour
@@ -192,5 +193,11 @@ public class RewindController : MonoBehaviour
     public bool IsAiming()
     {
         return !wasRecordingLastFrame && isRecordingThisFrame;
+    }
+
+    internal void OnLateUpdate()
+    {
+        _lineRenderer.SetPosition(0, transform.position);
+        _lineRenderer.SetPosition(1, contactPoint);
     }
 }

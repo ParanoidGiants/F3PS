@@ -182,10 +182,14 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            if (GameManager.Instance.isMenuOpen) return;
-            if (skillManager.telekinesisController.isRotatingObjectThisFrame) return;
-
-            cameraSettings.CameraTargetRotation();
+            if (!GameManager.Instance.isMenuOpen && !skillManager.telekinesisController.isRotatingObjectThisFrame)
+            {
+                cameraSettings.CameraTargetRotation();
+            }
+            if (GameManager.Instance.inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            {
+                skillManager.OnLateUpdate();
+            }
         }
 
 

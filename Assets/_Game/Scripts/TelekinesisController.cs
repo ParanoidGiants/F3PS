@@ -1,4 +1,5 @@
 using StarterAssets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -88,9 +89,6 @@ public class TelekinesisController : MonoBehaviour
 
     public void OnUpdate(bool isMoving, bool isRotating, Vector2 rotationDeltaXY, float pushPull)
     {
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, targetPosition);
-
         wasMovingObjectLastFrame = isMovingObjectThisFrame ;
         isMovingObjectThisFrame = isMoving;
 
@@ -348,5 +346,11 @@ public class TelekinesisController : MonoBehaviour
             default:
                 return Quaternion.identity;
         }
+    }
+
+    internal void OnLateUpdate()
+    {
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, targetPosition);
     }
 }
