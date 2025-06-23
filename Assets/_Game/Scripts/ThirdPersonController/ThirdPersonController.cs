@@ -17,10 +17,6 @@ namespace StarterAssets
     [RequireComponent(typeof(Rigidbody))]
     public class ThirdPersonController : MonoBehaviour
     {
-        private PlayerData _playerModel;
-        private PlayerEventController _playerEventController;
-
-        [Space(20)]
         [Header("References")]
         public StaminaManager staminaManager;
         public TimeManager timeManager;
@@ -31,26 +27,20 @@ namespace StarterAssets
         public Animator animator;
         public Transform armature;
 
-
         [Space(10)]
         [Header("Camera Settings")]
         public ThirdPersonCameraSettings cameraSettings;
 
         [Space(10)]
         [Header("Jump Settings")]
-        public float jumpCoolDownTimer = 0.25f;
         public float jumpCoolDownTime;
-
 
         [Space(10)]
         [Header("Dodge Settings")]
-        public float _dodgeAscendTime;
-        public float DodgeAscendTimer = 0.5f;
-        public float _dodgeLandTime;
-        public float DodgeLandTimer = 0.5f;
-        public Vector3 dodgeDirection = Vector3.forward;
-        public float dodgeCoolDownTimer = 0.25f;
+        public float dodgeAscendTime;
+        public float dodgeLandTime;
         public float dodgeCoolDownTime;
+        public Vector3 dodgeDirection = Vector3.forward;
 
         [Space(10)]
         [Header("Stair Climbing")]
@@ -113,7 +103,8 @@ namespace StarterAssets
         public float checkGroundTime = 0f;
 
         private Rigidbody _rigidbody;
-
+        private PlayerData _playerModel;
+        private PlayerEventController _playerEventController;
 
         public bool IsGrounded => _isGrounded;
 
@@ -127,8 +118,8 @@ namespace StarterAssets
         private void Start()
         {
             cameraSettings.Start();
-            jumpCoolDownTime = jumpCoolDownTimer;
-            dodgeCoolDownTime = dodgeCoolDownTimer;
+            jumpCoolDownTime = _playerModel.JumpCoolDownTimer;
+            dodgeCoolDownTime = _playerModel.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
         }
@@ -176,7 +167,7 @@ namespace StarterAssets
             else
             {
                 Move(skillManager.IsAiming());
-                HandleClimbingStairs();
+                //HandleClimbingStairs();
             }
         }
 
@@ -333,8 +324,8 @@ namespace StarterAssets
         {
             currentVerticalSpeed = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
             _isDodging = true;
-            _dodgeAscendTime = DodgeAscendTimer;
-            _dodgeLandTime = DodgeLandTimer;
+            dodgeAscendTime = 0f;
+            dodgeLandTime = 0f;
             _groundedCoyoteTime = groundedCoyoteDuration;
 
             _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
@@ -345,32 +336,30 @@ namespace StarterAssets
 
         private void HandleDodgeRoll()
         {
-            if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
+            if (dodgeAscendTime >= _playerModel.DodgeAscendTimer && dodgeLandTime >= _playerModel.DodgeLandTimer)
             {
                 _isDodging = false;
                 return;
             }
-            else if (_dodgeAscendTime > 0f)
+            else if (dodgeAscendTime < _playerModel.DodgeAscendTimer)
             {
-                _dodgeAscendTime -= Time.deltaTime;
+                dodgeAscendTime += Time.deltaTime;
             }
             else if (_isGrounded)
             {
-                _dodgeAscendTime = 0;
-                _dodgeLandTime -= Time.deltaTime;
+                dodgeAscendTime = _playerModel.DodgeAscendTimer;
+                dodgeLandTime += Time.deltaTime;
             }
             else
             {
-                _dodgeAscendTime = 0f;
+                dodgeAscendTime = _playerModel.DodgeAscendTimer;
             }
 
-            var timeFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
-            timeFactor = Mathf.Max(timeFactor, 0f);
-            var speed = Mathf.Lerp(
-                0f,
-                _playerModel.DodgeSpeed,
-                Mathf.Pow(timeFactor,4f)
-            );
+            var currentTime = dodgeAscendTime + dodgeLandTime;
+            var totalTime = _playerModel.DodgeAscendTimer + _playerModel.DodgeLandTimer;
+            var timeFactor = currentTime / totalTime;
+            timeFactor = Mathf.Min(timeFactor, 1f);
+            var speed = Mathf.Lerp(_playerModel.DodgeSpeed, 0f, Mathf.Pow(timeFactor,4f));
             _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
             _lookYaw = Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
@@ -401,7 +390,7 @@ namespace StarterAssets
             }
         }
 
-        private void HandleFallAndGravity()
+        private void  HandleFallAndGravity()
         {
             var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
             if (_isGrounded)
@@ -427,8 +416,8 @@ namespace StarterAssets
                 animator.SetBool(_animIDFreeFall, true);
                 _groundedCoyoteTime += Time.deltaTime;
 
-                dodgeCoolDownTime = dodgeCoolDownTimer;
-                jumpCoolDownTime = jumpCoolDownTimer;
+                dodgeCoolDownTime = _playerModel.DodgeCoolDownTimer;
+                jumpCoolDownTime = _playerModel.JumpCoolDownTimer;
                 currentVerticalSpeed += Gravity * Time.deltaTime;
                 currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
             }
@@ -558,22 +547,6 @@ namespace StarterAssets
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius
             );
-        }
-
-        public void ResetToLastGroundPosition()
-        {
-            transform.position = lastValidGroundPosition + Vector3.up;
-            _rigidbody.linearVelocity = Vector3.zero;
-        }
-
-        public void PauseGame()
-        {
-
-        }
-
-        public void ResumeGame()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -22,12 +22,13 @@ public class PlayerData
         CurrentHealth = MaxHealth;
     }
 
+    [Space(10)]
+    [Header("Health")]
     public int CurrentHealth;
     public int MaxHealth = 100;
 
-    public Skill ActiveSkill = Skill.Telekinesis;
-    public Attack ActiveAttack = Attack.Melee;
-
+    [Space(10)]
+    [Header("Move Settings")]
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
     [Range(0.0f, 1f)]
@@ -37,10 +38,24 @@ public class PlayerData
     public float MoveSpeed = 2.0f;
     public float AimSpeed = 2.0f;
     public float SprintSpeed = 5.335f;
+    public float SprintDepletionRate = 10f;
     public float SpeedChangeRate = 10.0f;
+
+    [Space(10)]
+    [Header("Jump Settings")]
+    public float JumpCoolDownTimer = 0.25f;
     public float JumpHeight = 1.2f;
+
+    [Space(10)]
+    [Header("Dodge Settings")]
     public float DodgeHeight = 1.2f;
     public float DodgeSpeed = 60f;
+    public float DodgeAscendTimer = 0.5f;
+    public float DodgeLandTimer = 0.5f;
+    public float DodgeCoolDownTimer = 0.25f;
 
-    public float SprintDepletionRate = 10f;
+    [Space(10)]
+    [Header("Skills and Attacks")]
+    public Skill ActiveSkill = Skill.Telekinesis;
+    public Attack ActiveAttack = Attack.Melee;
 }

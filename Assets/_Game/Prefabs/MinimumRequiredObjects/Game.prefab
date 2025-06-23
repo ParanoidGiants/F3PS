@@ -278,20 +278,25 @@ MonoBehaviour:
   PlayerData:
     CurrentHealth: 0
     MaxHealth: 100
-    ActiveSkill: 0
-    ActiveAttack: 0
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5
     RotationSpeedYaw: 0.5
     MoveSpeed: 50
     AimSpeed: 40
     SprintSpeed: 70
-    SpeedChangeRate: 10
-    JumpHeight: 5
-    DodgeHeight: 1.2
-    DodgeSpeed: 60
     SprintDepletionRate: 10
+    SpeedChangeRate: 10
+    JumpCoolDownTimer: 0.25
+    JumpHeight: 8
+    DodgeHeight: 1.2
+    DodgeSpeed: 40
+    DodgeAscendTimer: 0.05
+    DodgeLandTimer: 0.05
+    DodgeCoolDownTimer: 0.25
+    ActiveSkill: 2
+    ActiveAttack: 0
   _fps: 60
+  isMenuOpen: 0
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0
