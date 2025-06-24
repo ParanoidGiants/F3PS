@@ -60,11 +60,10 @@ namespace StarterAssets
         public float GroundedOffset = -0.14f;
         public float GroundedRadius = 0.28f;
         public LayerMask GroundLayers;
-
-        [Space(10)]
-        [Header("Platform")]
         public Transform currentGround;
         public Vector3 groundNormal;
+        public Vector3 groundHitPointLocal;
+        public Vector3 groundHitPointWorld;
         public Vector3 lastGroundPosition;
 
         [Header("Watchers")]
@@ -113,6 +112,7 @@ namespace StarterAssets
             _rigidbody = GetComponent<Rigidbody>();
             _playerModel = GameManager.Instance.PlayerData;
             _playerEventController = GameManager.Instance.PlayerEventController;
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         private void Start()
@@ -139,7 +139,6 @@ namespace StarterAssets
             attackManager.OnUpdate();
             
             _isSprinting = staminaManager.Sprint();
-            HandlePlatformTransform();
         }
 
         private void FixedUpdate()
@@ -149,6 +148,7 @@ namespace StarterAssets
             if (_isDying) return;
 
 
+            HandlePlatformTransform();
             GroundedCheck();
             HandleFallAndGravity();
 
@@ -168,6 +168,11 @@ namespace StarterAssets
             {
                 Move(skillManager.IsAiming());
                 //HandleClimbingStairs();
+                if (_isGrounded && currentGround != null)
+                {
+                    groundHitPointWorld = transform.position;
+                    groundHitPointLocal = currentGround.InverseTransformPoint(groundHitPointWorld);
+                }
             }
         }
 
@@ -184,6 +189,50 @@ namespace StarterAssets
         }
 
 
+        private void GroundedCheck()
+        {
+            Vector3 spherePosition = new Vector3(
+                transform.position.x,
+                transform.position.y - GroundedOffset,
+                transform.position.z
+            );
+            _isGrounded = Physics.CheckSphere(
+                spherePosition,
+                GroundedRadius,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
+
+            if (!_isGrounded)
+            {
+                currentGround = null;
+                groundNormal = Vector3.up;
+                checkGroundTime = 0f;
+                return;
+            }
+            Ray groundRay = new Ray(
+                spherePosition,
+                Vector3.down
+            );
+            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
+            // check if the ray hits the ground
+
+            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
+            {
+                groundNormal = Vector3.up;
+                _isGrounded = false;
+                checkGroundTime = 0f;
+                return;
+            }
+
+            var groundedObject = hit.transform;
+            currentGround = groundedObject;
+            groundNormal = hit.normal;
+            groundHitPointWorld = hit.point;
+            groundHitPointLocal = groundedObject.InverseTransformPoint(groundHitPointWorld);
+            lastGroundPosition = groundedObject.position;
+        }
+
         private void HandlePlatformTransform()
         {
             if (!_isGrounded)
@@ -191,9 +240,12 @@ namespace StarterAssets
                 return;
             }
 
-            var platformDirection = currentGround.position - lastGroundPosition;
-            lastGroundPosition = currentGround.position;
-            transform.position += platformDirection;
+            var currentGroundHitPointWorld = currentGround.TransformPoint(groundHitPointLocal);
+            var groundMovedDirection = currentGroundHitPointWorld - groundHitPointWorld;
+            Debug.Log(groundMovedDirection);
+            _rigidbody.MovePosition(_rigidbody.position + groundMovedDirection);
+            groundHitPointWorld = currentGroundHitPointWorld;
+            groundHitPointLocal = currentGround.InverseTransformPoint(groundHitPointWorld);
         }
 
         private void Move(bool isAiming)
@@ -277,47 +329,6 @@ namespace StarterAssets
 
             animator.SetFloat(_animIDSpeed, _animationBlend);
             animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-        }
-
-        private void HandleClimbingStairs()
-        {
-            if (GameManager.Instance.inputs.move == Vector2.zero)
-            {
-                isStairsClimbing = false;
-                return;
-            }
-
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
-            Vector3 moveDirection = new Vector3(GameManager.Instance.inputs.move.x, 0, GameManager.Instance.inputs.move.y);
-            Vector3 forwardDirection = moveVelocity.normalized;
-
-            Vector3 lowerRayStart = transform.position + Vector3.up * 0.05f;
-
-            RaycastHit lowerHit;
-            Debug.DrawLine(lowerRayStart, lowerRayStart + forwardDirection * StepCheckDistance, Color.blue);
-            isStairAtLower = Physics.Raycast(lowerRayStart, forwardDirection, out lowerHit, StepCheckDistance, GroundLayers);
-
-            Vector3 upperRayStart = lowerRayStart + Vector3.up * (MaxStepHeight - 0.05f);
-            Debug.DrawLine(upperRayStart, upperRayStart + forwardDirection * StepCheckDistance, Color.green);
-            isStairAtUpper = Physics.Raycast(upperRayStart, forwardDirection, StepCheckDistance, GroundLayers);
-
-            if (!isStairsClimbing && isStairAtLower && !isStairAtUpper)
-            {
-                isStairsClimbing = true;
-            }
-            else if (isStairsClimbing && !isStairAtLower)
-            {
-                isStairsClimbing = false;
-            }
-            else if (isStairsClimbing)
-            {
-                _rigidbody.linearVelocity = new Vector3(
-                    _rigidbody.linearVelocity.x,
-                    StepUpForce,
-                    _rigidbody.linearVelocity.z
-                );
-            }
         }
 
         private void DoDodge()
@@ -479,59 +490,6 @@ namespace StarterAssets
             animator.SetTrigger("Die");
             Destroy(hittableManager.gameObject);
             SceneLoader.Instance.ReloadScene(5f);
-        }
-
-        private void GroundedCheck()
-        {
-            Vector3 spherePosition = new Vector3(
-                transform.position.x,
-                transform.position.y - GroundedOffset,
-                transform.position.z
-            );
-            _isGrounded = Physics.CheckSphere(
-                spherePosition,
-                GroundedRadius,
-                GroundLayers,
-                QueryTriggerInteraction.Ignore
-            );
-
-            if (!_isGrounded)
-            {
-                currentGround = null;
-                groundNormal = Vector3.up;
-                checkGroundTime = 0f;
-                return;
-            }
-            Ray groundRay = new Ray(
-                spherePosition,
-                Vector3.down
-            );
-            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
-            // check if the ray hits the ground
-
-            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
-            {
-                groundNormal = Vector3.up;
-                _isGrounded = false;
-                checkGroundTime = 0f;
-                return;
-            }
-
-            var groundedObject = hit.transform;
-            groundNormal = hit.normal;
-            if (groundedObject != currentGround)
-            {
-                currentGround = groundedObject;
-                lastGroundPosition = currentGround.position;
-            }
-
-            checkGroundTime += Time.deltaTime;
-            if (checkGroundTime >= checkGroundTimer)
-            {
-                beforeLastValidGroundPosition = lastValidGroundPosition;
-                lastValidGroundPosition = transform.position;
-                checkGroundTime = 0f;
-            }
         }
 
         private void OnDrawGizmosSelected()
