@@ -54,7 +54,16 @@ public class TimeBubbleController : MonoBehaviour
                 timeBubbleGrenadeProjectile.DeactivateTimeBubble();
             }
         }
-        else if (!isThrown && !timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled)
+        else if (isThrown)
+        {
+            if (isAimingThisFrame && !wasAimingLastFrame)
+            {
+                isThrown = false;
+                isDeactivated = true;
+                timeBubbleGrenadeProjectile.InterruptThrow();
+            }
+        }
+        else if (!timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled)
         {
             if (!isDeactivated)
             {

@@ -152,6 +152,14 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
             });
     }
 
+    public void InterruptThrow()
+    {
+        _isUpAndRunning = false;
+        timeBubble.Clear();
+        timeBubble.gameObject.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
     public void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
     {
         _speed = shootSpeed;
