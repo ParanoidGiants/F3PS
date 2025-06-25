@@ -13,6 +13,6 @@ public class DeadZone : MonoBehaviour
             return;
         }
 
-        // player.ResetToLastGroundPosition();
+        player.ResetToLastGroundPosition();
     }
 }

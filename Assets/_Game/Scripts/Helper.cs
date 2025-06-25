@@ -44,6 +44,10 @@ public static class Helper
         var result = colliderLayer & EnemyLayer;
         return result != 0;
     }
+    public static bool IsInLayerMask(this GameObject obj, LayerMask mask)
+    {
+        return ((mask.value & (1 << obj.layer)) != 0);
+    }
 
     public static bool HasReachedDestination(NavMeshAgent agent, float threshold = 0.1f)
     {

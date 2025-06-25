@@ -6985,9 +6985,18 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 32769
+  SolidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 1
   currentGround: {fileID: 0}
   groundNormal: {x: 0, y: 0, z: 0}
+  groundHitPointLocal: {x: 0, y: 0, z: 0}
+  groundHitPointWorld: {x: 0, y: 0, z: 0}
   lastGroundPosition: {x: 0, y: 0, z: 0}
+  lastValidGroundPosition: {x: 0, y: 0, z: 0}
+  beforeLastValidGroundPosition: {x: 0, y: 0, z: 0}
+  checkGroundTimer: 1
+  checkGroundTime: 0
   _isGrounded: 0
   _isSprinting: 0
   _isShooting: 0
@@ -7015,10 +7024,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
-  lastValidGroundPosition: {x: 0, y: 0, z: 0}
-  beforeLastValidGroundPosition: {x: 0, y: 0, z: 0}
-  checkGroundTimer: 1
-  checkGroundTime: 0
 --- !u!114 &5993909412273645516
 MonoBehaviour:
   m_ObjectHideFlags: 0

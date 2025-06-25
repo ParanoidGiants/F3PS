@@ -60,11 +60,18 @@ namespace StarterAssets
         public float GroundedOffset = -0.14f;
         public float GroundedRadius = 0.28f;
         public LayerMask GroundLayers;
+        public LayerMask SolidGroundLayers;
         public Transform currentGround;
         public Vector3 groundNormal;
         public Vector3 groundHitPointLocal;
         public Vector3 groundHitPointWorld;
         public Vector3 lastGroundPosition;
+
+        [Header("Gravity & Ground")]
+        public Vector3 lastValidGroundPosition = Vector3.zero;
+        public Vector3 beforeLastValidGroundPosition = Vector3.zero;
+        public float checkGroundTimer = 1f;
+        public float checkGroundTime = 0f;
 
         [Header("Watchers")]
         [SerializeField] private bool _isGrounded;
@@ -95,11 +102,6 @@ namespace StarterAssets
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
-
-        public Vector3 lastValidGroundPosition = Vector3.zero;
-        public Vector3 beforeLastValidGroundPosition = Vector3.zero;
-        public float checkGroundTimer = 1f;
-        public float checkGroundTime = 0f;
 
         private Rigidbody _rigidbody;
         private PlayerData _playerModel;
@@ -231,6 +233,27 @@ namespace StarterAssets
             groundHitPointWorld = hit.point;
             groundHitPointLocal = groundedObject.InverseTransformPoint(groundHitPointWorld);
             lastGroundPosition = groundedObject.position;
+
+            if (groundedObject.gameObject.IsInLayerMask(SolidGroundLayers))
+            {
+                checkGroundTime += Time.fixedDeltaTime;
+                if (checkGroundTime >= checkGroundTimer)
+                {
+                    checkGroundTime = 0f;
+                    beforeLastValidGroundPosition = lastValidGroundPosition;
+                    lastValidGroundPosition = groundHitPointWorld;
+                }
+            }
+            else
+            {
+                checkGroundTime = 0f;
+            }
+        }
+
+        public void ResetToLastGroundPosition()
+        {
+            transform.position = beforeLastValidGroundPosition + Vector3.up;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
 
         private void HandlePlatformTransform()
@@ -242,7 +265,6 @@ namespace StarterAssets
 
             var currentGroundHitPointWorld = currentGround.TransformPoint(groundHitPointLocal);
             var groundMovedDirection = currentGroundHitPointWorld - groundHitPointWorld;
-            Debug.Log(groundMovedDirection);
             _rigidbody.MovePosition(_rigidbody.position + groundMovedDirection);
             groundHitPointWorld = currentGroundHitPointWorld;
             groundHitPointLocal = currentGround.InverseTransformPoint(groundHitPointWorld);
