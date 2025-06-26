@@ -125,6 +125,7 @@ MonoBehaviour:
   - _moving_platforms
   - _level_blockout_merge
   - _puzzle_00
+  - _puzzle_01
   backDrop: {fileID: 1664451570}
 --- !u!1 &1871273289
 GameObject:

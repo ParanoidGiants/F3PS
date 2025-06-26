@@ -5661,7 +5661,7 @@ Transform:
   m_GameObject: {fileID: 1634472901277285006}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1.6499996, z: -2.7799988}
+  m_LocalPosition: {x: 0.5, y: 1.65, z: -2.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6978,7 +6978,7 @@ MonoBehaviour:
   Gravity: -100
   currentVerticalSpeed: 0
   maximumVerticalFallSpeed: 53
-  groundedCoyoteDuration: 0.3
+  groundedCoyoteDuration: 2
   _groundedCoyoteTime: 0
   GroundedOffset: -0.11
   GroundedRadius: 0.16
