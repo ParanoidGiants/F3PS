@@ -7052,6 +7052,13 @@ MonoBehaviour:
     wasFreeCameraLastFrame: 0
     isFreeCameraActive: 0
   jumpCoolDownTime: 0
+  landingPlane: {fileID: 1589432364228203812}
+  ascendTime: 0
+  isAscending: 0
+  glideTime: 0
+  isGliding: 0
+  wasJumpPressedLastFrame: 0
+  wasDodgePressedLastFrame: 0
   dodgeAscendTime: 0
   dodgeLandTime: 0
   dodgeCoolDownTime: 0
@@ -7111,16 +7118,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
-  landingPlane: {fileID: 1589432364228203812}
-  landingDepth: 50
-  ascendDuration: 0.5
-  ascendTime: 0
-  isAscending: 0
-  glideDuration: 1
-  glideTime: 0
-  isGliding: 0
-  wasJumpPressedLastFrame: 0
-  wasDodgePressedLastFrame: 0
 --- !u!114 &5993909412273645516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19659,10 +19656,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfProjectiles: 1
-  attackSpeed: 5
+  attackSpeed: 20
   impactForceMultiplier: 5
-  attackCoolDownTimer: 0.2
-  recoilPower: 0
+  attackCoolDownTimer: 0.8
+  recoilPower: 1
   staminaCost: 10
   userSpace: {fileID: 6852364475795614233}
   projectileSpawn: {fileID: 7574983504808389657}

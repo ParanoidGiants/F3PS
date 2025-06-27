@@ -45,6 +45,9 @@ public class PlayerData
     [Header("Jump Settings")]
     public float JumpCoolDownTimer = 0.25f;
     public float JumpHeight = 1.2f;
+    public float LandingDepth = 20f;
+    public float AscendDuration = 1f;
+    public float GlideDuration = 1f;
 
     [Space(10)]
     [Header("Dodge Settings")]
