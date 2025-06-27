@@ -289,7 +289,7 @@ MonoBehaviour:
     SprintDepletionRate: 10
     SpeedChangeRate: 10
     JumpCoolDownTimer: 0.25
-    JumpHeight: 8
+    JumpHeight: 1
     DodgeHeight: 1.2
     DodgeSpeed: 40
     DodgeAscendTimer: 0.05

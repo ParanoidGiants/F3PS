@@ -1,6 +1,8 @@
 ﻿using F3PS;
 using UnityEngine;
 using TimeBending;
+using DG.Tweening;
+
 
 
 
@@ -389,21 +391,32 @@ namespace StarterAssets
         private void JumpAndDodge()
         {
             var jumpInput = GameManager.Instance.inputs.jump;
+            var jump = jumpInput && !wasJumpPressedLastFrame;
+            wasJumpPressedLastFrame = jumpInput;
+
             var dodgeInput = GameManager.Instance.inputs.dodge;
+            var dodge = dodgeInput && !wasDodgePressedLastFrame;
+            wasDodgePressedLastFrame = dodgeInput;
             if (!_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime)
             {
                 return;
             }
 
-            if (jumpInput && jumpCoolDownTime <= 0.0f)
+            if (jump && jumpCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
                 animator.SetBool(_animIDJump, true);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                 _groundedCoyoteTime = groundedCoyoteDuration;
+
+                landingPlane.SetActive(true);
+                UpdateLandingPlane();
+
+                isAscending = true;
+                ascendTime = 0f;
             }
-            else if (dodgeInput && dodgeCoolDownTime <= 0.0f)
+            else if (dodge && dodgeCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
@@ -419,9 +432,32 @@ namespace StarterAssets
             }
         }
 
+        private void UpdateLandingPlane()
+        {
+            Physics.Raycast(
+                new Ray(transform.position, Vector3.down),
+                out RaycastHit hit,
+                landingDepth,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
+            landingPlane.transform.position = hit.point + Vector3.up * 0.01f;
+        }
+
+        public GameObject landingPlane;
+        public float landingDepth = 20f;
+        public float ascendDuration = 1f;
+        public float ascendTime = 0f;
+        public bool isAscending = false;
+        public float glideDuration = 1f;
+        public float glideTime = 0f;
+        public bool isGliding = false;
+        public bool wasJumpPressedLastFrame = false;
+        public bool wasDodgePressedLastFrame = false;
+
         private void  HandleFallAndGravity()
         {
-            var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
+            var jumpInput = GameManager.Instance.inputs.jump;
             if (_isGrounded)
             {
                 animator.SetBool(_animIDJump, false);
@@ -440,8 +476,39 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
+            else if (jumpInput && isAscending)
+            {
+                UpdateLandingPlane();
+                ascendTime += Time.deltaTime;
+                if (ascendTime >= ascendDuration)
+                {
+                    isAscending = false;
+                    isGliding = true;
+                    ascendTime = 0f;
+                }
+                var maximumJumpSpeed = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
+                var easing = Helper.Easing.EaseInQuad(ascendTime / ascendDuration);
+                currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
+            }
+            else if (jumpInput && isGliding)
+            {
+                UpdateLandingPlane();
+                glideTime += Time.deltaTime;
+                if (glideTime >= glideDuration)
+                {
+                    isGliding = false;
+                    glideTime = 0f;
+                }
+                currentVerticalSpeed = 0f;
+            }
             else
             {
+                landingPlane.SetActive(false);
+                isAscending = false;
+                isGliding = false;
+                ascendTime = 0f;
+                glideTime = 0f;
+
                 animator.SetBool(_animIDFreeFall, true);
                 _groundedCoyoteTime += Time.deltaTime;
                 currentVerticalSpeed += Gravity * Time.deltaTime;

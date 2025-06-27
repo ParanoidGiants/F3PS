@@ -76,4 +76,21 @@ public static class Helper
     {
         return Mathf.Abs(pos1.y - pos2.y) < tolerance;
     }
+
+    public static class Easing
+    {
+        public static float Linear(float t)
+        {
+            return t;
+        }
+
+        public static float EaseInQuad(float t)
+        {
+            return t * t;
+        }
+        public static float EaseOutQuad(float t)
+        {
+            return t * (2 - t);
+        }
+    }
 }
