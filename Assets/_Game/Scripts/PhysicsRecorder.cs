@@ -20,7 +20,7 @@ public class PhysicsRecorder : MonoBehaviour
     [Header("References")]
     public RewindOutline outline;
     public LineRenderer rewindLine;
-    public MeshFilter meshFilter;
+    public Mesh mesh;
 
 
     [Space(10)]
@@ -49,7 +49,7 @@ public class PhysicsRecorder : MonoBehaviour
     protected virtual void Awake()
     {
         state = RecorderState.None;
-        outline.Init(meshFilter.mesh);
+        outline.Init(mesh);
         _rigidbodyHub = GetComponent<RigidbodyHub>();
     }
 

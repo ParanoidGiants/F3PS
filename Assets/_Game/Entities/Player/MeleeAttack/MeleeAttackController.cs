@@ -19,6 +19,7 @@ public class MeleeAttackController : MonoBehaviour
     public Transform userSpace;
     public GameObject projectilePrefab;
     public Transform projectileSpawn;
+    public GameObject muzzle;
     public ObjectPool projectilePool;
     public StaminaManager staminaManager;
     public CinemachineImpulseSource screenShakeSource;
@@ -53,6 +54,7 @@ public class MeleeAttackController : MonoBehaviour
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
+        muzzle.SetActive(true);
         for (int i = 0; i < numberOfProjectiles; i++)
         {
             float xRotation = Random.Range(-spreadAngle, spreadAngle);
@@ -75,6 +77,8 @@ public class MeleeAttackController : MonoBehaviour
             hud.UpdateCoolDown(1f - attackCoolDownTime / attackCoolDownTimer);
             yield return null;
         }
+
+        muzzle.SetActive(false);
         isAttacking = false;
     }
 

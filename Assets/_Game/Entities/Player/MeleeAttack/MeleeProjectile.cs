@@ -13,9 +13,8 @@ public class MeleeProjectile : MonoBehaviour
     private bool _isHit = false;
 
     [Header("Reference")]
-    public ParticleSystem hitParticleSystem;
-    public ParticleSystem noHitParticleSystem;
-    public GameObject[] meshes;
+    public GameObject hitParticleSystem;
+    public GameObject mesh;
 
     [Header("Settings")]
     public float lifeTime = 0f;
@@ -53,9 +52,8 @@ public class MeleeProjectile : MonoBehaviour
     }
     private void OnDisable()
     {
-        Array.ForEach(meshes, m => m.SetActive(true));
+        mesh.SetActive(true);
         hitParticleSystem.gameObject.SetActive(false);
-        noHitParticleSystem.gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -66,7 +64,7 @@ public class MeleeProjectile : MonoBehaviour
         }
         _isHit = true;
 
-        Array.ForEach(meshes, m => m.SetActive(false));
+        mesh.SetActive(false);
 
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null
@@ -74,12 +72,8 @@ public class MeleeProjectile : MonoBehaviour
         )
         {
             hittable.OnHit(_hitBox, transform.forward);
-            hitParticleSystem.gameObject.SetActive(true);
         }
-        else
-        {
-            noHitParticleSystem.gameObject.SetActive(true);
-        }
+        hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
     }
 
@@ -112,7 +106,7 @@ public class MeleeProjectile : MonoBehaviour
         yield return new WaitForFixedUpdate();
         _rigidbody.isKinematic = true;
 
-        yield return new WaitForSeconds(hitParticleSystem.main.duration);
+        yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);
     }
 }

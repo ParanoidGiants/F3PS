@@ -13,8 +13,7 @@ public class LongRangeProjectile : MonoBehaviour
     private bool _isHit = false;
 
     [Header("Reference")]
-    public ParticleSystem hitParticleSystem;
-    public ParticleSystem noHitParticleSystem;
+    public GameObject hitParticleSystem;
     public GameObject mesh;
 
     [Header("Settings")]
@@ -24,6 +23,7 @@ public class LongRangeProjectile : MonoBehaviour
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
     public float impactForceMultiplier = 1.0f;
+    public float particleDuration = 1.0f;
 
     private void Awake()
     {
@@ -56,8 +56,7 @@ public class LongRangeProjectile : MonoBehaviour
     private void OnDisable()
     {
         mesh.SetActive(true);
-        hitParticleSystem.gameObject.SetActive(false);
-        noHitParticleSystem.gameObject.SetActive(false);
+        hitParticleSystem.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -71,18 +70,13 @@ public class LongRangeProjectile : MonoBehaviour
         mesh.SetActive(false);
         ModifyImpact(other);
 
+        Debug.Log(other.gameObject.name);
         var hittable = other.gameObject.GetComponent<Hittable>();
-        if (hittable != null
-            && hittable.HittableId != _hitBox.attackerId
-        )
+        if (hittable != null)
         {
             hittable.OnHit(_hitBox, transform.forward);
-            hitParticleSystem.gameObject.SetActive(true);
         }
-        else
-        {
-            noHitParticleSystem.gameObject.SetActive(true);
-        }
+        hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
     }
 
@@ -127,7 +121,7 @@ public class LongRangeProjectile : MonoBehaviour
         yield return new WaitForFixedUpdate();
         _rigidbody.isKinematic = true;
 
-        yield return new WaitForSeconds(hitParticleSystem.main.duration);
+        yield return new WaitForSeconds(particleDuration);
         gameObject.SetActive(false);
     }
 }
