@@ -1,13 +1,16 @@
 using F3PS;
 using StarterAssets;
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
+    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+
     [Header("References")]
     public Crosshair crosshair;
-    public SelectSkillControllerHUD attackControllerHUD;
 
     [Header("Attacks")]
     public MeleeAttackController meleeAttackController;
@@ -56,6 +59,10 @@ public class AttackManager : MonoBehaviour
     }
     private void HandleSwitchAttack(bool switchWeapon)
     {
+        if (!AreAnyTwoAttacksUnlocked())
+        {
+            return;
+        }
         if (!CanSwitchCurrentAttack())
         {
             return;
@@ -78,6 +85,11 @@ public class AttackManager : MonoBehaviour
         SetActiveAttack(nextAttack);
     }
 
+    private bool AreAnyTwoAttacksUnlocked()
+    {
+        return PlayerData.UnlockedAttacks.Count(a => a != Attack.None) > 1;
+    }
+
     private bool CanSwitchCurrentAttack()
     {
         return ActiveAttack == Attack.Melee && !meleeAttackController.isAttacking
@@ -86,9 +98,8 @@ public class AttackManager : MonoBehaviour
 
     private void SetActiveAttack(Attack attack)
     {
-        attackControllerHUD.SelectSkillHud((int)attack);
         meleeAttackController.gameObject.SetActive(attack == Attack.Melee);
         longRangeAttackController.gameObject.SetActive(attack == Attack.LongRange);
-        GameManager.Instance.PlayerData.ActiveAttack = attack;
+        PlayerEventController.SetActiveAttack(attack);
     }
 }

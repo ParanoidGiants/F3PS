@@ -280,23 +280,45 @@ MonoBehaviour:
   PlayerData:
     CurrentHealth: 0
     MaxHealth: 100
+    CurrentStamina: 0
+    MaxStamina: 1
+    StaminaRecoveryRate: 0.2
+    IsRecoveringStamina: 0
+    IsDepletingStamina: 0
+    SprintDepletionRate: 0.2
+    SprintSpeed: 70
+    SpeedChangeRate: 10
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5
     RotationSpeedYaw: 0.5
-    MoveSpeed: 50
+    MoveSpeed: 30
     AimSpeed: 40
-    SprintSpeed: 70
-    SprintDepletionRate: 10
-    SpeedChangeRate: 10
     JumpCoolDownTimer: 0.25
-    JumpHeight: 1
+    JumpHeight: 4
+    LandingDepth: 20
+    AscendDuration: 1
+    GlideDuration: 1
     DodgeHeight: 1.2
     DodgeSpeed: 40
     DodgeAscendTimer: 0.05
     DodgeLandTimer: 0.05
     DodgeCoolDownTimer: 0.25
-    ActiveSkill: 2
+    UnlockedAttacks: 
     ActiveAttack: 0
+    MeleeAttackData:
+      NumberOfProjectiles: 8
+      StaminaCost: 10
+      SpreadAngle: 45
+      AttackSpeed: 100
+      AttackCoolDownTimer: 0.2
+    LongRangeAttackData:
+      AttackSpeed: 100
+      ImpactForceMultiplier: 1
+      AttackCoolDownTimer: 0.2
+      StaminaCost: 0.3
+    UnlockedSkills: 
+    ActiveSkill: 0
+    UnlockedPassiveSkills: 
   _fps: 60
   isMenuOpen: 0
 --- !u!1 &6633928464503870051

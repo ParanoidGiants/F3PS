@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class RewindHUD : MonoBehaviour
 {
+    public GameObject rewindBar;
     public Image stateIcon;
     public Image playbackBar;
 
@@ -13,7 +14,6 @@ public class RewindHUD : MonoBehaviour
     public Sprite playing;
     public Sprite rewinding;
     public Sprite pausing;
-    public Sprite none;
 
     private void Awake()
     {
@@ -69,5 +69,15 @@ public class RewindHUD : MonoBehaviour
         _animation.Pause();
         stateIcon.color = Color.white;
         stateIcon.sprite = pausing;
+    }
+
+    private void OnDisable()
+    {
+        rewindBar.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        rewindBar.SetActive(true);
     }
 }

@@ -1,18 +1,15 @@
 using Unity.Cinemachine;
-using DarkTonic.MasterAudio;
 using System.Collections;
 using UnityEngine;
+using F3PS;
 
 public class MeleeAttackController : MonoBehaviour
 {
+    private MeleeAttackData meleeAttackData => GameManager.Instance.PlayerData.MeleeAttackData;
+
     [Space(10)]
     [Header("Attack Settings")]
-    public int numberOfProjectiles;
-    public float spreadAngle;
-    public float attackSpeed = 100f;
-    public float attackCoolDownTimer = 0.2f;
     public float recoilPower;
-    public float staminaCost = 10f;
 
     [Space(10)]
     [Header("References")]
@@ -51,11 +48,15 @@ public class MeleeAttackController : MonoBehaviour
 
     protected IEnumerator Shoot(Vector3 targetPosition)
     {
+        var attackSpeed = meleeAttackData.AttackSpeed;
+        var spreadAngle = meleeAttackData.SpreadAngle;
+        var attackCoolDownTimer = meleeAttackData.AttackCoolDownTimer;
+
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
         muzzle.SetActive(true);
-        for (int i = 0; i < numberOfProjectiles; i++)
+        for (int i = 0; i < meleeAttackData.NumberOfProjectiles; i++)
         {
             float xRotation = Random.Range(-spreadAngle, spreadAngle);
             float yRotation = Random.Range(-spreadAngle, spreadAngle);
@@ -92,7 +93,7 @@ public class MeleeAttackController : MonoBehaviour
         
         if (!isAttacking && startAttacking)
         {
-            if (!staminaManager.HasEnoughStamina(staminaCost))
+            if (staminaManager.IsRecoveringStamina)
             {
                 hud.OnTryAttackWithoutStamina();
             }
@@ -100,7 +101,7 @@ public class MeleeAttackController : MonoBehaviour
             {
                 animator.SetTrigger("MeleeAttack");
                 StartCoroutine(Shoot(targetPosition));
-                staminaManager.Deplete(staminaCost);
+                staminaManager.Deplete(meleeAttackData.StaminaCost);
             }
             wasAttackingPressedLastFrame = true;
         }

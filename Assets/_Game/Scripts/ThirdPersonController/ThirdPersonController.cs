@@ -1,13 +1,11 @@
 ﻿using F3PS;
 using UnityEngine;
 using TimeBending;
-using DG.Tweening;
 
 
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
 using DarkTonic.MasterAudio;
 #endif
 
@@ -107,11 +105,10 @@ namespace StarterAssets
         // animation IDs
         private readonly int _animIDSpeed = Animator.StringToHash("Speed");
         private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
-        private readonly int _animIDJump = Animator.StringToHash("Jump");
-        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
+        private readonly int _animIDVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
         private Rigidbody _rigidbody;
         private PlayerData _data;
@@ -149,8 +146,27 @@ namespace StarterAssets
 
             skillManager.OnUpdate();
             attackManager.OnUpdate();
-            
-            _isSprinting = staminaManager.Sprint();
+
+            HandleSprint();
+        }
+
+        private void HandleSprint()
+        {
+            if (!_data.UnlockedPassiveSkills.Contains(PassiveSkills.Sprint))
+            {
+                _isSprinting = false;
+                return;
+            }
+            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina)
+            {
+                _isSprinting = false;
+            }
+            else if (GameManager.Instance.inputs.sprint)
+            {
+                staminaManager.Deplete(sprintStaminaDepletion);
+                _isSprinting = true;
+            }
         }
 
         private void FixedUpdate()
@@ -158,7 +174,6 @@ namespace StarterAssets
             if (!GameManager.Instance.inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
-
 
             HandlePlatformTransform();
             GroundedCheck();
@@ -414,7 +429,6 @@ namespace StarterAssets
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(_data.JumpHeight * -2f * Gravity);
-                animator.SetBool(_animIDJump, true);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                 _groundedCoyoteTime = groundedCoyoteDuration;
 
@@ -457,8 +471,6 @@ namespace StarterAssets
             var jumpInput = GameManager.Instance.inputs.jump;
             if (_isGrounded)
             {
-                animator.SetBool(_animIDJump, false);
-                animator.SetBool(_animIDFreeFall, false);
                 animator.SetBool(_animIDDodge, false);
 
                 _groundedCoyoteTime = 0f;
@@ -473,7 +485,7 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
-            else if (jumpInput && isAscending)
+            else if (_data.UnlockedPassiveSkills.Contains(PassiveSkills.Glide) && jumpInput && isAscending)
             {
                 UpdateLandingPlane();
                 ascendTime += Time.deltaTime;
@@ -487,7 +499,7 @@ namespace StarterAssets
                 var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
                 currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
             }
-            else if (jumpInput && isGliding)
+            else if (_data.UnlockedPassiveSkills.Contains(PassiveSkills.Glide) && jumpInput && isGliding)
             {
                 UpdateLandingPlane();
                 glideTime += Time.deltaTime;
@@ -506,11 +518,11 @@ namespace StarterAssets
                 ascendTime = 0f;
                 glideTime = 0f;
 
-                animator.SetBool(_animIDFreeFall, true);
                 _groundedCoyoteTime += Time.deltaTime;
                 currentVerticalSpeed += Gravity * Time.deltaTime;
                 currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
             }
+            animator.SetFloat(_animIDVerticalVelocity, currentVerticalSpeed);
         }
 
         private void OnFootstep(AnimationEvent animationEvent)

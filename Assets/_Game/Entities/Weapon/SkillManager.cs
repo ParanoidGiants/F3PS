@@ -1,14 +1,17 @@
 using F3PS;
 using StarterAssets;
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
+    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+
     [Header("References")]
     public Transform playerSpace;
     public Crosshair crosshair;
-    public SelectSkillControllerHUD selectSkillControllerHUD;
         
     [Header("Skills")]
     public TelekinesisController telekinesisController;
@@ -23,7 +26,7 @@ public class SkillManager : MonoBehaviour
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
-        SetActiveSkill(GameManager.Instance.PlayerData.ActiveSkill);
+        SetActiveSkill(PlayerData.ActiveSkill);
     }
 
     public void OnUpdate()
@@ -41,7 +44,7 @@ public class SkillManager : MonoBehaviour
     {
         _aimTargetPosition = crosshair.GetTargetPosition();
 
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
                 telekinesisController.OnFixedUpdate();
@@ -56,7 +59,7 @@ public class SkillManager : MonoBehaviour
 
     private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
     {
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (PlayerData.ActiveSkill)
         {
             case Skill.Telekinesis:
                 telekinesisController.OnUpdate(
@@ -79,6 +82,11 @@ public class SkillManager : MonoBehaviour
 
     private void HandleSwitchSkill(bool switchWeapon)
     {
+        if (!AreAnyTwoSkillsUnlocked())
+        {
+            return;
+        }
+
         if (!switchWeapon)
         {
             _isSkillSwitched = false;
@@ -91,15 +99,21 @@ public class SkillManager : MonoBehaviour
         }
 
         _isSkillSwitched = true;
-        var activeSkill = GameManager.Instance.PlayerData.ActiveSkill;
-        var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
+        var activeSkillIndex = PlayerData.UnlockedSkills.IndexOf(PlayerData.ActiveSkill);
+        var nextSkillIndex = ((activeSkillIndex + 1) % PlayerData.UnlockedSkills.Count);
+        var nextSkill = PlayerData.UnlockedSkills[nextSkillIndex];
         SetActiveSkill(nextSkill);
+    }
+
+    private bool AreAnyTwoSkillsUnlocked()
+    {
+        return PlayerData.UnlockedSkills.Count(s => s != Skill.None) > 1;
     }
 
     private void SetActiveSkill(Skill nextSkill)
     {
-        selectSkillControllerHUD.SelectSkillHud((int)nextSkill);
-        GameManager.Instance.PlayerData.ActiveSkill = nextSkill;
+        PlayerEventController.SetActiveSkill(nextSkill);
+        PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {
             case Skill.Telekinesis:
@@ -118,6 +132,9 @@ public class SkillManager : MonoBehaviour
                 timeBubbleController.gameObject.SetActive(true);
                 break;
             default:
+                telekinesisController.gameObject.SetActive(false);
+                rewindController.gameObject.SetActive(false);
+                timeBubbleController.gameObject.SetActive(false);
                 break;
         }
     }

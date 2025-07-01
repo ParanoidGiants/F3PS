@@ -1,32 +1,29 @@
 using Unity.Cinemachine;
 using DG.Tweening;
 using UnityEngine;
+using F3PS;
 
 public class TimeBubbleGrenadeProjectile : MonoBehaviour
 {
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private TimeBubbleSkillData TimeBubbleData => PlayerEventController.Data.TimeBubbleSkillData;
+
     [Header("Reference")]
     public Transform userSpace;
     public TimeBubble timeBubble;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
-    public TimeBubbleHUD hud;
     private bool _isUpAndRunning = false;
-    public ParticleSystem hitParticleSystem;
-    public ParticleSystem noHitParticleSystem;
     public GameObject mesh;
     public HitBox hitBox;
     public Rigidbody rb;
     public Collider col;
 
     [Header("Settings")]
-    public int damage = 50;
     public float shakePower = 1f;
-    public float lifeTime = 0f;
-    public float maximumLifeTimer = 5f;
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
 
-    public float LifeTimePercentage => lifeTime / maximumLifeTimer;
     public bool IsTimeBubbleActiveAndEnabled => timeBubble.isActiveAndEnabled;
     public bool IsProjectileUpAndRunning => _isUpAndRunning;
 
@@ -34,12 +31,6 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     private bool _isHit = false;
     private Collider[] collidersToIgnore;
     private bool _isInitialized = false;
-
-    private void Awake()
-    {
-        hud = FindFirstObjectByType<TimeBubbleHUD>();
-        hud.SetTimeScale(timeBubble.timeScale);
-    }
 
     private void Start()
     {
@@ -64,8 +55,6 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     private void OnDisable()
     {
         mesh.SetActive(true);
-        hitParticleSystem.gameObject.SetActive(false);
-        noHitParticleSystem.gameObject.SetActive(false);
     }
 
     Transform _touchedTransform;
@@ -90,12 +79,12 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     {
         if (!_isHit || !_isUpAndRunning) return;
 
-        lifeTime += Time.deltaTime;
-        hud.UpdateGrenadeEffect(LifeTimePercentage);
+        var activeTime = TimeBubbleData.ActiveTime + Time.deltaTime;
+        PlayerEventController.SetTimeBubbleActiveTime(activeTime);
 
         transform.position = _touchedTransform.TransformPoint(_stickToLocalPosition);
 
-        if (lifeTime > maximumLifeTimer)
+        if (activeTime > TimeBubbleData.ActiveDuration)
         {
             DeactivateTimeBubble();
         }
@@ -116,20 +105,19 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         }
         rb.isKinematic = false;
         rb.linearVelocity = transform.forward * _speed;
-        lifeTime = 0f;
+        PlayerEventController.SetTimeBubbleActiveTime(0f);
         enableCollisionsTime = 0f;
         col.enabled = true;
     }
 
     private void ActivateTimeBubble()
     {
-        hud.SetTimeScale(timeBubble.timeScale);
         timeBubble.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
         timeBubble.gameObject.SetActive(true);
         timeBubble.transform.localScale = Vector3.zero;
         timeBubble.transform
-            .DOScale(Vector3.one * timeBubble.targetSize, animationDuration)
+            .DOScale(Vector3.one * TimeBubbleData.TargetSize, animationDuration)
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
@@ -139,13 +127,12 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
 
     public void DeactivateTimeBubble()
     {
-        hud.UpdateGrenadeEffect(0f);
+        PlayerEventController.SetTimeBubbleActiveTime(0f);
         _isUpAndRunning = false;
         timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
             .OnComplete(() =>
             {
-                // Deactivate the GameObject after the tween is complete.
                 timeBubble.Clear();
                 timeBubble.gameObject.SetActive(false);
                 gameObject.SetActive(false);
@@ -167,9 +154,10 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         transform.forward = targetPosition - position;
     }
 
-    public void PitchTimeScale(float v)
+    public void PitchTimeScale(float changeDirection)
     {
-        timeBubble.PitchTimeScale(v);
-        hud.SetTimeScale(timeBubble.timeScale);
+        var timeScale = TimeBubbleData.TimeScale + changeDirection;
+        timeScale = Mathf.Clamp(timeScale, 0f, 1f);
+        PlayerEventController.SetTimeBubbleTimeScale(timeScale);
     }
 }

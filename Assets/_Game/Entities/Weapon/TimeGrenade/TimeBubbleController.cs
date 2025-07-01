@@ -1,7 +1,10 @@
+using F3PS;
 using UnityEngine;
     
 public class TimeBubbleController : MonoBehaviour
 {
+    private TimeBubbleSkillData TimeBubbleData => GameManager.Instance.PlayerData.TimeBubbleSkillData;
+
     [Header("References")]
     public Transform userSpace;
     public Collider[] ownColliders;
@@ -12,12 +15,9 @@ public class TimeBubbleController : MonoBehaviour
 
     [Space(10)]
     [Header("Settings")]
-    public float throwPower;
     public int lineResolution = 100;
     public float lineStepSize = 0.1f;
     public LayerMask whatCanCollide;
-    public bool isUnlocked;
-    public float timeBubbleTimeScaleSpeed = 1f;
 
     [Space(10)]
     [Header("Watchers")]
@@ -92,7 +92,7 @@ public class TimeBubbleController : MonoBehaviour
 
         if (bubbleTimeScaleChange != 0f)
         {
-            timeBubbleGrenadeProjectile.PitchTimeScale(bubbleTimeScaleChange * timeBubbleTimeScaleSpeed);
+            timeBubbleGrenadeProjectile.PitchTimeScale(bubbleTimeScaleChange * TimeBubbleData.ChangeTimeScaleSpeed);
         }
     }
 
@@ -103,7 +103,7 @@ public class TimeBubbleController : MonoBehaviour
         timeBubbleGrenadeProjectile.BeforeSetActive(
             spawnTransform.position,
             spawnTransform.position + throwDirection,
-            throwPower
+            TimeBubbleData.ThrowPower
         );
         timeBubbleGrenadeProjectile.gameObject.SetActive(true);
         animator.SetTrigger("TimeBubble");
@@ -122,6 +122,7 @@ public class TimeBubbleController : MonoBehaviour
 
     private void UpdateThrowLine()
     {
+        var throwPower = TimeBubbleData.ThrowPower;
         Vector3 spawnPosition = spawnTransform.position;
         float gravity = Physics.gravity.y;
         float throwAngleCos = Vector3.Dot(throwDirection, Vector3.up);

@@ -1,81 +1,62 @@
 using F3PS;
-using System;
-using TimeBending;
 using UnityEngine;
 
 public class StaminaManager : MonoBehaviour
 {
-    public float stamina;
-    public float staminaMax = 100f;
-    public float staminaRegenRate = 10f;
-    public float staminaDepletionRate = 10f;
-    public bool isDepleting;
-    public bool isRecovering;
-    public float StaminaPercentage => stamina / staminaMax;
+    public PlayerData playerData => GameManager.Instance.PlayerData;
+    public PlayerEventController playerEventController => GameManager.Instance.PlayerEventController;
 
-    private void Start()
+    public bool IsRecoveringStamina => playerData.IsRecoveringStamina;
+
+    private void Awake()
     {
-        stamina = staminaMax;
+        playerEventController.UpdateCurrentStamina(playerData.MaxStamina);
     }
 
     private void Update()
     {
-        if (isRecovering)
+        if (playerData.IsRecoveringStamina)
         {
-            if (stamina < staminaMax)
+            if (playerData.CurrentStamina <= playerData.MaxStamina)
             {
-                stamina += staminaRegenRate * Time.unscaledDeltaTime;
+                var stamina = playerData.CurrentStamina + playerData.StaminaRecoveryRate * Time.unscaledDeltaTime;
+                playerEventController.UpdateCurrentStamina(stamina);
             }
             else
             {
-                stamina = staminaMax;
-                isRecovering = false;
+                Debug.Log("Stamina is full, stopping recovery.");
+                playerEventController.UpdateCurrentStamina(playerData.MaxStamina);
+                playerEventController.UpdateIsRecoveringStamina(false);
             }
-            return;
         }
-        if (isDepleting)
+        else if (playerData.IsDepletingStamina)
         {
-            isDepleting = false;
-            return;
+            playerEventController.UpdateIsDepletingStamina(false);
         }
         else
         {
-            stamina += staminaRegenRate * Time.unscaledDeltaTime;
-            stamina = Mathf.Clamp(stamina, 0f, staminaMax);
+            var stamina = playerData.CurrentStamina + playerData.StaminaRecoveryRate * Time.unscaledDeltaTime;
+            stamina = Mathf.Clamp(stamina, 0f, playerData.MaxStamina);
+            playerEventController.UpdateCurrentStamina(stamina);
         }
-
     }
 
     public void Deplete(float deplete)
     {
-        isDepleting = true;
-        staminaDepletionRate -= deplete;
-        if (staminaDepletionRate <= 0f)
+        playerEventController.UpdateIsDepletingStamina(true);
+        var stamina = playerData.CurrentStamina - deplete;
+        playerEventController.UpdateCurrentStamina(stamina);
+
+        if (stamina <= 0f)
         {
-            staminaDepletionRate = 0f;
+            stamina = 0f;
             EnterRestMode();
         }
     }
 
-    public bool HasEnoughStamina(float required)
-    {
-        return !isRecovering && stamina >= required;
-    }
-
     private void EnterRestMode()
     {
-        isDepleting = false;
-        isRecovering = true;
-    }
-
-    public bool Sprint()
-    {
-        if (isRecovering || !GameManager.Instance.inputs.sprint)
-        {
-            return false;
-        }
-
-        Deplete(GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime);
-        return true;
+        playerEventController.UpdateIsDepletingStamina(false);
+        playerEventController.UpdateIsRecoveringStamina(true);
     }
 }

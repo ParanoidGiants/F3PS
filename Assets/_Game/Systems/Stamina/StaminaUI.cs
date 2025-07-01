@@ -1,21 +1,45 @@
+using F3PS;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StaminaUI : MonoBehaviour
 {
+    public PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
     public Image staminaBar;
     public Animator animator;
-    private StaminaManager _staminaManager;
     
-    void Start()
+    void Awake()
     {
-        _staminaManager = FindFirstObjectByType<StaminaManager>();
+        PlayerEventController.OnStaminaChanged += UpdateStamina;
+        PlayerEventController.OnIsRecoveringStaminaChanged += UpdateIsRecoveringStamina;
+        PlayerEventController.OnIsDepletingStaminaChanged += UpdateIsDepletingStamina;
     }
 
-    void Update()
+    private void Start()
     {
-        staminaBar.fillAmount = _staminaManager.StaminaPercentage;
-        animator.SetBool("isReloading", _staminaManager.isRecovering);
-        animator.SetBool("isUsing", _staminaManager.isDepleting);
+        if (PlayerData.UnlockedAttacks.All(a => a.Equals(Attack.None))
+            && PlayerData.UnlockedSkills.All(s => s.Equals(Skill.None))
+            && PlayerData.UnlockedPassiveSkills.All(p => p.Equals(PassiveSkills.None))
+        )
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void UpdateIsRecoveringStamina(bool isRecovering)
+    {
+        animator.SetBool("recover", isRecovering);
+    }
+
+    private void UpdateIsDepletingStamina(bool isDepleting)
+    {
+        animator.SetBool("deplet", isDepleting);
+    }
+
+    private void UpdateStamina(float stamina)
+    {
+        staminaBar.fillAmount = stamina;
     }
 }

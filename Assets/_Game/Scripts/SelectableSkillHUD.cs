@@ -1,9 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SelectableSkillHUD : MonoBehaviour
 {
+    internal Skill skillType;
     public CanvasGroup[] associatedCanvasGroups;
     public RectTransform _rectTransform;
 

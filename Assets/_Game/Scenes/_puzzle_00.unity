@@ -1093,6 +1093,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game
       objectReference: {fileID: 0}
+    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
+        type: 3}
+      propertyPath: PlayerData.ActiveSkill
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
+        type: 3}
+      propertyPath: PlayerData.UnlockedSkills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
+        type: 3}
+      propertyPath: 'PlayerData.UnlockedSkills.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
+        type: 3}
+      propertyPath: PlayerData.UnlockedPassiveSkills.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 153210392170721218, guid: d47e3064416c820499518ca551e06df0,
         type: 3}
       propertyPath: m_LocalPosition.x

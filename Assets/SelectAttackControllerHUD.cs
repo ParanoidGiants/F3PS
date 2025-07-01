@@ -1,19 +1,18 @@
 using F3PS;
 using UnityEngine;
 
-public class SelectSkillControllerHUD : MonoBehaviour
+public class SelectAttackControllerHUD : MonoBehaviour
 {
-    public SelectableSkillHUD[] skillHuds;
+    public SelectableAttackHUD[] skillHuds;
 
-    private void Awake()
+    public void Start()
     {
-        GameManager.Instance.PlayerEventController.OnActiveSkillChanged += SelectSkillHud;
+        GameManager.Instance.PlayerEventController.OnActiveAttackChanged += SelectSkillHud;
     }
 
-
-    public void SelectSkillHud(Skill attack)
+    public void SelectSkillHud(Attack attack)
     {
-        if (attack.Equals(Skill.None))
+        if (attack.Equals(Attack.None))
         {
             foreach (var skillHud in skillHuds)
             {
@@ -24,7 +23,7 @@ public class SelectSkillControllerHUD : MonoBehaviour
 
         foreach (var skillHud in skillHuds)
         {
-            if (skillHud.skillType == attack)
+            if (skillHud.attackType == attack)
             {
                 skillHud.Select();
             }

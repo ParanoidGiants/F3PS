@@ -1,17 +1,16 @@
+using F3PS;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
 public class LongRangeAttackController : MonoBehaviour
 {
+    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+
     [Space(10)]
     [Header("Attack Settings")]
-    public int numberOfProjectiles;
-    public float attackSpeed = 100f;
-    public float impactForceMultiplier = 1.0f;
-    public float attackCoolDownTimer = 0.2f;
     public float recoilPower;
-    public float staminaCost = 10f;
 
     [Space(10)]
     [Header("References")]
@@ -53,6 +52,10 @@ public class LongRangeAttackController : MonoBehaviour
 
     protected IEnumerator Shoot(Vector3 targetPosition)
     {
+        var attackCoolDownTimer = PlayerData.LongRangeAttackData.AttackCoolDownTimer;
+        var attackSpeed = PlayerData.LongRangeAttackData.AttackSpeed;
+        var impactForceMultiplier = PlayerData.LongRangeAttackData.ImpactForceMultiplier;
+
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
@@ -77,6 +80,7 @@ public class LongRangeAttackController : MonoBehaviour
 
     public void OnUpdate(bool isAttackingPressed, Vector3 targetPosition)
     {
+        var staminaCost = PlayerData.LongRangeAttackData.StaminaCost;
         wasAttackingPressedLastFrame = isAttackingPressedThisFrame;
         isAttackingPressedThisFrame = isAttackingPressed;
 
@@ -85,7 +89,7 @@ public class LongRangeAttackController : MonoBehaviour
 
         if (!isAttacking && startAttacking)
         {
-            if (!staminaManager.HasEnoughStamina(staminaCost))
+            if (staminaManager.IsRecoveringStamina)
             {
                 hud.OnTryAttackWithoutStamina();
             }

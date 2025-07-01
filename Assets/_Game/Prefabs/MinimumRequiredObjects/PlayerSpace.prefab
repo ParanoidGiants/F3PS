@@ -529,12 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e3ae162d7593d43a69bad4352f796e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfProjectiles: 10
-  spreadAngle: 20
-  attackSpeed: 100
-  attackCoolDownTimer: 1
   recoilPower: 0.2
-  staminaCost: 10
   userSpace: {fileID: 6852364475795614233}
   projectilePrefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
     type: 3}
@@ -5910,7 +5905,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpace: {fileID: 6852364475795614233}
   crosshair: {fileID: 4911003788126115723}
-  selectSkillControllerHUD: {fileID: 4911003786119444408}
   telekinesisController: {fileID: 7574983505477571672}
   rewindController: {fileID: 7574983506497150795}
   timeBubbleController: {fileID: 8207623447801904492}
@@ -7679,12 +7673,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b581a57cc18e6b841b6647cf9b2df5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stamina: 0
-  staminaMax: 1000
-  staminaRegenRate: 100
-  staminaDepletionRate: 10
-  isDepleting: 0
-  isRecovering: 0
 --- !u!1 &3512767288595458615
 GameObject:
   m_ObjectHideFlags: 0
@@ -8683,6 +8671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bd859db60a7cec46868624603f18a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBubbleBar: {fileID: 7574983506500630211}
   lifeTimeCircle: {fileID: 6842946946426532650}
   icon: {fileID: 7837948307017125137}
   timeScaleBar: {fileID: 7574983504867756268}
@@ -18430,7 +18419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7574983505360773219}
   - component: {fileID: 7574983505360773222}
-  - component: {fileID: 4054886498985362076}
+  - component: {fileID: 7785417084212747124}
   m_Layer: 5
   m_Name: SelectAttack
   m_TagString: Untagged
@@ -18450,8 +18439,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7574983505555791426}
   - {fileID: 7574983506560346504}
+  - {fileID: 7574983505555791426}
   m_Father: {fileID: 7574983504979079323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -18485,7 +18474,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &4054886498985362076
+--- !u!114 &7785417084212747124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18494,12 +18483,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7574983505360773218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573fe9b829bf9bc418de533edfaa58ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 82d0d498af8fb4948a652c1e79ef70a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   skillHuds:
-  - {fileID: 3994649586254236617}
-  - {fileID: 4631208167995075068}
+  - {fileID: 7396892581115525894}
+  - {fileID: 395702246536409976}
 --- !u!1 &7574983505397882020
 GameObject:
   m_ObjectHideFlags: 0
@@ -19043,7 +19032,7 @@ GameObject:
   - component: {fileID: 7574983505555791430}
   - component: {fileID: 7574983505555791429}
   - component: {fileID: 1636874671}
-  - component: {fileID: 3994649586254236617}
+  - component: {fileID: 7396892581115525894}
   m_Layer: 5
   m_Name: MeleeAttack
   m_TagString: Untagged
@@ -19135,7 +19124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolDownCircle: {fileID: 7574983505621223548}
   icon: {fileID: 7574983505555791430}
---- !u!114 &3994649586254236617
+--- !u!114 &7396892581115525894
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19144,12 +19133,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7574983505555791425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124af7e3b420c4344ad68f9c73b61e0c, type: 3}
+  m_Script: {fileID: 11500000, guid: a3b9fab5a7dad7445848532a9b19bb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  associatedCanvasGroups:
-  - {fileID: 7574983505555791429}
-  _rectTransform: {fileID: 7574983505555791426}
+  attackType: 1
 --- !u!1 &7574983505604775683
 GameObject:
   m_ObjectHideFlags: 0
@@ -19657,12 +19644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3123d104a9b2034987e52cf90d53408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfProjectiles: 1
-  attackSpeed: 20
-  impactForceMultiplier: 5
-  attackCoolDownTimer: 0.8
   recoilPower: 1
-  staminaCost: 10
   userSpace: {fileID: 6852364475795614233}
   projectileSpawn: {fileID: 7574983504808389657}
   projectilePool: {fileID: 7574983506069927854}
@@ -20275,7 +20257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshair: {fileID: 4911003788126115723}
-  attackControllerHUD: {fileID: 4054886498985362076}
   meleeAttackController: {fileID: 4367559546999111399}
   longRangeAttackController: {fileID: 7574983505734437858}
 --- !u!1 &7574983506180536849
@@ -21343,13 +21324,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2355042d69cf5ab428eefa2beb0ccd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rewindBar: {fileID: 7574983506180536849}
   stateIcon: {fileID: 7574983505636514905}
   playbackBar: {fileID: 7574983505206928095}
   recording: {fileID: 21300000, guid: ffb17c8fb8e3d2d4f9ce5f48003a77ea, type: 3}
   playing: {fileID: 21300000, guid: 14896606a8263b74094bef1def4b9b31, type: 3}
   rewinding: {fileID: 21300000, guid: 3ad736ac9ca87ac4f98fd123fe30e21b, type: 3}
   pausing: {fileID: 21300000, guid: 314b4f36f0098d64ba617428578aee97, type: 3}
-  none: {fileID: 0}
 --- !u!114 &7574983506523566344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21527,7 +21508,7 @@ GameObject:
   - component: {fileID: 7574983506560346507}
   - component: {fileID: 7574983506560346506}
   - component: {fileID: 7574983506560346509}
-  - component: {fileID: 4631208167995075068}
+  - component: {fileID: 395702246536409976}
   m_Layer: 5
   m_Name: LongRangeAttack
   m_TagString: Untagged
@@ -21619,7 +21600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolDownCircle: {fileID: 7574983505604775685}
   icon: {fileID: 7574983506560346507}
---- !u!114 &4631208167995075068
+--- !u!114 &395702246536409976
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21628,12 +21609,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7574983506560346503}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124af7e3b420c4344ad68f9c73b61e0c, type: 3}
+  m_Script: {fileID: 11500000, guid: a3b9fab5a7dad7445848532a9b19bb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  associatedCanvasGroups:
-  - {fileID: 7574983506560346506}
-  _rectTransform: {fileID: 7574983506560346504}
+  attackType: 2
 --- !u!1 &7993097629627840621
 GameObject:
   m_ObjectHideFlags: 0
