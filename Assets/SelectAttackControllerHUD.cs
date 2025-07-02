@@ -3,25 +3,29 @@ using UnityEngine;
 
 public class SelectAttackControllerHUD : MonoBehaviour
 {
-    public SelectableAttackHUD[] skillHuds;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+
+    public SelectableAttackHUD[] attackHuds;
+    public SelectableAttackHUD[] activeAttackHuds;
 
     public void Start()
     {
-        GameManager.Instance.PlayerEventController.OnActiveAttackChanged += SelectSkillHud;
+        PlayerEventController.OnActiveAttackChanged += SelectAttackHud;
     }
 
-    public void SelectSkillHud(Attack attack)
+    public void SelectAttackHud(Attack attack)
     {
         if (attack.Equals(Attack.None))
         {
-            foreach (var skillHud in skillHuds)
+            foreach (var skillHud in attackHuds)
             {
                 skillHud.gameObject.SetActive(false);
             }
             return;
         }
 
-        foreach (var skillHud in skillHuds)
+        foreach (var skillHud in attackHuds)
         {
             if (skillHud.attackType == attack)
             {

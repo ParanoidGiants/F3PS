@@ -5907,7 +5907,7 @@ MonoBehaviour:
   crosshair: {fileID: 4911003788126115723}
   telekinesisController: {fileID: 7574983505477571672}
   rewindController: {fileID: 7574983506497150795}
-  timeBubbleController: {fileID: 8207623447801904492}
+  khonsuSphereController: {fileID: 8207623447801904492}
 --- !u!1 &1745050354389436506
 GameObject:
   m_ObjectHideFlags: 0
@@ -7273,7 +7273,7 @@ GameObject:
   - component: {fileID: 2182058751231661202}
   - component: {fileID: 2182058751231661204}
   m_Layer: 6
-  m_Name: TimeGrenadeProjectile
+  m_Name: KhonsuSphereProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7374,20 +7374,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userSpace: {fileID: 6852364475795614233}
-  timeBubble: {fileID: 6429763038442078152}
+  khonsuSphere: {fileID: 6429763038442078152}
   shakeSource: {fileID: 2182058751231661202}
   animationDuration: 0.5
-  hud: {fileID: 0}
-  hitParticleSystem: {fileID: 8197495209339968917}
-  noHitParticleSystem: {fileID: 2018438907339570051}
   mesh: {fileID: 3512767288595458615}
   hitBox: {fileID: 154065154761950766}
   rb: {fileID: 3162939690903502728}
   col: {fileID: 1734263326451917492}
-  damage: 0
   shakePower: 0.005
-  lifeTime: 0
-  maximumLifeTimer: 3000
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
 --- !u!114 &2182058751231661202
@@ -7935,7 +7929,7 @@ GameObject:
   - component: {fileID: 2898628793384830623}
   - component: {fileID: 7808771985587844648}
   m_Layer: 13
-  m_Name: TimeBubble
+  m_Name: KhonsuSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8022,8 +8016,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeObjects: []
-  timeScale: 0.05
-  targetSize: 30
   baseColor: {r: 0, g: 1, b: 1, a: 0}
 --- !u!135 &2898628793384830623
 SphereCollider:
@@ -8595,7 +8587,7 @@ GameObject:
   - component: {fileID: 443969841402782103}
   - component: {fileID: 6351700139127826656}
   m_Layer: 5
-  m_Name: TimeBubble
+  m_Name: KhonsuSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8671,7 +8663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bd859db60a7cec46868624603f18a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBubbleBar: {fileID: 7574983506500630211}
+  khonsuSphereBar: {fileID: 7574983506500630211}
   lifeTimeCircle: {fileID: 6842946946426532650}
   icon: {fileID: 7837948307017125137}
   timeScaleBar: {fileID: 7574983504867756268}
@@ -8688,10 +8680,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124af7e3b420c4344ad68f9c73b61e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillType: 1
+  _rectTransform: {fileID: 7320080618143595762}
   associatedCanvasGroups:
   - {fileID: 6351700139127826656}
   - {fileID: 7574983504535442028}
-  _rectTransform: {fileID: 7320080618143595762}
 --- !u!225 &6351700139127826656
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13885,6 +13878,7 @@ MonoBehaviour:
   - {fileID: 443969841402782103}
   - {fileID: 7574983505514170184}
   - {fileID: 7574983506523566344}
+  activeSkillHuds: []
 --- !u!1 &4911003786349507915
 GameObject:
   m_ObjectHideFlags: 0
@@ -15765,7 +15759,7 @@ GameObject:
   - component: {fileID: 8207623447801904492}
   - component: {fileID: 6324198978507387220}
   m_Layer: 8
-  m_Name: TimeBubbleController
+  m_Name: KhonsuSphereController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15805,20 +15799,17 @@ MonoBehaviour:
   - {fileID: 7574983506362488686}
   - {fileID: 7574983505495882432}
   - {fileID: 7574983504573848545}
-  timeBubbleGrenadeProjectile: {fileID: 6326605106768036180}
+  khonsuSphereProjectile: {fileID: 6326605106768036180}
   throwLine: {fileID: 6324198978507387220}
   spawnTransform: {fileID: 6464183184900770139}
   animator: {fileID: 3756245146727236597}
-  throwPower: 20
   lineResolution: 200
   lineStepSize: 0.05
   whatCanCollide:
     serializedVersion: 2
     m_Bits: 4033
-  isUnlocked: 1
-  timeBubbleTimeScaleSpeed: 0.025
   isThrown: 0
-  isTimeBubbleActive: 0
+  isKhonsuSphereActive: 0
   isAimingThisFrame: 0
   wasAimingLastFrame: 0
   isDeactivated: 0
@@ -16482,7 +16473,7 @@ GameObject:
   - component: {fileID: 7574983504535442026}
   - component: {fileID: 7574983504535442028}
   m_Layer: 5
-  m_Name: TimeBubbleBar
+  m_Name: KhonsuSphereBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18486,9 +18477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d0d498af8fb4948a652c1e79ef70a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillHuds:
-  - {fileID: 7396892581115525894}
-  - {fileID: 395702246536409976}
+  attackHuds: []
+  activeAttackHuds: []
 --- !u!1 &7574983505397882020
 GameObject:
   m_ObjectHideFlags: 0
@@ -19004,9 +18994,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124af7e3b420c4344ad68f9c73b61e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillType: 2
+  _rectTransform: {fileID: 7574983505514170180}
   associatedCanvasGroups:
   - {fileID: 7988964885832199472}
-  _rectTransform: {fileID: 7574983505514170180}
 --- !u!225 &7988964885832199472
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -21206,7 +21197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7574983506500630212}
   m_Layer: 5
-  m_Name: TimeBubbleBar
+  m_Name: KhonsuSphereBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21343,10 +21334,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124af7e3b420c4344ad68f9c73b61e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillType: 3
+  _rectTransform: {fileID: 7574983506523566340}
   associatedCanvasGroups:
   - {fileID: 713774847360527301}
   - {fileID: 7574983505714767987}
-  _rectTransform: {fileID: 7574983506523566340}
 --- !u!225 &713774847360527301
 CanvasGroup:
   m_ObjectHideFlags: 0

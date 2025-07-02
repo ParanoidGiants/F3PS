@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class SelectableSkillHUD : MonoBehaviour
 {
-    internal Skill skillType;
-    public CanvasGroup[] associatedCanvasGroups;
+    public Skill skillType;
     public RectTransform _rectTransform;
+    public CanvasGroup[] associatedCanvasGroups;
 
     private Sequence _selectAnimation;
 

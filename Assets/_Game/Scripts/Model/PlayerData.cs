@@ -12,7 +12,7 @@ public enum PassiveSkills
 public enum Skill
 {
     None = 0,
-    TimeBubble = 1,
+    KhonsuSphere = 1,
     Telekinesis = 2,
     Rewind = 3,
 }
@@ -25,7 +25,7 @@ public enum Attack
 }
 
 [Serializable]
-public class TimeBubbleSkillData
+public class KhonsuSphereSkillData
 {
     [Header("Settings")]
     public float TargetSize = 10f;
@@ -140,8 +140,8 @@ public class PlayerData
     [Header("Skills")]
     public List<Skill> UnlockedSkills;
     public Skill ActiveSkill = Skill.None;
-    [Header("Time Bubble Skill Settings")]
-    public TimeBubbleSkillData TimeBubbleSkillData;
+    [Header("Khonsu Sphere Settings")]
+    public KhonsuSphereSkillData KhonsuSphereSkillData;
 
     [Space(20)]
     [Header("Passive Skills")]

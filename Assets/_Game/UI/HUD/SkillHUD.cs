@@ -7,9 +7,9 @@ public class SkillHUD : MonoBehaviour
     private RectTransform _rectTransform;
     private Animator _animator;
 
-    [Header("Time Grenade")]
-    public Image grenadeEffectCircle;
-    public Image grenadeIcon;
+    [Header("Khonsu Sphere Projectile")]
+    public Image projectileEffectCircle;
+    public Image projectileIcon;
 
     [Space(10)]
     [Header("Gun")]
@@ -40,15 +40,15 @@ public class SkillHUD : MonoBehaviour
         }
     }
     
-    public void UpdateGrenadeEffect(float percentage)
+    public void UpdateProjectileEffect(float percentage)
     {
         if (percentage == 0f)
         {
-            grenadeEffectCircle.fillAmount = 0f;
+            projectileEffectCircle.fillAmount = 0f;
         }
         else
         {
-            grenadeEffectCircle.fillAmount = 1f - percentage;
+            projectileEffectCircle.fillAmount = 1f - percentage;
         }
     }
 
@@ -68,16 +68,6 @@ public class SkillHUD : MonoBehaviour
     public void UpdateImage(Sprite activeWeaponIcon)
     {
         weaponIcon.sprite = activeWeaponIcon;
-    }
-
-    public void ShowGrenade()
-    {
-        grenadeIcon.gameObject.SetActive(true);
-    }
-
-    public void SetGrenadeVisible(bool visible)
-    {
-        grenadeIcon.gameObject.SetActive(visible);
     }
 
     public void SetGunVisible(bool visible)

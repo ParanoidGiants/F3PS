@@ -3,12 +3,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeBubbleHUD : MonoBehaviour
+public class KhonsuSphereHUD : MonoBehaviour
 {
-    private TimeBubbleSkillData TimeBubbleData => GameManager.Instance.PlayerData.TimeBubbleSkillData;
+    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.PlayerData.KhonsuSphereSkillData;
     private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
 
-    public GameObject timeBubbleBar;
+    public GameObject khonsuSphereBar;
     public Image lifeTimeCircle;
     public Image icon;
     public Image timeScaleBar;
@@ -16,13 +16,13 @@ public class TimeBubbleHUD : MonoBehaviour
 
     private void Awake()
     {
-        PlayerEventController.OnTimeBubbleTimeScaleChanged += UpdateTimeScale;
-        PlayerEventController.OnTimeBubbleActiveTimeChanged += UpdateActiveTime;
+        PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
+        PlayerEventController.OnKhonsuSphereActiveTimeChanged += UpdateActiveTime;
     }
 
     public void UpdateActiveTime(float activeTime)
     {
-        var percentage = activeTime / TimeBubbleData.ActiveDuration;
+        var percentage = activeTime / KhonsuSphereData.ActiveDuration;
         if (percentage == 0f)
         {
             lifeTimeCircle.fillAmount = 0f;
@@ -39,23 +39,15 @@ public class TimeBubbleHUD : MonoBehaviour
         timeScaleBarText.text = $"{Mathf.RoundToInt(timeScale * 100)}%";
     }
 
-    public void ShowGrenade()
-    {
-        icon.gameObject.SetActive(true);
-    }
-
-    public void SetGrenadeVisible(bool visible)
-    {
-        icon.gameObject.SetActive(visible);
-    }
-
     private void OnDisable()
     {
-        timeBubbleBar.SetActive(false);
+        khonsuSphereBar.SetActive(false);
+        Debug.Log("Khonsu Sphere HUD disabled");
     }
 
     private void OnEnable()
     {
-        timeBubbleBar.SetActive(true);
+        khonsuSphereBar.SetActive(true);
+        Debug.Log("Khonsu Sphere HUD enabled");
     }
 }

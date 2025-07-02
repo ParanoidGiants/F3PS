@@ -1,14 +1,14 @@
 using F3PS;
 using UnityEngine;
     
-public class TimeBubbleController : MonoBehaviour
+public class KhonsuSphereController : MonoBehaviour
 {
-    private TimeBubbleSkillData TimeBubbleData => GameManager.Instance.PlayerData.TimeBubbleSkillData;
+    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.PlayerData.KhonsuSphereSkillData;
 
     [Header("References")]
     public Transform userSpace;
     public Collider[] ownColliders;
-    public TimeBubbleGrenadeProjectile timeBubbleGrenadeProjectile;
+    public KhonsuSphereProjectile khonsuSphereProjectile;
     public LineRenderer throwLine;
     public Transform spawnTransform;
     public Animator animator;
@@ -22,7 +22,7 @@ public class TimeBubbleController : MonoBehaviour
     [Space(10)]
     [Header("Watchers")]
     public bool isThrown;
-    public bool isTimeBubbleActive;
+    public bool isKhonsuSphereActive;
     public bool isAimingThisFrame;
     public bool wasAimingLastFrame;
     public bool isDeactivated;
@@ -31,8 +31,8 @@ public class TimeBubbleController : MonoBehaviour
     private void Awake()
     {
         throwLine.positionCount = lineResolution;
-        timeBubbleGrenadeProjectile.Init(ownColliders);
-        var projectileCollider = timeBubbleGrenadeProjectile.GetComponent<Collider>();
+        khonsuSphereProjectile.Init(ownColliders);
+        var projectileCollider = khonsuSphereProjectile.GetComponent<Collider>();
         foreach (var collider in ownColliders)
         {
             Physics.IgnoreCollision(projectileCollider, collider);
@@ -45,13 +45,13 @@ public class TimeBubbleController : MonoBehaviour
         isAimingThisFrame = isAiming;
 
         throwDirection = (targetPosition - spawnTransform.position).normalized;
-        if (timeBubbleGrenadeProjectile.IsProjectileUpAndRunning)
+        if (khonsuSphereProjectile.IsProjectileUpAndRunning)
         {
             if (isAimingThisFrame && !wasAimingLastFrame)
             {
                 isThrown = false;
                 isDeactivated = true;
-                timeBubbleGrenadeProjectile.DeactivateTimeBubble();
+                khonsuSphereProjectile.DeactivateKhonsuSphere();
             }
         }
         else if (isThrown)
@@ -60,10 +60,10 @@ public class TimeBubbleController : MonoBehaviour
             {
                 isThrown = false;
                 isDeactivated = true;
-                timeBubbleGrenadeProjectile.InterruptThrow();
+                khonsuSphereProjectile.InterruptThrow();
             }
         }
-        else if (!timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled)
+        else if (!khonsuSphereProjectile.IsKhonsuSphereActiveAndEnabled)
         {
             if (!isDeactivated)
             {
@@ -73,7 +73,7 @@ public class TimeBubbleController : MonoBehaviour
                 }
                 else if (wasAimingLastFrame)
                 {
-                    ThrowGrenade();
+                    ThrowProjectile();
                     HideThrowLine();
                     wasAimingLastFrame = false;
                 }
@@ -92,21 +92,21 @@ public class TimeBubbleController : MonoBehaviour
 
         if (bubbleTimeScaleChange != 0f)
         {
-            timeBubbleGrenadeProjectile.PitchTimeScale(bubbleTimeScaleChange * TimeBubbleData.ChangeTimeScaleSpeed);
+            khonsuSphereProjectile.PitchTimeScale(bubbleTimeScaleChange * KhonsuSphereData.ChangeTimeScaleSpeed);
         }
     }
 
-    private void ThrowGrenade()
+    private void ThrowProjectile()
     {
         isThrown = true;
-        timeBubbleGrenadeProjectile.gameObject.SetActive(false);
-        timeBubbleGrenadeProjectile.BeforeSetActive(
+        khonsuSphereProjectile.gameObject.SetActive(false);
+        khonsuSphereProjectile.BeforeSetActive(
             spawnTransform.position,
             spawnTransform.position + throwDirection,
-            TimeBubbleData.ThrowPower
+            KhonsuSphereData.ThrowPower
         );
-        timeBubbleGrenadeProjectile.gameObject.SetActive(true);
-        animator.SetTrigger("TimeBubble");
+        khonsuSphereProjectile.gameObject.SetActive(true);
+        animator.SetTrigger("KhonsuSphere");
     }
 
     private void ShowThrowLine()
@@ -122,7 +122,7 @@ public class TimeBubbleController : MonoBehaviour
 
     private void UpdateThrowLine()
     {
-        var throwPower = TimeBubbleData.ThrowPower;
+        var throwPower = KhonsuSphereData.ThrowPower;
         Vector3 spawnPosition = spawnTransform.position;
         float gravity = Physics.gravity.y;
         float throwAngleCos = Vector3.Dot(throwDirection, Vector3.up);
@@ -160,9 +160,9 @@ public class TimeBubbleController : MonoBehaviour
 
     public bool IsAiming()
     {
-        return !timeBubbleGrenadeProjectile.IsProjectileUpAndRunning
+        return !khonsuSphereProjectile.IsProjectileUpAndRunning
             && !isThrown
-            && !timeBubbleGrenadeProjectile.IsTimeBubbleActiveAndEnabled
+            && !khonsuSphereProjectile.IsKhonsuSphereActiveAndEnabled
             && !isDeactivated
             && isAimingThisFrame
             && wasAimingLastFrame;

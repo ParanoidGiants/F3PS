@@ -3,14 +3,14 @@ using DG.Tweening;
 using UnityEngine;
 using F3PS;
 
-public class TimeBubbleGrenadeProjectile : MonoBehaviour
+public class KhonsuSphereProjectile : MonoBehaviour
 {
     private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
-    private TimeBubbleSkillData TimeBubbleData => PlayerEventController.Data.TimeBubbleSkillData;
+    private KhonsuSphereSkillData KhonsuSphereData => PlayerEventController.Data.KhonsuSphereSkillData;
 
     [Header("Reference")]
     public Transform userSpace;
-    public TimeBubble timeBubble;
+    public KhonsuSphere khonsuSphere;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
     private bool _isUpAndRunning = false;
@@ -24,7 +24,7 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
 
-    public bool IsTimeBubbleActiveAndEnabled => timeBubble.isActiveAndEnabled;
+    public bool IsKhonsuSphereActiveAndEnabled => khonsuSphere.isActiveAndEnabled;
     public bool IsProjectileUpAndRunning => _isUpAndRunning;
 
     private float _speed;
@@ -48,7 +48,7 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         rb.isKinematic = false;
         rb.constraints = RigidbodyConstraints.None;
         col.enabled = true;
-        timeBubble.gameObject.SetActive(false);
+        khonsuSphere.gameObject.SetActive(false);
         SetupProjectile();
     }
 
@@ -70,7 +70,7 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         col.enabled = false;
-        ActivateTimeBubble();
+        ActivateKhonsuSphere();
         _touchedTransform = other.transform;
         _stickToLocalPosition = _touchedTransform.InverseTransformPoint(transform.position);
     }
@@ -79,14 +79,14 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     {
         if (!_isHit || !_isUpAndRunning) return;
 
-        var activeTime = TimeBubbleData.ActiveTime + Time.deltaTime;
-        PlayerEventController.SetTimeBubbleActiveTime(activeTime);
+        var activeTime = KhonsuSphereData.ActiveTime + Time.deltaTime;
+        PlayerEventController.SetKhonsuSphereActiveTime(activeTime);
 
         transform.position = _touchedTransform.TransformPoint(_stickToLocalPosition);
 
-        if (activeTime > TimeBubbleData.ActiveDuration)
+        if (activeTime > KhonsuSphereData.ActiveDuration)
         {
-            DeactivateTimeBubble();
+            DeactivateKhonsuSphere();
         }
     }
 
@@ -105,19 +105,19 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
         }
         rb.isKinematic = false;
         rb.linearVelocity = transform.forward * _speed;
-        PlayerEventController.SetTimeBubbleActiveTime(0f);
+        PlayerEventController.SetKhonsuSphereActiveTime(0f);
         enableCollisionsTime = 0f;
         col.enabled = true;
     }
 
-    private void ActivateTimeBubble()
+    private void ActivateKhonsuSphere()
     {
-        timeBubble.Clear();
+        khonsuSphere.Clear();
         shakeSource.GenerateImpulseAt(transform.position, Vector3.one * shakePower);
-        timeBubble.gameObject.SetActive(true);
-        timeBubble.transform.localScale = Vector3.zero;
-        timeBubble.transform
-            .DOScale(Vector3.one * TimeBubbleData.TargetSize, animationDuration)
+        khonsuSphere.gameObject.SetActive(true);
+        khonsuSphere.transform.localScale = Vector3.zero;
+        khonsuSphere.transform
+            .DOScale(Vector3.one * KhonsuSphereData.TargetSize, animationDuration)
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
@@ -125,16 +125,16 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
              });
     }
 
-    public void DeactivateTimeBubble()
+    public void DeactivateKhonsuSphere()
     {
-        PlayerEventController.SetTimeBubbleActiveTime(0f);
+        PlayerEventController.SetKhonsuSphereActiveTime(0f);
         _isUpAndRunning = false;
-        timeBubble.gameObject.transform.DOScale(Vector3.zero, animationDuration)
+        khonsuSphere.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
             .OnComplete(() =>
             {
-                timeBubble.Clear();
-                timeBubble.gameObject.SetActive(false);
+                khonsuSphere.Clear();
+                khonsuSphere.gameObject.SetActive(false);
                 gameObject.SetActive(false);
             });
     }
@@ -142,8 +142,8 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
     public void InterruptThrow()
     {
         _isUpAndRunning = false;
-        timeBubble.Clear();
-        timeBubble.gameObject.SetActive(false);
+        khonsuSphere.Clear();
+        khonsuSphere.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
@@ -156,8 +156,8 @@ public class TimeBubbleGrenadeProjectile : MonoBehaviour
 
     public void PitchTimeScale(float changeDirection)
     {
-        var timeScale = TimeBubbleData.TimeScale + changeDirection;
+        var timeScale = KhonsuSphereData.TimeScale + changeDirection;
         timeScale = Mathf.Clamp(timeScale, 0f, 1f);
-        PlayerEventController.SetTimeBubbleTimeScale(timeScale);
+        PlayerEventController.SetKhonsuSphereTimeScale(timeScale);
     }
 }

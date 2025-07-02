@@ -2,9 +2,9 @@ using F3PS;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeBubble : MonoBehaviour
+public class KhonsuSphere : MonoBehaviour
 {
-    private TimeBubbleSkillData TimeBubbleData => GameManager.Instance.PlayerData.TimeBubbleSkillData;
+    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.PlayerData.KhonsuSphereSkillData;
     private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
 
     public List<TimeObject> timeObjects = new List<TimeObject>();
@@ -14,12 +14,12 @@ public class TimeBubble : MonoBehaviour
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
-        PlayerEventController.OnTimeBubbleTimeScaleChanged += UpdateTimeScale;
+        PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
     }
 
     private void OnEnable()
     {
-        _renderer.material.SetFloat("_BrackeysMoveSpeed", TimeBubbleData.TimeScale * 0.25f);
+        _renderer.material.SetFloat("_BrackeysMoveSpeed", KhonsuSphereData.TimeScale * 0.25f);
     }
 
     void OnTriggerEnter(Collider other)
@@ -30,7 +30,7 @@ public class TimeBubble : MonoBehaviour
             return;
         }
         timeObjects.Add(timeObject);
-        timeObject.Activate(TimeBubbleData.TimeScale);
+        timeObject.Activate(KhonsuSphereData.TimeScale);
     }
     
     void OnTriggerExit(Collider other)

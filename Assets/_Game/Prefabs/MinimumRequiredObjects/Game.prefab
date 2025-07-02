@@ -316,8 +316,17 @@ MonoBehaviour:
       ImpactForceMultiplier: 1
       AttackCoolDownTimer: 0.2
       StaminaCost: 0.3
-    UnlockedSkills: 
+    UnlockedSkills: 00000000
     ActiveSkill: 0
+    KhonsuSphereSkillData:
+      TargetSize: 10
+      ActiveDuration: 5
+      ThrowPower: 1
+      ChangeTimeScaleSpeed: 1
+      IsEnabled: 0
+      Position: {x: 0, y: 0, z: 0}
+      TimeScale: 1
+      ActiveTime: 0
     UnlockedPassiveSkills: 
   _fps: 60
   isMenuOpen: 0

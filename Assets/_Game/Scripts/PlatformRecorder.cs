@@ -25,8 +25,8 @@ public class PlatformRecorder : MonoBehaviour
     [Header("Watchers")]
     public float currentRecordingTime = 0;
     public int currentFrame = 0;
-    public Vector3 timeBubbleCenter;
-    public float timeBubbleRadius;
+    public Vector3 khonsuSphereCenter;
+    public float khonsuSphereRadius;
     public RecorderState state;
     public bool isRecording = false;
     public float aliveTime = 0f;
@@ -208,8 +208,8 @@ public class PlatformRecorder : MonoBehaviour
     public void StartRecording(Vector3 centerPosition, float radius)
     {
         Log("Start Recording");
-        timeBubbleCenter = centerPosition;
-        timeBubbleRadius = radius;
+        khonsuSphereCenter = centerPosition;
+        khonsuSphereRadius = radius;
         isRecording = true;
         currentFrame = 0;
         currentRecordingTime = 0;
@@ -243,6 +243,6 @@ public class PlatformRecorder : MonoBehaviour
 
     public bool IsInSphere()
     {
-        return MathUtils.IsPositionInsideOfSphere(transform.position, timeBubbleCenter, timeBubbleRadius);
+        return MathUtils.IsPositionInsideOfSphere(transform.position, khonsuSphereCenter, khonsuSphereRadius);
     }
 }

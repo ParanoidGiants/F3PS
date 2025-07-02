@@ -16,7 +16,7 @@ public class SkillManager : MonoBehaviour
     [Header("Skills")]
     public TelekinesisController telekinesisController;
     public RewindController rewindController;
-    public TimeBubbleController timeBubbleController;
+    public KhonsuSphereController khonsuSphereController;
 
     private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
@@ -27,6 +27,8 @@ public class SkillManager : MonoBehaviour
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
         SetActiveSkill(PlayerData.ActiveSkill);
+
+        PlayerEventController.OnActiveSkillChanged += SetActiveSkill;
     }
 
     public void OnUpdate()
@@ -72,8 +74,8 @@ public class SkillManager : MonoBehaviour
             case Skill.Rewind:
                 rewindController.OnUpdate(skill, grab, telekinesisPushPull);
                 break;
-            case Skill.TimeBubble:
-                timeBubbleController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
+            case Skill.KhonsuSphere:
+                khonsuSphereController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
                 break;
             default:
                 break;
@@ -102,6 +104,8 @@ public class SkillManager : MonoBehaviour
         var activeSkillIndex = PlayerData.UnlockedSkills.IndexOf(PlayerData.ActiveSkill);
         var nextSkillIndex = ((activeSkillIndex + 1) % PlayerData.UnlockedSkills.Count);
         var nextSkill = PlayerData.UnlockedSkills[nextSkillIndex];
+        PlayerEventController.SetActiveSkill(nextSkill);
+        PlayerData.ActiveSkill = nextSkill;
         SetActiveSkill(nextSkill);
     }
 
@@ -112,29 +116,27 @@ public class SkillManager : MonoBehaviour
 
     private void SetActiveSkill(Skill nextSkill)
     {
-        PlayerEventController.SetActiveSkill(nextSkill);
-        PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {
             case Skill.Telekinesis:
                 telekinesisController.gameObject.SetActive(true);
                 rewindController.gameObject.SetActive(false);
-                timeBubbleController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
             case Skill.Rewind:
                 telekinesisController.gameObject.SetActive(false);
                 rewindController.gameObject.SetActive(true);
-                timeBubbleController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
-            case Skill.TimeBubble:
+            case Skill.KhonsuSphere:
                 telekinesisController.gameObject.SetActive(false);
                 rewindController.gameObject.SetActive(false);
-                timeBubbleController.gameObject.SetActive(true);
+                khonsuSphereController.gameObject.SetActive(true);
                 break;
             default:
                 telekinesisController.gameObject.SetActive(false);
                 rewindController.gameObject.SetActive(false);
-                timeBubbleController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
         }
     }
@@ -147,8 +149,8 @@ public class SkillManager : MonoBehaviour
                 return telekinesisController.isMovingObjectThisFrame;
             case Skill.Rewind:
                 return rewindController.IsAiming();
-            case Skill.TimeBubble:
-                return timeBubbleController.IsAiming();
+            case Skill.KhonsuSphere:
+                return khonsuSphereController.IsAiming();
             default:
                 return false;
         }

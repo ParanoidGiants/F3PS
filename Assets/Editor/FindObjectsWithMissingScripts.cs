@@ -7,7 +7,7 @@ public static class FindObjectsWithMissingScripts
     [UnityEditor.MenuItem("My Tools/Find Objects with Missing Scripts")]
     public static void FindMissingScripts()
     {
-        var objects = UnityEngine.Object.FindObjectsOfType<GameObject>(true);
+        var objects = UnityEngine.Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
         foreach (var obj in objects)
         {
             var components = obj.GetComponents<Component>();

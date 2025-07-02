@@ -6,7 +6,7 @@ public class RigidbodyHub : MonoBehaviour
     private const double TIME_SCALE_TOLERANCE = 0.001f;
     public Rigidbody _rigidbody;
 
-    [Header("Time Bubble Settings")]
+    [Header("Khonsu Sphere Settings")]
     public bool useGravity = true;
     public float defaultMass;
     public float gravityScale = 1.0f;

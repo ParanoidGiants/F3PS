@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 public class PlayerEventController
 {
@@ -62,26 +63,38 @@ public class PlayerEventController
         OnActiveSkillChanged?.Invoke(skill);
         Data.ActiveSkill = skill;
     }
-    #region TimeBubble
-    public event Action<bool> OnTimeBubbleEnabledChanged;
-    public void SetTimeBubbleEnabled(bool enabled)
+
+    #region KhonsuSphere
+    public event Action<bool> OnKhonsuSphereSkillUnlockedChanged;
+    public void SetKhonsuSphereSkillUnlocked(bool unlocked)
     {
-        OnTimeBubbleEnabledChanged?.Invoke(enabled);
-        Data.TimeBubbleSkillData.IsEnabled = enabled;
+        OnKhonsuSphereSkillUnlockedChanged?.Invoke(unlocked);
+        Data.UnlockedSkills.Add(Skill.KhonsuSphere);
+        if (Data.ActiveSkill == Skill.None)
+        {
+            SetActiveSkill(Skill.KhonsuSphere);
+        }
     }
-    public event Action<float> OnTimeBubbleTimeScaleChanged;
-    public void SetTimeBubbleTimeScale(float timeScale)
+
+    public event Action<bool> OnKhonsuSphereEnabledChanged;
+    public void SetKhonsuSphereEnabled(bool enabled)
     {
-        OnTimeBubbleTimeScaleChanged?.Invoke(timeScale);
-        Data.TimeBubbleSkillData.TimeScale = timeScale;
+        OnKhonsuSphereEnabledChanged?.Invoke(enabled);
+        Data.KhonsuSphereSkillData.IsEnabled = enabled;
     }
-    public event Action<float> OnTimeBubbleActiveTimeChanged;
-    public void SetTimeBubbleActiveTime(float time)
+    public event Action<float> OnKhonsuSphereTimeScaleChanged;
+    public void SetKhonsuSphereTimeScale(float timeScale)
     {
-        OnTimeBubbleActiveTimeChanged?.Invoke(time);
-        Data.TimeBubbleSkillData.ActiveTime = time;
+        OnKhonsuSphereTimeScaleChanged?.Invoke(timeScale);
+        Data.KhonsuSphereSkillData.TimeScale = timeScale;
     }
-    #endregion TimeBubble
+    public event Action<float> OnKhonsuSphereActiveTimeChanged;
+    public void SetKhonsuSphereActiveTime(float time)
+    {
+        OnKhonsuSphereActiveTimeChanged?.Invoke(time);
+        Data.KhonsuSphereSkillData.ActiveTime = time;
+    }
+    #endregion KhonsuSphere
     #endregion Skills
 
     #region Health

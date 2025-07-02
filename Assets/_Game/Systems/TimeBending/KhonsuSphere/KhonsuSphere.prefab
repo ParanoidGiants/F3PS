@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6949285738735248361}
   - component: {fileID: 2600681138285482846}
   m_Layer: 13
-  m_Name: TimeBubble
+  m_Name: KhonsuSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
