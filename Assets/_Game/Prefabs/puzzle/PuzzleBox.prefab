@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 754453864}
   - component: {fileID: 754453863}
   - component: {fileID: 583305986}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Velocity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,8 +173,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2130496746}
   - component: {fileID: 2130496747}
-  m_Layer: 0
-  m_Name: RewindRecordingLine
+  m_Layer: 16
+  m_Name: AnubisScrollRecordingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -314,8 +314,8 @@ GameObject:
   - component: {fileID: 1792816962542230635}
   - component: {fileID: 1792816962542230634}
   - component: {fileID: 1792816962542230637}
-  m_Layer: 0
-  m_Name: RewindOutline
+  m_Layer: 16
+  m_Name: AnubisScrollOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,8 +419,8 @@ GameObject:
   - component: {fileID: 1792816963175001162}
   - component: {fileID: 1792816963175001165}
   - component: {fileID: 1792816963175001164}
-  m_Layer: 0
-  m_Name: TelekinesisOutline
+  m_Layer: 16
+  m_Name: ThotMindOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 2480036909849738590}
   - component: {fileID: 202516884}
   - component: {fileID: 1770612418}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PuzzleBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,7 +545,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 44.6, y: 19.3, z: 10.9}
-  m_LocalScale: {x: 15, y: 3, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1792816962542230636}
@@ -637,7 +637,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2488913616749242306}
   serializedVersion: 4
-  m_Mass: 100
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -669,21 +669,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 1792816962542230637}
-  rewindLine: {fileID: 2130496747}
-  meshFilter: {fileID: 2488913616749242312}
-  playbackSpeed: 0
-  amountOfTimeZones: 0
-  currentTimeScale: 1
-  additionalTimeScale: 1
-  gravityScale: 1
-  defaultMass: 0
-  initialTimeScale: 1
-  frameDuration: 0.02
-  currentRecordingTime: 0
-  currentFrame: 0
-  framesRecorded: 0
-  state: 0
-  isRecording: 0
+  anubisScrollRecordingLine: {fileID: 2130496747}
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  linePointFrequency: 5
 --- !u!114 &1792816962816023682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,9 +722,8 @@ MonoBehaviour:
   gravityScale: 1
   currentTimeScale: 1
   isTimeFrozen: 0
-  isMovingByTelekinesis: 0
-  maximumThrowSpeed: 10
-  isRewinding: 0
+  isMovingByThotMind: 0
+  isAnubisScrolling: 0
   constraintsFreezeAllCommandCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
   unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
@@ -768,6 +755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TimeObjectOutline
+      objectReference: {fileID: 0}
+    - target: {fileID: 3786671847482026373, guid: 9bdb4e1b34b869b468d7fe2281f625d7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3786671847482026373, guid: 9bdb4e1b34b869b468d7fe2281f625d7,
         type: 3}

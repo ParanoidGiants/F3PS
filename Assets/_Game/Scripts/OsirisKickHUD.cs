@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MeleeAttackHUD : MonoBehaviour
+public class OsirisKickHUD : MonoBehaviour
 {
     public Image coolDownCircle;
     public Image icon;
@@ -21,6 +21,6 @@ public class MeleeAttackHUD : MonoBehaviour
 
     public void OnTryAttackWithoutStamina()
     {
-        throw new NotImplementedException();
+        Debug.LogWarning("Osiris Kick: Cannot attack without stamina!");
     }
 }

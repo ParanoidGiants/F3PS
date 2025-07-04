@@ -21,7 +21,7 @@ public enum Attack
 {
     None = 0,
     HorusPalm = 1,
-    Melee = 2,
+    OsirisKick = 2,
 }
 
 [Serializable]
@@ -90,13 +90,14 @@ public class HorusPalmData
 }
 
 [Serializable]
-public class MeleeAttackData
+public class OsirisKickData
 {
     public int NumberOfProjectiles = 8;
     public float StaminaCost = 10f;
     public float SpreadAngle = 45f;
     public float AttackSpeed = 100f;
     public float AttackCoolDownTimer = 0.2f;
+    public float ProjectileLifeDuration = 5f;
 }
 
 [Serializable]
@@ -155,9 +156,9 @@ public class PlayerData
     [Header("Attacks")]
     public List<Attack> UnlockedAttacks;
     public Attack ActiveAttack = Attack.None;
-    [Header("Melee Attack Settings")]
-    public MeleeAttackData MeleeAttackData;
-    [Header("Long Range Attack Settings")]
+    [Header("Osiris Kick Settings")]
+    public OsirisKickData OsirisKickData;
+    [Header("Horus Palm Settings")]
     public HorusPalmData HorusPalmData;
 
     [Space(20)]

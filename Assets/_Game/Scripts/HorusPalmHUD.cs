@@ -21,6 +21,6 @@ public class HorusPalmHUD : MonoBehaviour
 
     public void OnTryAttackWithoutStamina()
     {
-        Debug.LogWarning("Cannot attack without stamina!");
+        Debug.LogWarning("Horus Palm: Cannot attack without stamina!");
     }
 }

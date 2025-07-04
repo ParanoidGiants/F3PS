@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 6161785318660400970}
   - component: {fileID: 7323334675426902740}
   m_Layer: 8
-  m_Name: MeleeAttack
+  m_Name: OsirisKick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

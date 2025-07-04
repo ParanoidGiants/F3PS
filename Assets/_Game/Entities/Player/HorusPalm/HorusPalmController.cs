@@ -64,9 +64,9 @@ public class HorusPalmController : MonoBehaviour
         var projectileTransform = projectileObject.transform;
         projectileTransform.position = projectileSpawn.position;
         projectileTransform.rotation = projectileSpawn.rotation;
-        var meleeProjectile = projectileObject.GetComponent<HorusPalmProjectile>();
+        var projectile = projectileObject.GetComponent<HorusPalmProjectile>();
         projectileObject.SetActive(true);
-        meleeProjectile.Shoot(attackSpeed, impactForceMultiplier);
+        projectile.Shoot(attackSpeed, impactForceMultiplier);
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);
         while (attackCoolDownTime > 0f)

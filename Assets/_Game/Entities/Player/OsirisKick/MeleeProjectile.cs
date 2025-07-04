@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using F3PS;
 using F3PS.Damage.Take;
 using UnityEngine;
 
-public class MeleeProjectile : MonoBehaviour
+public class OsirisKickProjectile : MonoBehaviour
 {
+    private OsirisKickData OsirisKickData => GameManager.Instance.PlayerData.OsirisKickData;
     private Collider[] _ownerColliders;
     private HitBox _hitBox;
     private Rigidbody _rigidbody;
@@ -17,10 +19,11 @@ public class MeleeProjectile : MonoBehaviour
     public GameObject mesh;
 
     [Header("Settings")]
-    public float lifeTime = 0f;
-    public float maximumLifeTimer = 5f;
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
+
+    [Header("Watchers")]
+    public float lifeTime = 0f;
 
     private void Awake()
     {
@@ -34,7 +37,7 @@ public class MeleeProjectile : MonoBehaviour
         if (_isHit) return;
 
         lifeTime += Time.deltaTime;
-        if (lifeTime > maximumLifeTimer)
+        if (lifeTime > OsirisKickData.ProjectileLifeDuration)
         {
             gameObject.SetActive(false);
         }

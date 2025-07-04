@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 4367559546999111399}
   - component: {fileID: 918181593482795897}
   m_Layer: 8
-  m_Name: MeleeAttack
+  m_Name: OsirisKickController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19153,7 +19153,7 @@ GameObject:
   - component: {fileID: 1636874671}
   - component: {fileID: 7396892581115525894}
   m_Layer: 5
-  m_Name: MeleeAttack
+  m_Name: OsirisKick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19255,7 +19255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b9fab5a7dad7445848532a9b19bb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  attackType: 2
   _canvasGroup: {fileID: 7574983505555791429}
   _rectTransform: {fileID: 7574983505555791426}
 --- !u!1 &7574983505604775683
@@ -19750,7 +19750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3123d104a9b2034987e52cf90d53408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilPower: 1
+  recoilPower: 0.1
   userSpace: {fileID: 6852364475795614233}
   projectileSpawn: {fileID: 7574983504808389657}
   projectilePool: {fileID: 7574983506069927854}
@@ -20363,7 +20363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshair: {fileID: 4911003788126115723}
-  meleeAttackController: {fileID: 4367559546999111399}
+  osirisKickController: {fileID: 4367559546999111399}
   horusPalmController: {fileID: 7574983505734437858}
 --- !u!1 &7574983506180536849
 GameObject:
@@ -22333,7 +22333,7 @@ GameObject:
   - component: {fileID: 8721933962685097985}
   - component: {fileID: 8721933962685097986}
   m_Layer: 8
-  m_Name: MeleeAttackProjectilePool
+  m_Name: OsirisKickProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

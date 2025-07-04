@@ -305,18 +305,19 @@ MonoBehaviour:
     DodgeCoolDownTimer: 0.25
     UnlockedAttacks: 
     ActiveAttack: 0
-    MeleeAttackData:
+    OsirisKickData:
       NumberOfProjectiles: 8
-      StaminaCost: 10
+      StaminaCost: 0.2
       SpreadAngle: 45
       AttackSpeed: 100
       AttackCoolDownTimer: 0.2
-    LongRangeAttackData:
+      ProjectileLifeDuration: 5
+    HorusPalmData:
       AttackSpeed: 100
-      ImpactForceMultiplier: 1
+      ImpactForceMultiplier: 0.1
       AttackCoolDownTimer: 0.2
       StaminaCost: 0.3
-    UnlockedSkills: 00000000
+    UnlockedSkills: 
     ActiveSkill: 0
     KhonsuSphereSkillData:
       TargetSize: 30
@@ -327,6 +328,25 @@ MonoBehaviour:
       Position: {x: 0, y: 0, z: 0}
       TimeScale: 1
       ActiveTime: 0
+    AnubisScrollSkillData:
+      CoolDownTime: 0.5
+      Duration: 2
+      Speed: 1
+      ScrollSpeed: 1
+      MinimumDistance: 3
+      MaximumDistance: 50
+      FrameDuration: 0.1
+      State: 0
+      CurrentFrame: 0
+      TotalFrames: 0
+      CurrentRecordingTime: 0
+    ThotMindSkillData:
+      PushPullSpeed: 10
+      RotateTimer: 1
+      MoveSpeed: 5
+      MinimumDistance: 3
+      MaximumDistance: 50
+      MaximumThrowSpeed: 50
     UnlockedPassiveSkills: 
   _fps: 60
   isMenuOpen: 0
@@ -379,7 +399,7 @@ MonoBehaviour:
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
   bubbleTimeScale: 0
-  telekinesisPushPull: 0
+  pushPull: 0
   jump: 0
   sprint: 0
   shoot: 0

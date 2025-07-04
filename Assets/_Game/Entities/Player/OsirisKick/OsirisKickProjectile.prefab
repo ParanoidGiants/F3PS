@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 1002956380}
   - component: {fileID: 1002956379}
   m_Layer: 6
-  m_Name: MeleeAttackProjectile
+  m_Name: OsirisKickProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -459,7 +459,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.31057, y: 0.31057, z: 0.31057}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4913037050134349307}
@@ -663,7 +663,7 @@ MonoBehaviour:
   hitParticleSystem: {fileID: 8767138684050436427}
   mesh: {fileID: 3210354824842243319}
   lifeTime: 0
-  maximumLifeTimer: 0.5
+  maximumLifeTimer: 0.1
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
 --- !u!114 &6922934115357786835
@@ -679,21 +679,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 225911959}
-  rewindLine: {fileID: 1232152197}
+  anubisScrollRecordingLine: {fileID: 0}
   mesh: {fileID: 5283261607579422976, guid: 30172aeecc15f494db1ff599f2b09019, type: 3}
-  playbackSpeed: 0
-  amountOfTimeZones: 0
-  currentTimeScale: 1
-  additionalTimeScale: 1
-  gravityScale: 1
-  defaultMass: 0
-  initialTimeScale: 1
-  frameDuration: 0.02
-  currentRecordingTime: 0
-  currentFrame: 0
-  framesRecorded: 0
-  state: 0
-  isRecording: 0
+  linePointFrequency: 5
 --- !u!114 &1002956380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,9 +716,8 @@ MonoBehaviour:
   gravityScale: 1
   currentTimeScale: 1
   isTimeFrozen: 0
-  isMovingByTelekinesis: 0
-  maximumThrowSpeed: 10
-  isRewinding: 0
+  isMovingByThotMind: 0
+  isAnubisScrolling: 0
   constraintsFreezeAllCommandCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
   unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
@@ -1001,6 +988,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5910657032164378927}
     m_Modifications:
+    - target: {fileID: 3729273297193597626, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5591079749489080556, guid: 78b32f95571d52646b753ca85fe9e7dc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1051,10 +1043,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080959018077536057, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8338453190285717145, guid: 78b32f95571d52646b753ca85fe9e7dc,
         type: 3}
       propertyPath: m_Name
       value: vfx_projectile_v1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8650033934279464209, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981949292974941083, guid: 78b32f95571d52646b753ca85fe9e7dc,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1082,6 +1134,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5910657032164378927}
     m_Modifications:
+    - target: {fileID: 1533553983883854417, guid: 38d2fe3f399289845ad8a47460080a58,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1533553984155769425, guid: 38d2fe3f399289845ad8a47460080a58,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1533553984292871859, guid: 38d2fe3f399289845ad8a47460080a58,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1533553984548324424, guid: 38d2fe3f399289845ad8a47460080a58,
         type: 3}
       propertyPath: m_Name
@@ -1135,6 +1202,11 @@ PrefabInstance:
     - target: {fileID: 1533553984548324427, guid: 38d2fe3f399289845ad8a47460080a58,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1533553985397452998, guid: 38d2fe3f399289845ad8a47460080a58,
+        type: 3}
+      propertyPath: scalingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

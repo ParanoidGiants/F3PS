@@ -12,7 +12,7 @@ public class AttackManager : MonoBehaviour
     public Crosshair crosshair;
 
     [Header("Attacks")]
-    public MeleeAttackController meleeAttackController;
+    public OsirisKickController osirisKickController;
     public HorusPalmController horusPalmController;
 
     private StarterAssetsInputs _inputs;
@@ -24,7 +24,7 @@ public class AttackManager : MonoBehaviour
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
-        meleeAttackController.Init();
+        osirisKickController.Init();
         horusPalmController.Init();
         SetActiveAttack(ActiveAttack);
 
@@ -48,8 +48,8 @@ public class AttackManager : MonoBehaviour
     {
         switch (ActiveAttack)
         {
-            case Attack.Melee:
-                meleeAttackController.OnUpdate(attack, targetPosition: _aimTargetPosition);
+            case Attack.OsirisKick:
+                osirisKickController.OnUpdate(attack, targetPosition: _aimTargetPosition);
                 break;
             case Attack.HorusPalm:
                 horusPalmController.OnUpdate(attack, targetPosition: _aimTargetPosition);
@@ -82,7 +82,7 @@ public class AttackManager : MonoBehaviour
 
         _isAttackSwitched = true;
         var currentAttack = ActiveAttack;
-        var nextAttack = currentAttack == Attack.Melee ? Attack.HorusPalm : Attack.Melee;
+        var nextAttack = currentAttack == Attack.OsirisKick ? Attack.HorusPalm : Attack.OsirisKick;
         SetActiveAttack(nextAttack);
     }
 
@@ -93,13 +93,13 @@ public class AttackManager : MonoBehaviour
 
     private bool CanSwitchCurrentAttack()
     {
-        return ActiveAttack == Attack.Melee && !meleeAttackController.isAttacking
+        return ActiveAttack == Attack.OsirisKick && !osirisKickController.isAttacking
             || ActiveAttack == Attack.HorusPalm && !horusPalmController.isAttacking;
     }
 
     private void SetActiveAttack(Attack attack)
     {
-        meleeAttackController.gameObject.SetActive(attack == Attack.Melee);
+        osirisKickController.gameObject.SetActive(attack == Attack.OsirisKick);
         horusPalmController.gameObject.SetActive(attack == Attack.HorusPalm);
     }
 }

@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine;
 using F3PS;
 
-public class MeleeAttackController : MonoBehaviour
+public class OsirisKickController : MonoBehaviour
 {
-    private MeleeAttackData meleeAttackData => GameManager.Instance.PlayerData.MeleeAttackData;
+    private OsirisKickData osirisKickData => GameManager.Instance.PlayerData.OsirisKickData;
 
     [Space(10)]
     [Header("Attack Settings")]
@@ -25,7 +25,7 @@ public class MeleeAttackController : MonoBehaviour
 
     [Space(10)]
     [Header("HUD")]
-    public MeleeAttackHUD hud;
+    public OsirisKickHUD hud;
 
     [Space(10)]
     [Header("Watchers")]
@@ -40,23 +40,23 @@ public class MeleeAttackController : MonoBehaviour
         var projectiles = projectilePool.GetObjects();
         foreach (var projectile in projectiles)
         {
-            var meleeProjectile = projectile.GetComponent<MeleeProjectile>();
-            meleeProjectile.Init(userSpace.GetInstanceID(), ownColliders);
+            var projectileComponent = projectile.GetComponent<OsirisKickProjectile>();
+            projectileComponent.Init(userSpace.GetInstanceID(), ownColliders);
             projectile.SetActive(false);
         }
     }
 
     protected IEnumerator Shoot(Vector3 targetPosition)
     {
-        var attackSpeed = meleeAttackData.AttackSpeed;
-        var spreadAngle = meleeAttackData.SpreadAngle;
-        var attackCoolDownTimer = meleeAttackData.AttackCoolDownTimer;
+        var attackSpeed = osirisKickData.AttackSpeed;
+        var spreadAngle = osirisKickData.SpreadAngle;
+        var attackCoolDownTimer = osirisKickData.AttackCoolDownTimer;
 
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
         muzzle.SetActive(true);
-        for (int i = 0; i < meleeAttackData.NumberOfProjectiles; i++)
+        for (int i = 0; i < osirisKickData.NumberOfProjectiles; i++)
         {
             float xRotation = Random.Range(-spreadAngle, spreadAngle);
             float yRotation = Random.Range(-spreadAngle, spreadAngle);
@@ -66,9 +66,9 @@ public class MeleeAttackController : MonoBehaviour
             var projectileTransform = projectileObject.transform;
             projectileTransform.position = projectileSpawn.position;
             projectileTransform.rotation = projectileOrientation;
-            var meleeProjectile = projectileObject.GetComponent<MeleeProjectile>();
+            var projectileComponent = projectileObject.GetComponent<OsirisKickProjectile>();
             projectileObject.SetActive(true);
-            meleeProjectile.Shoot(attackSpeed);
+            projectileComponent.Shoot(attackSpeed);
         }
         var shootDirection = (targetPosition - projectileSpawn.position).normalized;
         screenShakeSource.GenerateImpulseWithVelocity(-shootDirection * recoilPower);
@@ -99,9 +99,9 @@ public class MeleeAttackController : MonoBehaviour
             }
             else
             {
-                animator.SetTrigger("MeleeAttack");
+                animator.SetTrigger("OsirisKick");
                 StartCoroutine(Shoot(targetPosition));
-                staminaManager.Deplete(meleeAttackData.StaminaCost);
+                staminaManager.Deplete(osirisKickData.StaminaCost);
             }
             wasAttackingPressedLastFrame = true;
         }
