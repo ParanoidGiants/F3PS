@@ -15,7 +15,7 @@ public class SelectSkillControllerHUD : MonoBehaviour
     private void Awake()
     {
         PlayerEventController.OnActiveSkillChanged += SelectSkillHud;
-        PlayerEventController.OnKhonsuSphereSkillUnlockedChanged += UnlockKhonsuSphere;
+        PlayerEventController.OnSkillUnlocked += UnlockHud;
 
         foreach (var skillHud in skillHuds)
         {
@@ -53,22 +53,15 @@ public class SelectSkillControllerHUD : MonoBehaviour
         }
     }
 
-    public void UnlockKhonsuSphere(bool isUnlocked)
+    private void UnlockHud(Skill skill)
     {
-        Debug.Log("Khonsu Sphere skill unlocked: " + isUnlocked);
-        var khonsuSphereHud = skillHuds.FirstOrDefault(x => x.skillType == Skill.KhonsuSphere);
-        if (khonsuSphereHud != null)
+        var skillHud = skillHuds.FirstOrDefault(x => x.skillType == skill);
+        if (skillHud == null)
         {
-            khonsuSphereHud.gameObject.SetActive(isUnlocked);
+            Debug.LogError("Skill HUD does not exists for " + skill);
         }
-
-        if (isUnlocked)
-        {
-            activeSkillHuds = activeSkillHuds.Append(khonsuSphereHud).ToArray();
-        }
-        else
-        {
-            activeSkillHuds = activeSkillHuds.Where(x => x != khonsuSphereHud).ToArray();
-        }
+        skillHud.gameObject.SetActive(true);
+        activeSkillHuds = activeSkillHuds.Append(skillHud).ToArray();
+        skillHud.Deselect();
     }
 }

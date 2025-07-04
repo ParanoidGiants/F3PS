@@ -42,12 +42,10 @@ public class KhonsuSphereHUD : MonoBehaviour
     private void OnDisable()
     {
         khonsuSphereBar.SetActive(false);
-        Debug.Log("Khonsu Sphere HUD disabled");
     }
 
     private void OnEnable()
     {
         khonsuSphereBar.SetActive(true);
-        Debug.Log("Khonsu Sphere HUD enabled");
     }
 }

@@ -18,7 +18,7 @@ public class PlatformRecorder : MonoBehaviour
     public Renderer[] renderers;
     public Material _default;
     public Material resume;
-    public Material rewind;
+    public Material anubisScroll;
     public Material floating;
 
     [Space(20)]
@@ -27,7 +27,7 @@ public class PlatformRecorder : MonoBehaviour
     public int currentFrame = 0;
     public Vector3 khonsuSphereCenter;
     public float khonsuSphereRadius;
-    public RecorderState state;
+    public AnubisScrollState state;
     public bool isRecording = false;
     public float aliveTime = 0f;
 
@@ -43,7 +43,7 @@ public class PlatformRecorder : MonoBehaviour
 
     protected virtual void Awake()
     {
-        state = RecorderState.None;
+        state = AnubisScrollState.None;
     }
 
     void Update()
@@ -157,14 +157,14 @@ public class PlatformRecorder : MonoBehaviour
     {
         switch (state)
         {
-            case RecorderState.None:
+            case AnubisScrollState.None:
                 break;
 
-            case RecorderState.Record:
+            case AnubisScrollState.Record:
                 Record();
                 break;
 
-            case RecorderState.Playback:
+            case AnubisScrollState.Playback:
                 Playback();
                 break;
 
@@ -183,7 +183,7 @@ public class PlatformRecorder : MonoBehaviour
         platformMover.CurrentWayPointIndex = wayPoints.GetValueAtFrame(0);
         currentFrame = 0;
 
-        state = RecorderState.Record;
+        state = AnubisScrollState.Record;
         positions.ClearAllExceptFirstFrame();
         rotations.ClearAllExceptFirstFrame();
         wayPoints.ClearAllExceptFirstFrame();
@@ -193,8 +193,8 @@ public class PlatformRecorder : MonoBehaviour
     {
         Log("Change Direction to Playback");
 
-        Array.ForEach(renderers, r => r.material = rewind);
-        state = RecorderState.Playback;
+        Array.ForEach(renderers, r => r.material = anubisScroll);
+        state = AnubisScrollState.Playback;
 
         currentRecordingTime += ScaledDeltaTime;
         var segmentDirection = transform.position - positions.GetValueAtFrame(currentFrame);
@@ -215,14 +215,14 @@ public class PlatformRecorder : MonoBehaviour
         currentRecordingTime = 0;
         Array.ForEach(renderers, r => r.material = resume);
         RecordInitialFrame();
-        state = RecorderState.Record;
+        state = AnubisScrollState.Record;
     }
 
     public void StopRecording()
     {
         Log("Stop Recording");
         Resume();
-        state = RecorderState.None;
+        state = AnubisScrollState.None;
         isRecording = false;
         Array.ForEach(renderers, r => r.material = _default);
         positions.ClearAll();
@@ -238,7 +238,7 @@ public class PlatformRecorder : MonoBehaviour
 
     public bool IsMovingForward()
     {
-        return state == RecorderState.Record && currentFrame > 1;
+        return state == AnubisScrollState.Record && currentFrame > 1;
     }
 
     public bool IsInSphere()

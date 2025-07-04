@@ -1093,26 +1093,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game
       objectReference: {fileID: 0}
-    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
-        type: 3}
-      propertyPath: PlayerData.KhonsuSphereSkillData.TargetSize
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
-        type: 3}
-      propertyPath: PlayerData.KhonsuSphereSkillData.ThrowPower
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
-        type: 3}
-      propertyPath: PlayerData.KhonsuSphereSkillData.ActiveDuration
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 153210392170721217, guid: d47e3064416c820499518ca551e06df0,
-        type: 3}
-      propertyPath: PlayerData.KhonsuSphereSkillData.ChangeTimeScaleSpeed
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 153210392170721218, guid: d47e3064416c820499518ca551e06df0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11024,7 +11004,7 @@ GameObject:
   - component: {fileID: 540485403}
   - component: {fileID: 540485402}
   m_Layer: 0
-  m_Name: UnlockKhonsuSphere
+  m_Name: UnlockSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11042,6 +11022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f4fdee7bc37043a328431c8aedbf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skill: 3
 --- !u!65 &540485403
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -319,10 +319,10 @@ MonoBehaviour:
     UnlockedSkills: 00000000
     ActiveSkill: 0
     KhonsuSphereSkillData:
-      TargetSize: 10
-      ActiveDuration: 5
-      ThrowPower: 1
-      ChangeTimeScaleSpeed: 1
+      TargetSize: 30
+      ActiveDuration: 60
+      ThrowPower: 20
+      ChangeTimeScaleSpeed: 0.05
       IsEnabled: 0
       Position: {x: 0, y: 0, z: 0}
       TimeScale: 1

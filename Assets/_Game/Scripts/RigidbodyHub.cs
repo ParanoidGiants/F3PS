@@ -19,8 +19,8 @@ public class RigidbodyHub : MonoBehaviour
     public float maximumThrowSpeed = 10.0f;
 
     [Space(10)]
-    [Header("Rewind Settings")]
-    public bool isRewinding = false;
+    [Header("AnubisScroll Settings")]
+    public bool isAnubisScrolling = false;
 
     [Space(10)]
     [Header("Watchers")]
@@ -58,7 +58,7 @@ public class RigidbodyHub : MonoBehaviour
             if (isTimeFrozen)
             {
                 isTimeFrozen = false;
-                if (!isMovingByTelekinesis && !isRewinding)
+                if (!isMovingByTelekinesis && !isAnubisScrolling)
                 {
                     FreeFromConstraints();
                     _rigidbody.linearVelocity = unbiasedTimeFreezeVelocity * timeScale;
@@ -197,13 +197,13 @@ public class RigidbodyHub : MonoBehaviour
         FreeFromConstraints();
         SetUnbiasedVelocity(unbiasedVelocity);
         SetUnbiasedAngularVelocity(unbiasedAngularVelocity);
-        isRewinding = false;
+        isAnubisScrolling = false;
     }
 
     public void SetupForPlayback()
     {
         FreezeAll();
-        isRewinding = true;
+        isAnubisScrolling = true;
     }
     #endregion REWIND
 }

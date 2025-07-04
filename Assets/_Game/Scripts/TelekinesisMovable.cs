@@ -15,7 +15,7 @@ public class TelekinesisMovable : MonoBehaviour
     public bool isBeingRotated = false;
     public bool isCurrentlyTouchedByPlayer = false;
     private Coroutine _rotateCoroutine;
-    public bool IsLocked => _rigidbodyHub.isRewinding;
+    public bool IsLocked => _rigidbodyHub.isAnubisScrolling;
 
     private void Awake()
     {

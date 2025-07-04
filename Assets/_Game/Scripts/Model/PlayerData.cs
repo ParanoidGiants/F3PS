@@ -14,7 +14,7 @@ public enum Skill
     None = 0,
     KhonsuSphere = 1,
     Telekinesis = 2,
-    Rewind = 3,
+    AnubisScroll = 3,
 }
 
 public enum Attack
@@ -40,18 +40,39 @@ public class KhonsuSphereSkillData
     public float ActiveTime = 0f;
 }
 
+public enum AnubisScrollState
+{
+    None,
+    Record,
+    Playback,
+    Paused,
+    Rewind
+}
+
+[Serializable]
+public class AnubisScrollSkillData
+{
+    [Header("Settings")]
+    public float CoolDownTime = 0.5f;
+    public float Duration = 2f;
+    public float Speed = 1f;
+    public float ScrollSpeed = 1f;
+    public float MinimumDistance = 3f;
+    public float MaximumDistance = 50f;
+    public float FrameDuration = 0.1f;
+
+    [Header("Watchers")]
+    public AnubisScrollState State = AnubisScrollState.None;
+    public int CurrentFrame = 0;
+    public int TotalFrames = 0;
+    public float CurrentRecordingTime = 0;
+}
+
 public class TelekinesisSkillData
 {
     public float PushPullForce = 10f;
     public float MaxDistance = 10f;
     public float CoolDownTime = 0.5f;
-}
-
-public class RewindSkillData
-{
-    public float CoolDownTime = 0.5f;
-    public float Duration = 2f;
-    public float Speed = 1f;
 }
 
 
@@ -77,7 +98,6 @@ public class MeleeAttackData
 [Serializable]
 public class PlayerData
 {
-    [Space(10)]
     [Header("Health")]
     public int CurrentHealth;
     public int MaxHealth = 100;
@@ -142,6 +162,8 @@ public class PlayerData
     public Skill ActiveSkill = Skill.None;
     [Header("Khonsu Sphere Settings")]
     public KhonsuSphereSkillData KhonsuSphereSkillData;
+    [Header("Anubis Scroll Settings")]
+    public AnubisScrollSkillData AnubisScrollSkillData;
 
     [Space(20)]
     [Header("Passive Skills")]

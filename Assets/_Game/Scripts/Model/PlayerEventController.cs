@@ -64,24 +64,30 @@ public class PlayerEventController
         Data.ActiveSkill = skill;
     }
 
-    #region KhonsuSphere
-    public event Action<bool> OnKhonsuSphereSkillUnlockedChanged;
-    public void SetKhonsuSphereSkillUnlocked(bool unlocked)
+    public event Action<Skill> OnSkillUnlocked;
+    public void UnlockSkill(Skill skill)
     {
-        OnKhonsuSphereSkillUnlockedChanged?.Invoke(unlocked);
-        Data.UnlockedSkills.Add(Skill.KhonsuSphere);
+        if (skill == Skill.None)
+        {
+            UnityEngine.Debug.LogError("Cannot unlock Skill.None.");
+            return;
+        }
+
+        if (Data.UnlockedSkills.Contains(skill))
+        {
+            UnityEngine.Debug.LogError(skill + " is already unlocked.");
+            return;
+        }
+        OnSkillUnlocked?.Invoke(skill);
+
+        Data.UnlockedSkills.Add(skill);
         if (Data.ActiveSkill == Skill.None)
         {
-            SetActiveSkill(Skill.KhonsuSphere);
+            SetActiveSkill(skill);
         }
     }
 
-    public event Action<bool> OnKhonsuSphereEnabledChanged;
-    public void SetKhonsuSphereEnabled(bool enabled)
-    {
-        OnKhonsuSphereEnabledChanged?.Invoke(enabled);
-        Data.KhonsuSphereSkillData.IsEnabled = enabled;
-    }
+    #region KhonsuSphere
     public event Action<float> OnKhonsuSphereTimeScaleChanged;
     public void SetKhonsuSphereTimeScale(float timeScale)
     {
@@ -95,6 +101,37 @@ public class PlayerEventController
         Data.KhonsuSphereSkillData.ActiveTime = time;
     }
     #endregion KhonsuSphere
+    
+    #region AnubisScroll
+    public event Action<AnubisScrollState> OnAnubisScrollStateChanged;
+    public void SetAnubisScrollState(AnubisScrollState state)
+    {
+        OnAnubisScrollStateChanged?.Invoke(state);
+        Data.AnubisScrollSkillData.State = state;
+    }
+
+    public event Action<int> OnAnubisScrollCurrentFrameChanged;
+    public void SetAnubisScrollCurrentFrame(int frame)
+    {
+        OnAnubisScrollCurrentFrameChanged?.Invoke(frame);
+        Data.AnubisScrollSkillData.CurrentFrame = frame;
+    }
+    public event Action<int> OnAnubisScrollTotalFramesChanged;
+    public void SetAnubisScrollTotalFrames(int totalFrames)
+    {
+        OnAnubisScrollTotalFramesChanged?.Invoke(totalFrames);
+        Data.AnubisScrollSkillData.TotalFrames = totalFrames;
+    }
+
+    public event Action<float> OnAnubisScrollCurrentRecordingTime;
+    public void SetAnubisScrollCurrentRecordingTime(float time)
+    {
+        OnAnubisScrollCurrentRecordingTime?.Invoke(time);
+        Data.AnubisScrollSkillData.CurrentRecordingTime = time;
+    }
+
+    #endregion AnubisScroll
+
     #endregion Skills
 
     #region Health
