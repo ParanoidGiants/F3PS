@@ -1,4 +1,5 @@
 using F3PS;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,17 +16,25 @@ public class StaminaUI : MonoBehaviour
         PlayerEventController.OnStaminaChanged += UpdateStamina;
         PlayerEventController.OnIsRecoveringStaminaChanged += UpdateIsRecoveringStamina;
         PlayerEventController.OnIsDepletingStaminaChanged += UpdateIsDepletingStamina;
-    }
+        PlayerEventController.OnStaminaUnlocked += ActivateStamina;
 
-    private void Start()
-    {
-        if (PlayerData.UnlockedAttacks.All(a => a.Equals(Attack.None))
-            && PlayerData.UnlockedSkills.All(s => s.Equals(Skill.None))
-            && PlayerData.UnlockedPassiveSkills.All(p => p.Equals(PassiveSkills.None))
-        )
+        if (!AnySkillIsUnlocked())
         {
             gameObject.SetActive(false);
         }
+    }
+
+    private bool AnySkillIsUnlocked()
+    {
+        return PlayerData.UnlockedPassiveSkills.Any(skill => skill != PassiveSkills.None)
+            || PlayerData.UnlockedSkills.Any(skill => skill != Skill.None)
+            || PlayerData.UnlockedAttacks.Any(attack => attack != Attack.None);
+    }
+
+    private void ActivateStamina()
+    {
+        Debug.Log("Stamina Unlocked");
+        gameObject.SetActive(true);
     }
 
     private void UpdateIsRecoveringStamina(bool isRecovering)

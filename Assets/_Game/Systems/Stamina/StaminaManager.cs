@@ -10,7 +10,7 @@ public class StaminaManager : MonoBehaviour
 
     private void Awake()
     {
-        playerEventController.UpdateCurrentStamina(playerData.MaxStamina);
+        playerEventController.UpdateStamina(playerData.MaxStamina);
     }
 
     private void Update()
@@ -20,12 +20,12 @@ public class StaminaManager : MonoBehaviour
             if (playerData.CurrentStamina <= playerData.MaxStamina)
             {
                 var stamina = playerData.CurrentStamina + playerData.StaminaRecoveryRate * Time.unscaledDeltaTime;
-                playerEventController.UpdateCurrentStamina(stamina);
+                playerEventController.UpdateStamina(stamina);
             }
             else
             {
                 Debug.Log("Stamina is full, stopping recovery.");
-                playerEventController.UpdateCurrentStamina(playerData.MaxStamina);
+                playerEventController.UpdateStamina(playerData.MaxStamina);
                 playerEventController.UpdateIsRecoveringStamina(false);
             }
         }
@@ -37,7 +37,7 @@ public class StaminaManager : MonoBehaviour
         {
             var stamina = playerData.CurrentStamina + playerData.StaminaRecoveryRate * Time.unscaledDeltaTime;
             stamina = Mathf.Clamp(stamina, 0f, playerData.MaxStamina);
-            playerEventController.UpdateCurrentStamina(stamina);
+            playerEventController.UpdateStamina(stamina);
         }
     }
 
@@ -45,7 +45,7 @@ public class StaminaManager : MonoBehaviour
     {
         playerEventController.UpdateIsDepletingStamina(true);
         var stamina = playerData.CurrentStamina - deplete;
-        playerEventController.UpdateCurrentStamina(stamina);
+        playerEventController.UpdateStamina(stamina);
 
         if (stamina <= 0f)
         {

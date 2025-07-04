@@ -9,36 +9,36 @@ public class PlayerEventController
     }
 
     #region Stamina
-    public event Action<float> OnStaminaChanged;
-    public event Action<float> OnMaxStaminaChanged;
-    public event Action<float> OnStaminaRecoveryRateChanged;
-    public event Action<bool> OnIsRecoveringStaminaChanged;
-    public event Action<bool> OnIsDepletingStaminaChanged;
 
-    public void UpdateCurrentStamina(float currentStamina)
+    public event Action OnStaminaUnlocked;
+    public void UnlockStamina()
+    {
+        UnityEngine.Debug.Log("Stamina Unlocked");
+        OnStaminaUnlocked?.Invoke();
+    }
+
+    public event Action<float> OnStaminaChanged;
+    public void UpdateStamina(float currentStamina)
     {
         OnStaminaChanged?.Invoke(currentStamina);
         Data.CurrentStamina = currentStamina;
     }
 
+    public event Action<float> OnMaxStaminaChanged;
     public void UpdateMaxStamina(float maxStamina)
     {
         OnMaxStaminaChanged?.Invoke(maxStamina);
         Data.MaxStamina = maxStamina;
     }
 
-    public void UpdateStaminaRecoveryRate(float staminaRecoveryRate)
-    {
-        OnStaminaRecoveryRateChanged?.Invoke(staminaRecoveryRate);
-        Data.StaminaRecoveryRate = staminaRecoveryRate;
-    }
-
+    public event Action<bool> OnIsRecoveringStaminaChanged;
     public void UpdateIsRecoveringStamina(bool isRecovering)
     {
         OnIsRecoveringStaminaChanged?.Invoke(isRecovering);
         Data.IsRecoveringStamina = isRecovering;
     }
 
+    public event Action<bool> OnIsDepletingStaminaChanged;
     public void UpdateIsDepletingStamina(bool isDepleting)
     {
         OnIsDepletingStaminaChanged?.Invoke(isDepleting);
@@ -68,6 +68,7 @@ public class PlayerEventController
         if (Data.ActiveAttack == Attack.None)
         {
             SetActiveAttack(attack);
+            UnlockStamina();
         }
     }
     #endregion Attack
@@ -94,6 +95,7 @@ public class PlayerEventController
         if (Data.ActiveSkill == Skill.None)
         {
             SetActiveSkill(skill);
+            UnlockStamina();
         }
     }
 
