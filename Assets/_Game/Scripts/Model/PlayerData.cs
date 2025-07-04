@@ -13,7 +13,7 @@ public enum Skill
 {
     None = 0,
     KhonsuSphere = 1,
-    Telekinesis = 2,
+    ThotMind = 2,
     AnubisScroll = 3,
 }
 
@@ -68,11 +68,15 @@ public class AnubisScrollSkillData
     public float CurrentRecordingTime = 0;
 }
 
-public class TelekinesisSkillData
+[Serializable]
+public class ThotMindSkillData
 {
-    public float PushPullForce = 10f;
-    public float MaxDistance = 10f;
-    public float CoolDownTime = 0.5f;
+    public float PushPullSpeed = 5.0f;
+    public float RotateTimer = 1f;
+    public float MoveSpeed = 5.0f;
+    public float MinimumDistance = 3f;
+    public float MaximumDistance = 50f;
+    public float MaximumThrowSpeed = 3f;
 }
 
 
@@ -164,6 +168,8 @@ public class PlayerData
     public KhonsuSphereSkillData KhonsuSphereSkillData;
     [Header("Anubis Scroll Settings")]
     public AnubisScrollSkillData AnubisScrollSkillData;
+    [Header("Thot Mind Settings")]
+    public ThotMindSkillData ThotMindSkillData;
 
     [Space(20)]
     [Header("Passive Skills")]

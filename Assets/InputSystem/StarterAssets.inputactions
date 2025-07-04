@@ -150,7 +150,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TelekinesisPushPull",
+                    "name": "PushPull",
                     "type": "PassThrough",
                     "id": "5402a087-ea25-40a7-a012-55430172355e",
                     "expectedControlType": "Axis",
@@ -530,7 +530,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -541,7 +541,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -552,7 +552,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -563,7 +563,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -574,7 +574,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -585,7 +585,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TelekinesisPushPull",
+                    "action": "PushPull",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

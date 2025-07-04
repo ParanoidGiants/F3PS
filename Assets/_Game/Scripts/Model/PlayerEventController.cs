@@ -67,12 +67,6 @@ public class PlayerEventController
     public event Action<Skill> OnSkillUnlocked;
     public void UnlockSkill(Skill skill)
     {
-        if (skill == Skill.None)
-        {
-            UnityEngine.Debug.LogError("Cannot unlock Skill.None.");
-            return;
-        }
-
         if (Data.UnlockedSkills.Contains(skill))
         {
             UnityEngine.Debug.LogError(skill + " is already unlocked.");

@@ -1,3 +1,4 @@
+using F3PS;
 using System;
 using UnityEngine;
 
@@ -14,9 +15,8 @@ public class RigidbodyHub : MonoBehaviour
     public bool isTimeFrozen = false;
 
     [Space(10)]
-    [Header("Telekinesis Settings")]
-    public bool isMovingByTelekinesis = false;
-    public float maximumThrowSpeed = 10.0f;
+    [Header("ThotMind Settings")]
+    public bool isMovingByThotMind = false;
 
     [Space(10)]
     [Header("AnubisScroll Settings")]
@@ -33,7 +33,6 @@ public class RigidbodyHub : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         defaultMass = _rigidbody.mass;
-        maximumThrowSpeed = FindFirstObjectByType<TelekinesisController>(FindObjectsInactive.Include).maximumThrowSpeed;
     }
 
     void FixedUpdate()
@@ -58,7 +57,7 @@ public class RigidbodyHub : MonoBehaviour
             if (isTimeFrozen)
             {
                 isTimeFrozen = false;
-                if (!isMovingByTelekinesis && !isAnubisScrolling)
+                if (!isMovingByThotMind && !isAnubisScrolling)
                 {
                     FreeFromConstraints();
                     _rigidbody.linearVelocity = unbiasedTimeFreezeVelocity * timeScale;
@@ -67,13 +66,13 @@ public class RigidbodyHub : MonoBehaviour
             }
             else
             {
-                if (!isMovingByTelekinesis)
+                if (!isMovingByThotMind)
                 {
                     _rigidbody.linearVelocity *= relation;
                     _rigidbody.angularVelocity *= relation;
                 }
             }
-            if (!isMovingByTelekinesis)
+            if (!isMovingByThotMind)
             {
                 _rigidbody.mass = defaultMass / (timeScale * timeScale);
             }
@@ -81,7 +80,7 @@ public class RigidbodyHub : MonoBehaviour
         else if (!isTimeFrozen)
         {
             isTimeFrozen = true;
-            if (!isMovingByTelekinesis)
+            if (!isMovingByThotMind)
             {
                 unbiasedTimeFreezeVelocity = _rigidbody.linearVelocity / currentTimeScale;
                 unbiasedTimeFreezeAngularVelocity = _rigidbody.angularVelocity / currentTimeScale;
@@ -93,14 +92,14 @@ public class RigidbodyHub : MonoBehaviour
     #endregion TIME SCALE
 
     #region TELEKINESIS
-    public void SetTelekinesisVelocity(Vector3 velocity)
+    public void SetThotMindVelocity(Vector3 velocity)
     {
         _rigidbody.linearVelocity = velocity;
     }
 
-    public void StartTelekinesisMoving()
+    public void StartThotMindMoving()
     {
-        isMovingByTelekinesis = true;
+        isMovingByThotMind = true;
         useGravity = false;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -108,9 +107,9 @@ public class RigidbodyHub : MonoBehaviour
         _rigidbody.mass = defaultMass;
     }
 
-    internal void StopTelekinesisMoving(float maximumThrowSpeed)
+    internal void StopThotMindMoving(float maximumThrowSpeed)
     {
-        isMovingByTelekinesis = false;
+        isMovingByThotMind = false;
         useGravity = true;
         var throwVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed);
         if (isTimeFrozen)
@@ -159,9 +158,12 @@ public class RigidbodyHub : MonoBehaviour
         {
             return unbiasedTimeFreezeVelocity;
         }
-        if (isMovingByTelekinesis)
+        if (isMovingByThotMind)
         {
-            return Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed) / currentTimeScale;
+            return Vector3.ClampMagnitude(
+                _rigidbody.linearVelocity,
+                GameManager.Instance.PlayerData.ThotMindSkillData.MaximumThrowSpeed
+            ) / currentTimeScale;
         }
         return _rigidbody.linearVelocity / currentTimeScale;
     }

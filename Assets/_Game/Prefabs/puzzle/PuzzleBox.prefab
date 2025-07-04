@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 202516884}
   - component: {fileID: 1770612418}
   m_Layer: 0
-  m_Name: PhysicsCubeRewindSlowMoTelekinesis
+  m_Name: PuzzleBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

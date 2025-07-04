@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TelekinesisHUD : MonoBehaviour
+public class ThotMindHUD : MonoBehaviour
 {
     internal void Deselect()
     {

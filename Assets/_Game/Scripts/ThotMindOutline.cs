@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class TelekinesisOutline : MonoBehaviour
+public class ThotMindOutline : MonoBehaviour
 {
     public Material hoveringOutline;
     public Material pickedOutline;

@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TelekinesisLine
+  m_Name: ThotMindLine
   m_Shader: {fileID: -6465566751694194690, guid: b99a520994056bd4e898a56e6b3c376d,
     type: 3}
   m_Parent: {fileID: 0}

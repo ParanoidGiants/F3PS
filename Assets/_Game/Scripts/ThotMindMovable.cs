@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class TelekinesisMovable : MonoBehaviour
+public class ThotMindMovable : MonoBehaviour
 {
     private RigidbodyHub _rigidbodyHub;
     private Quaternion _initialRotation;
 
     [Header("References")]
-    public TelekinesisOutline outline;
+    public ThotMindOutline outline;
 
     [Space(10)]
     [Header("Watcher")]
@@ -47,14 +47,14 @@ public class TelekinesisMovable : MonoBehaviour
     public void StartMoving()
     {
         isMoving = true;
-        _rigidbodyHub.StartTelekinesisMoving();
+        _rigidbodyHub.StartThotMindMoving();
         _initialRotation = transform.rotation;
         outline.Pick();
     }
     public void StopMoving(float maximumThrowSpeed)
     {
         isMoving = false;
-        _rigidbodyHub.StopTelekinesisMoving(maximumThrowSpeed);
+        _rigidbodyHub.StopThotMindMoving(maximumThrowSpeed);
         outline.Unpick();
     }
 
@@ -62,7 +62,7 @@ public class TelekinesisMovable : MonoBehaviour
     {
         Vector3 direction = (moveTo - transform.position);
         Vector3 velocity = direction * moveSpeed;
-        _rigidbodyHub.SetTelekinesisVelocity(velocity);
+        _rigidbodyHub.SetThotMindVelocity(velocity);
     }
 
     public void StartRotating()
@@ -84,7 +84,7 @@ public class TelekinesisMovable : MonoBehaviour
 
         var worldRotation = transform.rotation;
         var objectRotation = Quaternion.Inverse(subjectOrientation) * worldRotation;
-        var snappedObjectRotation = TelekinesisController.GetClosestRotation(objectRotation);
+        var snappedObjectRotation = ThotMindController.GetClosestRotation(objectRotation);
         var snappedWorldRotation = subjectOrientation * snappedObjectRotation;
         transform.rotation = snappedWorldRotation;
     }
@@ -117,8 +117,8 @@ public class TelekinesisMovable : MonoBehaviour
     {
         var worldStartRotation = transform.rotation;
         var objectStartRotation = Quaternion.Inverse(subjectOrientation) * worldStartRotation;
-        var rotationToApply = TelekinesisController.GetStepRotationByRotationCommand(rotationCommand);
-        var objectTargetRotation = TelekinesisController.GetClosestRotation(rotationToApply * objectStartRotation);
+        var rotationToApply = ThotMindController.GetStepRotationByRotationCommand(rotationCommand);
+        var objectTargetRotation = ThotMindController.GetClosestRotation(rotationToApply * objectStartRotation);
         var worldTargetRotation = subjectOrientation * objectTargetRotation;
 
         var time = 0f;

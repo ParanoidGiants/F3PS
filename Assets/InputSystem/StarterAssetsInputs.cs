@@ -16,7 +16,7 @@ namespace StarterAssets
 		public Vector2 move;
 		public Vector2 look;
 		public float bubbleTimeScale;
-        public float telekinesisPushPull;
+        public float pushPull;
         public bool jump;
 		public bool sprint;
 		public bool shoot;
@@ -50,9 +50,9 @@ namespace StarterAssets
         {
             BubbleTimeScale(value.Get<float>());
         }
-        public void OnTelekinesisPushPull(InputValue value)
+        public void OnPushPull(InputValue value)
         {
-            TelekinesisPushPull(value.Get<float>());
+            PushPull(value.Get<float>());
         }
 
         public void OnLook(InputValue value)
@@ -144,9 +144,9 @@ namespace StarterAssets
 			bubbleTimeScale = direction == 0f ? 0f : Mathf.Sign(direction);
         }
 
-        private void TelekinesisPushPull(float direction)
+        private void PushPull(float direction)
         {
-            telekinesisPushPull = direction;
+            pushPull = direction;
         }
 
         public void LookInput(Vector2 newLookDirection)

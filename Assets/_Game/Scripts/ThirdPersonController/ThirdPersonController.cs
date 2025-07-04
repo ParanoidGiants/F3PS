@@ -192,7 +192,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            if (!GameManager.Instance.isMenuOpen && !skillManager.telekinesisController.isRotatingObjectThisFrame)
+            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
             {
                 cameraSettings.CameraTargetRotation();
             }

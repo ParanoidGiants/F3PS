@@ -14,7 +14,7 @@ public class SkillManager : MonoBehaviour
     public Crosshair crosshair;
         
     [Header("Skills")]
-    public TelekinesisController telekinesisController;
+    public ThotMindController thotMindController;
     public AnubisScrollController anubisScrollController;
     public KhonsuSphereController khonsuSphereController;
 
@@ -38,7 +38,7 @@ public class SkillManager : MonoBehaviour
             _inputs.skill,
             _inputs.grab,
             _inputs.look,
-            _inputs.telekinesisPushPull
+            _inputs.pushPull
         );
     }
 
@@ -50,8 +50,8 @@ public class SkillManager : MonoBehaviour
 
         switch (PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.OnFixedUpdate();
+            case Skill.ThotMind:
+                thotMindController.OnFixedUpdate();
                 break;
             case Skill.AnubisScroll:
                 anubisScrollController.OnFixedUpdate();
@@ -61,23 +61,23 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
+    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float thotMindPushPull)
     {
         switch (PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.OnUpdate(
+            case Skill.ThotMind:
+                thotMindController.OnUpdate(
                     skill,
                     grab,
                     look,
-                    telekinesisPushPull
+                    thotMindPushPull
                 );
                 break;
             case Skill.AnubisScroll:
-                anubisScrollController.OnUpdate(skill, grab, telekinesisPushPull);
+                anubisScrollController.OnUpdate(skill, grab, thotMindPushPull);
                 break;
             case Skill.KhonsuSphere:
-                khonsuSphereController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
+                khonsuSphereController.OnUpdate(skill, thotMindPushPull, _aimTargetPosition);
                 break;
             default:
                 break;
@@ -120,23 +120,23 @@ public class SkillManager : MonoBehaviour
     {
         switch (nextSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.gameObject.SetActive(true);
+            case Skill.ThotMind:
+                thotMindController.gameObject.SetActive(true);
                 anubisScrollController.gameObject.SetActive(false);
                 khonsuSphereController.gameObject.SetActive(false);
                 break;
             case Skill.AnubisScroll:
-                telekinesisController.gameObject.SetActive(false);
+                thotMindController.gameObject.SetActive(false);
                 anubisScrollController.gameObject.SetActive(true);
                 khonsuSphereController.gameObject.SetActive(false);
                 break;
             case Skill.KhonsuSphere:
-                telekinesisController.gameObject.SetActive(false);
+                thotMindController.gameObject.SetActive(false);
                 anubisScrollController.gameObject.SetActive(false);
                 khonsuSphereController.gameObject.SetActive(true);
                 break;
             default:
-                telekinesisController.gameObject.SetActive(false);
+                thotMindController.gameObject.SetActive(false);
                 anubisScrollController.gameObject.SetActive(false);
                 khonsuSphereController.gameObject.SetActive(false);
                 break;
@@ -147,8 +147,8 @@ public class SkillManager : MonoBehaviour
     {
         switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                return telekinesisController.isMovingObjectThisFrame;
+            case Skill.ThotMind:
+                return thotMindController.isMovingObjectThisFrame;
             case Skill.AnubisScroll:
                 return anubisScrollController.IsAiming();
             case Skill.KhonsuSphere:
@@ -163,8 +163,8 @@ public class SkillManager : MonoBehaviour
 
         switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.OnLateUpdate();
+            case Skill.ThotMind:
+                thotMindController.OnLateUpdate();
                 break;
 
             case Skill.AnubisScroll:

@@ -1,3 +1,4 @@
+using F3PS;
 using StarterAssets;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,9 @@ public enum RotationCommand
     RotateDown
 }
 
-public class TelekinesisController : MonoBehaviour
+public class ThotMindController : MonoBehaviour
 {
+    private ThotMindSkillData ThotMindSkillData => GameManager.Instance.PlayerData.ThotMindSkillData;
     private const float ROTATION_INPUT_THRESHOLD = 0.3f;
 
     [Header("References")]
@@ -25,18 +27,8 @@ public class TelekinesisController : MonoBehaviour
     public Animator animator;
 
     [Space(10)]
-    [Header("Settings")]
-    public float pushPullSpeed = 5.0f;
-    public float rotateTimer = 1f;
-    public float moveSpeed = 5.0f;
-    public float minimumDistance = 3f;
-    public float maximumDistance = 50f;
-    public float maximumThrowSpeed = 3f;
-
-
-    [Space(10)]
     [Header("Watchers")]
-    public TelekinesisMovable currentCandidate;
+    public ThotMindMovable currentCandidate;
     public Vector3 targetPosition;
 
     public bool wasObjectTouchedByPlayer = false;
@@ -76,13 +68,13 @@ public class TelekinesisController : MonoBehaviour
 
         if (isActuallyMovingObject)
         {
-            currentCandidate.StopMoving(maximumThrowSpeed);
+            currentCandidate.StopMoving(ThotMindSkillData.MaximumThrowSpeed);
         }
 
 
         currentCandidate.UnselectAsCandidate();
         isActuallyMovingObject = false;
-        animator.SetBool("Telekinesis", false);
+        animator.SetBool("ThotMind", false);
         isRotatingObjectThisFrame = false;
         hasCandidate = false;
     }
@@ -95,7 +87,7 @@ public class TelekinesisController : MonoBehaviour
         if (!PlayerIsGrounded() || !hasCandidate || currentCandidate.IsLocked)
         {
             isActuallyMovingObject = false;
-            animator.SetBool("Telekinesis", false);
+            animator.SetBool("ThotMind", false);
             return;
         }
 
@@ -108,10 +100,10 @@ public class TelekinesisController : MonoBehaviour
             if (isActuallyMovingObject)
             {
                 isActuallyMovingObject = false;
-                animator.SetBool("Telekinesis", false);
+                animator.SetBool("ThotMind", false);
                 isActuallyRotatingObject = false;
                 target.gameObject.SetActive(false);
-                currentCandidate.StopMoving(maximumThrowSpeed);
+                currentCandidate.StopMoving(ThotMindSkillData.MaximumThrowSpeed);
             }
             wasObjectTouchedByPlayer = true;
             currentCandidate.SetLocked();
@@ -126,7 +118,7 @@ public class TelekinesisController : MonoBehaviour
         if (startMovingObject)
         {
             isActuallyMovingObject = true;
-            animator.SetBool("Telekinesis", true);
+            animator.SetBool("ThotMind", true);
             target.gameObject.SetActive(true);
             SetTargetPosition(targetPosition);
             currentCandidate.SnapToRelativeRotation(SubjectOrientation);
@@ -138,10 +130,10 @@ public class TelekinesisController : MonoBehaviour
         {
             // Stop Moving Object
             isActuallyMovingObject = false;
-            animator.SetBool("Telekinesis", false);
+            animator.SetBool("ThotMind", false);
             isActuallyRotatingObject = false;
             target.gameObject.SetActive(false);
-            currentCandidate.StopMoving(maximumThrowSpeed);
+            currentCandidate.StopMoving(ThotMindSkillData.MaximumThrowSpeed);
             return;
         }
 
@@ -154,7 +146,7 @@ public class TelekinesisController : MonoBehaviour
         if (pushPull != 0f)
         {
             var moveDirection = target.forward;
-            var moveTarget = target.position + pushPull * pushPullSpeed * Time.deltaTime * moveDirection;
+            var moveTarget = target.position + pushPull * ThotMindSkillData.PushPullSpeed * Time.deltaTime * moveDirection;
             SetTargetPosition(moveTarget);
         }
 
@@ -163,7 +155,7 @@ public class TelekinesisController : MonoBehaviour
         if (isActuallyRotatingObject)
         {
             var rotationCommand = GetRotationCommand(rotationDeltaXY);
-            currentCandidate.Rotate(rotationCommand, SubjectOrientation, rotateTimer);
+            currentCandidate.Rotate(rotationCommand, SubjectOrientation, ThotMindSkillData.RotateTimer);
         }
         var startRotatingObject = !wasRotatingObjectLastFrame && isRotatingObjectThisFrame;
         var stopRotatingObject = wasRotatingObjectLastFrame && !isRotatingObjectThisFrame;
@@ -193,7 +185,7 @@ public class TelekinesisController : MonoBehaviour
         if (hasCandidate && isActuallyMovingObject)
         {
             targetPosition = target.position;
-            currentCandidate.MoveTowards(targetPosition, moveSpeed, transform.right);
+            currentCandidate.MoveTowards(targetPosition, ThotMindSkillData.MoveSpeed, transform.right);
             return;
         }
         if (!crosshair.CrosshairRaycast())
@@ -212,7 +204,7 @@ public class TelekinesisController : MonoBehaviour
         var targetHit = crosshair.Target;
         var targetTransform = targetHit.transform;
         var ray = crosshair.Ray;
-        var movableTarget = targetTransform.GetComponent<TelekinesisMovable>();
+        var movableTarget = targetTransform.GetComponent<ThotMindMovable>();
 
         if (movableTarget == null)
         {
@@ -248,7 +240,7 @@ public class TelekinesisController : MonoBehaviour
         }
     }
 
-    private void InitializeCandidate(TelekinesisMovable movableTarget)
+    private void InitializeCandidate(ThotMindMovable movableTarget)
     {
         movableTarget.SelectAsCandidate();
         if (movableTarget.IsLocked)
@@ -264,11 +256,11 @@ public class TelekinesisController : MonoBehaviour
     private void SetTargetPosition(Vector3 position)
     {
         target.position = position;
-        if (target.localPosition.z >= minimumDistance && target.localPosition.z <= maximumDistance)
+        if (target.localPosition.z >= ThotMindSkillData.MinimumDistance && target.localPosition.z <= ThotMindSkillData.MaximumDistance)
         {
             return;
         }
-        var clamped = Mathf.Clamp(target.localPosition.z, minimumDistance, maximumDistance);
+        var clamped = Mathf.Clamp(target.localPosition.z, ThotMindSkillData.MinimumDistance, ThotMindSkillData.MaximumDistance);
         target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, clamped);
     }
 

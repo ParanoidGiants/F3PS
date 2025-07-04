@@ -8,6 +8,12 @@ public class UnlockSkill : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (skill == Skill.None)
+        {
+            Debug.LogError("Cannot unlock Skill.None.");
+            return;
+        }
+
         if (!other.TryGetComponent<ThirdPersonController>(out var player))
         {
             return;
