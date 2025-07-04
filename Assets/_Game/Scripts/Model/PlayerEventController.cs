@@ -68,8 +68,8 @@ public class PlayerEventController
         if (Data.ActiveAttack == Attack.None)
         {
             SetActiveAttack(attack);
-            UnlockStamina();
         }
+        UnlockStamina();
     }
     #endregion Attack
 
@@ -95,8 +95,8 @@ public class PlayerEventController
         if (Data.ActiveSkill == Skill.None)
         {
             SetActiveSkill(skill);
-            UnlockStamina();
         }
+        UnlockStamina();
     }
 
     #region KhonsuSphere
@@ -146,6 +146,22 @@ public class PlayerEventController
 
 
     #endregion Skills
+
+    #region Abilities
+
+    public event Action<Ability> OnAbilityUnlocked;
+    public void UnlockAbility(Ability ability)
+    {
+        OnAbilityUnlocked?.Invoke(ability);
+        if (Data.UnlockedAbilities.Contains(ability))
+        {
+            UnityEngine.Debug.LogError(ability + " is already unlocked.");
+            return;
+        }
+        Data.UnlockedAbilities.Add(ability);
+        UnlockStamina();
+    }
+    #endregion Abilities
 
     #region Health
     public event Action<int> OnMaxHealthChanged;

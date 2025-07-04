@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PassiveSkills
+public enum Ability
 {
     None = 0,
     Glide = 1,
@@ -126,6 +126,14 @@ public class PlayerData
     public float SpeedChangeRate = 10.0f;
 
     [Space(10)]
+    [Header("Ascende and Glide Settings")]
+    public float AscendHeight = 1f;
+    public float AscendDuration = 1f;
+    public float GlideDuration = 1f;
+    public float GlideDepletionRate = 0.05f;
+    public float LandingDepth = 20f;
+
+    [Space(10)]
     [Header("Move Settings")]
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
@@ -140,9 +148,6 @@ public class PlayerData
     [Header("Jump Settings")]
     public float JumpCoolDownTimer = 0.25f;
     public float JumpHeight = 1.2f;
-    public float LandingDepth = 20f;
-    public float AscendDuration = 1f;
-    public float GlideDuration = 1f;
 
     [Space(10)]
     [Header("Dodge Settings")]
@@ -173,7 +178,7 @@ public class PlayerData
     public ThotMindSkillData ThotMindSkillData;
 
     [Space(20)]
-    [Header("Passive Skills")]
-    public List<PassiveSkills> UnlockedPassiveSkills;
+    [Header("Abilities")]
+    public List<Ability> UnlockedAbilities;
 
 }

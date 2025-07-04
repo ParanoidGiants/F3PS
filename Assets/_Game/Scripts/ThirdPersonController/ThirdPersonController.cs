@@ -148,11 +148,31 @@ namespace StarterAssets
             attackManager.OnUpdate();
 
             HandleSprint();
+            HandleGliding();
+        }
+
+        private void HandleGliding()
+        {
+            if (!isGliding)
+            {
+                return;
+            }
+
+            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina)
+            {
+                isGliding = false;
+            }
+            else
+            {
+                staminaManager.Deplete(glideDepletionRate);
+            }
         }
 
         private void HandleSprint()
         {
-            if (!_data.UnlockedPassiveSkills.Contains(PassiveSkills.Sprint))
+            var sprint = GameManager.Instance.inputs.sprint;
+            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
             {
                 _isSprinting = false;
                 return;
@@ -162,7 +182,7 @@ namespace StarterAssets
             {
                 _isSprinting = false;
             }
-            else if (GameManager.Instance.inputs.sprint)
+            else
             {
                 staminaManager.Deplete(sprintStaminaDepletion);
                 _isSprinting = true;
@@ -229,7 +249,6 @@ namespace StarterAssets
                 Vector3.down
             );
             Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
-            // check if the ray hits the ground
 
             if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
             {
@@ -432,9 +451,6 @@ namespace StarterAssets
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                 _groundedCoyoteTime = groundedCoyoteDuration;
 
-                landingPlane.SetActive(true);
-                UpdateLandingPlane();
-
                 isAscending = true;
                 ascendTime = 0f;
             }
@@ -485,7 +501,7 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
-            else if (_data.UnlockedPassiveSkills.Contains(PassiveSkills.Glide) && jumpInput && isAscending)
+            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
             {
                 UpdateLandingPlane();
                 ascendTime += Time.deltaTime;
@@ -493,13 +509,15 @@ namespace StarterAssets
                 {
                     isAscending = false;
                     isGliding = true;
+                    landingPlane.SetActive(true);
+                    UpdateLandingPlane();
                     ascendTime = 0f;
                 }
-                var maximumJumpSpeed = Mathf.Sqrt(_data.JumpHeight * -2f * Gravity);
+                var maximumJumpSpeed = Mathf.Sqrt(_data.AscendHeight * -2f * Gravity);
                 var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
                 currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
             }
-            else if (_data.UnlockedPassiveSkills.Contains(PassiveSkills.Glide) && jumpInput && isGliding)
+            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {
                 UpdateLandingPlane();
                 glideTime += Time.deltaTime;

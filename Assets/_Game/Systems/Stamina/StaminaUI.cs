@@ -26,7 +26,7 @@ public class StaminaUI : MonoBehaviour
 
     private bool AnySkillIsUnlocked()
     {
-        return PlayerData.UnlockedPassiveSkills.Any(skill => skill != PassiveSkills.None)
+        return PlayerData.UnlockedAbilities.Any(skill => skill != Ability.None)
             || PlayerData.UnlockedSkills.Any(skill => skill != Skill.None)
             || PlayerData.UnlockedAttacks.Any(attack => attack != Attack.None);
     }
