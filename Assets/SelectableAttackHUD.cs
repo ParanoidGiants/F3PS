@@ -5,8 +5,8 @@ public class SelectableAttackHUD : MonoBehaviour
 {
     public Attack attackType;
 
-    private CanvasGroup _canvasGroup;
-    private RectTransform _rectTransform;
+    public CanvasGroup _canvasGroup;
+    public RectTransform _rectTransform;
     private Sequence _selectAnimation;
 
     public void Select()

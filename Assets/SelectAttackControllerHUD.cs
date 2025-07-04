@@ -1,4 +1,6 @@
 using F3PS;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class SelectAttackControllerHUD : MonoBehaviour
@@ -12,19 +14,30 @@ public class SelectAttackControllerHUD : MonoBehaviour
     public void Start()
     {
         PlayerEventController.OnActiveAttackChanged += SelectAttackHud;
+        PlayerEventController.OnAttackUnlocked += UnlockHud;
+
+        foreach (var attackHud in attackHuds)
+        {
+            attackHud.gameObject.SetActive(false);
+        }
+
+        foreach (var attack in PlayerData.UnlockedAttacks)
+        {
+            var attackHud = attackHuds.FirstOrDefault(x => x.attackType == attack);
+            if (attackHud == null)
+            {
+                continue;
+            }
+            activeAttackHuds = activeAttackHuds.Append(attackHud).ToArray();
+        }
+        foreach (var skillHud in activeAttackHuds)
+        {
+            skillHud.gameObject.SetActive(true);
+        }
     }
 
     public void SelectAttackHud(Attack attack)
     {
-        if (attack.Equals(Attack.None))
-        {
-            foreach (var skillHud in attackHuds)
-            {
-                skillHud.gameObject.SetActive(false);
-            }
-            return;
-        }
-
         foreach (var skillHud in attackHuds)
         {
             if (skillHud.attackType == attack)
@@ -36,5 +49,18 @@ public class SelectAttackControllerHUD : MonoBehaviour
                 skillHud.Deselect();
             }
         }
+    }
+
+    private void UnlockHud(Attack attack)
+    {
+        var attackHud = Array.Find(attackHuds, x => x.attackType == attack);
+        if (attackHud == null)
+        {
+            Debug.LogWarning($"Attack HUD for {attack} not found.");
+            return;
+        }
+        attackHud.gameObject.SetActive(true);
+        activeAttackHuds = activeAttackHuds.Append(attackHud).ToArray();
+        attackHud.Deselect();
     }
 }

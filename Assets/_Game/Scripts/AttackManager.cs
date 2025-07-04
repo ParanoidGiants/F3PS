@@ -1,6 +1,5 @@
 using F3PS;
 using StarterAssets;
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class AttackManager : MonoBehaviour
 
     [Header("Attacks")]
     public MeleeAttackController meleeAttackController;
-    public LongRangeAttackController longRangeAttackController;
+    public HorusPalmController horusPalmController;
 
     private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
@@ -26,8 +25,10 @@ public class AttackManager : MonoBehaviour
     {
         _inputs = GameManager.Instance.inputs;
         meleeAttackController.Init();
-        longRangeAttackController.Init();
+        horusPalmController.Init();
         SetActiveAttack(ActiveAttack);
+
+        PlayerEventController.OnActiveAttackChanged += SetActiveAttack;
     }
     public void OnUpdate()
     {
@@ -50,8 +51,8 @@ public class AttackManager : MonoBehaviour
             case Attack.Melee:
                 meleeAttackController.OnUpdate(attack, targetPosition: _aimTargetPosition);
                 break;
-            case Attack.LongRange:
-                longRangeAttackController.OnUpdate(attack, targetPosition: _aimTargetPosition);
+            case Attack.HorusPalm:
+                horusPalmController.OnUpdate(attack, targetPosition: _aimTargetPosition);
                 break;
             default:
                 break;
@@ -81,7 +82,7 @@ public class AttackManager : MonoBehaviour
 
         _isAttackSwitched = true;
         var currentAttack = ActiveAttack;
-        var nextAttack = currentAttack == Attack.Melee ? Attack.LongRange : Attack.Melee;
+        var nextAttack = currentAttack == Attack.Melee ? Attack.HorusPalm : Attack.Melee;
         SetActiveAttack(nextAttack);
     }
 
@@ -93,13 +94,12 @@ public class AttackManager : MonoBehaviour
     private bool CanSwitchCurrentAttack()
     {
         return ActiveAttack == Attack.Melee && !meleeAttackController.isAttacking
-            || ActiveAttack == Attack.LongRange && !longRangeAttackController.isAttacking;
+            || ActiveAttack == Attack.HorusPalm && !horusPalmController.isAttacking;
     }
 
     private void SetActiveAttack(Attack attack)
     {
         meleeAttackController.gameObject.SetActive(attack == Attack.Melee);
-        longRangeAttackController.gameObject.SetActive(attack == Attack.LongRange);
-        PlayerEventController.SetActiveAttack(attack);
+        horusPalmController.gameObject.SetActive(attack == Attack.HorusPalm);
     }
 }

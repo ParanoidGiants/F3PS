@@ -5905,7 +5905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpace: {fileID: 6852364475795614233}
   crosshair: {fileID: 4911003788126115723}
-  telekinesisController: {fileID: 7574983505477571672}
+  thotMindController: {fileID: 7574983505477571672}
   anubisScrollController: {fileID: 7574983506497150795}
   khonsuSphereController: {fileID: 8207623447801904492}
 --- !u!1 &1745050354389436506
@@ -7455,8 +7455,7 @@ MonoBehaviour:
   gravityScale: 1
   currentTimeScale: 1
   isTimeFrozen: 0
-  isMovingByTelekinesis: 0
-  maximumThrowSpeed: 10
+  isMovingByThotMind: 0
   isAnubisScrolling: 0
   constraintsFreezeAllCommandCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
@@ -18611,7 +18610,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d0d498af8fb4948a652c1e79ef70a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackHuds: []
+  attackHuds:
+  - {fileID: 395702246536409976}
+  - {fileID: 7396892581115525894}
   activeAttackHuds: []
 --- !u!1 &7574983505397882020
 GameObject:
@@ -18689,7 +18690,7 @@ GameObject:
   - component: {fileID: 7574983505477571673}
   - component: {fileID: 7574983505477571672}
   m_Layer: 8
-  m_Name: TelekinesisController
+  m_Name: ThotMindController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18837,12 +18838,6 @@ MonoBehaviour:
   target: {fileID: 7574983505898908273}
   playerCameraTransform: {fileID: 1634472901277285233}
   animator: {fileID: 3756245146727236597}
-  pushPullSpeed: 10
-  rotateTimer: 0.5
-  moveSpeed: 10
-  minimumDistance: 3
-  maximumDistance: 50
-  maximumThrowSpeed: 30
   currentCandidate: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   wasObjectTouchedByPlayer: 0
@@ -19040,7 +19035,7 @@ GameObject:
   - component: {fileID: 7574983505514170184}
   - component: {fileID: 7574983505514170185}
   m_Layer: 5
-  m_Name: Telekinesis
+  m_Name: ThotMind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19261,6 +19256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 1
+  _canvasGroup: {fileID: 7574983505555791429}
+  _rectTransform: {fileID: 7574983505555791426}
 --- !u!1 &7574983505604775683
 GameObject:
   m_ObjectHideFlags: 0
@@ -19718,7 +19715,7 @@ GameObject:
   - component: {fileID: 7574983505734437858}
   - component: {fileID: 7574983505734437856}
   m_Layer: 8
-  m_Name: LongRangeAttack
+  m_Name: HorusPalmController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19870,7 +19867,7 @@ GameObject:
   - component: {fileID: 7574983505898908275}
   - component: {fileID: 7574983505898908274}
   m_Layer: 8
-  m_Name: TelekinesisTarget
+  m_Name: ThotMindTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20182,7 +20179,7 @@ GameObject:
   - component: {fileID: 7574983506069927853}
   - component: {fileID: 7574983506069927854}
   m_Layer: 8
-  m_Name: LongRangeAttackProjectilePool
+  m_Name: HorusPalmProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20349,8 +20346,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7347877809617099915}
   - {fileID: 7574983505734437919}
+  - {fileID: 7347877809617099915}
   m_Father: {fileID: 726126027721835658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7574983506105095472
@@ -20367,7 +20364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshair: {fileID: 4911003788126115723}
   meleeAttackController: {fileID: 4367559546999111399}
-  longRangeAttackController: {fileID: 7574983505734437858}
+  horusPalmController: {fileID: 7574983505734437858}
 --- !u!1 &7574983506180536849
 GameObject:
   m_ObjectHideFlags: 0
@@ -21611,7 +21608,7 @@ GameObject:
   - component: {fileID: 7574983506560346509}
   - component: {fileID: 395702246536409976}
   m_Layer: 5
-  m_Name: LongRangeAttack
+  m_Name: HorusPalm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21713,7 +21710,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b9fab5a7dad7445848532a9b19bb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 2
+  attackType: 1
+  _canvasGroup: {fileID: 7574983506560346506}
+  _rectTransform: {fileID: 7574983506560346504}
 --- !u!1 &7993097629627840621
 GameObject:
   m_ObjectHideFlags: 0

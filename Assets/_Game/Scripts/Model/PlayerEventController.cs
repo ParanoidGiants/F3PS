@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 
 public class PlayerEventController
 {
@@ -53,6 +52,23 @@ public class PlayerEventController
     {
         OnActiveAttackChanged?.Invoke(attack);
         Data.ActiveAttack = attack;
+    }
+
+    public event Action<Attack> OnAttackUnlocked;
+    public void UnlockAttack(Attack attack)
+    {
+        if (Data.UnlockedAttacks.Contains(attack))
+        {
+            UnityEngine.Debug.LogError(attack + " is already unlocked.");
+            return;
+        }
+        OnAttackUnlocked?.Invoke(attack);
+
+        Data.UnlockedAttacks.Add(attack);
+        if (Data.ActiveAttack == Attack.None)
+        {
+            SetActiveAttack(attack);
+        }
     }
     #endregion Attack
 
@@ -125,6 +141,7 @@ public class PlayerEventController
     }
 
     #endregion AnubisScroll
+
 
     #endregion Skills
 

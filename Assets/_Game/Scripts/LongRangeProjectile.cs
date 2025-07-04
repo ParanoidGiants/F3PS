@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class LongRangeProjectile : MonoBehaviour
+public class HorusPalmProjectile : MonoBehaviour
 {
     private Collider[] _ownerColliders;
     private HitBox _hitBox;
@@ -70,7 +70,6 @@ public class LongRangeProjectile : MonoBehaviour
         mesh.SetActive(false);
         ModifyImpact(other);
 
-        Debug.Log(other.gameObject.name);
         var hittable = other.gameObject.GetComponent<Hittable>();
         if (hittable != null)
         {

@@ -59,6 +59,7 @@ public class SelectSkillControllerHUD : MonoBehaviour
         if (skillHud == null)
         {
             Debug.LogError("Skill HUD does not exists for " + skill);
+            return;
         }
         skillHud.gameObject.SetActive(true);
         activeSkillHuds = activeSkillHuds.Append(skillHud).ToArray();

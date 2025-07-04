@@ -20,8 +20,8 @@ public enum Skill
 public enum Attack
 {
     None = 0,
-    Melee = 1,
-    LongRange = 2,
+    HorusPalm = 1,
+    Melee = 2,
 }
 
 [Serializable]
@@ -81,7 +81,7 @@ public class ThotMindSkillData
 
 
 [Serializable]
-public class LongRangeAttackData
+public class HorusPalmData
 {
     public float AttackSpeed = 100f;
     public float ImpactForceMultiplier = 1.0f;
@@ -158,7 +158,7 @@ public class PlayerData
     [Header("Melee Attack Settings")]
     public MeleeAttackData MeleeAttackData;
     [Header("Long Range Attack Settings")]
-    public LongRangeAttackData LongRangeAttackData;
+    public HorusPalmData HorusPalmData;
 
     [Space(20)]
     [Header("Skills")]
