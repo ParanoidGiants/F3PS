@@ -319,7 +319,7 @@ MonoBehaviour:
       ImpactForceMultiplier: 0.1
       AttackCoolDownTimer: 0.2
       StaminaCost: 0.3
-    UnlockedSkills: 
+    UnlockedSkills: 010000000200000003000000
     ActiveSkill: 0
     KhonsuSphereSkillData:
       TargetSize: 30

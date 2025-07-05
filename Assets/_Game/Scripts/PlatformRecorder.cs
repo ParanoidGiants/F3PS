@@ -94,7 +94,7 @@ public class PlatformRecorder : MonoBehaviour
         Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWayPointIndex, MathUtils.IntEquals);
+        // wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWaypointIndex, MathUtils.IntEquals);
     }
 
     private void RecordInitialFrame()
@@ -103,7 +103,7 @@ public class PlatformRecorder : MonoBehaviour
         Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWayPointIndex, MathUtils.IntEquals);
+        // wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWaypointIndex, MathUtils.IntEquals);
     }
 
     private void RecordFutureFramePosition(int frame, Vector3 position)
@@ -180,7 +180,7 @@ public class PlatformRecorder : MonoBehaviour
         Log("Restore Initial Frame");
         transform.position = positions.GetValueAtFrame(0);
         transform.rotation = rotations.GetValueAtFrame(0);
-        platformMover.CurrentWayPointIndex = wayPoints.GetValueAtFrame(0);
+        // platformMover.CurrentWaypointIndex = wayPoints.GetValueAtFrame(0);
         currentFrame = 0;
 
         state = AnubisScrollState.Record;

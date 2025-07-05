@@ -14,9 +14,11 @@ using DarkTonic.MasterAudio;
 
 namespace StarterAssets
 {
+
     [RequireComponent(typeof(Rigidbody))]
     public class ThirdPersonController : MonoBehaviour
     {
+        private StarterAssetsInputs Inputs => GameManager.Instance.inputs;
         [Header("References")]
         public StaminaManager staminaManager;
         public TimeManager timeManager;
@@ -68,7 +70,6 @@ namespace StarterAssets
         public float GroundedRadius = 0.28f;
         public LayerMask SolidGroundLayers;
         public LayerMask GroundLayers;
-        public Transform currentGround;
         public Vector3 groundNormal;
 
         [Header("Fall of ground")]
@@ -134,7 +135,7 @@ namespace StarterAssets
             
             cameraSettings.HandleFreeCamera();
 
-            if (!GameManager.Instance.inputs.canControlPlayer) return;
+            if (!Inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
 
@@ -143,20 +144,37 @@ namespace StarterAssets
             skillManager.OnUpdate();
             attackManager.OnUpdate();
 
-            HandlePlatformTransformUpdate();
             HandleSprintInput();
             HandleGlidingInput();
         }
 
+        private void LateUpdate()
+        {
+            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
+            {
+                cameraSettings.CameraTargetRotation();
+            }
+            if (Inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            {
+                skillManager.OnLateUpdate();
+            }
+        }
+
+        [Header("Platform Movement")]
+        private Rigidbody _activePlatform;
+        private Vector3 _platformPositionOffset;
+        private Quaternion _platformRotationOffset;
+        private Vector3 _lastPlatformPosition;
+        private Quaternion _lastPlatformRotation;
+        private Vector3 _platformVelocity;
+
 
         private void FixedUpdate()
         {
-            if (!GameManager.Instance.inputs.canControlPlayer) return;
-            if (timeManager.isPaused) return;
-            if (_isDying) return;
+            if (!Inputs.canControlPlayer || timeManager.isPaused || _isDying) return;
 
-            // HandlePlatformTransformFixedUpdate();
-            
+            GroundedCheck();
+            UpdatePlatformVelocity();
             HandleFallAndGravity();
 
             skillManager.OnFixedUpdate();
@@ -168,120 +186,82 @@ namespace StarterAssets
             }
 
             Move(skillManager.IsAiming());
-
-            GroundedCheck();
-            MovingGroundCheck();
         }
 
-
-        private void LateUpdate()
+        private void UpdatePlatformVelocity()
         {
-            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
+            if (_activePlatform == null)
             {
-                cameraSettings.CameraTargetRotation();
-            }
-            if (GameManager.Instance.inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
-            {
-                skillManager.OnLateUpdate();
-            }
-        }
-
-        [Space(30)]
-        [Header("Platform Transform Update")]
-        public bool wasGroundedLastFrame = false;
-        public Vector3 lastGroundTransformPosition;
-        public Vector3 lastGroundHitPoint;
-        public RaycastHit currentGroundHit;
-
-        private void HandlePlatformTransformUpdate()
-        {
-            if (!_isGrounded)
-            {
-                Debug.Log("Not grounded");
-                wasGroundedLastFrame = false;
-                return;
-            }
-            if (!wasGroundedLastFrame)
-            {
-                wasGroundedLastFrame = true;
-                Debug.Log($"Initial Ground Transform Position: {currentGroundHit.transform.position}");
-                lastGroundTransformPosition = currentGroundHit.transform.position;
+                _platformVelocity = Vector3.zero;
                 return;
             }
 
-            var movingdirection = currentGroundHit.transform.position - lastGroundTransformPosition;
-            var didPlatformMove = Vector3.Distance(lastGroundTransformPosition, currentGroundHit.transform.position) > 0f;
-            if (!didPlatformMove)
-            {
-                return;
-            }
-            Debug.Log($"Old Ground Transform Position: {lastGroundTransformPosition}");
-            Debug.Log($"New Ground Transform Position: {currentGroundHit.transform.position}");
+            // Calculate the platform's movement and rotation since the last frame
+            var rotationDelta = _activePlatform.rotation * Quaternion.Inverse(_lastPlatformRotation);
+            Vector3 positionDelta = _activePlatform.position - _lastPlatformPosition;
 
-            transform.position += movingdirection;
-            lastGroundTransformPosition = currentGroundHit.transform.position;
+            // Calculate the rotational effect on our position offset
+            Vector3 rotatedOffset = rotationDelta * _platformPositionOffset;
+
+            // The total displacement caused by the platform's movement and rotation
+            Vector3 totalDisplacement = positionDelta + (rotatedOffset - _platformPositionOffset);
+
+            // Calculate the effective velocity of the platform at our position
+            _platformVelocity = totalDisplacement / Time.fixedDeltaTime;
+
+            // Update our stored position and rotation for the next frame's calculation
+            _lastPlatformPosition = _activePlatform.position;
+            _lastPlatformRotation = _activePlatform.rotation;
+            // Continuously update the offset in case the player moves on the platform
+            _platformPositionOffset = transform.position - _activePlatform.position;
+            _platformRotationOffset = Quaternion.Euler(0, rotationDelta.eulerAngles.y, 0);
         }
 
         private void GroundedCheck()
         {
-            Vector3 spherePosition = new Vector3(
-                transform.position.x,
-                transform.position.y - GroundedOffset,
-                transform.position.z
-            );
-            _isGrounded = Physics.CheckSphere(
-                spherePosition,
-                GroundedRadius,
-                GroundLayers,
-                QueryTriggerInteraction.Ignore
-            );
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
 
-            if (!_isGrounded)
+            if (Physics.SphereCast(spherePosition + Vector3.up * 0.1f, GroundedRadius, Vector3.down, out RaycastHit hit, 0.2f, GroundLayers, QueryTriggerInteraction.Ignore))
             {
-                currentGround = null;
-                groundNormal = Vector3.up;
-                checkGroundTime = 0f;
-                return;
-            }
-            Ray groundRay = new Ray(
-                spherePosition,
-                Vector3.down
-            );
-            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
+                _isGrounded = true;
+                groundNormal = hit.normal;
 
-            if (!Physics.Raycast(groundRay, out currentGroundHit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
-            {
-                groundNormal = Vector3.up;
-                _isGrounded = false;
-                checkGroundTime = 0f;
-                return;
-            }
-        }
-        private void MovingGroundCheck()
-        {
-            if (!_isGrounded)
-            {
-                return;
-            }
-
-            var groundedObject = currentGroundHit.transform;
-
-            if (groundedObject.gameObject.IsInLayerMask(SolidGroundLayers))
-            {
-                checkGroundTime += Time.fixedDeltaTime;
-                if (checkGroundTime >= checkGroundTimer)
+                Rigidbody newPlatform = hit.collider.GetComponentInParent<Rigidbody>();
+                if (_activePlatform != newPlatform)
                 {
-                    checkGroundTime = 0f;
-                    beforeLastValidGroundPosition = lastValidGroundPosition;
-                    lastValidGroundPosition = currentGroundHit.point;
+                    SwitchActivePlatform(newPlatform);
+                }
+
+                if (_activePlatform != null)
+                {
+                    _platformPositionOffset = transform.position - _activePlatform.position;
+                    _lastPlatformPosition = _activePlatform.position;
+                    _lastPlatformRotation = _activePlatform.rotation;
                 }
             }
             else
             {
-                checkGroundTime = 0f;
+                _isGrounded = false;
+                groundNormal = Vector3.up;
+
+                if (_activePlatform != null)
+                {
+                    SwitchActivePlatform(null);
+                }
             }
         }
 
+        private void SwitchActivePlatform(Rigidbody newPlatform)
+        {
+            _activePlatform = newPlatform;
+
+            if (_activePlatform != null)
+            {
+                _platformPositionOffset = transform.position - _activePlatform.position;
+                _lastPlatformPosition = _activePlatform.position;
+                _lastPlatformRotation = _activePlatform.rotation;
+            }
+        }
 
         private void HandleGlidingInput()
         {
@@ -303,8 +283,8 @@ namespace StarterAssets
 
         private void HandleSprintInput()
         {
-            var moving = GameManager.Instance.inputs.move != Vector2.zero;
-            var sprint = GameManager.Instance.inputs.sprint;
+            var moving = Inputs.move != Vector2.zero;
+            var sprint = Inputs.sprint;
             if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
             {
                 _isSprinting = false;
@@ -370,7 +350,7 @@ namespace StarterAssets
             }
 
             float targetSpeed = 0f;
-            if (GameManager.Instance.inputs.move.magnitude > 0f)
+            if (Inputs.move.magnitude > 0f)
             {
                 if (isAiming)
                 {
@@ -388,7 +368,7 @@ namespace StarterAssets
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
             float speedOffset = 0.1f;
-            float inputMagnitude = GameManager.Instance.inputs.analogMovement ? GameManager.Instance.inputs.move.magnitude : 1f;
+            float inputMagnitude = Inputs.analogMovement ? Inputs.move.magnitude : 1f;
             if (currentHorizontalSpeed < targetSpeed - speedOffset
                 || currentHorizontalSpeed > targetSpeed + speedOffset
             )
@@ -411,9 +391,9 @@ namespace StarterAssets
                 Time.deltaTime * _data.SpeedChangeRate
             );
             if (_animationBlend < 0.01f) _animationBlend = 0f;
-            if (GameManager.Instance.inputs.move.sqrMagnitude > 0f)
+            if (Inputs.move.sqrMagnitude > 0f)
             {
-                _lastInputDirection = new Vector3(GameManager.Instance.inputs.move.x, 0.0f, GameManager.Instance.inputs.move.y).normalized;
+                _lastInputDirection = new Vector3(Inputs.move.x, 0.0f, Inputs.move.y).normalized;
             }
             _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
             _lookYaw = Mathf.SmoothDampAngle(
@@ -429,21 +409,21 @@ namespace StarterAssets
                 var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
                 armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
             }
-            else if(GameManager.Instance.inputs.move.magnitude > 0f)
+            else if(Inputs.move.magnitude > 0f)
             {
                 armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             }
 
             var verticalVelocity = new Vector3(0.0f, currentVerticalSpeed, 0.0f);
-            if (GameManager.Instance.inputs.move.magnitude > 0f)
+            if (Inputs.move.magnitude > 0f)
             {
                 Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
                 var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
-                _rigidbody.linearVelocity = (verticalVelocity + moveVelocity);
+                _rigidbody.linearVelocity = verticalVelocity + moveVelocity + _platformVelocity; ;
             }
             else
             {
-                _rigidbody.linearVelocity = verticalVelocity;
+                _rigidbody.linearVelocity = verticalVelocity + _platformVelocity; ;
             }
 
             animator.SetFloat(_animIDSpeed, _animationBlend);
@@ -452,11 +432,11 @@ namespace StarterAssets
 
         private void JumpAndDodge()
         {
-            var jumpInput = GameManager.Instance.inputs.jump;
+            var jumpInput = Inputs.jump;
             var jump = jumpInput && !wasJumpPressedLastFrame;
             wasJumpPressedLastFrame = jumpInput;
 
-            var dodgeInput = GameManager.Instance.inputs.dodge;
+            var dodgeInput = Inputs.dodge;
             var dodge = dodgeInput && !wasDodgePressedLastFrame;
             wasDodgePressedLastFrame = dodgeInput;
             if (isAscending 
@@ -506,7 +486,7 @@ namespace StarterAssets
 
         private void  HandleFallAndGravity()
         {
-            var jumpInput = GameManager.Instance.inputs.jump;
+            var jumpInput = Inputs.jump;
             if (_isGrounded)
             {
                 animator.SetBool(_animIDDodge, false);

@@ -5743,7 +5743,7 @@ Transform:
   m_GameObject: {fileID: 1634472901277285006}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.27, y: 1.6499996, z: -15.669998}
+  m_LocalPosition: {x: -0.99, y: 1.6499996, z: -3.7400055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6924,7 +6924,7 @@ Transform:
   m_GameObject: {fileID: 3022957628131920240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.77, y: 0, z: -12.89}
+  m_LocalPosition: {x: -1.49, y: 0, z: -0.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7071,17 +7071,13 @@ MonoBehaviour:
   _groundedCoyoteTime: 0
   GroundedOffset: -0.11
   GroundedRadius: 0.16
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 98305
   SolidGroundLayers:
     serializedVersion: 2
     m_Bits: 1
-  currentGround: {fileID: 0}
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 98305
   groundNormal: {x: 0, y: 0, z: 0}
-  groundHitPointLocal: {x: 0, y: 0, z: 0}
-  groundHitPointWorld: {x: 0, y: 0, z: 0}
-  lastGroundPosition: {x: 0, y: 0, z: 0}
   lastValidGroundPosition: {x: 0, y: 0, z: 0}
   beforeLastValidGroundPosition: {x: 0, y: 0, z: 0}
   checkGroundTimer: 1
@@ -7195,7 +7191,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!136 &3043020489084050869
@@ -7666,6 +7662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b581a57cc18e6b841b6647cf9b2df5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDepleting: 0
 --- !u!1 &3512767288595458615
 GameObject:
   m_ObjectHideFlags: 0
