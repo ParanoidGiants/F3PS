@@ -44,7 +44,6 @@ public class SkillManager : MonoBehaviour
 
     public void OnFixedUpdate()
     {
-        anubisScrollController.OnFixedUpdateForCurrentCandidate();
 
         _aimTargetPosition = crosshair.GetTargetPosition();
 
@@ -59,6 +58,8 @@ public class SkillManager : MonoBehaviour
             default:
                 break;
         }
+
+        anubisScrollController.OnFixedUpdateForCurrentCandidate();
     }
 
     private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float thotMindPushPull)
