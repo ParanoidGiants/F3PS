@@ -34,7 +34,6 @@ namespace StarterAssets
         [Space(10)]
         [Header("Jump Settings")]
         public float jumpCoolDownTime;
-
         public GameObject landingPlane;
         public float ascendTime = 0f;
         public bool isAscending = false;
@@ -67,15 +66,12 @@ namespace StarterAssets
         public float _groundedCoyoteTime = 0f;
         public float GroundedOffset = -0.14f;
         public float GroundedRadius = 0.28f;
-        public LayerMask GroundLayers;
         public LayerMask SolidGroundLayers;
+        public LayerMask GroundLayers;
         public Transform currentGround;
         public Vector3 groundNormal;
-        public Vector3 groundHitPointLocal;
-        public Vector3 groundHitPointWorld;
-        public Vector3 lastGroundPosition;
 
-        [Header("Gravity & Ground")]
+        [Header("Fall of ground")]
         public Vector3 lastValidGroundPosition = Vector3.zero;
         public Vector3 beforeLastValidGroundPosition = Vector3.zero;
         public float checkGroundTimer = 1f;
@@ -147,17 +143,20 @@ namespace StarterAssets
             skillManager.OnUpdate();
             attackManager.OnUpdate();
 
-            HandleSprint();
-            HandleGliding();
+            HandlePlatformTransformUpdate();
+            HandleSprintInput();
+            HandleGlidingInput();
         }
+
+
         private void FixedUpdate()
         {
             if (!GameManager.Instance.inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
 
-            HandlePlatformTransform();
-            GroundedCheck();
+            // HandlePlatformTransformFixedUpdate();
+            
             HandleFallAndGravity();
 
             skillManager.OnFixedUpdate();
@@ -169,7 +168,11 @@ namespace StarterAssets
             }
 
             Move(skillManager.IsAiming());
+
+            GroundedCheck();
+            MovingGroundCheck();
         }
+
 
         private void LateUpdate()
         {
@@ -183,46 +186,41 @@ namespace StarterAssets
             }
         }
 
+        [Space(30)]
+        [Header("Platform Transform Update")]
+        public bool wasGroundedLastFrame = false;
+        public Vector3 lastGroundTransformPosition;
+        public Vector3 lastGroundHitPoint;
+        public RaycastHit currentGroundHit;
 
-        private void HandleGliding()
+        private void HandlePlatformTransformUpdate()
         {
-            if (!isGliding)
+            if (!_isGrounded)
             {
+                Debug.Log("Not grounded");
+                wasGroundedLastFrame = false;
+                return;
+            }
+            if (!wasGroundedLastFrame)
+            {
+                wasGroundedLastFrame = true;
+                Debug.Log($"Initial Ground Transform Position: {currentGroundHit.transform.position}");
+                lastGroundTransformPosition = currentGroundHit.transform.position;
                 return;
             }
 
-            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina)
+            var movingdirection = currentGroundHit.transform.position - lastGroundTransformPosition;
+            var didPlatformMove = Vector3.Distance(lastGroundTransformPosition, currentGroundHit.transform.position) > 0f;
+            if (!didPlatformMove)
             {
-                isGliding = false;
-            }
-            else
-            {
-                staminaManager.Deplete(glideDepletionRate);
-            }
-        }
-
-        private void HandleSprint()
-        {
-            var moving = GameManager.Instance.inputs.move != Vector2.zero;
-            var sprint = GameManager.Instance.inputs.sprint;
-            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
-            {
-                _isSprinting = false;
                 return;
             }
-            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
-            {
-                _isSprinting = false;
-            }
-            else
-            {
-                staminaManager.Deplete(sprintStaminaDepletion);
-                _isSprinting = true;
-            }
-        }
+            Debug.Log($"Old Ground Transform Position: {lastGroundTransformPosition}");
+            Debug.Log($"New Ground Transform Position: {currentGroundHit.transform.position}");
 
+            transform.position += movingdirection;
+            lastGroundTransformPosition = currentGroundHit.transform.position;
+        }
 
         private void GroundedCheck()
         {
@@ -251,20 +249,22 @@ namespace StarterAssets
             );
             Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
 
-            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
+            if (!Physics.Raycast(groundRay, out currentGroundHit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
             {
                 groundNormal = Vector3.up;
                 _isGrounded = false;
                 checkGroundTime = 0f;
                 return;
             }
+        }
+        private void MovingGroundCheck()
+        {
+            if (!_isGrounded)
+            {
+                return;
+            }
 
-            var groundedObject = hit.transform;
-            currentGround = groundedObject;
-            groundNormal = hit.normal;
-            groundHitPointWorld = hit.point;
-            groundHitPointLocal = groundedObject.InverseTransformPoint(groundHitPointWorld);
-            lastGroundPosition = groundedObject.position;
+            var groundedObject = currentGroundHit.transform;
 
             if (groundedObject.gameObject.IsInLayerMask(SolidGroundLayers))
             {
@@ -273,7 +273,7 @@ namespace StarterAssets
                 {
                     checkGroundTime = 0f;
                     beforeLastValidGroundPosition = lastValidGroundPosition;
-                    lastValidGroundPosition = groundHitPointWorld;
+                    lastValidGroundPosition = currentGroundHit.point;
                 }
             }
             else
@@ -282,24 +282,50 @@ namespace StarterAssets
             }
         }
 
-        public void ResetToLastGroundPosition()
-        {
-            transform.position = beforeLastValidGroundPosition + Vector3.up;
-            _rigidbody.linearVelocity = Vector3.zero;
-        }
 
-        private void HandlePlatformTransform()
+        private void HandleGlidingInput()
         {
-            if (!_isGrounded)
+            if (!isGliding)
             {
                 return;
             }
 
-            var currentGroundHitPointWorld = currentGround.TransformPoint(groundHitPointLocal);
-            var groundMovedDirection = currentGroundHitPointWorld - groundHitPointWorld;
-            _rigidbody.MovePosition(_rigidbody.position + groundMovedDirection);
-            groundHitPointWorld = currentGroundHitPointWorld;
-            groundHitPointLocal = currentGround.InverseTransformPoint(groundHitPointWorld);
+            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina)
+            {
+                isGliding = false;
+            }
+            else
+            {
+                staminaManager.Deplete(glideDepletionRate);
+            }
+        }
+
+        private void HandleSprintInput()
+        {
+            var moving = GameManager.Instance.inputs.move != Vector2.zero;
+            var sprint = GameManager.Instance.inputs.sprint;
+            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
+            {
+                _isSprinting = false;
+                return;
+            }
+            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
+            {
+                _isSprinting = false;
+            }
+            else
+            {
+                staminaManager.Deplete(sprintStaminaDepletion);
+                _isSprinting = true;
+            }
+        }
+
+        public void ResetToLastGroundPosition()
+        {
+            transform.position = beforeLastValidGroundPosition + Vector3.up;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
 
         private void Move(bool isAiming)
@@ -422,13 +448,6 @@ namespace StarterAssets
 
             animator.SetFloat(_animIDSpeed, _animationBlend);
             animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-
-
-            if (_isGrounded && currentGround != null)
-            {
-                groundHitPointWorld = transform.position;
-                groundHitPointLocal = currentGround.InverseTransformPoint(groundHitPointWorld);
-            }
         }
 
         private void JumpAndDodge()
@@ -520,7 +539,6 @@ namespace StarterAssets
                 var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
                 easing = Mathf.Clamp01(easing);
                 currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
-                Debug.Log($"Ascending: {currentVerticalSpeed}" );
             }
             else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {
