@@ -11,10 +11,19 @@ public class PlayerHealthHUD : MonoBehaviour
     public Image healthBar;
     public Image healthBarBackground;
 
+    private void OnEnable()
+    {
+        PlayerEventController.OnCurrentHealthChanged += UpdateHealth;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEventController.OnCurrentHealthChanged -= UpdateHealth;
+    }
+
     void Start()
     {
         healthBar.fillAmount = 1f;
-        PlayerEventController.OnCurrentHealthChanged += UpdateHealth;
     }
 
     private void UpdateHealth(int currentHealth)

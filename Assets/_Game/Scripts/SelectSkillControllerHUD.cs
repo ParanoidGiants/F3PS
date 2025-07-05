@@ -12,10 +12,20 @@ public class SelectSkillControllerHUD : MonoBehaviour
 
     public SelectableSkillHUD[] activeSkillHuds;
 
-    private void Awake()
+    private void OnEnable()
     {
         PlayerEventController.OnActiveSkillChanged += SelectSkillHud;
         PlayerEventController.OnSkillUnlocked += UnlockHud;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEventController.OnActiveSkillChanged -= SelectSkillHud;
+        PlayerEventController.OnSkillUnlocked -= UnlockHud;
+    }
+
+    private void Awake()
+    {
 
         foreach (var skillHud in skillHuds)
         {

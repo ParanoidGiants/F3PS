@@ -14,10 +14,17 @@ public class KhonsuSphereHUD : MonoBehaviour
     public Image timeScaleBar;
     public TextMeshProUGUI timeScaleBarText;
 
-    private void Awake()
+    private void OnEnable()
     {
         PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
         PlayerEventController.OnKhonsuSphereActiveTimeChanged += UpdateActiveTime;
+        khonsuSphereBar.SetActive(true);
+    }
+    private void OnDisable()
+    {
+        PlayerEventController.OnKhonsuSphereTimeScaleChanged -= UpdateTimeScale;
+        PlayerEventController.OnKhonsuSphereActiveTimeChanged -= UpdateActiveTime;
+        khonsuSphereBar.SetActive(false);
     }
 
     public void UpdateActiveTime(float activeTime)
@@ -37,15 +44,5 @@ public class KhonsuSphereHUD : MonoBehaviour
     {
         timeScaleBar.fillAmount = timeScale;
         timeScaleBarText.text = $"{Mathf.RoundToInt(timeScale * 100)}%";
-    }
-
-    private void OnDisable()
-    {
-        khonsuSphereBar.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-        khonsuSphereBar.SetActive(true);
     }
 }

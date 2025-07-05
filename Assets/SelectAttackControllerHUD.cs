@@ -11,11 +11,20 @@ public class SelectAttackControllerHUD : MonoBehaviour
     public SelectableAttackHUD[] attackHuds;
     public SelectableAttackHUD[] activeAttackHuds;
 
-    public void Start()
+    private void OnEnable()
     {
         PlayerEventController.OnActiveAttackChanged += SelectAttackHud;
         PlayerEventController.OnAttackUnlocked += UnlockHud;
+    }
 
+    private void OnDisable()
+    {
+        PlayerEventController.OnActiveAttackChanged -= SelectAttackHud;
+        PlayerEventController.OnAttackUnlocked -= UnlockHud;
+    }
+
+    public void Start()
+    {
         foreach (var attackHud in attackHuds)
         {
             attackHud.gameObject.SetActive(false);

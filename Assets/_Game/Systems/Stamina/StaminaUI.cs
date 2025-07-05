@@ -10,25 +10,21 @@ public class StaminaUI : MonoBehaviour
     private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
     public Image staminaBar;
     public Animator animator;
-    
-    void Awake()
+
+    private void OnEnable()
     {
         PlayerEventController.OnStaminaChanged += UpdateStamina;
         PlayerEventController.OnIsRecoveringStaminaChanged += UpdateIsRecoveringStamina;
         PlayerEventController.OnIsDepletingStaminaChanged += UpdateIsDepletingStamina;
         PlayerEventController.OnStaminaUnlocked += ActivateStamina;
-
-        if (!AnySkillIsUnlocked())
-        {
-            gameObject.SetActive(false);
-        }
     }
 
-    private bool AnySkillIsUnlocked()
+    private void OnDisable()
     {
-        return PlayerData.UnlockedAbilities.Any(skill => skill != Ability.None)
-            || PlayerData.UnlockedSkills.Any(skill => skill != Skill.None)
-            || PlayerData.UnlockedAttacks.Any(attack => attack != Attack.None);
+        PlayerEventController.OnStaminaChanged -= UpdateStamina;
+        PlayerEventController.OnIsRecoveringStaminaChanged -= UpdateIsRecoveringStamina;
+        PlayerEventController.OnIsDepletingStaminaChanged -= UpdateIsDepletingStamina;
+        PlayerEventController.OnStaminaUnlocked -= ActivateStamina;
     }
 
     private void ActivateStamina()

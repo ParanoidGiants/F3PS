@@ -11,15 +11,19 @@ public class KhonsuSphere : MonoBehaviour
     private Renderer _renderer;
     public Color baseColor = Color.white;
 
+    private void OnEnable()
+    {
+        PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
+        _renderer.material.SetFloat("_BrackeysMoveSpeed", KhonsuSphereData.TimeScale * 0.25f);
+    }
+    private void OnDisable()
+    {
+        PlayerEventController.OnKhonsuSphereTimeScaleChanged -= UpdateTimeScale;
+    }
+
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
-        PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
-    }
-
-    private void OnEnable()
-    {
-        _renderer.material.SetFloat("_BrackeysMoveSpeed", KhonsuSphereData.TimeScale * 0.25f);
     }
 
     void OnTriggerEnter(Collider other)

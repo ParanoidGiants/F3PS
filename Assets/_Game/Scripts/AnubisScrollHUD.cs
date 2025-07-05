@@ -19,13 +19,24 @@ public class AnubisScrollHUD : MonoBehaviour
     public Sprite rewind;
     public Sprite paused;
 
-    private void Awake()
+    private void OnEnable()
     {
         PlayerEventController.OnAnubisScrollStateChanged += UpdateScrollState;
         PlayerEventController.OnAnubisScrollCurrentFrameChanged += UpdateCurrentFrame;
         PlayerEventController.OnAnubisScrollTotalFramesChanged += UpdateTotalFrames;
+        anubisScrollBar.SetActive(true);
+    }
 
+    private void OnDisable()
+    {
+        PlayerEventController.OnAnubisScrollStateChanged -= UpdateScrollState;
+        PlayerEventController.OnAnubisScrollCurrentFrameChanged -= UpdateCurrentFrame;
+        PlayerEventController.OnAnubisScrollTotalFramesChanged -= UpdateTotalFrames;
+        anubisScrollBar.SetActive(false);
+    }
 
+    private void Awake()
+    {
         _animation = DOTween.Sequence()
             .Append(stateIcon.DOFade(0.2f, 0.5f))
             .Append(stateIcon.DOFade(1f, 0.5f))
@@ -88,15 +99,5 @@ public class AnubisScrollHUD : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
-    }
-
-    private void OnDisable()
-    {
-        anubisScrollBar.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-        anubisScrollBar.SetActive(true);
     }
 }

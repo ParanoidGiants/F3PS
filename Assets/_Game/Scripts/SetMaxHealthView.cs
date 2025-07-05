@@ -10,18 +10,19 @@ public class SetMaxHealthView: SetModelValueView
 
     private void OnEnable()
     {
+        PlayerEventController.OnMaxHealthChanged += SetMaxHealthSlider;
+
         slider.minValue = 1;
         slider.maxValue = 3000;
         slider.value = PlayerData.MaxHealth;
 
-        PlayerEventController.OnMaxHealthChanged += SetMaxHealthSlider;
         initialized = true;
     }
 
     private void OnDisable()
     {
-        initialized = false;
         PlayerEventController.OnMaxHealthChanged -= SetMaxHealthSlider;
+        initialized = false;
     }
 
     private void SetMaxHealthSlider(int maxHealth)

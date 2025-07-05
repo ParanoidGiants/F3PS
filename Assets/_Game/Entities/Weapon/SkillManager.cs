@@ -22,13 +22,21 @@ public class SkillManager : MonoBehaviour
     private Vector3 _aimTargetPosition;
     private bool _isSkillSwitched;
 
+    private void OnEnable()
+    {
+        PlayerEventController.OnActiveSkillChanged += SetActiveSkill;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEventController.OnActiveSkillChanged -= SetActiveSkill;
+    }
+
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
         SetActiveSkill(PlayerData.ActiveSkill);
-
-        PlayerEventController.OnActiveSkillChanged += SetActiveSkill;
     }
 
     public void OnUpdate()

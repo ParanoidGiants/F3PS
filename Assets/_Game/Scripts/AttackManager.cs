@@ -21,12 +21,21 @@ public class AttackManager : MonoBehaviour
 
     private Attack ActiveAttack => GameManager.Instance.PlayerData.ActiveAttack;
 
+    private void OnEnable()
+    {
+        PlayerEventController.OnActiveAttackChanged += SetActiveAttack;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEventController.OnActiveAttackChanged -= SetActiveAttack;
+    }
+
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
         osirisKickController.Init();
         horusPalmController.Init();
-        PlayerEventController.OnActiveAttackChanged += SetActiveAttack;
     }
     public void OnUpdate()
     {

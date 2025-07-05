@@ -14,20 +14,22 @@ public class SetCurrentHealthView : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerEventController.OnCurrentHealthChanged += SetCurrentHealthSlider;
+        PlayerEventController.OnMaxHealthChanged += SetMaxHealth;
+
         slider.minValue = 1;
         slider.maxValue = PlayerData.MaxHealth;
         slider.value = PlayerData.CurrentHealth;
 
-        PlayerEventController.OnCurrentHealthChanged += SetCurrentHealthSlider;
-        PlayerEventController.OnMaxHealthChanged += SetMaxHealth;
         initialized = true;
     }
 
     private void OnDisable()
     {
-        initialized = false;
         PlayerEventController.OnCurrentHealthChanged -= SetCurrentHealthSlider;
         PlayerEventController.OnMaxHealthChanged -= SetMaxHealth;
+
+        initialized = false;
     }
 
     private void SetCurrentHealthSlider(int currentHealth)
