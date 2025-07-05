@@ -288,6 +288,11 @@ MonoBehaviour:
     SprintDepletionRate: 0.2
     SprintSpeed: 70
     SpeedChangeRate: 10
+    AscendHeight: 8
+    AscendDuration: 0.2
+    GlideDuration: 2
+    GlideDepletionRate: 0.25
+    LandingDepth: 20
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5
     RotationSpeedYaw: 0.5
@@ -295,9 +300,6 @@ MonoBehaviour:
     AimSpeed: 40
     JumpCoolDownTimer: 0.25
     JumpHeight: 4
-    LandingDepth: 20
-    AscendDuration: 1
-    GlideDuration: 1
     DodgeHeight: 1.2
     DodgeSpeed: 40
     DodgeAscendTimer: 0.05
@@ -347,7 +349,7 @@ MonoBehaviour:
       MinimumDistance: 3
       MaximumDistance: 50
       MaximumThrowSpeed: 50
-    UnlockedPassiveSkills: 
+    UnlockedAbilities: 
   _fps: 60
   isMenuOpen: 0
 --- !u!1 &6633928464503870051

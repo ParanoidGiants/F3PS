@@ -150,6 +150,39 @@ namespace StarterAssets
             HandleSprint();
             HandleGliding();
         }
+        private void FixedUpdate()
+        {
+            if (!GameManager.Instance.inputs.canControlPlayer) return;
+            if (timeManager.isPaused) return;
+            if (_isDying) return;
+
+            HandlePlatformTransform();
+            GroundedCheck();
+            HandleFallAndGravity();
+
+            skillManager.OnFixedUpdate();
+            attackManager.OnFixedUpdate();
+
+            if (!skillManager.IsAiming())
+            {
+                JumpAndDodge();
+            }
+
+            Move(skillManager.IsAiming());
+        }
+
+        private void LateUpdate()
+        {
+            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
+            {
+                cameraSettings.CameraTargetRotation();
+            }
+            if (GameManager.Instance.inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            {
+                skillManager.OnLateUpdate();
+            }
+        }
+
 
         private void HandleGliding()
         {
@@ -186,39 +219,6 @@ namespace StarterAssets
             {
                 staminaManager.Deplete(sprintStaminaDepletion);
                 _isSprinting = true;
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (!GameManager.Instance.inputs.canControlPlayer) return;
-            if (timeManager.isPaused) return;
-            if (_isDying) return;
-
-            HandlePlatformTransform();
-            GroundedCheck();
-            HandleFallAndGravity();
-
-            skillManager.OnFixedUpdate();
-            attackManager.OnFixedUpdate();
-
-            if (!skillManager.IsAiming())
-            {
-                JumpAndDodge();
-            }
-            
-            Move(skillManager.IsAiming());
-        }
-
-        private void LateUpdate()
-        {
-            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
-            {
-                cameraSettings.CameraTargetRotation();
-            }
-            if (GameManager.Instance.inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
-            {
-                skillManager.OnLateUpdate();
             }
         }
 

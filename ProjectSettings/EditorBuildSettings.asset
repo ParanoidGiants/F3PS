@@ -7,10 +7,13 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/_Game/Scenes/_puzzle_00.unity
-    guid: 9e13a13ba4a76b84abefd7877f795dc2
+    guid: 9b9d66709f708f440af8039e82443095
   - enabled: 1
     path: Assets/_Game/Scenes/_puzzle_01.unity
-    guid: 80b8fce55ba556548a7c8389298a924e
+    guid: 463b3f19a8c9fbc42ab2ab8f6593435e
+  - enabled: 1
+    path: Assets/_Game/Scenes/_puzzle_10.unity
+    guid: 03a6dd34c1bbd1c45badaad322caf844
   - enabled: 1
     path: Assets/_Game/Scenes/_level_blockout_merge.unity
     guid: da42d25bf2bc0f744933d88bf77aac3c

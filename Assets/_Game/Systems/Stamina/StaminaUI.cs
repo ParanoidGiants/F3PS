@@ -33,7 +33,6 @@ public class StaminaUI : MonoBehaviour
 
     private void ActivateStamina()
     {
-        Debug.Log("Stamina Unlocked");
         gameObject.SetActive(true);
     }
 

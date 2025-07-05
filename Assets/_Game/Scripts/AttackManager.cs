@@ -26,8 +26,6 @@ public class AttackManager : MonoBehaviour
         _inputs = GameManager.Instance.inputs;
         osirisKickController.Init();
         horusPalmController.Init();
-        SetActiveAttack(ActiveAttack);
-
         PlayerEventController.OnActiveAttackChanged += SetActiveAttack;
     }
     public void OnUpdate()
@@ -60,15 +58,16 @@ public class AttackManager : MonoBehaviour
     }
     private void HandleSwitchAttack(bool switchWeapon)
     {
-        if (!AreAnyTwoAttacksUnlocked())
+        if (!PlayerData.UnlockedAttacks.Contains(Attack.OsirisKick)
+            || !PlayerData.UnlockedAttacks.Contains(Attack.HorusPalm))
         {
             return;
         }
-        if (!CanSwitchCurrentAttack())
+        if (ActiveAttack == Attack.OsirisKick && osirisKickController.isAttacking
+            || ActiveAttack == Attack.HorusPalm && horusPalmController.isAttacking)
         {
             return;
         }
-
         if (!switchWeapon)
         {
             _isAttackSwitched = false;
@@ -83,18 +82,7 @@ public class AttackManager : MonoBehaviour
         _isAttackSwitched = true;
         var currentAttack = ActiveAttack;
         var nextAttack = currentAttack == Attack.OsirisKick ? Attack.HorusPalm : Attack.OsirisKick;
-        SetActiveAttack(nextAttack);
-    }
-
-    private bool AreAnyTwoAttacksUnlocked()
-    {
-        return PlayerData.UnlockedAttacks.Count(a => a != Attack.None) > 1;
-    }
-
-    private bool CanSwitchCurrentAttack()
-    {
-        return ActiveAttack == Attack.OsirisKick && !osirisKickController.isAttacking
-            || ActiveAttack == Attack.HorusPalm && !horusPalmController.isAttacking;
+        PlayerEventController.SetActiveAttack(nextAttack);
     }
 
     private void SetActiveAttack(Attack attack)
