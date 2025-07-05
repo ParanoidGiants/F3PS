@@ -204,6 +204,7 @@ namespace StarterAssets
 
         private void HandleSprint()
         {
+            var moving = GameManager.Instance.inputs.move != Vector2.zero;
             var sprint = GameManager.Instance.inputs.sprint;
             if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
             {
@@ -211,7 +212,7 @@ namespace StarterAssets
                 return;
             }
             var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina)
+            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
             {
                 _isSprinting = false;
             }
@@ -439,8 +440,10 @@ namespace StarterAssets
             var dodgeInput = GameManager.Instance.inputs.dodge;
             var dodge = dodgeInput && !wasDodgePressedLastFrame;
             wasDodgePressedLastFrame = dodgeInput;
-            if (!_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime)
-            {
+            if (isAscending 
+                || isGliding
+                || !_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
+            ) {
                 return;
             }
 
@@ -511,11 +514,13 @@ namespace StarterAssets
                     isGliding = true;
                     landingPlane.SetActive(true);
                     UpdateLandingPlane();
-                    ascendTime = 0f;
+                    ascendTime = _data.AscendDuration;
                 }
                 var maximumJumpSpeed = Mathf.Sqrt(_data.AscendHeight * -2f * Gravity);
                 var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
+                easing = Mathf.Clamp01(easing);
                 currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
+                Debug.Log($"Ascending: {currentVerticalSpeed}" );
             }
             else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {

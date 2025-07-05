@@ -6,6 +6,8 @@ public class StaminaManager : MonoBehaviour
     public PlayerData playerData => GameManager.Instance.PlayerData;
     public PlayerEventController playerEventController => GameManager.Instance.PlayerEventController;
 
+    public bool isDepleting = false;
+
     public bool IsRecoveringStamina => playerData.IsRecoveringStamina;
 
     private void Awake()
@@ -29,22 +31,28 @@ public class StaminaManager : MonoBehaviour
                 playerEventController.UpdateIsRecoveringStamina(false);
             }
         }
-        else if (playerData.IsDepletingStamina)
-        {
-            playerEventController.UpdateIsDepletingStamina(false);
-        }
-        else
+        else if (!playerData.IsDepletingStamina && !isDepleting)
         {
             var stamina = playerData.CurrentStamina + playerData.StaminaRecoveryRate * Time.unscaledDeltaTime;
             stamina = Mathf.Clamp(stamina, 0f, playerData.MaxStamina);
             playerEventController.UpdateStamina(stamina);
         }
+        else if (isDepleting)
+        {
+            isDepleting = false;
+        }
+        else
+        {
+            playerEventController.UpdateIsDepletingStamina(false);
+        }
     }
 
     public void Deplete(float deplete)
     {
-        playerEventController.UpdateIsDepletingStamina(true);
         var stamina = playerData.CurrentStamina - deplete;
+        isDepleting = true;
+
+        playerEventController.UpdateIsDepletingStamina(true);
         playerEventController.UpdateStamina(stamina);
 
         if (stamina <= 0f)

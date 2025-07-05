@@ -153,7 +153,7 @@ AnimatorStateTransition:
     m_ConditionEvent: recover
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: recover
+    m_ConditionEvent: deplet
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7048624500234946267}

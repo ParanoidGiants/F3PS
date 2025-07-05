@@ -285,7 +285,7 @@ MonoBehaviour:
     StaminaRecoveryRate: 0.2
     IsRecoveringStamina: 0
     IsDepletingStamina: 0
-    SprintDepletionRate: 0.2
+    SprintDepletionRate: 0.1
     SprintSpeed: 70
     SpeedChangeRate: 10
     AscendHeight: 8
@@ -349,7 +349,7 @@ MonoBehaviour:
       MinimumDistance: 3
       MaximumDistance: 50
       MaximumThrowSpeed: 50
-    UnlockedAbilities: 
+    UnlockedAbilities: 0200000001000000
   _fps: 60
   isMenuOpen: 0
 --- !u!1 &6633928464503870051
