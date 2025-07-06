@@ -165,9 +165,9 @@ namespace StarterAssets
         private Vector3 _platformPositionOffset;
         private Quaternion _platformRotationOffset;
         private Vector3 _lastPlatformPosition;
+        private Vector3 _lastPlatformOffsetPosition;
         private Quaternion _lastPlatformRotation;
         private Vector3 _platformVelocity;
-
 
         private void FixedUpdate()
         {
@@ -187,7 +187,6 @@ namespace StarterAssets
 
             Move(skillManager.IsAiming());
         }
-
         private void UpdatePlatformVelocity()
         {
             if (_activePlatform == null)
@@ -200,7 +199,12 @@ namespace StarterAssets
             var rotationDelta = _activePlatform.rotation * Quaternion.Inverse(_lastPlatformRotation);
             Vector3 positionDelta = _activePlatform.position - _lastPlatformPosition;
 
+            // Apply the same rotation to the player
+            transform.rotation = rotationDelta * transform.rotation;
+
             // Calculate the rotational effect on our position offset
+            // The offset is from the platform's center to the player's position
+            _platformPositionOffset = transform.position - _activePlatform.position;
             Vector3 rotatedOffset = rotationDelta * _platformPositionOffset;
 
             // The total displacement caused by the platform's movement and rotation
@@ -212,9 +216,6 @@ namespace StarterAssets
             // Update our stored position and rotation for the next frame's calculation
             _lastPlatformPosition = _activePlatform.position;
             _lastPlatformRotation = _activePlatform.rotation;
-            // Continuously update the offset in case the player moves on the platform
-            _platformPositionOffset = transform.position - _activePlatform.position;
-            _platformRotationOffset = Quaternion.Euler(0, rotationDelta.eulerAngles.y, 0);
         }
 
         private void GroundedCheck()
@@ -230,13 +231,6 @@ namespace StarterAssets
                 if (_activePlatform != newPlatform)
                 {
                     SwitchActivePlatform(newPlatform);
-                }
-
-                if (_activePlatform != null)
-                {
-                    _platformPositionOffset = transform.position - _activePlatform.position;
-                    _lastPlatformPosition = _activePlatform.position;
-                    _lastPlatformRotation = _activePlatform.rotation;
                 }
             }
             else
@@ -262,52 +256,6 @@ namespace StarterAssets
                 _lastPlatformRotation = _activePlatform.rotation;
             }
         }
-
-        private void HandleGlidingInput()
-        {
-            if (!isGliding)
-            {
-                return;
-            }
-
-            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina)
-            {
-                isGliding = false;
-            }
-            else
-            {
-                staminaManager.Deplete(glideDepletionRate);
-            }
-        }
-
-        private void HandleSprintInput()
-        {
-            var moving = Inputs.move != Vector2.zero;
-            var sprint = Inputs.sprint;
-            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
-            {
-                _isSprinting = false;
-                return;
-            }
-            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
-            {
-                _isSprinting = false;
-            }
-            else
-            {
-                staminaManager.Deplete(sprintStaminaDepletion);
-                _isSprinting = true;
-            }
-        }
-
-        public void ResetToLastGroundPosition()
-        {
-            transform.position = beforeLastValidGroundPosition + Vector3.up;
-            _rigidbody.linearVelocity = Vector3.zero;
-        }
-
         private void Move(bool isAiming)
         {
             if (_isDodging)
@@ -402,14 +350,14 @@ namespace StarterAssets
                 ref _rotationVelocity,
                 _data.RotationSmoothTime * Time.unscaledDeltaTime
             );
-            
+
             if (isAiming)
             {
                 var cameraForward = cameraSettings.defaultCamera.transform.forward;
                 var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
                 armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
             }
-            else if(Inputs.move.magnitude > 0f)
+            else if (Inputs.move.magnitude > 0f)
             {
                 armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             }
@@ -429,6 +377,52 @@ namespace StarterAssets
             animator.SetFloat(_animIDSpeed, _animationBlend);
             animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
         }
+
+        private void HandleGlidingInput()
+        {
+            if (!isGliding)
+            {
+                return;
+            }
+
+            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina)
+            {
+                isGliding = false;
+            }
+            else
+            {
+                staminaManager.Deplete(glideDepletionRate);
+            }
+        }
+
+        private void HandleSprintInput()
+        {
+            var moving = Inputs.move != Vector2.zero;
+            var sprint = Inputs.sprint;
+            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
+            {
+                _isSprinting = false;
+                return;
+            }
+            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
+            {
+                _isSprinting = false;
+            }
+            else
+            {
+                staminaManager.Deplete(sprintStaminaDepletion);
+                _isSprinting = true;
+            }
+        }
+
+        public void ResetToLastGroundPosition()
+        {
+            transform.position = beforeLastValidGroundPosition + Vector3.up;
+            _rigidbody.linearVelocity = Vector3.zero;
+        }
+
 
         private void JumpAndDodge()
         {

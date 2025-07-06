@@ -300,10 +300,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 8505290776749647911}
-  speed: 60
+  movementSpeed: 60
+  rotationSpeed: 60
   waitDuration: 2
-  defaultTranslationBetweenWaypointsDuration: 1
-  CurrentWaypointIndex: 0
+  currentWaypointIndex: 0
   fromWaypoint: {fileID: 0}
   toWaypoint: {fileID: 0}
   translationBetweenWaypointsTime: 0
