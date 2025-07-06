@@ -195,25 +195,18 @@ namespace StarterAssets
                 return;
             }
 
-            // Calculate the platform's movement and rotation since the last frame
             var rotationDelta = _activePlatform.rotation * Quaternion.Inverse(_lastPlatformRotation);
             Vector3 positionDelta = _activePlatform.position - _lastPlatformPosition;
 
-            // Apply the same rotation to the player
-            transform.rotation = rotationDelta * transform.rotation;
-
-            // Calculate the rotational effect on our position offset
-            // The offset is from the platform's center to the player's position
+            var yawDelta = Quaternion.Euler(0, rotationDelta.eulerAngles.y, 0);
+            transform.rotation = yawDelta * transform.rotation;
             _platformPositionOffset = transform.position - _activePlatform.position;
             Vector3 rotatedOffset = rotationDelta * _platformPositionOffset;
 
-            // The total displacement caused by the platform's movement and rotation
             Vector3 totalDisplacement = positionDelta + (rotatedOffset - _platformPositionOffset);
 
-            // Calculate the effective velocity of the platform at our position
             _platformVelocity = totalDisplacement / Time.fixedDeltaTime;
 
-            // Update our stored position and rotation for the next frame's calculation
             _lastPlatformPosition = _activePlatform.position;
             _lastPlatformRotation = _activePlatform.rotation;
         }

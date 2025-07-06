@@ -48,15 +48,15 @@ public class PhysicsRecorder : MonoBehaviour
     public void StartRecording()
     {
         outline.Record();
-        positions.RecordIfChanged(0, transform.position, MathUtils.Vector3Equals);
-        rotations.RecordIfChanged(0, transform.rotation, MathUtils.QuaternionEquals);
+        positions.RecordIfChanged(0, _rigidbodyHub.Position, MathUtils.Vector3Equals);
+        rotations.RecordIfChanged(0, _rigidbodyHub.Rotation, MathUtils.QuaternionEquals);
         velocities.RecordIfChanged(0, _rigidbodyHub.GetCurrentUnbiasedVelocity(), MathUtils.Vector3Equals);
         angularVelocities.RecordIfChanged(0, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
         SetRecordingLinePoint(0);
     }
     public void StopRecording()
     {
-        _rigidbodyHub.FreeFromConstraints();
+        _rigidbodyHub.UnsetKinematic();
         outline.gameObject.SetActive(false);
         positions.ClearAll();
         rotations.ClearAll();
@@ -68,8 +68,8 @@ public class PhysicsRecorder : MonoBehaviour
     public void Record()
     {
         var currentFrame = AnubisScrollSkillData.CurrentFrame;
-        if (MathUtils.Vector3Equals(transform.position, positions.GetValueAtFrame(currentFrame), THRESHOLD)
-                && MathUtils.QuaternionEquals(transform.rotation, rotations.GetValueAtFrame(currentFrame), THRESHOLD)
+        if (MathUtils.Vector3Equals(_rigidbodyHub.Position, positions.GetValueAtFrame(currentFrame), THRESHOLD)
+                && MathUtils.QuaternionEquals(_rigidbodyHub.Rotation, rotations.GetValueAtFrame(currentFrame), THRESHOLD)
             )
         {
             return;
@@ -81,8 +81,8 @@ public class PhysicsRecorder : MonoBehaviour
         var nextFrame = (int)Math.Ceiling(currentRecordingTime / frameDuration);
         PlayerEventController.SetAnubisScrollCurrentRecordingTime(currentRecordingTime);
 
-        positions.RecordIfChanged(nextFrame, transform.position, MathUtils.Vector3Equals);
-        rotations.RecordIfChanged(nextFrame, transform.rotation, MathUtils.QuaternionEquals);
+        positions.RecordIfChanged(nextFrame, _rigidbodyHub.Position, MathUtils.Vector3Equals);
+        rotations.RecordIfChanged(nextFrame, _rigidbodyHub.Rotation, MathUtils.QuaternionEquals);
         velocities.RecordIfChanged(nextFrame, _rigidbodyHub.GetCurrentUnbiasedVelocity(), MathUtils.Vector3Equals);
         angularVelocities.RecordIfChanged(nextFrame, _rigidbodyHub.GetCurrentUnbiasedAngularVelocity(), MathUtils.Vector3Equals);
         SetRecordingLinePoint(nextFrame);
@@ -100,7 +100,7 @@ public class PhysicsRecorder : MonoBehaviour
     {
         int linePointIndex = (frame + linePointFrequency - 1) / linePointFrequency;
         anubisScrollRecordingLine.positionCount = linePointIndex + 1;
-        anubisScrollRecordingLine.SetPosition(linePointIndex, transform.position);
+        anubisScrollRecordingLine.SetPosition(linePointIndex, _rigidbodyHub.Position);
     }
 
     public void SelectAsCandidate()
@@ -157,8 +157,8 @@ public class PhysicsRecorder : MonoBehaviour
             PlayerEventController.SetAnubisScrollCurrentRecordingTime(currentRecordingTime);
             PlayerEventController.SetAnubisScrollCurrentFrame(currentFrame);
 
-            transform.position = GetPositionAtCurrentTime();
-            transform.rotation = GetRotationAtCurrentTime();
+            _rigidbodyHub.MovePosition(GetPositionAtCurrentTime());
+            _rigidbodyHub.MoveRotation(GetRotationAtCurrentTime());
 
         }
     }
@@ -166,8 +166,8 @@ public class PhysicsRecorder : MonoBehaviour
     public void SetupForRecording()
     {
         outline.Record();
-        transform.position = GetPositionAtCurrentTime();
-        transform.rotation = GetRotationAtCurrentTime();
+        _rigidbodyHub.MovePosition(GetPositionAtCurrentTime());
+        _rigidbodyHub.MoveRotation(GetRotationAtCurrentTime());
         _rigidbodyHub.SetupForRecording(GetVelocityAtCurrentTime(), GetAngularVelocityAtCurrentTime());
 
         var currentFrame = AnubisScrollSkillData.CurrentFrame;

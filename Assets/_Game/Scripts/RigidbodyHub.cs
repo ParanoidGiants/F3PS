@@ -24,9 +24,11 @@ public class RigidbodyHub : MonoBehaviour
 
     [Space(10)]
     [Header("Watchers")]
-    public int constraintsFreezeAllCommandCount = 0;
+    public int setKinematicCount = 0;
     public Vector3 unbiasedTimeFreezeAngularVelocity;
     public Vector3 unbiasedTimeFreezeVelocity;
+    internal Vector3 Position => _rigidbody.position;
+    internal Quaternion Rotation => _rigidbody.rotation;
 
     private void Awake()
     {
@@ -59,7 +61,7 @@ public class RigidbodyHub : MonoBehaviour
                 isTimeFrozen = false;
                 if (!isMovingByThotMind && !isAnubisScrolling)
                 {
-                    FreeFromConstraints();
+                    UnsetKinematic();
                     _rigidbody.linearVelocity = unbiasedTimeFreezeVelocity * timeScale;
                     _rigidbody.angularVelocity = unbiasedTimeFreezeAngularVelocity * timeScale;
                 }
@@ -84,7 +86,7 @@ public class RigidbodyHub : MonoBehaviour
             {
                 unbiasedTimeFreezeVelocity = _rigidbody.linearVelocity / currentTimeScale;
                 unbiasedTimeFreezeAngularVelocity = _rigidbody.angularVelocity / currentTimeScale;
-                FreezeAll();
+                SetKinematic();
             }
         }
         currentTimeScale = timeScale;
@@ -101,6 +103,7 @@ public class RigidbodyHub : MonoBehaviour
     {
         isMovingByThotMind = true;
         useGravity = false;
+        _rigidbody.isKinematic = false;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.linearVelocity = Vector3.zero;
@@ -111,15 +114,16 @@ public class RigidbodyHub : MonoBehaviour
     {
         isMovingByThotMind = false;
         useGravity = true;
+        _rigidbody.constraints = RigidbodyConstraints.None;
         var throwVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed);
         if (isTimeFrozen)
         {
-            FreezeAll();
+            SetKinematic();
             SetUnbiasedVelocity(throwVelocity);
         }
         else
         {
-            FreeFromConstraints();
+            UnsetKinematic();
             _rigidbody.mass = defaultMass / (currentTimeScale * currentTimeScale);
             _rigidbody.linearVelocity = throwVelocity * currentTimeScale;
             _rigidbody.angularVelocity = Vector3.zero;
@@ -128,20 +132,20 @@ public class RigidbodyHub : MonoBehaviour
     #endregion TELEKINESIS
 
     #region GENERAL
-    public void FreezeAll()
+    public void SetKinematic()
     {
-        constraintsFreezeAllCommandCount++;
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        setKinematicCount++;
+        _rigidbody.isKinematic = true;
     }
 
-    public void FreeFromConstraints()
+    public void UnsetKinematic()
     {
-        constraintsFreezeAllCommandCount--;
-        if (constraintsFreezeAllCommandCount > 0)
+        setKinematicCount--;
+        if (setKinematicCount > 0)
         {
             return;
         }
-        _rigidbody.constraints = RigidbodyConstraints.None;
+        _rigidbody.isKinematic = false;
     }
 
     public Vector3 GetCurrentUnbiasedAngularVelocity()
@@ -196,7 +200,7 @@ public class RigidbodyHub : MonoBehaviour
     #region REWIND
     public void SetupForRecording(Vector3 unbiasedVelocity, Vector3 unbiasedAngularVelocity)
     {
-        FreeFromConstraints();
+        UnsetKinematic();
         SetUnbiasedVelocity(unbiasedVelocity);
         SetUnbiasedAngularVelocity(unbiasedAngularVelocity);
         isAnubisScrolling = false;
@@ -204,8 +208,18 @@ public class RigidbodyHub : MonoBehaviour
 
     public void SetupForPlayback()
     {
-        FreezeAll();
+        SetKinematic();
         isAnubisScrolling = true;
+    }
+
+    public void MovePosition(Vector3 position)
+    {
+        _rigidbody.MovePosition(position);
+    }
+
+    public void MoveRotation(Quaternion quaternion)
+    {
+        _rigidbody.MoveRotation(quaternion);
     }
     #endregion REWIND
 }

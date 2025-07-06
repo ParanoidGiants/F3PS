@@ -25,6 +25,7 @@ public class AnubisScrollController : MonoBehaviour
     public bool isActivatingPlaybackThisFrame = false;
     public bool wasActivatingPlaybackLastFrame = false;
     public bool isPlaybackActive = false;
+    public float _forwardBackward = 0f;
 
     private LineRenderer _lineRenderer;
     private Crosshair _crosshair;
@@ -61,6 +62,7 @@ public class AnubisScrollController : MonoBehaviour
         isRecordingThisFrame = isRecording;
         wasActivatingPlaybackLastFrame = isActivatingPlaybackThisFrame;
         isActivatingPlaybackThisFrame = activatePlayback;
+        _forwardBackward = forwardBackward;
 
         if (!hasCandidate)
         {
@@ -106,12 +108,6 @@ public class AnubisScrollController : MonoBehaviour
                 isPlaybackActive = false;
             }
         }
-
-        if (isPlaybackActive)
-        {
-
-            currentCandidate.Playback(AnubisScrollSkillData.ScrollSpeed * forwardBackward);
-        }
     }
 
     public void OnFixedUpdateForCurrentCandidate()
@@ -124,6 +120,12 @@ public class AnubisScrollController : MonoBehaviour
 
     public void OnFixedUpdate()
     {
+
+        if (isPlaybackActive)
+        {
+            currentCandidate.Playback(AnubisScrollSkillData.ScrollSpeed * _forwardBackward);
+        }
+
         if (selectedObjectForRecord)
         {
             contactPoint = currentCandidate.transform.position;
