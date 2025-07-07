@@ -6,6 +6,14 @@ public class UnlockAttack : MonoBehaviour
 {
     public Attack attack;
 
+    private void Awake()
+    {
+        if (GameManager.Instance.PlayerData.UnlockedAttacks.Contains(attack))
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (attack == Attack.None)

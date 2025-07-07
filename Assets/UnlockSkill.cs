@@ -6,6 +6,14 @@ public class UnlockSkill : MonoBehaviour
 {
     public Skill skill;
 
+    private void Awake()
+    {
+        if (GameManager.Instance.PlayerData.UnlockedSkills.Contains(skill))
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (skill == Skill.None)
