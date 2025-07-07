@@ -81,6 +81,7 @@ public class ThotMindController : MonoBehaviour
 
     public void OnUpdate(bool isMoving, bool isRotating, Vector2 rotationDeltaXY, float pushPull)
     {
+        var subjectOrientation = SubjectOrientation;
         wasMovingObjectLastFrame = isMovingObjectThisFrame ;
         isMovingObjectThisFrame = isMoving;
 
@@ -121,7 +122,8 @@ public class ThotMindController : MonoBehaviour
             animator.SetBool("ThotMind", true);
             target.gameObject.SetActive(true);
             SetTargetPosition(targetPosition);
-            currentCandidate.SnapToRelativeRotation(SubjectOrientation);
+            currentCandidate.UpdateRelativeRotation(subjectOrientation);
+            currentCandidate.SnapToRelativeRotation(subjectOrientation);
             currentCandidate.StartMoving();
             return;
         }
@@ -155,7 +157,7 @@ public class ThotMindController : MonoBehaviour
         if (isActuallyRotatingObject)
         {
             var rotationCommand = GetRotationCommand(rotationDeltaXY);
-            currentCandidate.Rotate(rotationCommand, SubjectOrientation, ThotMindSkillData.RotateTimer);
+            currentCandidate.Rotate(rotationCommand, subjectOrientation, ThotMindSkillData.RotateTimer);
         }
         var startRotatingObject = !wasRotatingObjectLastFrame && isRotatingObjectThisFrame;
         var stopRotatingObject = wasRotatingObjectLastFrame && !isRotatingObjectThisFrame;
@@ -171,7 +173,7 @@ public class ThotMindController : MonoBehaviour
         }
         else if (!currentCandidate.isBeingRotated)
         {
-            currentCandidate.SnapToRelativeRotation(SubjectOrientation);
+            currentCandidate.SnapToRelativeRotation(subjectOrientation);
         }
     }
 

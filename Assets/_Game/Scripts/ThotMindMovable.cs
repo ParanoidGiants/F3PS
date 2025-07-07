@@ -16,6 +16,7 @@ public class ThotMindMovable : MonoBehaviour
     public bool isCurrentlyTouchedByPlayer = false;
     private Coroutine _rotateCoroutine;
     public bool IsLocked => _rigidbodyHub.isAnubisScrolling;
+    public Quaternion relativeRotation = Quaternion.identity;
 
     private void Awake()
     {
@@ -75,6 +76,13 @@ public class ThotMindMovable : MonoBehaviour
         outline.StopRotate();
     }
 
+    public void UpdateRelativeRotation(Quaternion subjectOrientation)
+    {
+        var worldRotation = transform.rotation;
+        var objectRotation = Quaternion.Inverse(subjectOrientation) * worldRotation;
+        relativeRotation = ThotMindController.GetClosestRotation(objectRotation);
+    }
+
     public void SnapToRelativeRotation(Quaternion subjectOrientation)
     {
         if (isBeingRotated)
@@ -82,16 +90,7 @@ public class ThotMindMovable : MonoBehaviour
             return;
         }
 
-        var worldRotation = transform.rotation;
-        var objectRotation = Quaternion.Inverse(subjectOrientation) * worldRotation;
-        var snappedObjectRotation = ThotMindController.GetClosestRotation(objectRotation);
-        var snappedWorldRotation = subjectOrientation * snappedObjectRotation;
-        transform.rotation = snappedWorldRotation;
-    }
-
-    public void UpdateOrientation(Quaternion subjectOrientation)
-    {
-        transform.rotation = subjectOrientation * _initialRotation;
+        transform.rotation = subjectOrientation * relativeRotation;
     }
 
     public void Rotate(RotationCommand rotationCommand, Quaternion subjectOrientation, float rotateTimer)
@@ -131,6 +130,7 @@ public class ThotMindMovable : MonoBehaviour
             yield return null;
         }
         transform.rotation = worldTargetRotation;
+        UpdateRelativeRotation(subjectOrientation);
         isBeingRotated = false;
     }
 
