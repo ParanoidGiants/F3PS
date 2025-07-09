@@ -51,7 +51,6 @@ namespace F3PS.AI.States.Action
             _hitCollider = GetComponent<Collider>();
             _hitCollider.enabled = false;
             _hitBox = GetComponent<HitBox>();
-            _hitBox.attackerId = enemy.GetInstanceID();
         }
 
         override
@@ -83,10 +82,6 @@ namespace F3PS.AI.States.Action
             }
             
             _wasEarlyHit = true;
-            if (hittable != null && hittable.HittableId != _hitBox.attackerId)
-            {
-                hittable.OnHit(_hitBox, enemy.transform.forward);
-            }
         }
 
         override

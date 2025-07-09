@@ -28,7 +28,6 @@ public class BaseProjectile : MonoBehaviour
 
     public void Init(int userSpaceId, Collider[] colliders)
     {
-        hitBox.attackerId = userSpaceId;
         collidersToIgnore = colliders;
         _isInitialized = true;
     }
@@ -91,29 +90,6 @@ public class BaseProjectile : MonoBehaviour
         mesh.SetActive(true);
         hitParticleSystem.gameObject.SetActive(false);
         noHitParticleSystem.gameObject.SetActive(false);
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if (_isHit)
-        {
-            return;
-        }
-        _isHit = true;
-
-        mesh.SetActive(false);
-        var hittable = other.gameObject.GetComponent<Hittable>();
-        if (hittable != null 
-            && hittable.HittableId != hitBox.attackerId
-        ) {
-            hittable.OnHit(hitBox, transform.forward);
-            hitParticleSystem.gameObject.SetActive(true);
-        }
-        else
-        {
-            noHitParticleSystem.gameObject.SetActive(true);
-        }
-        ProjectileSpecificActions();
     }
 
     protected virtual void ProjectileSpecificActions()

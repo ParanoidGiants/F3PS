@@ -14,7 +14,6 @@ public class OsirisKickController : MonoBehaviour
     [Space(10)]
     [Header("References")]
     public Transform userSpace;
-    public GameObject projectilePrefab;
     public Transform projectileSpawn;
     public GameObject muzzle;
     public ObjectPool projectilePool;
@@ -41,7 +40,7 @@ public class OsirisKickController : MonoBehaviour
         foreach (var projectile in projectiles)
         {
             var projectileComponent = projectile.GetComponent<OsirisKickProjectile>();
-            projectileComponent.Init(userSpace.GetInstanceID(), ownColliders);
+            projectileComponent.Init(userSpace.gameObject, ownColliders);
             projectile.SetActive(false);
         }
     }

@@ -34,17 +34,19 @@ public class ScorpionController : MonoBehaviour
 
     [Header("References")]
     public Animator animator;
-    public NavMeshAgent navMeshAgent; 
-    public Hittable[] _hittables;
+    public NavMeshAgent navMeshAgent;
     public PatrolManager patrolManager;
     public TimeObject timeObject;
     public AnimateMesh animateMesh;
     public SensorController sensorController;
+    public GameObject hittableParent;
     public GameObject chargeFlare;
     public Collider attackHitBox;
+    public Hittable hittable;
 
     [Space(20)]
     [Header("Settings")]
+    public int health;
     public int maxHealth = 100;
     public float moveSpeed;
 
@@ -92,14 +94,17 @@ public class ScorpionController : MonoBehaviour
     public Vector3 attackRecoveryStartPosition;
     public Vector3 attackRecoveryEndPosition;
 
+    [Space(10)]
+    [Header("Dying Settings")]
+    public bool fadingOut = false;
+    public float dieTime = 0f;
+    public float fadeOutDuration = 1f;
+
     [Space(20)]
     [Header("Watchers")]
     public EnemyHealthUIPool _healthUIPool;
     public ScorpionState currentState = ScorpionState.IDLE;
-    public bool isActive = true;
-    public bool isDying = false;
     public bool isDead = false;
-    public int health;
 
     protected void Awake()
     {
@@ -108,8 +113,6 @@ public class ScorpionController : MonoBehaviour
 
     private void Start()
     {
-        if (!isActive) return;
-
         health = maxHealth;
         patrolManager.Init();
         EnterState(ScorpionState.IDLE);
@@ -117,6 +120,7 @@ public class ScorpionController : MonoBehaviour
 
     private void SwitchState(ScorpionState newState)
     {
+        Debug.Log("Switching state from " + currentState + " to " + newState);
         ExitState(currentState);
         currentState = newState;
         EnterState(currentState);
@@ -154,6 +158,8 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.HIT:
                 break;
             case ScorpionState.DYING:
+                navMeshAgent.isStopped = true;
+                animator.SetTrigger("Die");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
@@ -187,12 +193,7 @@ public class ScorpionController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isActive || currentState == ScorpionState.DYING)
-        {
-            return;
-        }
-
-        if (currentState != ScorpionState.AGGRESSIVE && sensorController.IsTargetDetected())
+        if (currentState != ScorpionState.DYING && currentState != ScorpionState.AGGRESSIVE && sensorController.IsTargetDetected())
         {
             SwitchState(ScorpionState.AGGRESSIVE);
         }
@@ -260,6 +261,25 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.HIT:
                 break;
             case ScorpionState.DYING:
+                if (dieTime >= 0f)
+                {
+                    dieTime -= ScaledDeltaTime;
+                    return;
+                }
+
+                if (!fadingOut)
+                {
+                    fadingOut = true;
+                    animateMesh.FadeOut(fadeOutDuration);
+                }
+
+                if (fadeOutDuration >= 0f)
+                {
+                    fadeOutDuration -= ScaledDeltaTime;
+                    return;
+                }
+                Debug.Log("Enemy Dead");
+                Died();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
@@ -306,6 +326,7 @@ public class ScorpionController : MonoBehaviour
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
                     attackState = ScorpionAttackState.EXECUTION;
+                    chargeFlare.SetActive(false);
                     attackHitBox.enabled = true;
                     attackExecutionStartPosition = transform.position;
                     attackExecutionEndPosition = attackExecutionStartPosition + _attackForward * attackExecutionDistance;
@@ -354,8 +375,6 @@ public class ScorpionController : MonoBehaviour
 
     private void Update()
     {
-        if (!isActive) return;
-
         switch (currentState)
         {
             case ScorpionState.IDLE:
@@ -398,7 +417,8 @@ public class ScorpionController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        if (isDying)
+        Debug.Log("Scorpion Hit: " + damage);
+        if (currentState is ScorpionState.DYING)
         {
             return;
         }
@@ -407,13 +427,11 @@ public class ScorpionController : MonoBehaviour
         if (health <= 0)
         {
             _healthUIPool.OnKillTarget(transform);
-            isDead = true;
-            // _stateManager.SwitchState(StateType.DYING);
+            SwitchState(ScorpionState.DYING);
             return;
         }
         _healthUIPool.OnHitTarget(transform, health, maxHealth);
         animateMesh.HitFlash();
-        // _stateManager.Hit();
     }
 
     private void UpdateSensorState(ScorpionState state)
@@ -426,7 +444,7 @@ public class ScorpionController : MonoBehaviour
         {
             sensorController.SetState(SensorState.SEARCHING);
         }
-        else
+        else if (state is not ScorpionState.DYING)
         {
             sensorController.SetState(SensorState.IDLE);
         }
@@ -434,12 +452,8 @@ public class ScorpionController : MonoBehaviour
 
     public void Deactivate()
     {
-        isActive = false;
         navMeshAgent.enabled = false;
-        foreach (var hittable in _hittables)
-        {
-            hittable.enabled = false;
-        }
+        hittableParent.SetActive(false);
     }
 
     public void Died()
@@ -449,6 +463,11 @@ public class ScorpionController : MonoBehaviour
 
     public void HitByPlayerFrom(Vector3 hitDirection)
     {
+        if (currentState is ScorpionState.DYING or ScorpionState.AGGRESSIVE)
+        {
+            return;
+        }
+
         navMeshAgent.destination = navMeshAgent.transform.position - hitDirection;
         SwitchState(ScorpionState.CHECKING);
     }

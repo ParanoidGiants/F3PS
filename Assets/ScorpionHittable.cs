@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class ScorpionHittable : Hittable
 {
-    private int _playerId;
     public ScorpionController scorpion;
 
     void Awake()
     {
         _collider = GetComponent<Collider>();
-        _hittableId = scorpion.GetInstanceID();
-        _playerId = FindFirstObjectByType<ThirdPersonController>().transform.parent.GetInstanceID();
     }
 
     private void OnEnable()
@@ -25,16 +22,13 @@ public class ScorpionHittable : Hittable
     }
 
     override
-    public void OnHit(HitBox hitBy, Vector3 hitDirection)
+    public void OnHit(int damage, Vector3 hitDirection)
     {
         if (scorpion.isDead)
         {
             return;
         }
-        scorpion.Hit((int)(damageMultiplier * hitBy.damage));
-        if (hitBy.attackerId == _playerId && scorpion.currentState is not ScorpionState.AGGRESSIVE)
-        {
-            scorpion.HitByPlayerFrom(hitDirection);
-        }
+        scorpion.HitByPlayerFrom(hitDirection);
+        scorpion.Hit((int)(damageMultiplier * damage));
     }
 }

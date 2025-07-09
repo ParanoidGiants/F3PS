@@ -83,15 +83,18 @@ public class ThotMindSkillData
 [Serializable]
 public class HorusPalmData
 {
+    public int Damage = 10;
     public float AttackSpeed = 100f;
     public float ImpactForceMultiplier = 1.0f;
     public float AttackCoolDownTimer = 0.2f;
     public float StaminaCost = 0.3f;
+    public float ProjectileLifeDuration = 5f;
 }
 
 [Serializable]
 public class OsirisKickData
 {
+    public int Damage = 10;
     public int NumberOfProjectiles = 8;
     public float StaminaCost = 10f;
     public float SpreadAngle = 45f;

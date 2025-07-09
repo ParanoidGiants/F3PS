@@ -20,14 +20,12 @@ namespace F3PS.Damage.Take
         {
             _controller = FindFirstObjectByType<ThirdPersonController>();
             _collider = GetComponent<Collider>();
-            _hittableId = _controller.GetInstanceID();
         }
 
         override
-        public void OnHit(HitBox hitBy, Vector3 hitDirection)
+        public void OnHit(int damage, Vector3 hitDirection)
         {
-            var damage = (int)(damageMultiplier * hitBy.damage);
-            _controller.Hit(damage, hitDirection);
+            _controller.Hit((int)(damageMultiplier * damage), hitDirection);
         }
     }
 }

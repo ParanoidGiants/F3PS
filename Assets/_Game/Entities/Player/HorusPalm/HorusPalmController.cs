@@ -40,7 +40,7 @@ public class HorusPalmController : MonoBehaviour
         foreach (var projectile in projectiles)
         {
             var horusPalmProjectile = projectile.GetComponent<HorusPalmProjectile>();
-            horusPalmProjectile.Init(userSpace.GetInstanceID(), ownColliders);
+            horusPalmProjectile.Init(userSpace.gameObject, ownColliders);
             projectile.SetActive(false);
         }
     }

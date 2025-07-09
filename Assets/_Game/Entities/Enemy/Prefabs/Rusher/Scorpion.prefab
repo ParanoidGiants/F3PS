@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 4545646383701901574}
   - component: {fileID: 7123907103778620744}
   m_Layer: 10
-  m_Name: RushHitBox
+  m_Name: HitBoxRush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,7 +366,7 @@ Transform:
   - {fileID: 1829523528260659340}
   - {fileID: 1410692698}
   - {fileID: 1660023864}
-  - {fileID: 4867060836433124111}
+  - {fileID: 1823029999151333271}
   - {fileID: 174807445859336808}
   m_Father: {fileID: 1823029999567002500}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
@@ -446,14 +446,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 95548461742404872}
   navMeshAgent: {fileID: 1038869799714516501}
-  _hittables:
-  - {fileID: 0}
   patrolManager: {fileID: 6372822854961854032}
   timeObject: {fileID: 1660023865}
   animateMesh: {fileID: 802972072586228041}
   sensorController: {fileID: 6770845122494050193}
+  hittableParent: {fileID: 0}
   chargeFlare: {fileID: 590738213}
   attackHitBox: {fileID: 7123907103778620744}
+  health: 50
   maxHealth: 100
   moveSpeed: 5
   idleDuration: 5
@@ -475,7 +475,7 @@ MonoBehaviour:
   attackAnticipationStartPosition: {x: 0, y: 0, z: 0}
   attackAnticipationEndPosition: {x: 0, y: 0, z: 0}
   attackExecutionTime: 0
-  attackExecutionDuration: 1
+  attackExecutionDuration: 0.5
   attackExecutionDistance: 5
   attackExecutionStartPosition: {x: 0, y: 0, z: 0}
   attackExecutionEndPosition: {x: 0, y: 0, z: 0}
@@ -489,7 +489,6 @@ MonoBehaviour:
   isActive: 1
   isDying: 0
   isDead: 0
-  health: 50
 --- !u!1 &1161983476467543427
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,7 +684,7 @@ GameObject:
   - component: {fileID: 6770845122387822219}
   - component: {fileID: 163223178494596376}
   m_Layer: 11
-  m_Name: Body
+  m_Name: HittableBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -704,7 +703,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4867060836433124111}
+  m_Father: {fileID: 1303918254061530425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5426112264836416496
 BoxCollider:
@@ -766,7 +765,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bffb6e42e71fe0469891914e4ac4bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 0
+  owner: {fileID: 0}
+  damageMultiplier: 1
   scorpion: {fileID: 566672495419761056}
 --- !u!1 &1823029999567002505
 GameObject:
@@ -862,38 +862,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3205173711511640818}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2354115671808351670
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4867060836433124111}
-  m_Layer: 7
-  m_Name: Hittables
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4867060836433124111
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2354115671808351670}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1823029999151333271}
-  m_Father: {fileID: 1303918254061530425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3521068046704983537
 GameObject:

@@ -437,7 +437,6 @@ GameObject:
   - component: {fileID: 5910657032164378923}
   - component: {fileID: 7615002434370928052}
   - component: {fileID: 7057858510028837911}
-  - component: {fileID: 8917271109250969741}
   - component: {fileID: 3943370298523652051}
   - component: {fileID: 6922934115357786835}
   - component: {fileID: 1002956380}
@@ -634,20 +633,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8917271109250969741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910657032164378920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 428ae0cd26a7b66468b69e88534889da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackerId: 0
-  damage: 2
 --- !u!114 &3943370298523652051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,10 +647,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitParticleSystem: {fileID: 8767138684050436427}
   mesh: {fileID: 3210354824842243319}
-  lifeTime: 0
-  maximumLifeTimer: 0.1
+  owner: {fileID: 0}
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
+  lifeTime: 0
 --- !u!114 &6922934115357786835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,7 +703,7 @@ MonoBehaviour:
   isTimeFrozen: 0
   isMovingByThotMind: 0
   isAnubisScrolling: 0
-  constraintsFreezeAllCommandCount: 0
+  setKinematicCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
   unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &6390966158899025387
