@@ -13,16 +13,16 @@ namespace F3PS.Enemy.UI
             enemyHealthUI.gameObject.SetActive(false);
         }
 
-        public void OnHitTarget(BaseEnemy target)
+        public void OnHitTarget(Transform target, int health, int maxHealth)
         {
-            var bodyTransform = target.body.transform;
+            var bodyTransform = target;
             if (enemyHealthUI.target != bodyTransform)
             {
                 enemyHealthUI.gameObject.SetActive(true);
                 enemyHealthUI.SetTarget(bodyTransform);
             }
             
-            enemyHealthUI.SetFill(target.health/ (float) target.maxHealth);
+            enemyHealthUI.SetFill((float) health / maxHealth);
         }
         
         public void OnKillTarget(Transform target)

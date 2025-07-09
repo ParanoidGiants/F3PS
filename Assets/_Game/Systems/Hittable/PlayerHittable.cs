@@ -26,20 +26,7 @@ namespace F3PS.Damage.Take
         override
         public void OnHit(HitBox hitBy, Vector3 hitDirection)
         {
-            // Hit by projectile
-            var projectile = hitBy.gameObject.GetComponent<BaseProjectile>();
-            var damage = 0;
-            if (projectile)
-            {
-                damage = (int)(damageMultiplier * projectile.damage);
-            }
-
-            // Hit by rush
-            var rush = hitBy.gameObject.GetComponent<Rush>();
-            if (rush)
-            {
-                damage = (int)(damageMultiplier * rush.damage);
-            }
+            var damage = (int)(damageMultiplier * hitBy.damage);
             _controller.Hit(damage, hitDirection);
         }
     }

@@ -132,7 +132,8 @@ namespace StarterAssets
         private void Update()
         {
             if (GameManager.Instance.isMenuOpen) return;
-            
+            if (_isDying) return;
+
             cameraSettings.HandleFreeCamera();
 
             if (!Inputs.canControlPlayer) return;

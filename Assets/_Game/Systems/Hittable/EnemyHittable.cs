@@ -1,3 +1,4 @@
+using F3PS.AI.States;
 using F3PS.AI.States.Action;
 using F3PS.Enemy;
 using StarterAssets;
@@ -35,10 +36,7 @@ namespace F3PS.Damage.Take
                 return;
             }
             enemy.Hit((int)(damageMultiplier * hitBy.damage));
-            if (hitBy.attackerId == _playerId)
-            {
-                OnHitByPlayer(hitDirection);
-            }
+            OnHitByPlayer(hitDirection);
         }
 
         private void OnHitByPlayer(Vector3 hitDirection)

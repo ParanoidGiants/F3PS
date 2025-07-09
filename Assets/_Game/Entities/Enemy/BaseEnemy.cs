@@ -108,7 +108,7 @@ namespace F3PS.Enemy
                 _stateManager.SwitchState(StateType.DYING);
                 return;
             }
-            _healthUIPool.OnHitTarget(this);
+            _healthUIPool.OnHitTarget(body.transform, health, maxHealth);
             animateMesh.HitFlash();
             _stateManager.Hit();
         }

@@ -5,6 +5,19 @@ using System;
 
 namespace F3PS.AI.States
 {
+    public enum StateType
+    {
+        IDLE,
+        AGGRESSIVE,
+        CHECKING,
+        SUSPICIOUS,
+        RETURN_TO_IDLE,
+        PATROLLING,
+        HIT,
+        DYING,
+        ENABLED_PHYSICS
+    }
+
     public class EnemyStateManager : MonoBehaviour
     {
         [Header("Watchers")]
