@@ -531,8 +531,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recoilPower: 0.2
   userSpace: {fileID: 6852364475795614233}
-  projectilePrefab: {fileID: 5910657032164378920, guid: e0d4101f6a7f81843845695b40151660,
-    type: 3}
   projectileSpawn: {fileID: 4028994581673832351}
   muzzle: {fileID: 2139086016214524578}
   projectilePool: {fileID: 8721933962685097986}
@@ -7355,7 +7353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428ae0cd26a7b66468b69e88534889da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackerId: 0
+  owner: {fileID: 0}
   damage: 0
 --- !u!114 &6326605106768036180
 MonoBehaviour:
@@ -7453,7 +7451,7 @@ MonoBehaviour:
   isTimeFrozen: 0
   isMovingByThotMind: 0
   isAnubisScrolling: 0
-  constraintsFreezeAllCommandCount: 0
+  setKinematicCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
   unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &3176930573350917661
@@ -16735,7 +16733,7 @@ CapsuleCollider:
   m_Radius: 0.13
   m_Height: 0.78064996
   m_Direction: 1
-  m_Center: {x: -0.06, y: 0.3796564, z: -0.03}
+  m_Center: {x: 0, y: 0.3796564, z: 0}
 --- !u!54 &7574983504573848544
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16775,6 +16773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   damageMultiplier: 0.5
 --- !u!1 &7574983504574855100
 GameObject:
@@ -16823,7 +16822,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e804078b186744b9842608dbdfd18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliders: []
+  colliders:
+  - {fileID: 7574983506362488686}
+  - {fileID: 7574983505495882432}
+  - {fileID: 7574983504573848545}
 --- !u!1 &7574983504645317821
 GameObject:
   m_ObjectHideFlags: 0
@@ -18901,7 +18903,7 @@ CapsuleCollider:
   m_Radius: 0.15109065
   m_Height: 0.55
   m_Direction: 1
-  m_Center: {x: 0, y: 0.98, z: -0.03}
+  m_Center: {x: 0, y: 0.98, z: 0}
 --- !u!54 &7574983505495882431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18941,6 +18943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   damageMultiplier: 1
 --- !u!1 &7574983505512464184
 GameObject:
@@ -20977,6 +20980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da875e52a363d3e48ab4241b5bc1961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   damageMultiplier: 2
 --- !u!1 &7574983506414611143
 GameObject:
@@ -21295,6 +21299,7 @@ MonoBehaviour:
   isActivatingPlaybackThisFrame: 0
   wasActivatingPlaybackLastFrame: 0
   isPlaybackActive: 0
+  _forwardBackward: 0
 --- !u!1 &7574983506500630211
 GameObject:
   m_ObjectHideFlags: 0

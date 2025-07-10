@@ -534,7 +534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2488913616749242317
 Transform:
   m_ObjectHideFlags: 0
@@ -545,7 +545,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 44.6, y: 19.3, z: 10.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 2, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1792816962542230636}
@@ -704,6 +704,7 @@ MonoBehaviour:
   isMoving: 0
   isBeingRotated: 0
   isCurrentlyTouchedByPlayer: 0
+  relativeRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &202516884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,7 +725,7 @@ MonoBehaviour:
   isTimeFrozen: 0
   isMovingByThotMind: 0
   isAnubisScrolling: 0
-  constraintsFreezeAllCommandCount: 0
+  setKinematicCount: 0
   unbiasedTimeFreezeAngularVelocity: {x: 0, y: 0, z: 0}
   unbiasedTimeFreezeVelocity: {x: 0, y: 0, z: 0}
 --- !u!208 &1770612418

@@ -67,7 +67,6 @@ public class ScorpionController : MonoBehaviour
     public float stoppingDistanceFollow = 1f;
     [Header("Attack")]
     public ScorpionAttackState attackState = ScorpionAttackState.NONE;
-    public bool isStaying = false;
     public float coolDownTime;
     public float coolDownDuration;
     public bool hitTargetEarly = false;
@@ -105,6 +104,7 @@ public class ScorpionController : MonoBehaviour
     public EnemyHealthUIPool _healthUIPool;
     public ScorpionState currentState = ScorpionState.IDLE;
     public bool isDead = false;
+    private Vector3 lastPosition;
 
     protected void Awake()
     {
@@ -120,7 +120,6 @@ public class ScorpionController : MonoBehaviour
 
     private void SwitchState(ScorpionState newState)
     {
-        Debug.Log("Switching state from " + currentState + " to " + newState);
         ExitState(currentState);
         currentState = newState;
         EnterState(currentState);
@@ -128,13 +127,16 @@ public class ScorpionController : MonoBehaviour
 
     private void EnterState(ScorpionState state)
     {
+        var traveledDistance = Vector3.Distance(lastPosition, transform.position);
+        animator.SetFloat("Speed", traveledDistance > 0.1f ? 1 : 0);
+        lastPosition = transform.position;
+
         UpdateSensorState(state);
         switch (state)
         {
             case ScorpionState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
-                animator.SetFloat("Speed", 0f);
                 break;
             case ScorpionState.PATROLLING:
                 navMeshAgent.isStopped = false;
@@ -142,12 +144,10 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
-                animator.SetFloat("Speed", 1f);
                 break;
             case ScorpionState.AGGRESSIVE:
                 navMeshAgent.isStopped = false;
-                HandleAggressiveStoppingDistance();
-                animator.SetFloat("Speed", 1f);
+                navMeshAgent.angularSpeed = 0f;
                 break;
             case ScorpionState.CHECKING:
                 break;
@@ -175,6 +175,7 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.PATROLLING:
                 break;
             case ScorpionState.AGGRESSIVE:
+                navMeshAgent.angularSpeed = 1000;
                 break;
             case ScorpionState.CHECKING:
                 break;
@@ -234,12 +235,12 @@ public class ScorpionController : MonoBehaviour
                 }
 
                 _selectedTarget = sensorController.GetTargetFromSensors();
-                navMeshAgent.destination = _selectedTarget.Center();
                 HandleAggressiveStoppingDistance();
 
-                var canAttack = isStaying && coolDownTime >= coolDownDuration;
+                var canAttack = coolDownTime >= coolDownDuration && Helper.HasReachedDestination(navMeshAgent);
                 if (!canAttack)
                 {
+                    coolDownTime += ScaledDeltaTime;
                     break;
                 }
 
@@ -325,6 +326,7 @@ public class ScorpionController : MonoBehaviour
                 attackAnticipationTime += ScaledDeltaTime;
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
+                    _attackForward = transform.forward;
                     attackState = ScorpionAttackState.EXECUTION;
                     chargeFlare.SetActive(false);
                     attackHitBox.enabled = true;
@@ -400,18 +402,40 @@ public class ScorpionController : MonoBehaviour
 
     private void HandleAggressiveStoppingDistance()
     {
-        isStaying = Helper.HasReachedDestination(navMeshAgent);
+        var toTarget = _selectedTarget.Center() - transform.position;
+        var distanceToTarget = toTarget.magnitude;
+        var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * ScaledDeltaTime);
         if (!sensorController.IsTargetInLineOfSight())
         {
             navMeshAgent.stoppingDistance = 0;
+            return;
         }
-        else if (isStaying)
+
+        else if (_selectedTarget == null)
         {
-            navMeshAgent.stoppingDistance = stoppingDistanceStay;
+            Debug.LogWarning("Selected target is null, cannot handle aggressive stopping distance.");
+            return;
         }
         else
         {
-            navMeshAgent.stoppingDistance = stoppingDistanceFollow;
+            if (distanceToTarget <= stoppingDistanceStay)
+            {
+                var fleeDirection = -lookDirection;
+                var ray = new Ray(transform.position, fleeDirection);
+                Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
+                var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
+                Debug.Log(distance);
+                Debug.DrawLine(transform.position, transform.position + fleeDirection * distance, Color.red, 1f);
+                var fleeDestination = transform.position + fleeDirection * distance;
+                navMeshAgent.stoppingDistance = 0f;
+                navMeshAgent.destination = fleeDestination;
+            }
+            else
+            {
+                navMeshAgent.stoppingDistance = stoppingDistanceFollow;
+                navMeshAgent.destination = _selectedTarget.Center();
+            }
         }
     }
 
