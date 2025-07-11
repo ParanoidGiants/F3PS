@@ -373,8 +373,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 690318467157581653}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: -4.9, y: 8.59, z: 115.47}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.9, y: 13.73, z: 151.65}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -384,7 +384,7 @@ Transform:
   - {fileID: 1823029999151333271}
   - {fileID: 174807445859336808}
   m_Father: {fileID: 1823029999567002500}
-  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6853480437526070404
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -431,7 +431,7 @@ NavMeshAgent:
   m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1
-  m_BaseOffset: 0.5
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
 --- !u!114 &1579425261
@@ -465,17 +465,27 @@ MonoBehaviour:
   timeObject: {fileID: 1660023865}
   animateMesh: {fileID: 802972072586228041}
   sensorController: {fileID: 6770845122494050193}
-  hittableParent: {fileID: 0}
+  hittableParent: {fileID: 1823029999151333275}
   chargeFlare: {fileID: 590738213}
   attackHitBox: {fileID: 7123907103778620744}
-  hittable: {fileID: 0}
   health: 50
   maxHealth: 500
   moveSpeed: 5
   idleDuration: 5
   idleTime: 0
   patrolMoveSpeed: 7
+  checkingMoveSpeed: 7
+  checkingDestination: {x: 0, y: 0, z: 0}
+  suspiciousTime: 0
+  suspiciousDuration: 2
+  suspiciousRotateSpeed: 30
+  hitTime: 0
+  stunDuration: 0
+  fadingOut: 0
+  dieTime: 1
+  fadeOutDuration: 1
   _selectedTarget: {fileID: 0}
+  aggressiveMoveSpeed: 10
   rotationSpeed: 90
   stoppingDistanceStay: 5
   stoppingDistanceFollow: 6
@@ -490,7 +500,7 @@ MonoBehaviour:
   attackAnticipationStartPosition: {x: 0, y: 0, z: 0}
   attackAnticipationEndPosition: {x: 0, y: 0, z: 0}
   attackExecutionTime: 0
-  attackExecutionDuration: 0.5
+  attackExecutionDuration: 0.25
   attackExecutionDistance: 8
   attackExecutionStartPosition: {x: 0, y: 0, z: 0}
   attackExecutionEndPosition: {x: 0, y: 0, z: 0}
@@ -499,9 +509,6 @@ MonoBehaviour:
   attackRecoveryDistance: 1
   attackRecoveryStartPosition: {x: 0, y: 0, z: 0}
   attackRecoveryEndPosition: {x: 0, y: 0, z: 0}
-  fadingOut: 0
-  dieTime: 1
-  fadeOutDuration: 1
   _healthUIPool: {fileID: 0}
   currentState: 0
   isDead: 0
@@ -740,8 +747,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.5522927, y: 0.91621494, z: 2}
+  m_Center: {x: -0.014923513, y: 0.5418925, z: 0}
 --- !u!54 &6770845122387822219
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1565,11 +1572,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4360855223042742, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.532
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4360855223042742, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4360855223042742, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1841,7 +1848,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4516655043259508, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.018112183
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516655043259508, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516655043259508, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4516655043259508, guid: 6bf7135ae7bc5734b81cfe41fe66f80e, type: 3}
       propertyPath: m_LocalRotation.w

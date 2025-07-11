@@ -1,5 +1,6 @@
 using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
+using F3PS.AI.States;
 using F3PS.Damage.Take;
 using F3PS.Enemy.UI;
 using System;
@@ -42,7 +43,6 @@ public class ScorpionController : MonoBehaviour
     public GameObject hittableParent;
     public GameObject chargeFlare;
     public Collider attackHitBox;
-    public Hittable hittable;
 
     [Space(20)]
     [Header("Settings")]
@@ -60,11 +60,36 @@ public class ScorpionController : MonoBehaviour
     public float patrolMoveSpeed = 0f;
 
     [Space(10)]
+    [Header("Checking Settings")]
+    public float checkingMoveSpeed = 0f;
+    public Vector3 checkingDestination = Vector3.zero;
+
+    [Space(10)]
+    [Header("Suspicious Settings")]
+    public float suspiciousTime;
+    public float suspiciousDuration = 2f;
+    public float suspiciousRotateSpeed = 30f;
+    private Quaternion _startRotation;
+
+    [Space(10)]
+    [Header("Hit Settings")]
+    public float hitTime = 0f;
+    public float stunDuration = 0f;
+
+    [Space(10)]
+    [Header("Dying Settings")]
+    public bool fadingOut = false;
+    public float dieTime = 0f;
+    public float fadeOutDuration = 1f;
+
+    [Space(10)]
     [Header("Aggressive Settings")]
     public Hittable _selectedTarget;
+    public float aggressiveMoveSpeed = 0f;
     public float rotationSpeed;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
+
     [Header("Attack")]
     public ScorpionAttackState attackState = ScorpionAttackState.NONE;
     public float coolDownTime;
@@ -92,12 +117,6 @@ public class ScorpionController : MonoBehaviour
     public float attackRecoveryDistance = 0f;
     public Vector3 attackRecoveryStartPosition;
     public Vector3 attackRecoveryEndPosition;
-
-    [Space(10)]
-    [Header("Dying Settings")]
-    public bool fadingOut = false;
-    public float dieTime = 0f;
-    public float fadeOutDuration = 1f;
 
     [Space(20)]
     [Header("Watchers")]
@@ -148,14 +167,26 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.AGGRESSIVE:
                 navMeshAgent.isStopped = false;
                 navMeshAgent.angularSpeed = 0f;
+                navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
                 break;
             case ScorpionState.CHECKING:
+                navMeshAgent.isStopped = false;
+                navMeshAgent.speed = checkingMoveSpeed * TimeScale;
+                navMeshAgent.stoppingDistance = 0f;
+                navMeshAgent.destination = checkingDestination;
+                animator.SetFloat("Speed", 1f);
                 break;
             case ScorpionState.SUSPICIOUS:
+                suspiciousTime = suspiciousDuration;
+                _startRotation = transform.rotation;
+                animator.SetFloat("Speed", 1f);
                 break;
             case ScorpionState.RETURN_TO_IDLE:
                 break;
             case ScorpionState.HIT:
+                hitTime = stunDuration;
+                navMeshAgent.isStopped = true;
+                animator.SetTrigger("Hit");
                 break;
             case ScorpionState.DYING:
                 navMeshAgent.isStopped = true;
@@ -254,13 +285,32 @@ public class ScorpionController : MonoBehaviour
 
                 break;
             case ScorpionState.CHECKING:
+                if (Helper.HasReachedDestination(navMeshAgent))
+                {
+                    SwitchState(ScorpionState.SUSPICIOUS);
+                }
                 break;
             case ScorpionState.SUSPICIOUS:
+                suspiciousTime -= ScaledDeltaTime;
+
+                float isSuspiciousAnimateTime = Mathf.Sin(suspiciousTime / suspiciousDuration * (2f * Mathf.PI));
+                transform.rotation = _startRotation * Quaternion.Euler(0, suspiciousRotateSpeed * isSuspiciousAnimateTime, 0f);
+
+                if (suspiciousTime > 0f) return;
+
+                SwitchState(ScorpionState.IDLE);
                 break;
             case ScorpionState.RETURN_TO_IDLE:
                 break;
             case ScorpionState.HIT:
+                if (hitTime < 0f)
+                {
+                    SwitchState(ScorpionState.PATROLLING);
+                    return;
+                }
+                hitTime -= ScaledDeltaTime;
                 break;
+
             case ScorpionState.DYING:
                 if (dieTime >= 0f)
                 {
@@ -492,7 +542,7 @@ public class ScorpionController : MonoBehaviour
             return;
         }
 
-        navMeshAgent.destination = navMeshAgent.transform.position - hitDirection;
+        checkingDestination = navMeshAgent.transform.position - hitDirection;
         SwitchState(ScorpionState.CHECKING);
     }
 }
