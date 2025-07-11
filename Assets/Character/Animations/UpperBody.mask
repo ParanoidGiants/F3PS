@@ -7,149 +7,173 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UpperBody
-  m_Mask: 01000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000000000000000000
   m_Elements:
   - m_Path: 
     m_Weight: 1
-  - m_Path: Geometry
+  - m_Path: Armature
     m_Weight: 1
-  - m_Path: Geometry/Armature_Mesh
+  - m_Path: Armature/Root
     m_Weight: 1
-  - m_Path: Skeleton
+  - m_Path: Armature/Root/Pelvis
     m_Weight: 1
-  - m_Path: Skeleton/Hips
+  - m_Path: Armature/Root/Pelvis/Loincloth
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Left_UpperLeg
+  - m_Path: Armature/Root/Pelvis/Spine_01
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg/Left_Foot
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg/Left_Foot/Left_Toes
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg/Left_Foot/Left_Toes/Left_ToesEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Right_UpperLeg
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg/Right_Foot
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Index_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg/Right_Foot/Right_Toes
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Index_01_L/Index_02_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg/Right_Foot/Right_Toes/Right_ToesEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Index_01_L/Index_02_L/Index_03_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Middle_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Middle_01_L/Middle_02_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Middle_01_L/Middle_02_L/Middle_03_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Pinky_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Pinky_01_L/Pinky_02_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Pinky_01_L/Pinky_02_L/Pinky_03_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Ring_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_IndexProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Ring_01_L/Ring_02_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_IndexProximal/Left_IndexIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Ring_01_L/Ring_02_L/Ring_03_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_IndexProximal/Left_IndexIntermediate/Left_IndexDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Thumb_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_IndexProximal/Left_IndexIntermediate/Left_IndexDistal/Left_IndexDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Thumb_01_L/Thumb_02_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_MiddleProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Hand_L/Thumb_01_L/Thumb_02_L/Thumb_03_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_MiddleProximal/Left_MiddleIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/Lowerarm_L/Lowerarm_Twist_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_MiddleProximal/Left_MiddleIntermediate/Left_MiddleDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_L/UpperArm_L/UpperArm_Twist_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_MiddleProximal/Left_MiddleIntermediate/Left_MiddleDistal/Left_MiddleDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_PinkyProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_PinkyProximal/Left_PinkyIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_PinkyProximal/Left_PinkyIntermediate/Left_PinkyDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_PinkyProximal/Left_PinkyIntermediate/Left_PinkyDistal/Left_PinkyDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Index_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_RingProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Index_01_R/Index_02_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_RingProximal/Left_RingIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Index_01_R/Index_02_R/Index_03_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_RingProximal/Left_RingIntermediate/Left_RingDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Middle_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_RingProximal/Left_RingIntermediate/Left_RingDistal/Left_RingDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Middle_01_R/Middle_02_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_ThumbProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Middle_01_R/Middle_02_R/Middle_03_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_ThumbProximal/Left_ThumbIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Pinky_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_ThumbProximal/Left_ThumbIntermediate/Left_ThumbDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Pinky_01_R/Pinky_02_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Left_Shoulder/Left_UpperArm/Left_LowerArm/Left_Hand/Left_ThumbProximal/Left_ThumbIntermediate/Left_ThumbDistal/Left_ThumbDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Pinky_01_R/Pinky_02_R/Pinky_03_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Ring_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck/Head
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Ring_01_R/Ring_02_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck/Head/Jaw
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Ring_01_R/Ring_02_R/Ring_03_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck/Head/Left_Eye
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Thumb_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck/Head/Right_Eye
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Thumb_01_R/Thumb_02_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Neck/Neck_Twist_A
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Hand_R/Thumb_01_R/Thumb_02_R/Thumb_03_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/Lowerarm_R/Lowerarm_Twist_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Clavicle_R/UpperArm_R/UpperArm_Twist_01_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_IndexProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head/Earring_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_IndexProximal/Right_IndexIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head/Earring_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_IndexProximal/Right_IndexIntermediate/Right_IndexDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head/Eye_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_IndexProximal/Right_IndexIntermediate/Right_IndexDistal/Right_IndexDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head/Eye_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_MiddleProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Neck_01/head/Jaw
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_MiddleProximal/Right_MiddleIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_MiddleProximal/Right_MiddleIntermediate/Right_MiddleDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_L/Shawl2_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_MiddleProximal/Right_MiddleIntermediate/Right_MiddleDistal/Right_MiddleDistalEnd
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_L/Shawl2_L/Shawl3_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_PinkyProximal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_PinkyProximal/Right_PinkyIntermediate
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_R/Shawl2_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_PinkyProximal/Right_PinkyIntermediate/Right_PinkyDistal
+  - m_Path: Armature/Root/Pelvis/Spine_01/Spine_02/Spine_03/Shawl1_R/Shawl2_R/Shawl3_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_PinkyProximal/Right_PinkyIntermediate/Right_PinkyDistal/Right_PinkyDistalEnd
+  - m_Path: Armature/Root/Pelvis/Thigh_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_RingProximal
+  - m_Path: Armature/Root/Pelvis/Thigh_L/Calf_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_RingProximal/Right_RingIntermediate
+  - m_Path: Armature/Root/Pelvis/Thigh_L/Calf_L/Calf_Twist_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_RingProximal/Right_RingIntermediate/Right_RingDistal
+  - m_Path: Armature/Root/Pelvis/Thigh_L/Calf_L/Foot_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_RingProximal/Right_RingIntermediate/Right_RingDistal/Right_RingDistalEnd
+  - m_Path: Armature/Root/Pelvis/Thigh_L/Calf_L/Foot_L/Toe_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_ThumbProximal
+  - m_Path: Armature/Root/Pelvis/Thigh_L/Thigh_Twist_01_L
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_ThumbProximal/Right_ThumbIntermediate
+  - m_Path: Armature/Root/Pelvis/Thigh_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_ThumbProximal/Right_ThumbIntermediate/Right_ThumbDistal
+  - m_Path: Armature/Root/Pelvis/Thigh_R/Calf_R
     m_Weight: 1
-  - m_Path: Skeleton/Hips/Spine/Chest/UpperChest/Right_Shoulder/Right_UpperArm/Right_LowerArm/Right_Hand/Right_ThumbProximal/Right_ThumbIntermediate/Right_ThumbDistal/Right_ThumbDistalEnd
+  - m_Path: Armature/Root/Pelvis/Thigh_R/Calf_R/Calf_Twist_01_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Thigh_R/Calf_R/Foot_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Thigh_R/Calf_R/Foot_R/Toe_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Pelvis/Thigh_R/Thigh_Twist_01_R
+    m_Weight: 1
+  - m_Path: Body
+    m_Weight: 1
+  - m_Path: Collar.001
+    m_Weight: 1
+  - m_Path: Collar.002
+    m_Weight: 1
+  - m_Path: Collar.003
+    m_Weight: 1
+  - m_Path: Eyes.001
+    m_Weight: 1
+  - m_Path: Feder1
+    m_Weight: 1
+  - m_Path: Feder3
+    m_Weight: 1
+  - m_Path: Shoe
+    m_Weight: 1
+  - m_Path: Wig_LR
     m_Weight: 1
