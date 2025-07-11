@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -92,5 +93,40 @@ public static class Helper
         {
             return t * (2 - t);
         }
+    }
+    public static float GetPathLengthOnNavMesh(Vector3 originPosition, Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        if (NavMesh.CalculatePath(originPosition, targetPosition, NavMesh.AllAreas, path))
+        {
+            if (path.status == NavMeshPathStatus.PathComplete)
+            {
+                float pathLength = 0.0f;
+                for (int i = 0; i < path.corners.Length - 1; i++)
+                {
+                    pathLength += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+                }
+                return pathLength;
+            }
+        }
+        return -1f;
+    }
+
+    internal static float GetStraightPathLengthOnNavMesh(NavMeshAgent navMeshAgent, Vector3 vector3)
+    {
+        NavMeshPath path = new NavMeshPath();
+        if (NavMesh.CalculatePath(navMeshAgent.transform.position, vector3, NavMesh.AllAreas, path))
+        {
+            if (path.status == NavMeshPathStatus.PathComplete)
+            {
+                float pathLength = 0.0f;
+                for (int i = 0; i < path.corners.Length - 1; i++)
+                {
+                    pathLength += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+                }
+                return pathLength;
+            }
+        }
+        return -1f;
     }
 }
