@@ -53,7 +53,7 @@ public static class Helper
     public static bool HasReachedDestination(NavMeshAgent agent, float threshold = 0.1f)
     {
         return !agent.pathPending 
-               && agent.remainingDistance <= agent.stoppingDistance + threshold 
+               && agent.remainingDistance <= agent.stoppingDistance + threshold
                && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
     }
 

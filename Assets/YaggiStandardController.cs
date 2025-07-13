@@ -38,6 +38,9 @@ public class YaggiStandardController : MonoBehaviour
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
 
+    public bool debugIsStopped;
+    public float debugStoppingDistance;
+
     [Header("References")]
     public Animator animator;
     public NavMeshAgent navMeshAgent;
@@ -89,26 +92,24 @@ public class YaggiStandardController : MonoBehaviour
 
     [Space(10)]
     [Header("Aggressive Settings")]
-    public YaggiStandardStoppingDistanceState yaggiStandardStoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
+    public YaggiStandardStoppingDistanceState stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
     public Hittable _selectedTarget;
     public float aggressiveMoveSpeed = 0f;
-    public float rotationSpeed;
+    public float aggressiveRotationSpeed;
     public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
     [Header("Attack")]
+    public Vector3 _attackForward;
     public YaggiStandardAttackState attackState = YaggiStandardAttackState.NONE;
     public float coolDownTime;
     public float coolDownDuration;
     public bool hitTargetEarly = false;
-    public Vector3 _attackForward;
 
     [Header("Attack Anticipation")]
     public float attackAnticipationTime = 0f;
     public float attackAnticipationDuration = 1f;
-    public float attackAnticipationDistance = 0f;
-    public Vector3 attackAnticipationStartPosition;
-    public Vector3 attackAnticipationEndPosition;
+    public float attackAnticipationRotationSpeed = 100f;
 
     [Header("Attack Execution")]
     public float attackExecutionTime = 0f;
@@ -120,9 +121,6 @@ public class YaggiStandardController : MonoBehaviour
     [Header("Attack Recovery")]
     public float attackRecoveryTime = 0f;
     public float attackRecoveryDuration = 1f;
-    public float attackRecoveryDistance = 0f;
-    public Vector3 attackRecoveryStartPosition;
-    public Vector3 attackRecoveryEndPosition;
 
     [Space(20)]
     [Header("Watchers")]
@@ -158,6 +156,7 @@ public class YaggiStandardController : MonoBehaviour
             case YaggiStandardState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
+                animator.SetFloat("Speed", 0);
                 break;
             case YaggiStandardState.PATROLLING:
                 navMeshAgent.isStopped = false;
@@ -165,9 +164,10 @@ public class YaggiStandardController : MonoBehaviour
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
+                animator.SetFloat("Speed", 1f);
                 break;
             case YaggiStandardState.AGGRESSIVE:
-                yaggiStandardStoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
+                stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
                 navMeshAgent.isStopped = true;
                 navMeshAgent.angularSpeed = 0f;
                 navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
@@ -177,10 +177,12 @@ public class YaggiStandardController : MonoBehaviour
                 navMeshAgent.speed = checkingMoveSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 navMeshAgent.destination = checkingDestination;
+                animator.SetFloat("Speed", 1f);
                 break;
             case YaggiStandardState.SUSPICIOUS:
                 suspiciousTime = suspiciousDuration;
                 _startRotation = transform.rotation;
+                animator.SetFloat("Speed", 0f);
                 break;
             case YaggiStandardState.RETURN_TO_IDLE:
                 break;
@@ -224,8 +226,28 @@ public class YaggiStandardController : MonoBehaviour
         }
     }
 
+
     private void FixedUpdate()
     {
+
+        var color = Color.white;
+        switch (stoppingDistanceState)
+        {
+            case YaggiStandardStoppingDistanceState.PUSHED:
+                color = Color.red;
+                break;
+            case YaggiStandardStoppingDistanceState.FOLLOWING:
+                color = Color.yellow;
+                break;
+            case YaggiStandardStoppingDistanceState.STAYING:
+                color = Color.green;
+                break;
+        }
+        Debug.DrawLine(transform.position, navMeshAgent.destination, color, 4f);
+        debugIsStopped = navMeshAgent.isStopped;
+        debugStoppingDistance = navMeshAgent.stoppingDistance;
+
+
         if (currentState != YaggiStandardState.DYING && currentState != YaggiStandardState.AGGRESSIVE && sensorController.IsTargetDetected())
         {
             SwitchState(YaggiStandardState.AGGRESSIVE);
@@ -265,11 +287,13 @@ public class YaggiStandardController : MonoBehaviour
                     SwitchState(YaggiStandardState.CHECKING);
                     return;
                 }
-
                 _selectedTarget = sensorController.GetTargetFromSensors();
+                checkingDestination = _selectedTarget.Center();
+
                 HandleAggressiveStoppingDistance();
 
-                var canAttack = coolDownTime >= coolDownDuration && Helper.HasReachedDestination(navMeshAgent);
+                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+                var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackExecutionDistance;
                 if (!canAttack)
                 {
                     coolDownTime += ScaledDeltaTime;
@@ -278,7 +302,6 @@ public class YaggiStandardController : MonoBehaviour
 
                 var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
-
                 if (isAlignedWithTarget)
                 {
                     attackState = YaggiStandardAttackState.INIT;
@@ -351,11 +374,6 @@ public class YaggiStandardController : MonoBehaviour
                 attackExecutionTime = 0f;
                 attackRecoveryTime = 0f;
 
-                _attackForward = transform.forward;
-
-                attackAnticipationStartPosition = transform.position;
-                attackAnticipationEndPosition = attackAnticipationStartPosition - _attackForward * attackAnticipationDistance;
-
                 chargeFlare.SetActive(true);
                 animator.SetTrigger("Charge");
                 break;
@@ -366,12 +384,7 @@ public class YaggiStandardController : MonoBehaviour
                 transform.rotation = Quaternion.RotateTowards(
                     transform.rotation,
                     newRotation,
-                    ScaledDeltaTime * 80
-                );
-                transform.position = Vector3.Lerp(
-                    attackAnticipationStartPosition,
-                    attackAnticipationEndPosition,
-                    attackAnticipationTime / attackAnticipationDuration
+                    ScaledDeltaTime * attackAnticipationRotationSpeed
                 );
 
                 attackAnticipationTime += ScaledDeltaTime;
@@ -399,24 +412,17 @@ public class YaggiStandardController : MonoBehaviour
                 {
                     attackState = YaggiStandardAttackState.RECOVERY;
                     attackHitBox.enabled = false;
-                    attackRecoveryStartPosition = transform.position;
-                    attackRecoveryEndPosition = attackRecoveryStartPosition - _attackForward * attackRecoveryDistance;
                     animator.SetTrigger("Recover");
                 }
                 break;
             case YaggiStandardAttackState.RECOVERY:
-                transform.position = Vector3.Lerp(
-                    attackRecoveryStartPosition,
-                    attackRecoveryEndPosition,
-                    attackRecoveryTime / attackRecoveryDuration
-                );
-
                 attackRecoveryTime += ScaledDeltaTime;
                 if (attackRecoveryTime >= attackRecoveryDuration)
                 {
                     attackState = YaggiStandardAttackState.NONE;
                     coolDownTime = 0f;
-                    navMeshAgent.isStopped = false;
+                    stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
+                    navMeshAgent.isStopped = true;
                 }
                 break;
             case YaggiStandardAttackState.NONE:
@@ -426,37 +432,16 @@ public class YaggiStandardController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        switch (currentState)
-        {
-            case YaggiStandardState.IDLE:
-                break;
-            case YaggiStandardState.AGGRESSIVE:
-                break;
-            case YaggiStandardState.CHECKING:
-                break;
-            case YaggiStandardState.SUSPICIOUS:
-                break;
-            case YaggiStandardState.RETURN_TO_IDLE:
-                break;
-            case YaggiStandardState.PATROLLING:
-                break;
-            case YaggiStandardState.HIT:
-                break;
-            case YaggiStandardState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
-        }
-    }
-
 
     private void HandleAggressiveStoppingDistance()
     {
         var toTarget = _selectedTarget.Center() - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * ScaledDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            Quaternion.LookRotation(lookDirection),
+            aggressiveRotationSpeed * ScaledDeltaTime
+        );
 
 
         if (!sensorController.IsTargetInLineOfSight())
@@ -467,57 +452,56 @@ public class YaggiStandardController : MonoBehaviour
 
         if (_selectedTarget == null)
         {
-            Debug.LogWarning("Selected target is null, cannot handle aggressive stopping distance.");
             return;
         }
 
         var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
-        if (yaggiStandardStoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
+        if (stoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
-            yaggiStandardStoppingDistanceState = YaggiStandardStoppingDistanceState.FOLLOWING;
+            animator.SetFloat("Speed", 1f);
             navMeshAgent.stoppingDistance = 0;
             navMeshAgent.isStopped = false;
-            navMeshAgent.destination = _selectedTarget.Center();
-            animator.SetFloat("Speed", 1f);
+            stoppingDistanceState = YaggiStandardStoppingDistanceState.FOLLOWING;
         }
-        else if (yaggiStandardStoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
+        else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
             && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
             var ray = new Ray(transform.position, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            Debug.DrawLine(transform.position, transform.position + fleeDirection * distance, Color.red, 20f);
             var fleeDestination = transform.position + fleeDirection * distance;
             navMeshAgent.stoppingDistance = 0;
             navMeshAgent.destination = fleeDestination;
             navMeshAgent.isStopped = false;
 
-            yaggiStandardStoppingDistanceState = YaggiStandardStoppingDistanceState.PUSHED;
+            stoppingDistanceState = YaggiStandardStoppingDistanceState.PUSHED;
             animator.SetFloat("Speed", -1f);
         }
-        else if (yaggiStandardStoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING
+        else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING
             && distanceToTarget < stoppingDistanceStay
-            || yaggiStandardStoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED
+            || stoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED
             && distanceToTarget > stoppingDistanceStay
         ) {
-            yaggiStandardStoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
+            stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
             navMeshAgent.isStopped = true;
             navMeshAgent.destination = _selectedTarget.Center();
             animator.SetFloat("Speed", 0f);
         }
-        else if (yaggiStandardStoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED)
+        else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED)
         {
             var fleeDirection = -lookDirection;
             var ray = new Ray(transform.position, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            Debug.DrawLine(transform.position, transform.position + fleeDirection * distance, Color.red, 20f);
             var fleeDestination = transform.position + fleeDirection * distance;
             navMeshAgent.destination = fleeDestination;
         }
-        Debug.DrawLine(transform.position, _selectedTarget.Center(), Color.blue, 1f);
+        else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING)
+        {
+            navMeshAgent.destination = _selectedTarget.Center();
+        }
     }
 
     public virtual void Hit(int damage)
