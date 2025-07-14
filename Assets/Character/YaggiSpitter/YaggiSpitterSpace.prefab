@@ -256,7 +256,7 @@ GameObject:
   - component: {fileID: 1352020953009425868}
   - component: {fileID: 487407697453555679}
   - component: {fileID: 7167066751064770035}
-  - component: {fileID: 6383444781272763807}
+  - component: {fileID: 1268719658364565993}
   m_Layer: 11
   m_Name: HittableBody
   m_TagString: Untagged
@@ -327,7 +327,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 2
---- !u!114 &6383444781272763807
+--- !u!114 &1268719658364565993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -336,12 +336,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2928179375839135005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06792d5871d524a4dbd29e9330b7b5d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 672413119bcfc6c4bbebbad8ae5345c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 8388546679799622151}
   damageMultiplier: 1
-  yaggi: {fileID: 0}
+  yaggi: {fileID: 2376897340350882576}
 --- !u!1 &3062666606120658548
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +637,7 @@ Transform:
   m_GameObject: {fileID: 5293640246665523194}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -3.91, y: 14, z: 141.09}
+  m_LocalPosition: {x: -19.3, y: 14, z: 141.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -731,7 +731,6 @@ MonoBehaviour:
   animateMesh: {fileID: 4539462810999195660}
   sensorController: {fileID: 7541989257748621213}
   hittableParent: {fileID: 2928179375839135005}
-  attackHitBox: {fileID: 0}
   health: 0
   maxHealth: 100
   moveSpeed: 5
@@ -755,19 +754,20 @@ MonoBehaviour:
   stoppingDistancePushBack: 8
   stoppingDistanceStay: 12
   stoppingDistanceFollow: 16
+  attackProjectileSpawnPoint: {fileID: 6201099748426222228}
+  attackprojectilePool: {fileID: 6152117942392150147}
+  attackProjectileCount: 20
+  attackSpreadAngle: 40
+  attackProjectileDistance: 20
+  attackSpeed: 60
+  attackGravityScale: 6
   _attackForward: {x: 0, y: 0, z: 0}
   attackState: 0
   coolDownTime: 0
-  coolDownDuration: 5
-  hitTargetEarly: 0
+  coolDownDuration: 2
   attackAnticipationTime: 0
   attackAnticipationDuration: 1
   attackAnticipationRotationSpeed: 100
-  attackExecutionTime: 0
-  attackExecutionDuration: 1
-  attackExecutionDistance: 0
-  attackExecutionStartPosition: {x: 0, y: 0, z: 0}
-  attackExecutionEndPosition: {x: 0, y: 0, z: 0}
   attackRecoveryTime: 0
   attackRecoveryDuration: 1
   _healthUIPool: {fileID: 0}
@@ -799,7 +799,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5329464745367914964}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.21, z: 0.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -909,7 +909,7 @@ MonoBehaviour:
   currentTimeScale: 1
   additionalTimeScale: 1
   agent: {fileID: 5973231540840446235}
-  animator: {fileID: 0}
+  animator: {fileID: 4680136459373611631}
 --- !u!65 &1718032380508500547
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1053,7 +1053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2149979966636889756, guid: a8fc6a1a1847a4b4abbf75a5abe2d084, type: 3}
-  numberOfPooledObjects: 100
+  numberOfPooledObjects: 60
 --- !u!1 &8180445407752999320
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,6 +1247,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9096125486015149496}
     m_Modifications:
+    - target: {fileID: 1781199362024005083, guid: 559aaa505c91cf144838dabb89c73d28,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2bc3e233a6e054c44ae0f9102dbfe11b, type: 2}
     - target: {fileID: 4629469019791312884, guid: 559aaa505c91cf144838dabb89c73d28,
         type: 3}
       propertyPath: m_Name
@@ -1260,7 +1265,7 @@ PrefabInstance:
     - target: {fileID: 5437248995127074126, guid: 559aaa505c91cf144838dabb89c73d28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5437248995127074126, guid: 559aaa505c91cf144838dabb89c73d28,
         type: 3}
@@ -1398,8 +1403,8 @@ MonoBehaviour:
   currentTimeEmissionColor: {r: 0, g: 0, b: 0, a: 1}
   hitFlashEmissionColor: {r: 1, g: 0, b: 0, a: 0}
   currentHitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-  hitFlashEaseInAnimationDuration: 1
-  hitFlashEaseOutAnimationDuration: 1
+  hitFlashEaseInAnimationDuration: 0.1
+  hitFlashEaseOutAnimationDuration: 0.2
   hitFlashEaseIn: 5
   hitFlashEaseOut: 6
 --- !u!4 &8744012242767460255 stripped

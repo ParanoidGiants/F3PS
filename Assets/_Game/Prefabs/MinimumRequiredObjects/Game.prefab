@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputs: {fileID: 5736421558823638681}
   PlayerData:
-    CurrentHealth: 0
+    CurrentHealth: 100
     MaxHealth: 100
     CurrentStamina: 0
     MaxStamina: 1
@@ -305,20 +305,23 @@ MonoBehaviour:
     DodgeAscendTimer: 0.05
     DodgeLandTimer: 0.05
     DodgeCoolDownTimer: 0.25
-    UnlockedAttacks: 
+    UnlockedAttacks: 0100000002000000
     ActiveAttack: 0
     OsirisKickData:
+      Damage: 2
       NumberOfProjectiles: 8
       StaminaCost: 0.2
-      SpreadAngle: 45
+      SpreadAngle: 10
       AttackSpeed: 100
       AttackCoolDownTimer: 0.2
       ProjectileLifeDuration: 5
     HorusPalmData:
+      Damage: 20
       AttackSpeed: 100
       ImpactForceMultiplier: 0.1
       AttackCoolDownTimer: 0.2
       StaminaCost: 0.3
+      ProjectileLifeDuration: 5
     UnlockedSkills: 010000000200000003000000
     ActiveSkill: 0
     KhonsuSphereSkillData:

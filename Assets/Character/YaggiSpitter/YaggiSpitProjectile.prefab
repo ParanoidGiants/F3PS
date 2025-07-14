@@ -962,7 +962,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   useGravity: 1
   defaultMass: 0
-  gravityScale: 0
+  gravityScale: 6
   currentTimeScale: 1
   isTimeFrozen: 0
   isMovingByThotMind: 0
@@ -1002,7 +1002,7 @@ MonoBehaviour:
   mesh: {fileID: 1221906835299876186}
   owner: {fileID: 0}
   projectileLifeDuration: 5
-  damage: 1
+  damage: 10
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
   lifeTime: 0

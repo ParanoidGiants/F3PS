@@ -84,7 +84,7 @@ public class YaggiSpitProjectile : MonoBehaviour
         _ownerColliders = ownerColliders;
     }
 
-    public void Shoot(float shootSpeed)
+    public void Shoot(float shootSpeed, float gravityScale)
     {
         _isHit = false;
         collisionsEnabled = false;
@@ -92,7 +92,7 @@ public class YaggiSpitProjectile : MonoBehaviour
         {
             Physics.IgnoreCollision(_collider, hittableCollider);
         }
-
+        GetComponent<RigidbodyHub>().gravityScale = gravityScale;
         _rigidbody.isKinematic = false;
         _rigidbody.linearVelocity = transform.forward * shootSpeed;
         lifeTime = 0f;

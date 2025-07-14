@@ -1,9 +1,11 @@
 using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
+using F3PS.AI.States.Action;
 using F3PS.Enemy.UI;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms;
 
 public enum YaggiSpitterStoppingDistanceState
 {
@@ -29,7 +31,6 @@ public enum YaggiSpitterAttackState
     NONE,
     INIT,
     ANTICIPATION,
-    EXECUTION,
     RECOVERY
 }
 
@@ -49,7 +50,6 @@ public class YaggiSpitterController : MonoBehaviour
     public AnimateMesh animateMesh;
     public SensorController sensorController;
     public GameObject hittableParent;
-    public Collider attackHitBox;
 
     [Space(20)]
     [Header("Settings")]
@@ -98,24 +98,25 @@ public class YaggiSpitterController : MonoBehaviour
     public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
+
     [Header("Attack")]
+    public Transform attackProjectileSpawnPoint;
+    public ObjectPool attackprojectilePool;
+    public int attackProjectileCount = 8;
+    public float attackSpreadAngle = 20f;
+    public float attackProjectileDistance = 5f;
+    public float attackSpeed = 10f;
+    public float attackGravityScale = 1f;
+
     public Vector3 _attackForward;
     public YaggiSpitterAttackState attackState = YaggiSpitterAttackState.NONE;
     public float coolDownTime;
     public float coolDownDuration;
-    public bool hitTargetEarly = false;
 
     [Header("Attack Anticipation")]
     public float attackAnticipationTime = 0f;
     public float attackAnticipationDuration = 1f;
     public float attackAnticipationRotationSpeed = 100f;
-
-    [Header("Attack Execution")]
-    public float attackExecutionTime = 0f;
-    public float attackExecutionDuration = 1f;
-    public float attackExecutionDistance = 0f;
-    public Vector3 attackExecutionStartPosition;
-    public Vector3 attackExecutionEndPosition;
 
     [Header("Attack Recovery")]
     public float attackRecoveryTime = 0f;
@@ -131,6 +132,16 @@ public class YaggiSpitterController : MonoBehaviour
     protected void Awake()
     {
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
+
+        var parent = transform.parent;
+        attackprojectilePool.Init(parent);
+        var projectiles = attackprojectilePool.GetObjects();
+        foreach (var projectile in projectiles)
+        {
+            var projectileComponent = projectile.GetComponent<YaggiSpitProjectile>();
+            projectileComponent.Init(parent.gameObject, hittableParent.GetComponents<Collider>());
+            projectile.SetActive(false);
+        }
     }
 
     private void Start()
@@ -292,7 +303,7 @@ public class YaggiSpitterController : MonoBehaviour
                 HandleAggressiveStoppingDistance();
 
                 var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
-                var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackExecutionDistance;
+                var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackProjectileDistance;
                 if (!canAttack)
                 {
                     coolDownTime += ScaledDeltaTime;
@@ -368,9 +379,7 @@ public class YaggiSpitterController : MonoBehaviour
                 attackState = YaggiSpitterAttackState.ANTICIPATION;
 
                 navMeshAgent.isStopped = true;
-                hitTargetEarly = false;
                 attackAnticipationTime = 0f;
-                attackExecutionTime = 0f;
                 attackRecoveryTime = 0f;
 
                 animator.SetTrigger("Charge");
@@ -388,28 +397,26 @@ public class YaggiSpitterController : MonoBehaviour
                 attackAnticipationTime += ScaledDeltaTime;
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
-                    _attackForward = transform.forward;
-                    attackState = YaggiSpitterAttackState.EXECUTION;
-                    attackHitBox.enabled = true;
-                    attackExecutionStartPosition = transform.position;
-                    attackExecutionEndPosition = attackExecutionStartPosition + _attackForward * attackExecutionDistance;
-                    MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", transform);
-                    animator.SetTrigger("Attack");
-                }
-                break;
-            case YaggiSpitterAttackState.EXECUTION:
-                transform.position = Vector3.Lerp(
-                    attackExecutionStartPosition,
-                    attackExecutionEndPosition,
-                    attackExecutionTime / attackExecutionDuration
-                );
-
-                attackExecutionTime += ScaledDeltaTime;
-                if (hitTargetEarly || attackExecutionTime >= attackExecutionDuration)
-                {
                     attackState = YaggiSpitterAttackState.RECOVERY;
-                    attackHitBox.enabled = false;
                     animator.SetTrigger("Recover");
+
+                    var targetPosition = _selectedTarget.Center();
+                    var yRotation = -attackSpreadAngle;
+                    var yRotationStep = (2f * attackSpreadAngle) / attackProjectileCount;
+                    for (int i = 0; i < attackProjectileCount; i++)
+                    {
+                        Quaternion projectileOrientation = Quaternion.Euler(0f, yRotation, 0f) * attackProjectileSpawnPoint.rotation;
+                        var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - attackProjectileSpawnPoint.position);
+                        var projectileObject = attackprojectilePool.GetObject();
+                        var projectileTransform = projectileObject.transform;
+                        projectileTransform.position = attackProjectileSpawnPoint.position;
+                        projectileTransform.rotation = projectileOrientation;
+                        var projectileComponent = projectileObject.GetComponent<YaggiSpitProjectile>();
+                        projectileObject.SetActive(true);
+                        projectileComponent.Shoot(attackSpeed, attackGravityScale);
+                        yRotation += yRotationStep;
+                    }
+
                 }
                 break;
             case YaggiSpitterAttackState.RECOVERY:
