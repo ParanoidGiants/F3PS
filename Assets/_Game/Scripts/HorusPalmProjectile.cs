@@ -12,6 +12,7 @@ public class HorusPalmProjectile : MonoBehaviour
     private HitBox _hitBox;
     private Rigidbody _rigidbody;
     private Collider _collider;
+    private PhysicsTimeObject _physicsTimeObject;
     private bool collisionsEnabled = false;
     private bool _isHit = false;
 
@@ -32,19 +33,20 @@ public class HorusPalmProjectile : MonoBehaviour
         _hitBox = GetComponent<HitBox>();
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<Collider>();
+        _physicsTimeObject = GetComponent<PhysicsTimeObject>();
     }
 
     private void Update()
     {
         if (_isHit) return;
 
-        lifeTime += Time.deltaTime;
+        lifeTime += _physicsTimeObject.ScaledDeltaTime;
         if (lifeTime > HorusPalmData.ProjectileLifeDuration)
         {
             gameObject.SetActive(false);
         }
 
-        enableCollisionsTime += Time.deltaTime;
+        enableCollisionsTime += _physicsTimeObject.ScaledDeltaTime;
         if (enableCollisionsTime <= enableCollisionsTimer || collisionsEnabled)
         {
             return;

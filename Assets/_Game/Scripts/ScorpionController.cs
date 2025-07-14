@@ -475,8 +475,6 @@ public class ScorpionController : MonoBehaviour
                 var ray = new Ray(transform.position, fleeDirection);
                 Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
                 var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
-                Debug.Log(distance);
-                Debug.DrawLine(transform.position, transform.position + fleeDirection * distance, Color.red, 1f);
                 var fleeDestination = transform.position + fleeDirection * distance;
                 navMeshAgent.stoppingDistance = 0f;
                 navMeshAgent.destination = fleeDestination;
@@ -491,7 +489,6 @@ public class ScorpionController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        Debug.Log("Scorpion Hit: " + damage);
         if (currentState is ScorpionState.DYING)
         {
             return;
