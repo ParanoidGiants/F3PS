@@ -5,6 +5,13 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum YaggiSpitterStoppingDistanceState
+{
+    PUSHED,
+    FOLLOWING,
+    STAYING
+}
+
 public enum YaggiSpitterState
 {
     IDLE,
@@ -31,6 +38,9 @@ public class YaggiSpitterController : MonoBehaviour
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
 
+    public bool debugIsStopped;
+    public float debugStoppingDistance;
+
     [Header("References")]
     public Animator animator;
     public NavMeshAgent navMeshAgent;
@@ -39,7 +49,6 @@ public class YaggiSpitterController : MonoBehaviour
     public AnimateMesh animateMesh;
     public SensorController sensorController;
     public GameObject hittableParent;
-    public GameObject chargeFlare;
     public Collider attackHitBox;
 
     [Space(20)]
@@ -82,23 +91,24 @@ public class YaggiSpitterController : MonoBehaviour
 
     [Space(10)]
     [Header("Aggressive Settings")]
-    public Hittable selectedTarget;
-    public float rotationSpeed;
+    public YaggiSpitterStoppingDistanceState stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
+    public Hittable _selectedTarget;
+    public float aggressiveMoveSpeed = 0f;
+    public float aggressiveRotationSpeed;
+    public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
     [Header("Attack")]
+    public Vector3 _attackForward;
     public YaggiSpitterAttackState attackState = YaggiSpitterAttackState.NONE;
     public float coolDownTime;
     public float coolDownDuration;
-    public ObjectPool projectilePool;
-    public Vector3 _attackForward;
+    public bool hitTargetEarly = false;
 
     [Header("Attack Anticipation")]
     public float attackAnticipationTime = 0f;
     public float attackAnticipationDuration = 1f;
-    public float attackAnticipationDistance = 0f;
-    public Vector3 attackAnticipationStartPosition;
-    public Vector3 attackAnticipationEndPosition;
+    public float attackAnticipationRotationSpeed = 100f;
 
     [Header("Attack Execution")]
     public float attackExecutionTime = 0f;
@@ -110,9 +120,6 @@ public class YaggiSpitterController : MonoBehaviour
     [Header("Attack Recovery")]
     public float attackRecoveryTime = 0f;
     public float attackRecoveryDuration = 1f;
-    public float attackRecoveryDistance = 0f;
-    public Vector3 attackRecoveryStartPosition;
-    public Vector3 attackRecoveryEndPosition;
 
     [Space(20)]
     [Header("Watchers")]
@@ -142,16 +149,13 @@ public class YaggiSpitterController : MonoBehaviour
 
     private void EnterState(YaggiSpitterState state)
     {
-        var traveledDistance = Vector3.Distance(lastPosition, transform.position);
-        animator.SetFloat("Speed", traveledDistance > 0.1f ? 1 : 0);
-        lastPosition = transform.position;
-
         UpdateSensorState(state);
         switch (state)
         {
             case YaggiSpitterState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
+                animator.SetFloat("Speed", 0);
                 break;
             case YaggiSpitterState.PATROLLING:
                 navMeshAgent.isStopped = false;
@@ -159,10 +163,13 @@ public class YaggiSpitterController : MonoBehaviour
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
+                animator.SetFloat("Speed", 1f);
                 break;
             case YaggiSpitterState.AGGRESSIVE:
-                navMeshAgent.isStopped = false;
+                stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
+                navMeshAgent.isStopped = true;
                 navMeshAgent.angularSpeed = 0f;
+                navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
                 break;
             case YaggiSpitterState.CHECKING:
                 navMeshAgent.isStopped = false;
@@ -174,7 +181,7 @@ public class YaggiSpitterController : MonoBehaviour
             case YaggiSpitterState.SUSPICIOUS:
                 suspiciousTime = suspiciousDuration;
                 _startRotation = transform.rotation;
-                animator.SetFloat("Speed", 1f);
+                animator.SetFloat("Speed", 0f);
                 break;
             case YaggiSpitterState.RETURN_TO_IDLE:
                 break;
@@ -218,8 +225,28 @@ public class YaggiSpitterController : MonoBehaviour
         }
     }
 
+
     private void FixedUpdate()
     {
+
+        var color = Color.white;
+        switch (stoppingDistanceState)
+        {
+            case YaggiSpitterStoppingDistanceState.PUSHED:
+                color = Color.red;
+                break;
+            case YaggiSpitterStoppingDistanceState.FOLLOWING:
+                color = Color.yellow;
+                break;
+            case YaggiSpitterStoppingDistanceState.STAYING:
+                color = Color.green;
+                break;
+        }
+        Debug.DrawLine(transform.position, navMeshAgent.destination, color, 4f);
+        debugIsStopped = navMeshAgent.isStopped;
+        debugStoppingDistance = navMeshAgent.stoppingDistance;
+
+
         if (currentState != YaggiSpitterState.DYING && currentState != YaggiSpitterState.AGGRESSIVE && sensorController.IsTargetDetected())
         {
             SwitchState(YaggiSpitterState.AGGRESSIVE);
@@ -259,20 +286,21 @@ public class YaggiSpitterController : MonoBehaviour
                     SwitchState(YaggiSpitterState.CHECKING);
                     return;
                 }
+                _selectedTarget = sensorController.GetTargetFromSensors();
+                checkingDestination = _selectedTarget.Center();
 
-                selectedTarget = sensorController.GetTargetFromSensors();
                 HandleAggressiveStoppingDistance();
 
-                var canAttack = coolDownTime >= coolDownDuration && Helper.HasReachedDestination(navMeshAgent);
+                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+                var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackExecutionDistance;
                 if (!canAttack)
                 {
                     coolDownTime += ScaledDeltaTime;
                     break;
                 }
 
-                var targetDirection = (selectedTarget.Center() - transform.position).normalized;
+                var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
-
                 if (isAlignedWithTarget)
                 {
                     attackState = YaggiSpitterAttackState.INIT;
@@ -340,6 +368,7 @@ public class YaggiSpitterController : MonoBehaviour
                 attackState = YaggiSpitterAttackState.ANTICIPATION;
 
                 navMeshAgent.isStopped = true;
+                hitTargetEarly = false;
                 attackAnticipationTime = 0f;
                 attackExecutionTime = 0f;
                 attackRecoveryTime = 0f;
@@ -347,10 +376,22 @@ public class YaggiSpitterController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case YaggiSpitterAttackState.ANTICIPATION:
+                var lookDirection = _selectedTarget.Center() - transform.position;
+                var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
+                var newRotation = Quaternion.LookRotation(newForward, transform.up);
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    newRotation,
+                    ScaledDeltaTime * attackAnticipationRotationSpeed
+                );
+
                 attackAnticipationTime += ScaledDeltaTime;
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
+                    _attackForward = transform.forward;
                     attackState = YaggiSpitterAttackState.EXECUTION;
+                    attackHitBox.enabled = true;
+                    attackExecutionStartPosition = transform.position;
                     attackExecutionEndPosition = attackExecutionStartPosition + _attackForward * attackExecutionDistance;
                     MasterAudio.PlaySound3DAtTransformAndForget("Enemy_dash", transform);
                     animator.SetTrigger("Attack");
@@ -364,28 +405,21 @@ public class YaggiSpitterController : MonoBehaviour
                 );
 
                 attackExecutionTime += ScaledDeltaTime;
-                if (attackExecutionTime >= attackExecutionDuration)
+                if (hitTargetEarly || attackExecutionTime >= attackExecutionDuration)
                 {
                     attackState = YaggiSpitterAttackState.RECOVERY;
                     attackHitBox.enabled = false;
-                    attackRecoveryStartPosition = transform.position;
-                    attackRecoveryEndPosition = attackRecoveryStartPosition - _attackForward * attackRecoveryDistance;
                     animator.SetTrigger("Recover");
                 }
                 break;
             case YaggiSpitterAttackState.RECOVERY:
-                transform.position = Vector3.Lerp(
-                    attackRecoveryStartPosition,
-                    attackRecoveryEndPosition,
-                    attackRecoveryTime / attackRecoveryDuration
-                );
-
                 attackRecoveryTime += ScaledDeltaTime;
                 if (attackRecoveryTime >= attackRecoveryDuration)
                 {
                     attackState = YaggiSpitterAttackState.NONE;
                     coolDownTime = 0f;
-                    navMeshAgent.isStopped = false;
+                    stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
+                    navMeshAgent.isStopped = true;
                 }
                 break;
             case YaggiSpitterAttackState.NONE:
@@ -395,67 +429,76 @@ public class YaggiSpitterController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        switch (currentState)
-        {
-            case YaggiSpitterState.IDLE:
-                break;
-            case YaggiSpitterState.AGGRESSIVE:
-                break;
-            case YaggiSpitterState.CHECKING:
-                break;
-            case YaggiSpitterState.SUSPICIOUS:
-                break;
-            case YaggiSpitterState.RETURN_TO_IDLE:
-                break;
-            case YaggiSpitterState.PATROLLING:
-                break;
-            case YaggiSpitterState.HIT:
-                break;
-            case YaggiSpitterState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
-        }
-    }
 
     private void HandleAggressiveStoppingDistance()
     {
-        var toTarget = selectedTarget.Center() - transform.position;
-        var distanceToTarget = toTarget.magnitude;
+        var toTarget = _selectedTarget.Center() - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * ScaledDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            Quaternion.LookRotation(lookDirection),
+            aggressiveRotationSpeed * ScaledDeltaTime
+        );
+
+
         if (!sensorController.IsTargetInLineOfSight())
         {
             navMeshAgent.stoppingDistance = 0;
             return;
         }
 
-        else if (selectedTarget == null)
+        if (_selectedTarget == null)
         {
-            Debug.LogWarning("Selected target is null, cannot handle aggressive stopping distance.");
             return;
         }
-        else
+
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+        if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.STAYING
+            && distanceToTarget > stoppingDistanceFollow)
         {
-            if (distanceToTarget <= stoppingDistanceStay)
-            {
-                var fleeDirection = -lookDirection;
-                var ray = new Ray(transform.position, fleeDirection);
-                Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
-                var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
-                Debug.Log(distance);
-                Debug.DrawLine(transform.position, transform.position + fleeDirection * distance, Color.red, 1f);
-                var fleeDestination = transform.position + fleeDirection * distance;
-                navMeshAgent.stoppingDistance = 0f;
-                navMeshAgent.destination = fleeDestination;
-            }
-            else
-            {
-                navMeshAgent.stoppingDistance = stoppingDistanceFollow;
-                navMeshAgent.destination = selectedTarget.Center();
-            }
+            animator.SetFloat("Speed", 1f);
+            navMeshAgent.stoppingDistance = 0;
+            navMeshAgent.isStopped = false;
+            stoppingDistanceState = YaggiSpitterStoppingDistanceState.FOLLOWING;
+        }
+        else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.STAYING
+            && distanceToTarget < stoppingDistancePushBack)
+        {
+            var fleeDirection = -lookDirection;
+            var ray = new Ray(transform.position, fleeDirection);
+            Physics.Raycast(ray, out var hit, stoppingDistanceStay);
+            var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
+            var fleeDestination = transform.position + fleeDirection * distance;
+            navMeshAgent.stoppingDistance = 0;
+            navMeshAgent.destination = fleeDestination;
+            navMeshAgent.isStopped = false;
+
+            stoppingDistanceState = YaggiSpitterStoppingDistanceState.PUSHED;
+            animator.SetFloat("Speed", -1f);
+        }
+        else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.FOLLOWING
+            && distanceToTarget < stoppingDistanceStay
+            || stoppingDistanceState == YaggiSpitterStoppingDistanceState.PUSHED
+            && distanceToTarget > stoppingDistanceStay
+        )
+        {
+            stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
+            navMeshAgent.isStopped = true;
+            navMeshAgent.destination = _selectedTarget.Center();
+            animator.SetFloat("Speed", 0f);
+        }
+        else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.PUSHED)
+        {
+            var fleeDirection = -lookDirection;
+            var ray = new Ray(transform.position, fleeDirection);
+            Physics.Raycast(ray, out var hit, stoppingDistanceStay);
+            var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
+            var fleeDestination = transform.position + fleeDirection * distance;
+            navMeshAgent.destination = fleeDestination;
+        }
+        else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.FOLLOWING)
+        {
+            navMeshAgent.destination = _selectedTarget.Center();
         }
     }
 
