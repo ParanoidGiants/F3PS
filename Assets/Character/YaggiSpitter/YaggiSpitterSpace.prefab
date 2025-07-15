@@ -637,7 +637,7 @@ Transform:
   m_GameObject: {fileID: 5293640246665523194}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -19.3, y: 14, z: 141.09}
+  m_LocalPosition: {x: 16.79, y: 14, z: 141.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -755,6 +755,7 @@ MonoBehaviour:
   stoppingDistanceStay: 12
   stoppingDistanceFollow: 16
   attackProjectileSpawnPoint: {fileID: 6201099748426222228}
+  attackProjectileSpawnPointInitialRotation: {x: 0, y: 0, z: 0, w: 0}
   attackprojectilePool: {fileID: 6152117942392150147}
   attackProjectileCount: 20
   attackSpreadAngle: 40

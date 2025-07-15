@@ -101,6 +101,7 @@ public class YaggiSpitterController : MonoBehaviour
 
     [Header("Attack")]
     public Transform attackProjectileSpawnPoint;
+    public Quaternion attackProjectileSpawnPointInitialRotation;
     public ObjectPool attackprojectilePool;
     public int attackProjectileCount = 8;
     public float attackSpreadAngle = 20f;
@@ -132,6 +133,7 @@ public class YaggiSpitterController : MonoBehaviour
     protected void Awake()
     {
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
+        attackProjectileSpawnPointInitialRotation = attackProjectileSpawnPoint.rotation;
 
         var parent = transform.parent;
         attackprojectilePool.Init(parent);
@@ -385,7 +387,8 @@ public class YaggiSpitterController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case YaggiSpitterAttackState.ANTICIPATION:
-                var lookDirection = _selectedTarget.Center() - transform.position;
+                var targetPosition = _selectedTarget.Center();
+                var lookDirection = targetPosition - transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, transform.up);
                 transform.rotation = Quaternion.RotateTowards(
@@ -394,19 +397,30 @@ public class YaggiSpitterController : MonoBehaviour
                     ScaledDeltaTime * attackAnticipationRotationSpeed
                 );
 
+                var targetDirectionForPitch = targetPosition - attackProjectileSpawnPoint.position;
+                var horizontalDistance = new Vector3(targetDirectionForPitch.x, 0, targetDirectionForPitch.z).magnitude;
+                var verticalDistance = targetDirectionForPitch.y;
+                var desiredPitchAngle = -Mathf.Atan2(verticalDistance, horizontalDistance) * Mathf.Rad2Deg;
+                var currentSpawnPointEuler = attackProjectileSpawnPoint.localEulerAngles;
+                var clampedDesiredPitch = Mathf.Clamp(desiredPitchAngle, -80f, 80f);
+                var targetProjectileSpawnPointRotation = Quaternion.Euler(clampedDesiredPitch, currentSpawnPointEuler.y, currentSpawnPointEuler.z);
+                attackProjectileSpawnPoint.localRotation = Quaternion.RotateTowards(
+                    attackProjectileSpawnPoint.localRotation,
+                    targetProjectileSpawnPointRotation,
+                    ScaledDeltaTime * attackAnticipationRotationSpeed
+                );
+
                 attackAnticipationTime += ScaledDeltaTime;
+
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
                     attackState = YaggiSpitterAttackState.RECOVERY;
                     animator.SetTrigger("Recover");
-
-                    var targetPosition = _selectedTarget.Center();
                     var yRotation = -attackSpreadAngle;
                     var yRotationStep = (2f * attackSpreadAngle) / attackProjectileCount;
                     for (int i = 0; i < attackProjectileCount; i++)
                     {
                         Quaternion projectileOrientation = Quaternion.Euler(0f, yRotation, 0f) * attackProjectileSpawnPoint.rotation;
-                        var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - attackProjectileSpawnPoint.position);
                         var projectileObject = attackprojectilePool.GetObject();
                         var projectileTransform = projectileObject.transform;
                         projectileTransform.position = attackProjectileSpawnPoint.position;
@@ -416,7 +430,6 @@ public class YaggiSpitterController : MonoBehaviour
                         projectileComponent.Shoot(attackSpeed, attackGravityScale);
                         yRotation += yRotationStep;
                     }
-
                 }
                 break;
             case YaggiSpitterAttackState.RECOVERY:

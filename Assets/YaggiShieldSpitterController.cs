@@ -384,7 +384,8 @@ public class YaggiShieldSpitterController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case YaggiShieldSpitterAttackState.ANTICIPATION:
-                var lookDirection = _selectedTarget.Center() - transform.position;
+                var targetPosition = _selectedTarget.Center();
+                var lookDirection = targetPosition - transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, transform.up);
                 transform.rotation = Quaternion.RotateTowards(
@@ -393,19 +394,30 @@ public class YaggiShieldSpitterController : MonoBehaviour
                     ScaledDeltaTime * attackAnticipationRotationSpeed
                 );
 
+                var targetDirectionForPitch = targetPosition - attackProjectileSpawnPoint.position;
+                var horizontalDistance = new Vector3(targetDirectionForPitch.x, 0, targetDirectionForPitch.z).magnitude;
+                var verticalDistance = targetDirectionForPitch.y;
+                var desiredPitchAngle = -Mathf.Atan2(verticalDistance, horizontalDistance) * Mathf.Rad2Deg;
+                var currentSpawnPointEuler = attackProjectileSpawnPoint.localEulerAngles;
+                var clampedDesiredPitch = Mathf.Clamp(desiredPitchAngle, -80f, 80f);
+                var targetProjectileSpawnPointRotation = Quaternion.Euler(clampedDesiredPitch, currentSpawnPointEuler.y, currentSpawnPointEuler.z);
+                attackProjectileSpawnPoint.localRotation = Quaternion.RotateTowards(
+                    attackProjectileSpawnPoint.localRotation,
+                    targetProjectileSpawnPointRotation,
+                    ScaledDeltaTime * attackAnticipationRotationSpeed
+                );
+
                 attackAnticipationTime += ScaledDeltaTime;
+
                 if (attackAnticipationTime >= attackAnticipationDuration)
                 {
                     attackState = YaggiShieldSpitterAttackState.RECOVERY;
                     animator.SetTrigger("Recover");
-
-                    var targetPosition = _selectedTarget.Center();
                     var yRotation = -attackSpreadAngle;
                     var yRotationStep = (2f * attackSpreadAngle) / attackProjectileCount;
                     for (int i = 0; i < attackProjectileCount; i++)
                     {
                         Quaternion projectileOrientation = Quaternion.Euler(0f, yRotation, 0f) * attackProjectileSpawnPoint.rotation;
-                        var targetDirection = projectileOrientation * Vector3.forward * Vector3.Magnitude(targetPosition - attackProjectileSpawnPoint.position);
                         var projectileObject = attackprojectilePool.GetObject();
                         var projectileTransform = projectileObject.transform;
                         projectileTransform.position = attackProjectileSpawnPoint.position;
@@ -415,7 +427,6 @@ public class YaggiShieldSpitterController : MonoBehaviour
                         projectileComponent.Shoot(attackSpeed, attackGravityScale);
                         yRotation += yRotationStep;
                     }
-
                 }
                 break;
             case YaggiShieldSpitterAttackState.RECOVERY:
