@@ -106,6 +106,7 @@ public class YaghotepController : MonoBehaviour
     public float attackProjectileDistance = 5f;
     public float attackSpeed = 10f;
     public float attackGravityScale = 1f;
+    public float additionalPitch = 30f;
 
     public Vector3 _attackForward;
     public YaghotepAttackState attackState = YaghotepAttackState.NONE;
@@ -137,7 +138,7 @@ public class YaghotepController : MonoBehaviour
         var projectiles = attackprojectilePool.GetObjects();
         foreach (var projectile in projectiles)
         {
-            var projectileComponent = projectile.GetComponent<YaggiSpitProjectile>();
+            var projectileComponent = projectile.GetComponent<YaghotepProjectile>();
             projectileComponent.Init(parent.gameObject, collidersThatShouldntBeHit);
             projectile.SetActive(false);
         }
@@ -400,7 +401,7 @@ public class YaghotepController : MonoBehaviour
                 var desiredPitchAngle = -Mathf.Atan2(verticalDistance, horizontalDistance) * Mathf.Rad2Deg;
                 var currentSpawnPointEuler = attackProjectileSpawnPoint.localEulerAngles;
                 var clampedDesiredPitch = Mathf.Clamp(desiredPitchAngle, -80f, 80f);
-                var targetProjectileSpawnPointRotation = Quaternion.Euler(clampedDesiredPitch, currentSpawnPointEuler.y, currentSpawnPointEuler.z);
+                var targetProjectileSpawnPointRotation = Quaternion.Euler(clampedDesiredPitch - additionalPitch, currentSpawnPointEuler.y, currentSpawnPointEuler.z);
                 attackProjectileSpawnPoint.localRotation = Quaternion.RotateTowards(
                     attackProjectileSpawnPoint.localRotation,
                     targetProjectileSpawnPointRotation,
@@ -422,7 +423,7 @@ public class YaghotepController : MonoBehaviour
                         var projectileTransform = projectileObject.transform;
                         projectileTransform.position = attackProjectileSpawnPoint.position;
                         projectileTransform.rotation = projectileOrientation;
-                        var projectileComponent = projectileObject.GetComponent<YaggiSpitProjectile>();
+                        var projectileComponent = projectileObject.GetComponent<YaghotepProjectile>();
                         projectileObject.SetActive(true);
                         projectileComponent.Shoot(attackSpeed, attackGravityScale);
                         yRotation += yRotationStep;

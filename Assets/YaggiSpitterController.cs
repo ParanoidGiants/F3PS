@@ -1,11 +1,9 @@
 using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
-using F3PS.AI.States.Action;
 using F3PS.Enemy.UI;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms;
 
 public enum YaggiSpitterStoppingDistanceState
 {
@@ -134,6 +132,8 @@ public class YaggiSpitterController : MonoBehaviour
     {
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
         attackProjectileSpawnPointInitialRotation = attackProjectileSpawnPoint.rotation;
+        navMeshAgent.Warp(transform.position);
+        navMeshAgent.SetDestination(transform.position);
 
         var parent = transform.parent;
         attackprojectilePool.Init(parent);
@@ -269,7 +269,7 @@ public class YaggiSpitterController : MonoBehaviour
         switch (currentState)
         {
             case YaggiSpitterState.IDLE:
-                if (idleDuration < 0f)
+                if (idleDuration < 0f || patrolManager.PatrolPointCount <= 0)
                 {
                     return;
                 }

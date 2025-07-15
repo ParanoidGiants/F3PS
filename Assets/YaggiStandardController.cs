@@ -2,6 +2,7 @@ using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
 using F3PS.Enemy.UI;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -229,7 +230,6 @@ public class YaggiStandardController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         var color = Color.white;
         switch (stoppingDistanceState)
         {
@@ -257,7 +257,7 @@ public class YaggiStandardController : MonoBehaviour
         switch (currentState)
         {
             case YaggiStandardState.IDLE:
-                if (idleDuration < 0f)
+                if (idleDuration < 0f || patrolManager.PatrolPointCount <= 0)
                 {
                     return;
                 }

@@ -266,7 +266,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
         switch (currentState)
         {
             case YaggiShieldSpitterState.IDLE:
-                if (idleDuration < 0f)
+                if (idleDuration < 0f || patrolManager.PatrolPointCount <= 0)
                 {
                     return;
                 }

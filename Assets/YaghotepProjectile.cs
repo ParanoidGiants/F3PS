@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
+using F3PS;
+using F3PS.Damage.Take;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class YagothepProjectile : MonoBehaviour
+public class YaghotepProjectile : MonoBehaviour
 {
     private Collider[] _ownerColliders;
     private Rigidbody _rigidbody;
@@ -13,10 +17,12 @@ public class YagothepProjectile : MonoBehaviour
     [Header("Reference")]
     public GameObject hitParticleSystem;
     public GameObject mesh;
+    public GameObject spawnYaggiStandardPrefab;
+    public GameObject spawnYaggiSpitterPrefab;
+    public GameObject spawnYaggiShieldPrefab;
 
     [Header("Settings")]
     public GameObject owner;
-    public GameObject[] enemiesToSpawnPrefabs;
     public float projectileLifeDuration = 5f;
     public int damage = 1;
     public float enableCollisionsTime = 0f;
@@ -71,19 +77,39 @@ public class YagothepProjectile : MonoBehaviour
         hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
 
+        var random = UnityEngine.Random.Range(0, 3);
+        GameObject enemyPrefab = null;
+        if (random == 0)
+        {
+            enemyPrefab = spawnYaggiStandardPrefab;
+        }
+        else if (random == 1)
+        {
+            enemyPrefab = spawnYaggiSpitterPrefab;
+        }
+        else
+        {
+            enemyPrefab = spawnYaggiShieldPrefab;
+        }
+
+        Vector3 intendedSpawn = transform.position;
+        NavMeshHit hit;
+        var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+        var rotation = Quaternion.LookRotation(forward, Vector3.up);
+        if (NavMesh.SamplePosition(intendedSpawn, out hit, 2.0f, NavMesh.AllAreas))
+        {
+            Instantiate(enemyPrefab, hit.position, rotation);
+        }
+        else
+        {
+            Debug.LogError("No NavMesh at intended spawn position!");
+        }
+
         if (collision.gameObject.TryGetComponent<Hittable>(out var hittable)
             && !hittable.IsOwner(owner.GetInstanceID()))
         {
             hittable.OnHit(damage, transform.forward);
         }
-
-        var lookDirection = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
-        var rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
-        Instantiate(
-            enemiesToSpawnPrefabs[Random.Range(0, enemiesToSpawnPrefabs.Length)],
-            collision.contacts[0].point,
-            rotation
-        );
     }
 
     public void Init(GameObject owner, Collider[] ownerColliders)
@@ -92,7 +118,7 @@ public class YagothepProjectile : MonoBehaviour
         _ownerColliders = ownerColliders;
     }
 
-    public void Shoot(float shootSpeed)
+    public void Shoot(float shootSpeed, float gravityScale)
     {
         _isHit = false;
         collisionsEnabled = false;
@@ -100,7 +126,7 @@ public class YagothepProjectile : MonoBehaviour
         {
             Physics.IgnoreCollision(_collider, hittableCollider);
         }
-
+        GetComponent<RigidbodyHub>().gravityScale = gravityScale;
         _rigidbody.isKinematic = false;
         _rigidbody.linearVelocity = transform.forward * shootSpeed;
         lifeTime = 0f;

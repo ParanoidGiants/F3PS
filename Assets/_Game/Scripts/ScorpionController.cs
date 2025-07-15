@@ -234,7 +234,7 @@ public class ScorpionController : MonoBehaviour
         switch (currentState)
         {
             case ScorpionState.IDLE:
-                if (idleDuration < 0f)
+                if (idleDuration < 0f || patrolManager.PatrolPointCount <= 0)
                 {
                     return;
                 }
@@ -243,6 +243,7 @@ public class ScorpionController : MonoBehaviour
                 {
                     return;
                 }
+
                 SwitchState(ScorpionState.PATROLLING);
                 break;
 

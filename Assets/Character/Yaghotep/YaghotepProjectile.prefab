@@ -738,7 +738,7 @@ GameObject:
   - component: {fileID: 3441787797724077415}
   - component: {fileID: 776249882}
   - component: {fileID: 776249883}
-  - component: {fileID: 2198154116106941852}
+  - component: {fileID: 4458042772473839598}
   m_Layer: 6
   m_Name: YaghotepProjectile
   m_TagString: Untagged
@@ -986,7 +986,7 @@ MonoBehaviour:
   currentTimeScale: 1
   additionalTimeScale: 1
   outline: {fileID: 8231915809977655751}
---- !u!114 &2198154116106941852
+--- !u!114 &4458042772473839598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -995,14 +995,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2149979966636889756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe76d4610e64a974bb5afc6b144c2aff, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ad42c5bc3b8b364bb6e49f80fe5dfb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hitParticleSystem: {fileID: 7460288382135344857}
   mesh: {fileID: 1221906835299876186}
+  spawnYaggiStandardPrefab: {fileID: 543593137632601105, guid: e45522b7b6e42114a8b84b980fbb124f,
+    type: 3}
+  spawnYaggiSpitterPrefab: {fileID: 1012558106636741781, guid: e58ebcd54379ba5409d481015cf8c38c,
+    type: 3}
+  spawnYaggiShieldPrefab: {fileID: 766827952870102963, guid: faf134eca6660954a91df2e2251c0947,
+    type: 3}
   owner: {fileID: 0}
-  projectileLifeDuration: 5
-  damage: 10
+  projectileLifeDuration: 20
+  damage: 1
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
   lifeTime: 0
