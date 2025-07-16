@@ -506,7 +506,6 @@ public class YaggiStandardController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        Debug.Log("YaggiStandard Hit: " + damage);
         if (currentState is YaggiStandardState.DYING)
         {
             return;

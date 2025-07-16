@@ -521,7 +521,6 @@ public class YaggiShieldSpitterController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        Debug.Log("YaggiShieldSpitter Hit: " + damage);
         if (currentState is YaggiShieldSpitterState.DYING)
         {
             return;

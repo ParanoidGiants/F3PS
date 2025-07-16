@@ -2,8 +2,15 @@ using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
 using F3PS.Enemy.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+
+public enum YaghotepAttackType
+{
+    SPAWN,
+    FORMATION
+}
 
 public enum YaghotepStoppingDistanceState
 {
@@ -29,6 +36,7 @@ public enum YaghotepAttackState
     NONE,
     INIT,
     ANTICIPATION,
+    EXECUTE,
     RECOVERY
 }
 
@@ -37,6 +45,11 @@ public class YaghotepController : MonoBehaviour
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
 
+    [Header("Debug")]
+    public EnemyHealthUIPool _healthUIPool;
+    public YaghotepState currentState = YaghotepState.IDLE;
+    public bool isDead = false;
+    public Vector3 lastPosition;
     public bool debugIsStopped;
     public float debugStoppingDistance;
 
@@ -98,45 +111,107 @@ public class YaghotepController : MonoBehaviour
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
 
-    [Header("Attack")]
-    public Transform attackProjectileSpawnPoint;
-    public ObjectPool attackprojectilePool;
-    public int attackProjectileCount = 8;
-    public float attackSpreadAngle = 20f;
-    public float attackProjectileDistance = 5f;
-    public float attackSpeed = 10f;
-    public float attackGravityScale = 1f;
-    public float additionalPitch = 30f;
-
-    public Vector3 _attackForward;
+    public YaghotepAttackType currentAttackType = YaghotepAttackType.SPAWN;
     public YaghotepAttackState attackState = YaghotepAttackState.NONE;
-    public float coolDownTime;
-    public float coolDownDuration;
+    public float attackProjectileDistance = 5f;
+    public float spawnAttackCoolDownTime;
+    public float spawnAttackCoolDownDuration;
+    public Vector3 attackForward;
+    public Transform projectileSpawnPoint;
+
+    #region Spawn Attack
+    [Header("Spawn Attack")]
+    public ObjectPool spawnAttackprojectilePool;
+    public int spawnAttackProjectileCount = 8;
+    public float spawnAttackSpreadAngle = 20f;
+    public float spawnAttackSpeed = 10f;
+    public float spawnAttackGravityScale = 1f;
+    public float spawnAttackAdditionalPitch = 30f;
+    public int spawnMaximumEnemies = 10;
 
     [Header("Attack Anticipation")]
-    public float attackAnticipationTime = 0f;
-    public float attackAnticipationDuration = 1f;
-    public float attackAnticipationRotationSpeed = 100f;
+    public float spawnAttackAnticipationTime = 0f;
+    public float spawnAttackAnticipationDuration = 1f;
+    public float spawnAttackAnticipationRotationSpeed = 100f;
 
     [Header("Attack Recovery")]
-    public float attackRecoveryTime = 0f;
-    public float attackRecoveryDuration = 1f;
+    public float spawnAttackRecoveryTime = 0f;
+    public float spawnAttackRecoveryDuration = 1f;
 
-    [Space(20)]
-    [Header("Watchers")]
-    public EnemyHealthUIPool _healthUIPool;
-    public YaghotepState currentState = YaghotepState.IDLE;
-    public bool isDead = false;
-    private Vector3 lastPosition;
+    public List<GameObject> spawnedEnemies;
+    private void OnEnemySpawned(GameObject enemy)
+    {
+        spawnedEnemies.Add(enemy);
+        var enemyDied = enemy.GetComponent<OnEnemyDied>();
+        if (enemyDied != null)
+        {
+            enemyDied.OnEnemyDiedEvent += OnEnemyDied;
+        }
+    }
+
+    private void OnEnemyDied(GameObject enemy)
+    {
+        spawnedEnemies.Remove(enemy);
+        var enemyDied = enemy.GetComponent<OnEnemyDied>();
+        if (enemyDied != null)
+        {
+            enemyDied.OnEnemyDiedEvent -= OnEnemyDied;
+        }
+    }
+
+    #endregion Spawn Attack
+
+    #region Formation Attack
+    [Header("Formation Attack")]
+    public ObjectPool formationAttackprojectilePool;
+    public int formationAttackProjectileCount = 8;
+    public float formationAttackSpreadAngle = 20f;
+    public float formationAttackProjectileDistance = 5f;
+    public float formationAttackSpeed = 10f;
+    public float formationAttackGravityScale = 1f;
+    public float additionalPitch = 30f;
+    public float formationRadius = 3f;
+
+    public Vector3 _formationAttackForward;
+    public YaghotepAttackState formationAttackState = YaghotepAttackState.NONE;
+    public float formationAttackCoolDownTime;
+    public float formationAttackCoolDownDuration = 8f;
+
+    [Header("Formation Attack Anticipation")]
+    public float formationAttackAnticipationTime = 0f;
+    public float formationAttackAnticipationDuration = 1f;
+    public float formationAttackAnticipationRotationSpeed = 100f;
+
+    [Header("Formation Attack Execution")]
+    public int formationAttackExecutionCount = 0;
+    public int formationAttackExecutionTotalNumber = 8;
+    public float formationAttackExecutionTime = 0f;
+    public float formationAttackExecutionDuration = 1f;
+    public float formationAttackExecutionRotationSpeed = 100f;
+
+    [Header("Formation Attack Recovery")]
+    public float formationAttackRecoveryTime = 0f;
+    public float formationAttackRecoveryDuration = 1f;
+    #endregion Formation Attack
 
     protected void Awake()
     {
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
 
         var parent = transform.parent;
-        attackprojectilePool.Init(parent);
-        var projectiles = attackprojectilePool.GetObjects();
-        foreach (var projectile in projectiles)
+        spawnAttackprojectilePool.Init(parent);
+        formationAttackprojectilePool.Init(parent);
+
+        var spawnProjectiles = spawnAttackprojectilePool.GetObjects();
+        foreach (var projectile in spawnProjectiles)
+        {
+            var projectileComponent = projectile.GetComponent<YaghotepSpawnProjectile>();
+            projectileComponent.Init(parent.gameObject, collidersThatShouldntBeHit);
+            projectile.SetActive(false);
+        }
+
+        var formationProjectiles = formationAttackprojectilePool.GetObjects();
+        foreach (var projectile in formationProjectiles)
         {
             var projectileComponent = projectile.GetComponent<YaghotepProjectile>();
             projectileComponent.Init(parent.gameObject, collidersThatShouldntBeHit);
@@ -253,7 +328,6 @@ public class YaghotepController : MonoBehaviour
                 color = Color.green;
                 break;
         }
-        Debug.DrawLine(transform.position, navMeshAgent.destination, color, 4f);
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
@@ -285,39 +359,69 @@ public class YaghotepController : MonoBehaviour
                 break;
 
             case YaghotepState.AGGRESSIVE:
-                if (attackState != YaghotepAttackState.NONE)
-                {
-                    HandleAttackProcedure();
-                    return;
-                }
 
-                bool hasTarget = sensorController.IsTargetDetected();
-                if (!hasTarget)
+                if (attackState is YaghotepAttackState.NONE && !sensorController.IsTargetDetected())
                 {
                     SwitchState(YaghotepState.CHECKING);
                     return;
                 }
+
+                if (currentAttackType is YaghotepAttackType.SPAWN && attackState is not YaghotepAttackState.NONE)
+                {
+                    HandleSpawnAttackProcedure();
+                    return;
+                }
+                else if (currentAttackType is YaghotepAttackType.FORMATION && attackState is not YaghotepAttackState.NONE)
+                {
+                    HandleFormationAttackProcedure();
+                    return;
+                }
+
+
                 _selectedTarget = sensorController.GetTargetFromSensors();
                 checkingDestination = _selectedTarget.Center();
-
                 HandleAggressiveStoppingDistance();
 
-                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
-                var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackProjectileDistance;
-                if (!canAttack)
+                if (spawnedEnemies.Count == 0 && currentAttackType is not YaghotepAttackType.SPAWN)
                 {
-                    coolDownTime += ScaledDeltaTime;
-                    break;
+                    currentAttackType = YaghotepAttackType.SPAWN;
+                }
+                else if (spawnedEnemies.Count >= spawnMaximumEnemies && currentAttackType is YaghotepAttackType.SPAWN)
+                {
+                    currentAttackType = YaghotepAttackType.FORMATION;
+                }
+
+                if (currentAttackType is YaghotepAttackType.SPAWN)
+                {
+                    spawnAttackCoolDownTime += ScaledDeltaTime;
+                }
+                else
+                {
+                    formationAttackCoolDownTime += ScaledDeltaTime;
+                }
+
+                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+                if (distanceToTarget >= attackProjectileDistance)
+                {
+                    return;
                 }
 
                 var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
-                if (isAlignedWithTarget)
+                if (!isAlignedWithTarget)
                 {
-                    attackState = YaghotepAttackState.INIT;
+                    return;
                 }
 
-                break;
+                if (currentAttackType is YaghotepAttackType.SPAWN && spawnAttackCoolDownTime >= spawnAttackCoolDownDuration
+                    || currentAttackType is YaghotepAttackType.FORMATION && formationAttackCoolDownTime >= formationAttackCoolDownDuration)
+                {
+                    attackState = YaghotepAttackState.INIT;
+                    return;
+                }
+
+                return;
+
             case YaghotepState.CHECKING:
                 if (Helper.HasReachedDestination(navMeshAgent))
                 {
@@ -371,7 +475,7 @@ public class YaghotepController : MonoBehaviour
         }
     }
 
-    private void HandleAttackProcedure()
+    private void HandleSpawnAttackProcedure()
     {
         switch (attackState)
         {
@@ -379,8 +483,8 @@ public class YaghotepController : MonoBehaviour
                 attackState = YaghotepAttackState.ANTICIPATION;
 
                 navMeshAgent.isStopped = true;
-                attackAnticipationTime = 0f;
-                attackRecoveryTime = 0f;
+                spawnAttackAnticipationTime = 0f;
+                spawnAttackRecoveryTime = 0f;
 
                 animator.SetTrigger("Charge");
                 break;
@@ -392,50 +496,144 @@ public class YaghotepController : MonoBehaviour
                 transform.rotation = Quaternion.RotateTowards(
                     transform.rotation,
                     newRotation,
-                    ScaledDeltaTime * attackAnticipationRotationSpeed
+                    ScaledDeltaTime * spawnAttackAnticipationRotationSpeed
                 );
 
-                var targetDirectionForPitch = targetPosition - attackProjectileSpawnPoint.position;
+                var targetDirectionForPitch = targetPosition - projectileSpawnPoint.position;
                 var horizontalDistance = new Vector3(targetDirectionForPitch.x, 0, targetDirectionForPitch.z).magnitude;
                 var verticalDistance = targetDirectionForPitch.y;
                 var desiredPitchAngle = -Mathf.Atan2(verticalDistance, horizontalDistance) * Mathf.Rad2Deg;
-                var currentSpawnPointEuler = attackProjectileSpawnPoint.localEulerAngles;
+                var currentSpawnPointEuler = projectileSpawnPoint.localEulerAngles;
                 var clampedDesiredPitch = Mathf.Clamp(desiredPitchAngle, -80f, 80f);
                 var targetProjectileSpawnPointRotation = Quaternion.Euler(clampedDesiredPitch - additionalPitch, currentSpawnPointEuler.y, currentSpawnPointEuler.z);
-                attackProjectileSpawnPoint.localRotation = Quaternion.RotateTowards(
-                    attackProjectileSpawnPoint.localRotation,
+                projectileSpawnPoint.localRotation = Quaternion.RotateTowards(
+                    projectileSpawnPoint.localRotation,
                     targetProjectileSpawnPointRotation,
-                    ScaledDeltaTime * attackAnticipationRotationSpeed
+                    ScaledDeltaTime * spawnAttackAnticipationRotationSpeed
                 );
 
-                attackAnticipationTime += ScaledDeltaTime;
-
-                if (attackAnticipationTime >= attackAnticipationDuration)
+                spawnAttackAnticipationTime += ScaledDeltaTime;
+                if (spawnAttackAnticipationTime >= spawnAttackAnticipationDuration)
                 {
                     attackState = YaghotepAttackState.RECOVERY;
                     animator.SetTrigger("Recover");
-                    var yRotation = -attackSpreadAngle;
-                    var yRotationStep = (2f * attackSpreadAngle) / attackProjectileCount;
-                    for (int i = 0; i < attackProjectileCount; i++)
+                    var yRotation = -spawnAttackSpreadAngle;
+                    var yRotationStep = (2f * spawnAttackSpreadAngle) / spawnAttackProjectileCount;
+                    for (int i = 0; i < spawnAttackProjectileCount; i++)
                     {
-                        Quaternion projectileOrientation = Quaternion.Euler(0f, yRotation, 0f) * attackProjectileSpawnPoint.rotation;
-                        var projectileObject = attackprojectilePool.GetObject();
+                        Quaternion projectileOrientation = Quaternion.Euler(0f, yRotation, 0f) * projectileSpawnPoint.rotation;
+                        var projectileObject = spawnAttackprojectilePool.GetObject();
                         var projectileTransform = projectileObject.transform;
-                        projectileTransform.position = attackProjectileSpawnPoint.position;
+                        projectileTransform.position = projectileSpawnPoint.position;
                         projectileTransform.rotation = projectileOrientation;
-                        var projectileComponent = projectileObject.GetComponent<YaghotepProjectile>();
+                        var projectileComponent = projectileObject.GetComponent<YaghotepSpawnProjectile>();
                         projectileObject.SetActive(true);
-                        projectileComponent.Shoot(attackSpeed, attackGravityScale);
+                        projectileComponent.Shoot(spawnAttackSpeed, spawnAttackGravityScale, OnEnemySpawned);
                         yRotation += yRotationStep;
                     }
                 }
                 break;
             case YaghotepAttackState.RECOVERY:
-                attackRecoveryTime += ScaledDeltaTime;
-                if (attackRecoveryTime >= attackRecoveryDuration)
+                spawnAttackRecoveryTime += ScaledDeltaTime;
+                if (spawnAttackRecoveryTime >= spawnAttackRecoveryDuration)
                 {
                     attackState = YaghotepAttackState.NONE;
-                    coolDownTime = 0f;
+                    spawnAttackCoolDownTime = 0f;
+                    stoppingDistanceState = YaghotepStoppingDistanceState.STAYING;
+                    navMeshAgent.isStopped = true;
+                }
+                break;
+            case YaghotepAttackState.NONE:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(attackState), attackState, null);
+        }
+    }
+    private void HandleFormationAttackProcedure()
+    {
+        Vector3 targetPosition, lookDirection, newForward;
+        Quaternion newRotation;
+        switch (attackState)
+        {
+            case YaghotepAttackState.INIT:
+                attackState = YaghotepAttackState.ANTICIPATION;
+
+                navMeshAgent.isStopped = true;
+                formationAttackAnticipationTime = 0f;
+                formationAttackRecoveryTime = 0f;
+                formationAttackExecutionTime = 0f;
+                formationAttackExecutionCount = 0;
+                animator.SetTrigger("Charge");
+                break;
+            case YaghotepAttackState.ANTICIPATION:
+                targetPosition = _selectedTarget.Center();
+                lookDirection = targetPosition - transform.position;
+                newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
+                newRotation = Quaternion.LookRotation(newForward, transform.up);
+                transform.rotation = newRotation;
+
+                formationAttackAnticipationTime += ScaledDeltaTime;
+
+                if (formationAttackAnticipationTime >= formationAttackAnticipationDuration)
+                {
+                    attackState = YaghotepAttackState.EXECUTE;
+                }
+                break;
+            case YaghotepAttackState.EXECUTE:
+                formationAttackExecutionTime += ScaledDeltaTime;
+                var oldExecutionCount = formationAttackExecutionCount;
+                var newExecutionCount = 1 + (int) (formationAttackExecutionTotalNumber * (formationAttackExecutionTime / formationAttackExecutionDuration));
+                formationAttackExecutionCount = newExecutionCount;
+                if (newExecutionCount == oldExecutionCount)
+                {
+                    return;
+                }
+                else if (formationAttackExecutionCount >= formationAttackExecutionTotalNumber)
+                {
+                    attackState = YaghotepAttackState.RECOVERY;
+                    animator.SetTrigger("Recover");
+                    return;
+                }
+
+                targetPosition = _selectedTarget.Center();
+                lookDirection = targetPosition - transform.position;
+                newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
+                newRotation = Quaternion.LookRotation(newForward, transform.up);
+                transform.rotation = newRotation;
+                var forward = (targetPosition - projectileSpawnPoint.position);
+                forward.y = 0;
+                if (forward == Vector3.zero) forward = projectileSpawnPoint.forward;
+                forward.Normalize();
+
+                // Evenly distribute projectiles in a circle
+                float angleStep = 360f / formationAttackProjectileCount;
+                var right = Vector3.Cross(forward, Vector3.up).normalized;
+
+                Debug.DrawRay(projectileSpawnPoint.position, Vector3.up * (-10f));
+
+                for (int i = 0; i < formationAttackProjectileCount; i++)
+                {
+                    float angle = i * angleStep;
+                    var projectilePosition = projectileSpawnPoint.position
+                        + Mathf.Sin(angle * Mathf.Deg2Rad) * formationRadius * Vector3.up
+                        + Mathf.Cos(angle * Mathf.Deg2Rad) * formationRadius * right;
+
+                    Quaternion rotation = Quaternion.LookRotation(forward, Vector3.up);
+                    var projectileObject = formationAttackprojectilePool.GetObject();
+                    var projectileTransform = projectileObject.transform;
+                    projectileTransform.position = projectilePosition;
+                    projectileTransform.rotation = rotation;
+                    var projectileComponent = projectileObject.GetComponent<YaghotepProjectile>();
+                    projectileObject.SetActive(true);
+                    projectileComponent.Shoot(formationAttackSpeed, formationAttackGravityScale);
+                }
+                break;
+            case YaghotepAttackState.RECOVERY:
+                formationAttackRecoveryTime += ScaledDeltaTime;
+                if (formationAttackRecoveryTime >= formationAttackRecoveryDuration)
+                {
+                    attackState = YaghotepAttackState.NONE;
+                    formationAttackCoolDownTime = 0f;
                     stoppingDistanceState = YaghotepStoppingDistanceState.STAYING;
                     navMeshAgent.isStopped = true;
                 }
@@ -522,7 +720,6 @@ public class YaghotepController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        Debug.Log("Yaghotep Hit: " + damage);
         if (currentState is YaghotepState.DYING)
         {
             return;

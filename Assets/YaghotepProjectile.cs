@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using F3PS;
-using F3PS.Damage.Take;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class YaghotepProjectile : MonoBehaviour
 {
@@ -17,9 +13,6 @@ public class YaghotepProjectile : MonoBehaviour
     [Header("Reference")]
     public GameObject hitParticleSystem;
     public GameObject mesh;
-    public GameObject spawnYaggiStandardPrefab;
-    public GameObject spawnYaggiSpitterPrefab;
-    public GameObject spawnYaggiShieldPrefab;
 
     [Header("Settings")]
     public GameObject owner;
@@ -76,34 +69,6 @@ public class YaghotepProjectile : MonoBehaviour
         mesh.SetActive(false);
         hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
-
-        var random = UnityEngine.Random.Range(0, 3);
-        GameObject enemyPrefab = null;
-        if (random == 0)
-        {
-            enemyPrefab = spawnYaggiStandardPrefab;
-        }
-        else if (random == 1)
-        {
-            enemyPrefab = spawnYaggiSpitterPrefab;
-        }
-        else
-        {
-            enemyPrefab = spawnYaggiShieldPrefab;
-        }
-
-        Vector3 intendedSpawn = transform.position;
-        NavMeshHit hit;
-        var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
-        var rotation = Quaternion.LookRotation(forward, Vector3.up);
-        if (NavMesh.SamplePosition(intendedSpawn, out hit, 2.0f, NavMesh.AllAreas))
-        {
-            Instantiate(enemyPrefab, hit.position, rotation);
-        }
-        else
-        {
-            Debug.LogError("No NavMesh at intended spawn position!");
-        }
 
         if (collision.gameObject.TryGetComponent<Hittable>(out var hittable)
             && !hittable.IsOwner(owner.GetInstanceID()))
