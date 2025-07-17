@@ -16774,7 +16774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  damageMultiplier: 0.5
+  damageMultiplier: 1
 --- !u!1 &7574983504574855100
 GameObject:
   m_ObjectHideFlags: 0

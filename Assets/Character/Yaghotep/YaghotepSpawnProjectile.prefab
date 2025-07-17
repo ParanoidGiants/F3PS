@@ -1008,7 +1008,7 @@ MonoBehaviour:
     type: 3}
   owner: {fileID: 0}
   projectileLifeDuration: 20
-  damage: 1
+  damage: 5
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
   lifeTime: 0

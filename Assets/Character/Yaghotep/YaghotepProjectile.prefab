@@ -588,7 +588,7 @@ MonoBehaviour:
   mesh: {fileID: 1221906835299876186}
   owner: {fileID: 0}
   projectileLifeDuration: 30
-  damage: 0
+  damage: 3
   enableCollisionsTime: 0
   enableCollisionsTimer: 0.2
   lifeTime: 0

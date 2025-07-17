@@ -757,11 +757,11 @@ MonoBehaviour:
   stoppingDistanceFollow: 12
   attackProjectileSpawnPoint: {fileID: 6201099748426222228}
   attackprojectilePool: {fileID: 6152117942392150147}
-  attackProjectileCount: 20
-  attackSpreadAngle: 40
+  attackProjectileCount: 5
+  attackSpreadAngle: 20
   attackProjectileDistance: 20
-  attackSpeed: 60
-  attackGravityScale: 6
+  attackSpeed: 30
+  attackGravityScale: 0
   _attackForward: {x: 0, y: 0, z: 0}
   attackState: 0
   coolDownTime: 0

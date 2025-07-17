@@ -65,6 +65,7 @@ public class YaghotepProjectile : MonoBehaviour
             return;
         }
         _isHit = true;
+        _physicsTimeObject.DeactivateOutline();
 
         mesh.SetActive(false);
         hitParticleSystem.SetActive(true);
