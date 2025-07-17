@@ -72,6 +72,7 @@ public class HorusPalmProjectile : MonoBehaviour
         }
         _isHit = true;
 
+        _physicsTimeObject.DeactivateOutline();
         mesh.SetActive(false);
         hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
@@ -85,6 +86,7 @@ public class HorusPalmProjectile : MonoBehaviour
         if (collision.gameObject.TryGetComponent<Hittable>(out var hittable)
             && !hittable.IsOwner(owner.GetInstanceID()))
         {
+            Debug.Log($"HorusPalmProjectile hit {hittable.name} with damage: {HorusPalmData.Damage}");
             hittable.OnHit(HorusPalmData.Damage, transform.forward);
         }
     }

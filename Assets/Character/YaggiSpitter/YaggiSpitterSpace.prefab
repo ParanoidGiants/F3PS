@@ -756,7 +756,7 @@ MonoBehaviour:
   attackProjectileSpawnPointInitialRotation: {x: 0, y: 0, z: 0, w: 0}
   attackprojectilePool: {fileID: 6152117942392150147}
   attackProjectileCount: 5
-  attackSpreadAngle: 20
+  attackSpreadAngle: 5
   attackProjectileDistance: 20
   attackSpeed: 30
   attackGravityScale: 0

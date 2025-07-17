@@ -69,6 +69,7 @@ public class YaggiSpitProjectile : MonoBehaviour
         }
         _isHit = true;
 
+        _physicsTimeObject.DeactivateOutline();
         mesh.SetActive(false);
         hitParticleSystem.SetActive(true);
         StartCoroutine(SetInactiveAfterSeconds());
