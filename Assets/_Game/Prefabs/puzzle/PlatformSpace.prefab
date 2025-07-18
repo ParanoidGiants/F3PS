@@ -75,7 +75,7 @@ Transform:
   m_GameObject: {fileID: 8505290777269508879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 2.3, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 8505290778328549823}
   - component: {fileID: 8505290778328549821}
   - component: {fileID: 8505290778328549822}
+  - component: {fileID: 6523103495274340408}
   m_Layer: 15
   m_Name: Platform
   m_TagString: Untagged
@@ -300,8 +301,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 8505290776749647911}
-  movementSpeed: 60
-  rotationSpeed: 60
+  movementSpeed: 10
+  rotationSpeed: 90
   waitDuration: 2
   currentWaypointIndex: 0
   fromWaypoint: {fileID: 0}
@@ -324,6 +325,22 @@ MonoBehaviour:
   currentTimeScale: 1
   additionalTimeScale: 1
   outline: {fileID: 4793001110946293227}
+--- !u!208 &6523103495274340408
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8505290778328549798}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8505290778586789537
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +399,7 @@ Transform:
   m_GameObject: {fileID: 8505290778651806528}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.3, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
