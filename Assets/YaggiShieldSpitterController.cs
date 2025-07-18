@@ -126,7 +126,6 @@ public class YaggiShieldSpitterController : MonoBehaviour
     public EnemyHealthUIPool _healthUIPool;
     public YaggiShieldSpitterState currentState = YaggiShieldSpitterState.IDLE;
     public bool isDead = false;
-    private Vector3 lastPosition;
 
     protected void Awake()
     {
@@ -147,6 +146,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
     {
         health = maxHealth;
         patrolManager.Init();
+
         EnterState(YaggiShieldSpitterState.IDLE);
     }
 

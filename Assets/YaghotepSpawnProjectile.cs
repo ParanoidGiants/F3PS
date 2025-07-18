@@ -99,7 +99,7 @@ public class YaghotepSpawnProjectile : MonoBehaviour
         NavMeshHit hit;
         var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
         var rotation = Quaternion.LookRotation(forward, Vector3.up);
-        if (NavMesh.SamplePosition(intendedSpawn, out hit, 2.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(intendedSpawn, out hit, 20f, NavMesh.AllAreas))
         {
             var enemy = Instantiate(enemyPrefab, hit.position, rotation);
             onEnemySpawned?.Invoke(enemy);

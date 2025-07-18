@@ -760,51 +760,78 @@ MonoBehaviour:
   stoppingDistanceStay: 20
   stoppingDistanceFollow: 25
   currentAttackType: 1
-  attackState: 0
   attackProjectileDistance: 30
-  spawnAttackCoolDownTime: 0
-  spawnAttackCoolDownDuration: 5
-  attackForward: {x: 0, y: 0, z: 0}
-  spawnAttackprojectilePool: {fileID: 6152117942392150147}
-  spawnProjectileSpawnPoint: {fileID: 6201099748426222228}
-  spawnAttackProjectileCount: 5
-  spawnAttackSpreadAngle: 40
-  spawnAttackSpeed: 10
-  spawnAttackGravityScale: 1
-  spawnAttackAdditionalPitch: 30
-  spawnMaximumEnemies: 1
-  spawnAttackAnticipationTime: 0
-  spawnAttackAnticipationDuration: 0.6
-  spawnAttackAnticipationRotationSpeed: 100
-  spawnAttackRecoveryTime: 0
-  spawnAttackRecoveryDuration: 2
-  spawnedEnemies: []
-  formationChargeAnimationClip: {fileID: 7400000, guid: 55ab7d698eafe1d4b881f640c8837625,
-    type: 2}
-  formationExecutionAnimationClip: {fileID: 7400000, guid: fee2b4e6afeb75947ae19c3774d715a6,
-    type: 2}
-  formationAttackprojectilePool: {fileID: 8256312915681573675}
-  formationProjectileSpawnPoint: {fileID: 8398584671982662294}
-  formationAttackProjectileCount: 8
-  formationAttackSpreadAngle: 20
-  formationAttackProjectileDistance: 5
-  formationAttackSpeed: 10
-  formationAttackGravityScale: 0
-  additionalPitch: 0
-  formationRadius: 4
-  _formationAttackForward: {x: 0, y: 0, z: 0}
-  formationAttackCoolDownTime: 2
-  formationAttackCoolDownDuration: 3
-  formationAttackAnticipationTime: 0
-  formationAttackAnticipationDuration: 0
-  formationAttackAnticipationRotationSpeed: 100
-  formationAttackExecutionCount: 0
-  formationAttackExecutionTotalNumber: 8
-  formationAttackExecutionTime: 0
-  formationAttackExecutionDuration: 4.8
-  formationAttackExecutionRotationSpeed: 360
-  formationAttackRecoveryTime: 0
-  formationAttackRecoveryDuration: 1
+  spawnAttack:
+    spawnedMinions: []
+    attackState: 0
+    _selectedTarget: {fileID: 0}
+    scaledDeltaTime: 0
+    anticipationTime: 0
+    recoveryTime: 0
+    coolDownTime: 0
+    projectileSpawnPoint: {fileID: 6201099748426222228}
+    projectilePool: {fileID: 6152117942392150147}
+    anticipationAnimationClip: {fileID: 7400000, guid: 1a2d309b678631a49b3adb9e352a2bf7,
+      type: 2}
+    recoveryAnimationClip: {fileID: 7400000, guid: 6a13aa82d3dacd34e945120be496dc4e,
+      type: 2}
+    anticipationRotationSpeed: 360
+    coolDownDuration: 1
+    projectileSpreadAngle: 5
+    projectileSpeed: 30
+    projectileGravityScale: 5
+    additionalShootPitch: 30
+    projectileCount: 5
+    maximumEnemies: 10
+  formationAttack:
+    _selectedTarget: {fileID: 0}
+    attackState: 0
+    scaledDeltaTime: 0
+    anticipationTime: 0
+    executionTime: 0
+    executionCount: 0
+    recoveryTime: 0
+    coolDownTime: 0
+    projectileSpawnPoint: {fileID: 8398584671982662294}
+    projectilePool: {fileID: 8256312915681573675}
+    anticipationAnimationClip: {fileID: 7400000, guid: 55ab7d698eafe1d4b881f640c8837625,
+      type: 2}
+    executionAnimationClip: {fileID: 7400000, guid: fee2b4e6afeb75947ae19c3774d715a6,
+      type: 2}
+    recoveryAnimationClip: {fileID: 7400000, guid: 6a13aa82d3dacd34e945120be496dc4e,
+      type: 2}
+    executionTotalNumber: 6
+    coolDownDuration: 10
+    projectileCount: 8
+    formationRadius: 4.5
+    projectileSpeed: 10
+    projectileGravityScale: 0
+  jumpAttack:
+    animator: {fileID: 0}
+    navMeshAgent: {fileID: 0}
+    ScaledDeltaTime: 0
+    jumpAnticipationTime: 0
+    jumpAnticipationDuration: 0
+    jumpAnticipationRotationSpeed: 0
+    jumpExecutionTime: 0
+    jumpExecutionDuration: 0
+    jumpRecoveryTime: 0
+    jumpRecoveryDuration: 0
+    jumpPower: 0
+    jumpArcHeight: 0
+    jumpStartPoint: {fileID: 0}
+    jumpEndPoint: {fileID: 0}
+    _selectedTarget: {fileID: 0}
+    attackState: 0
+    pulseWavePrefab: {fileID: 0}
+    groundLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    landingCheckDistance: 0.5
+    _jumpStartPos: {x: 0, y: 0, z: 0}
+    _jumpEndPos: {x: 0, y: 0, z: 0}
+    _jumpTotalTime: 0
+    _hasLanded: 0
 --- !u!1 &5329464745367914964
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,7 +844,7 @@ GameObject:
   - component: {fileID: 3514362209210776554}
   - component: {fileID: 1686380799309636404}
   m_Layer: 8
-  m_Name: ProjectileSpawn
+  m_Name: MinionsProjectileSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1128,7 +1155,7 @@ GameObject:
   - component: {fileID: 8174146676930887745}
   - component: {fileID: 6152117942392150147}
   m_Layer: 8
-  m_Name: SpawnProjectilePool
+  m_Name: SpawnMinionsProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
