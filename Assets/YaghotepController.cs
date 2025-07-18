@@ -2,14 +2,14 @@ using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
 using F3PS.Enemy.UI;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public enum YaghotepAttackType
 {
     SPAWN,
-    FORMATION
+    FORMATION,
+    JUMP
 }
 
 public enum YaghotepStoppingDistanceState
@@ -319,73 +319,115 @@ public class YaghotepController : MonoBehaviour
 
     private void HandleAggressiveState()
     {
-        var attackState = currentAttackType is YaghotepAttackType.SPAWN
-                    ? spawnAttack.attackState
-                    : formationAttack.attackState;
+        Debug.Log("------------------------------------");
+        Debug.Log("Set Attack State");
+        var attackState = YaghotepAttackState.NONE;
+        if (currentAttackType is YaghotepAttackType.SPAWN)
+        {
+            attackState = spawnAttack.attackState;
+        }
+        else if (currentAttackType is YaghotepAttackType.FORMATION)
+        {
+            attackState = formationAttack.attackState;
+        }
+        else if (currentAttackType is YaghotepAttackType.JUMP)
+        {
+            attackState = jumpAttack.attackState;
+        }
 
+
+        Debug.Log("Check if target out of range");
         if (attackState is YaghotepAttackState.NONE && !sensorController.IsTargetDetected())
         {
             SwitchState(YaghotepState.CHECKING);
             return;
         }
 
-        if (currentAttackType is YaghotepAttackType.SPAWN && attackState is not YaghotepAttackState.NONE)
+        Debug.Log("Handle Attack Procedure");
+        if (attackState is not YaghotepAttackState.NONE)
         {
-            spawnAttack.scaledDeltaTime = ScaledDeltaTime;
-            spawnAttack._selectedTarget = _selectedTarget;
-            spawnAttack.HandleSpawnAttackProcedure();
-            return;
+            if (currentAttackType is YaghotepAttackType.SPAWN)
+            {
+                spawnAttack.scaledDeltaTime = ScaledDeltaTime;
+                spawnAttack._selectedTarget = _selectedTarget;
+                spawnAttack.HandleSpawnAttackProcedure();
+                return;
+            }
+            else if (currentAttackType is YaghotepAttackType.FORMATION)
+            {
+                formationAttack.scaledDeltaTime = ScaledDeltaTime;
+                formationAttack._selectedTarget = _selectedTarget;
+                formationAttack.HandleFormationAttackProcedure();
+                return;
+            }
+            else if (currentAttackType is YaghotepAttackType.JUMP)
+            {
+                jumpAttack.scaledDeltaTime = ScaledDeltaTime;
+                jumpAttack._selectedTarget = _selectedTarget;
+                jumpAttack.HandleJumpAttackProcedure();
+                return;
+            }
+            else
+            {
+                Debug.Log("No attack set?");
+            }
         }
-        else if (currentAttackType is YaghotepAttackType.FORMATION && attackState is not YaghotepAttackState.NONE)
-        {
-            formationAttack.scaledDeltaTime = ScaledDeltaTime;
-            formationAttack._selectedTarget = _selectedTarget;
-            formationAttack.HandleFormationAttackProcedure();
-            return;
-        }
-        // Jump attack wiring (if enabled)
-        // else if (currentAttackType is YaghotepAttackType.JUMP && attackState is not YaghotepAttackState.NONE)
-        // {
-        //     jumpAttack.ScaledDeltaTime = ScaledDeltaTime;
-        //     jumpAttack._selectedTarget = _selectedTarget;
-        //     jumpAttack.attackState = attackState;
-        //     jumpAttack.SetAttackState = (state) => attackState = state;
-        //     jumpAttack.HandleJumpAttackProcedure();
-        //     attackState = jumpAttack.attackState;
-        //     return;
-        // }
 
 
         _selectedTarget = sensorController.GetTargetFromSensors();
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
         checkingDestination = _selectedTarget.Center();
+
+        Debug.Log("Handle Stopping Distance");
         HandleAggressiveStoppingDistance();
 
+
+
+        Debug.Log("Select attack");
         if (spawnAttack.AreAllMinionsDead())
         {
+            Debug.Log("SpawnMinions selected");
             currentAttackType = YaghotepAttackType.SPAWN;
         }
-        else if (spawnAttack.HasReachedMaximumEnemies() && currentAttackType is YaghotepAttackType.SPAWN)
+        else if (spawnAttack.HasReachedMaximumMinions() && currentAttackType is YaghotepAttackType.SPAWN)
         {
-            currentAttackType = YaghotepAttackType.FORMATION;
+            if (distanceToTarget <= jumpAttack.attackDistance)
+            {
+                Debug.Log("Jump selected");
+                Debug.Log($"Distance to target {distanceToTarget}:{jumpAttack.attackDistance}");
+                Debug.Break();
+                currentAttackType = YaghotepAttackType.JUMP;
+            }
+            else
+            {
+                Debug.Log("Formation selected");
+                currentAttackType = YaghotepAttackType.FORMATION;
+            }
         }
 
-        if (currentAttackType is YaghotepAttackType.SPAWN)
+
+        Debug.Log("Update attack cool down");
+        switch (currentAttackType)
         {
-            spawnAttack.scaledDeltaTime = ScaledDeltaTime;
-            spawnAttack.UpdateCoolDown();
-        }
-        else
-        {
-            formationAttack.scaledDeltaTime = ScaledDeltaTime;
-            formationAttack.UpdateCoolDown();
+            case YaghotepAttackType.SPAWN:
+                spawnAttack.scaledDeltaTime = ScaledDeltaTime;
+                spawnAttack.UpdateCoolDown();
+                break;
+            case YaghotepAttackType.FORMATION:
+                formationAttack.scaledDeltaTime = ScaledDeltaTime;
+                formationAttack.UpdateCoolDown();
+                break;
+            case YaghotepAttackType.JUMP:
+                jumpAttack.scaledDeltaTime = ScaledDeltaTime;
+                jumpAttack.UpdateCoolDown();
+                break;
+            default:
+                Debug.LogError($"Unknown attack type: {currentAttackType}");
+                return;
+
         }
 
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
-        if (distanceToTarget >= attackProjectileDistance)
-        {
-            return;
-        }
-
+        Debug.Log("Check if aligned");
         var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
         bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
         if (!isAlignedWithTarget)
@@ -393,6 +435,7 @@ public class YaghotepController : MonoBehaviour
             return;
         }
 
+        Debug.Log("Initialize Attack");
         if (currentAttackType is YaghotepAttackType.SPAWN && spawnAttack.IsAttackReady())
         {
             spawnAttack.attackState = YaghotepAttackState.INIT;
@@ -400,6 +443,10 @@ public class YaghotepController : MonoBehaviour
         else if (currentAttackType is YaghotepAttackType.FORMATION && formationAttack.IsAttackReady())
         {
             formationAttack.attackState = YaghotepAttackState.INIT;
+        }
+        else if (currentAttackType is YaghotepAttackType.JUMP && jumpAttack.IsAttackReady())
+        {
+            jumpAttack.attackState = YaghotepAttackState.INIT;
         }
     }
 

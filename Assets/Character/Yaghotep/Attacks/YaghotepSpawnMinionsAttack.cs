@@ -34,7 +34,7 @@ public class YaghotepSpawnMinionsAttack
     public float projectileGravityScale;
     public float additionalShootPitch;
     public int projectileCount;
-    public int maximumEnemies;
+    public int maximumMinionCount;
 
     public void Init(Transform parent, Collider[] collidersThatShouldntBeHit, Animator animator, NavMeshAgent navMeshAgent)
     {
@@ -147,7 +147,7 @@ public class YaghotepSpawnMinionsAttack
 
     public bool AreAllMinionsDead()
     {
-        return spawnedMinions.Count == 0;
+        return spawnedMinions.Count == 0 && maximumMinionCount != 0;
     }
 
     public void UpdateCoolDown()
@@ -163,9 +163,9 @@ public class YaghotepSpawnMinionsAttack
         return coolDownTime >= coolDownDuration;
     }
 
-    public bool HasReachedMaximumEnemies()
+    public bool HasReachedMaximumMinions()
     {
-        return spawnedMinions.Count >= maximumEnemies;
+        return spawnedMinions.Count >= maximumMinionCount;
     }
 
     internal void Died()
