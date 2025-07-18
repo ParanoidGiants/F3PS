@@ -130,7 +130,6 @@ public class YaggiSpitterController : MonoBehaviour
 
     protected void Awake()
     {
-        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
         attackProjectileSpawnPointInitialRotation = attackProjectileSpawnPoint.rotation;
         navMeshAgent.Warp(transform.position);
         navMeshAgent.SetDestination(transform.position);
@@ -151,6 +150,8 @@ public class YaggiSpitterController : MonoBehaviour
         health = maxHealth;
         patrolManager.Init();
         EnterState(YaggiSpitterState.IDLE);
+        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
+        _healthUIPool.CreateEnemyHealthUI(transform);
     }
 
     private void SwitchState(YaggiSpitterState newState)
@@ -533,7 +534,7 @@ public class YaggiSpitterController : MonoBehaviour
         MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
         if (health <= 0)
         {
-            _healthUIPool.OnKillTarget(transform);
+            _healthUIPool.RemoveEnemyHealthUI(transform);
             SwitchState(YaggiSpitterState.DYING);
             return;
         }

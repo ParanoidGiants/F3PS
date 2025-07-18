@@ -132,7 +132,6 @@ public class YaggiStandardController : MonoBehaviour
 
     protected void Awake()
     {
-        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
     }
 
     private void Start()
@@ -140,6 +139,8 @@ public class YaggiStandardController : MonoBehaviour
         health = maxHealth;
         patrolManager.Init();
         EnterState(YaggiStandardState.IDLE);
+        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
+        _healthUIPool.CreateEnemyHealthUI(transform);
     }
 
     private void SwitchState(YaggiStandardState newState)
@@ -514,7 +515,7 @@ public class YaggiStandardController : MonoBehaviour
         MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
         if (health <= 0)
         {
-            _healthUIPool.OnKillTarget(transform);
+            _healthUIPool.RemoveEnemyHealthUI(transform);
             SwitchState(YaggiStandardState.DYING);
             return;
         }

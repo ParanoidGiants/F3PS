@@ -122,8 +122,6 @@ public class YaghotepController : MonoBehaviour
 
     protected void Awake()
     {
-        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
-
         var parent = transform.parent;
         spawnAttack.Init(
             parent,
@@ -147,6 +145,7 @@ public class YaghotepController : MonoBehaviour
         health = maxHealth;
         patrolManager.Init();
         EnterState(YaghotepState.IDLE);
+        _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
     }
 
     private void SwitchState(YaghotepState newState)
@@ -177,6 +176,7 @@ public class YaghotepController : MonoBehaviour
             case YaghotepState.AGGRESSIVE:
                 navMeshAgent.angularSpeed = 0f;
                 navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
+                _healthUIPool.EnableBossUI();
                 break;
             case YaghotepState.CHECKING:
                 navMeshAgent.isStopped = false;
@@ -501,11 +501,11 @@ public class YaghotepController : MonoBehaviour
         MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
         if (health <= 0)
         {
-            _healthUIPool.OnKillTarget(transform);
+            _healthUIPool.DisableBossUI();
             SwitchState(YaghotepState.DYING);
             return;
         }
-        _healthUIPool.OnHitTarget(transform, health, maxHealth);
+        _healthUIPool.OnHitBoss(health, maxHealth);
         animateMesh.HitFlash();
     }
 
