@@ -4,37 +4,91 @@ using UnityEngine;
 
 public class AnimateMesh : MonoBehaviour
 {
-    [SerializeField]private Renderer[] _renderers;
-
-    private bool setEmission = false;
     private Color CurrentEmissionColor => currentTimeEmissionColor + currentHitFlashEmissionColor;
 
+    public Renderer[] _renderers;
+    public TimeObject timeObject;
     [Space(10)]
     [Header("Debug")]
+    public bool setEmission = false;
     public bool hitFlashAnimate = false;
     public bool timeFlashAnimate = false;
     public float timeFlashAnimateTimeScale = 1f;
-    
     public float timeScale = 1f;
-    public void SetTimeScale(float timeScale_)
+
+    [Header("Time Animation Settings")]
+    [Range(0f, 1f)]
+    public float timeAnimationDuration = 0.1f;
+    public Color timeEmissionColor;
+    public Color currentTimeEmissionColor = Color.black;
+    private Sequence _timeSequence;
+    public void TimeFlash(float newTimeScale)
     {
-        DOTween.To(
-            () => this.timeScale,
-            x =>
-            {
-                this.timeScale = x;
-                if (_timeSequence != null && _timeSequence.IsActive() && _timeSequence.IsPlaying())
-                {
-                    _timeSequence.timeScale = this.timeScale;
-                }
-                if (_hitFlashSequence != null && _hitFlashSequence.IsActive() && _hitFlashSequence.IsPlaying())
-                {
-                    _hitFlashSequence.timeScale = this.timeScale;
-                }
-            },
-            timeScale_,
-            1f
-        ).SetEase(Ease.Linear);
+        if (_timeSequence != null && _timeSequence.IsActive() && _timeSequence.IsPlaying())
+        {
+            _timeSequence.Kill();
+        }
+        _timeSequence = DOTween.Sequence();
+        if (newTimeScale != 1f)
+        {
+            _timeSequence.Insert(
+                0f,
+                DOTween.To(
+                    () => currentTimeEmissionColor,
+                    x => {
+                        currentTimeEmissionColor = x;
+                        setEmission = true;
+                    },
+                    timeEmissionColor,
+                    timeAnimationDuration
+                )
+                .SetEase(Ease.InSine)
+            );
+        }
+        else
+        {
+            _timeSequence.Insert(
+                0f,
+                DOTween.To(
+                    () => currentTimeEmissionColor,
+                    x => {
+                        currentTimeEmissionColor = x;
+                        setEmission = true;
+                    },
+                    Color.black,
+                    timeAnimationDuration
+                )
+                .SetEase(Ease.OutSine)
+            );
+        }
+        _timeSequence.timeScale = timeScale;
+        _timeSequence.Play();
+    }
+
+    private void OnEnable()
+    {
+        if (timeObject != null)
+        {
+            timeObject.OnTimeScaleChanged += TimeFlash;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (timeObject != null)
+        {
+            timeObject.OnTimeScaleChanged -= TimeFlash;
+        }
+        if (_hitFlashSequence != null)
+        {
+            _hitFlashSequence.Kill();
+            _hitFlashSequence = null;
+        }
+        if (_timeSequence != null)
+        {
+            _timeSequence.Kill();
+            _timeSequence = null;
+        }
     }
 
 
@@ -94,55 +148,6 @@ public class AnimateMesh : MonoBehaviour
                 material.SetColor(GlobalConstants.MATERIAL_KEYWORD_EMISSION_COLOR, color);
             }
         }
-    }
-
-    [Header("Time Animation Settings")]
-    [Range(0f, 1f)]
-    public float timeAnimationDuration = 0.1f;
-    public Color timeEmissionColor;
-    public Color currentTimeEmissionColor = Color.black;
-    private Sequence _timeSequence;
-    public void TimeFlash(float newTimeScale)
-    {
-        if (_timeSequence != null && _timeSequence.IsActive() && _timeSequence.IsPlaying())
-        {
-            _timeSequence.Kill();
-        }
-        _timeSequence = DOTween.Sequence();
-        if (newTimeScale != 1f)
-        {
-            _timeSequence.Insert(
-                0f,
-                DOTween.To(
-                    () => currentTimeEmissionColor,
-                    x => {
-                        currentTimeEmissionColor = x;
-                        setEmission = true;
-                    },
-                    timeEmissionColor,
-                    timeAnimationDuration
-                )
-                .SetEase(Ease.InSine)
-            );
-        }
-        else
-        {
-            _timeSequence.Insert(
-                0f,
-                DOTween.To(
-                    () => currentTimeEmissionColor,
-                    x => {
-                        currentTimeEmissionColor = x;
-                        setEmission = true;
-                    },
-                    Color.black,
-                    timeAnimationDuration
-                )
-                .SetEase(Ease.OutSine)
-            );
-        }
-        _timeSequence.timeScale = timeScale;
-        _timeSequence.Play();
     }
 
 

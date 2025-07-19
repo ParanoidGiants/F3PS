@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimeObject : MonoBehaviour
@@ -8,6 +9,7 @@ public class TimeObject : MonoBehaviour
     public float additionalTimeScale = 1;
     public float ScaledDeltaTime => currentTimeScale * Time.deltaTime;
     public float ScaledFixedDeltaTime => currentTimeScale * Time.fixedDeltaTime;
+    public Action<float> OnTimeScaleChanged;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class TimeObject : MonoBehaviour
             return;
         }
         currentTimeScale = newTimeScale;
+        OnTimeScaleChanged?.Invoke(currentTimeScale);
     }
 
     public virtual void Deactivate()

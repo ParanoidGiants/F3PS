@@ -10,7 +10,6 @@ public class EnemyHealthUI : MonoBehaviour
     public GameObject bar;
     public Transform target;
     public Image fillImage;
-    public Vector2 offset;
     public bool isTargetSet = false;
     public float scaleAtMinDistance = 1.0f;
     public float scaleAtMaxDistance = 0.5f;
@@ -53,8 +52,7 @@ public class EnemyHealthUI : MonoBehaviour
         float scale = Mathf.Lerp(scaleAtMinDistance, scaleAtMaxDistance, t);
         _rectTransform.localScale = Vector3.one * scale;
 
-        Vector2 dynamicOffset = offset * scale * scale;
-        _rectTransform.anchoredPosition = GetCanvasAnchoredPosition(target.position) + dynamicOffset;
+        _rectTransform.anchoredPosition = GetCanvasAnchoredPosition(target.position);
     }
 
     public Vector2 GetCanvasAnchoredPosition(Vector3 worldPosition)

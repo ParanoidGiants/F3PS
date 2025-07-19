@@ -52,7 +52,7 @@ MonoBehaviour:
   bar: {fileID: 2612678252785743128}
   target: {fileID: 0}
   fillImage: {fileID: 2612678252885862609}
-  offset: {x: 0, y: 35}
+  offset: {x: 0, y: 0}
   isTargetSet: 0
   scaleAtMinDistance: 1
   scaleAtMaxDistance: 0.5

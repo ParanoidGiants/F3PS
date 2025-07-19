@@ -28,21 +28,6 @@ PrefabInstance:
       propertyPath: sensorController
       value: 
       objectReference: {fileID: 4642259828021586585}
-    - target: {fileID: 3284046647878532734, guid: a4e0f700ac9de474d840e34300ac39d1,
-        type: 3}
-      propertyPath: eyes
-      value: 
-      objectReference: {fileID: 8523392502306028658}
-    - target: {fileID: 3752928452022811528, guid: a4e0f700ac9de474d840e34300ac39d1,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 16.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3752928452022811528, guid: a4e0f700ac9de474d840e34300ac39d1,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 157.7
-      objectReference: {fileID: 0}
     - target: {fileID: 4229273190856824870, guid: a4e0f700ac9de474d840e34300ac39d1,
         type: 3}
       propertyPath: m_Name
@@ -105,6 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1083888159797312526, guid: a4e0f700ac9de474d840e34300ac39d1, type: 3}
+    - {fileID: 8641079181092434539, guid: a4e0f700ac9de474d840e34300ac39d1, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6902320052261013271, guid: a4e0f700ac9de474d840e34300ac39d1, type: 3}
     m_AddedGameObjects: []
@@ -182,9 +168,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a291656140da1b742b91e00efdb33094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8523392502306028658 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5436815383935402053, guid: a4e0f700ac9de474d840e34300ac39d1,
-    type: 3}
-  m_PrefabInstance: {fileID: 4411942805479685175}
-  m_PrefabAsset: {fileID: 0}
