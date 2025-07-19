@@ -5811,7 +5811,7 @@ MonoBehaviour:
     Enabled: 1
     CollisionFilter:
       serializedVersion: 2
-      m_Bits: 1
+      m_Bits: 513
     IgnoreTag: 
     CameraRadius: 0.001
     DampingIntoCollision: 0.05
@@ -7094,6 +7094,9 @@ MonoBehaviour:
   _targetYaw: 0
   _lookYaw: 0
   _lastInputDirection: {x: 0, y: 0, z: 0}
+  noDamageAfterHitDuration: 0
+  noDamageAfterHitTime: 0
+  wasHitAndIsInvincibleForTime: 0
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   FootstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
@@ -7248,7 +7251,7 @@ MonoBehaviour:
   hitFlashEmissionColor: {r: 1, g: 0, b: 0, a: 1}
   currentHitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 1}
   hitFlashEaseInAnimationDuration: 1
-  hitFlashEaseOutAnimationDuration: 1
+  hitFlashEaseOutAnimationDuration: 2
   hitFlashEaseIn: 14
   hitFlashEaseOut: 15
 --- !u!1 &3162939690903502731

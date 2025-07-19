@@ -722,7 +722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpAttack:
     attackState: 0
-    _selectedTarget: {fileID: 0}
+    _sensorController: {fileID: 0}
     _hasLanded: 0
     scaledDeltaTime: 0
     anticipationTime: 0
@@ -742,7 +742,7 @@ MonoBehaviour:
       type: 2}
     jumpDistance: 8
     jumpHeight: 15
-    attackDistance: 5
+    attackDistance: 10
     anticipationRotationSpeed: 360
     coolDownTime: 0
     coolDownDuration: 1
@@ -763,6 +763,7 @@ MonoBehaviour:
   lastPosition: {x: 0, y: 0, z: 0}
   debugIsStopped: 0
   debugStoppingDistance: 0
+  currentAttackPhase: 0
   animator: {fileID: 3815326507004596890}
   navMeshAgent: {fileID: 5973231540840446235}
   patrolManager: {fileID: 530893263447620679}
@@ -789,7 +790,6 @@ MonoBehaviour:
   dieTime: 0
   fadeOutDuration: 2
   stoppingDistanceState: 2
-  _selectedTarget: {fileID: 0}
   aggressiveMoveSpeed: 10
   aggressiveRotationSpeed: 360
   stoppingDistancePushBack: 15
@@ -798,9 +798,9 @@ MonoBehaviour:
   currentAttackType: 0
   attackProjectileDistance: 30
   spawnAttack:
+    _sensorController: {fileID: 0}
     spawnedMinions: []
     attackState: 0
-    _selectedTarget: {fileID: 0}
     scaledDeltaTime: 0
     anticipationTime: 0
     recoveryTime: 0
@@ -812,15 +812,15 @@ MonoBehaviour:
     recoveryAnimationClip: {fileID: 7400000, guid: 6a13aa82d3dacd34e945120be496dc4e,
       type: 2}
     anticipationRotationSpeed: 360
-    coolDownDuration: 1
+    coolDownDuration: 10
     projectileSpreadAngle: 5
     projectileSpeed: 30
     projectileGravityScale: 8
     additionalShootPitch: 30
-    projectileCount: 5
+    projectileCount: 2
     maximumMinionCount: 10
   formationAttack:
-    _selectedTarget: {fileID: 0}
+    sensorController: {fileID: 0}
     attackState: 0
     scaledDeltaTime: 0
     timeScale: 1
@@ -1847,6 +1847,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -1.6419356
       objectReference: {fileID: 0}
+    - target: {fileID: -7790348871499237031, guid: 8eba572ebd0411d498ea187662b3aaef,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2bc3e233a6e054c44ae0f9102dbfe11b, type: 2}
     - target: {fileID: -7135753153473025331, guid: 8eba572ebd0411d498ea187662b3aaef,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2152,6 +2157,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -171.92136
       objectReference: {fileID: 0}
+    - target: {fileID: 1630794972795428178, guid: 8eba572ebd0411d498ea187662b3aaef,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2bc3e233a6e054c44ae0f9102dbfe11b, type: 2}
     - target: {fileID: 2491007114822520937, guid: 8eba572ebd0411d498ea187662b3aaef,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2242,6 +2252,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.015722321
       objectReference: {fileID: 0}
+    - target: {fileID: 5641428554444008150, guid: 8eba572ebd0411d498ea187662b3aaef,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2bc3e233a6e054c44ae0f9102dbfe11b, type: 2}
     - target: {fileID: 5958889531891478246, guid: 8eba572ebd0411d498ea187662b3aaef,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2514,22 +2529,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderers:
   - {fileID: 3025277616347751610}
+  - {fileID: 5254591398844797356}
   hitFlashAnimate: 0
   timeFlashAnimate: 0
   timeFlashAnimateTimeScale: 1
   timeScale: 1
   timeAnimationDuration: 0.1
-  timeEmissionColor: {r: 0, g: 0, b: 0, a: 0}
+  timeEmissionColor: {r: 0, g: 0.85274386, b: 1, a: 0}
   currentTimeEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-  hitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 0}
+  hitFlashEmissionColor: {r: 1, g: 0, b: 0, a: 0}
   currentHitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-  hitFlashEaseInAnimationDuration: 0
-  hitFlashEaseOutAnimationDuration: 0
+  hitFlashEaseInAnimationDuration: 0.1
+  hitFlashEaseOutAnimationDuration: 0.2
   hitFlashEaseIn: 0
   hitFlashEaseOut: 0
 --- !u!4 &4094044641195892227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8eba572ebd0411d498ea187662b3aaef,
+    type: 3}
+  m_PrefabInstance: {fileID: 4565047576494078440}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5254591398844797356 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8626154274752587844, guid: 8eba572ebd0411d498ea187662b3aaef,
     type: 3}
   m_PrefabInstance: {fileID: 4565047576494078440}
   m_PrefabAsset: {fileID: 0}
