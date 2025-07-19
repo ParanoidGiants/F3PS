@@ -37,6 +37,7 @@ public class SkillManager : MonoBehaviour
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
         SetActiveSkill(PlayerData.ActiveSkill);
+        PlayerEventController.SetActiveSkill(PlayerData.ActiveSkill);
     }
 
     public void OnUpdate()

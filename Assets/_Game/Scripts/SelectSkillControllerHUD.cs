@@ -26,7 +26,6 @@ public class SelectSkillControllerHUD : MonoBehaviour
 
     private void Awake()
     {
-
         foreach (var skillHud in skillHuds)
         {
             skillHud.gameObject.SetActive(false);
@@ -66,11 +65,6 @@ public class SelectSkillControllerHUD : MonoBehaviour
     private void UnlockHud(Skill skill)
     {
         var skillHud = skillHuds.FirstOrDefault(x => x.skillType == skill);
-        if (skillHud == null)
-        {
-            Debug.LogError("Skill HUD does not exists for " + skill);
-            return;
-        }
         skillHud.gameObject.SetActive(true);
         activeSkillHuds = activeSkillHuds.Append(skillHud).ToArray();
         skillHud.Deselect();

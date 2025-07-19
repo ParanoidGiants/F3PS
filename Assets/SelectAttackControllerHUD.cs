@@ -23,7 +23,7 @@ public class SelectAttackControllerHUD : MonoBehaviour
         PlayerEventController.OnAttackUnlocked -= UnlockHud;
     }
 
-    public void Start()
+    public void Awake()
     {
         foreach (var attackHud in attackHuds)
         {
@@ -65,7 +65,6 @@ public class SelectAttackControllerHUD : MonoBehaviour
         var attackHud = Array.Find(attackHuds, x => x.attackType == attack);
         if (attackHud == null)
         {
-            Debug.LogWarning($"Attack HUD for {attack} not found.");
             return;
         }
         attackHud.gameObject.SetActive(true);

@@ -13,7 +13,6 @@ public class PlayerEventController
     public event Action OnStaminaUnlocked;
     public void UnlockStamina()
     {
-        UnityEngine.Debug.Log("Stamina Unlocked");
         OnStaminaUnlocked?.Invoke();
     }
 
@@ -86,7 +85,6 @@ public class PlayerEventController
     {
         if (Data.UnlockedSkills.Contains(skill))
         {
-            UnityEngine.Debug.LogError(skill + " is already unlocked.");
             return;
         }
         OnSkillUnlocked?.Invoke(skill);
