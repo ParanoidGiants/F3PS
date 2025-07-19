@@ -19,6 +19,7 @@ public class YaghotepJumpAttack
     public Vector3 startPos;
     public Vector3 endPos;
     public Vector3 landingPosition;
+    public float timeScale = 1f;
 
     [Space(10)]
     [Header("References")]
@@ -46,17 +47,18 @@ public class YaghotepJumpAttack
     [Space(10)]
     public float fallTime;
     public float fallDuration;
+    [Space(10)]
+    public int shockWaveDamage;
+    public float shockWaveExpansionSpeed;
+    public float shockWaveThickness;
+    public float shockWaveMaxRadius;
+
 
     public void Init(Animator animator, NavMeshAgent navMeshAgent)
     {
         _animator = animator;
         _navMeshAgent = navMeshAgent;
         _transform = navMeshAgent.transform;
-    }
-
-    public void SetScaledDeltaTime(float value)
-    {
-        scaledDeltaTime = value;
     }
 
     public void HandleJumpAttackProcedure()
@@ -149,10 +151,20 @@ public class YaghotepJumpAttack
                 recoveryTime += scaledDeltaTime;
                 if (recoveryTime >= recoveryAnimationClip.length)
                 {
+                    // Spawn shockwave
+                    donutShockwave.StartShockwave(
+                        landingPosition,
+                        shockWaveDamage,
+                        shockWaveExpansionSpeed,
+                        shockWaveThickness,
+                        shockWaveMaxRadius,
+                        timeScale
+                    );
                     attackState = YaghotepAttackState.NONE;
                     _navMeshAgent.Warp(landingPosition);
                     _navMeshAgent.updatePosition = true;
                     _navMeshAgent.updateRotation = true;
+                    coolDownTime = 0f;
                 }
                 break;
             default:

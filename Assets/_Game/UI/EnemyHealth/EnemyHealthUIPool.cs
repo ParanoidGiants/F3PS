@@ -8,12 +8,7 @@ namespace F3PS.Enemy.UI
     public class EnemyHealthUIPool : MonoBehaviour
     {
         public GameObject healthUIPrefab;
-        public Dictionary<Transform, EnemyHealthUI> healthUIs;
-
-        private void Start()
-        {
-            healthUIs = new Dictionary<Transform, EnemyHealthUI>();
-        }
+        public Dictionary<Transform, EnemyHealthUI> healthUIs = new Dictionary<Transform, EnemyHealthUI>();
 
         public void CreateEnemyHealthUI(Transform target)
         {
