@@ -84,7 +84,6 @@ public class ScorpionController : MonoBehaviour
 
     [Space(10)]
     [Header("Aggressive Settings")]
-    public Hittable _selectedTarget;
     public float aggressiveMoveSpeed = 0f;
     public float rotationSpeed;
     public float stoppingDistanceStay = 3f;
@@ -96,6 +95,7 @@ public class ScorpionController : MonoBehaviour
     public float coolDownDuration;
     public bool hitTargetEarly = false;
     public Vector3 _attackForward;
+    public Vector3 lastTargetPosition;
 
     [Header("Attack Anticipation")]
     public float attackAnticipationTime = 0f;
@@ -201,33 +201,15 @@ public class ScorpionController : MonoBehaviour
 
     private void ExitState(ScorpionState currentState)
     {
-        switch (currentState)
+        if (currentState is ScorpionState.AGGRESSIVE)
         {
-            case ScorpionState.IDLE:
-                break;
-            case ScorpionState.PATROLLING:
-                break;
-            case ScorpionState.AGGRESSIVE:
-                navMeshAgent.angularSpeed = 1000;
-                break;
-            case ScorpionState.CHECKING:
-                break;
-            case ScorpionState.SUSPICIOUS:
-                break;
-            case ScorpionState.RETURN_TO_IDLE:
-                break;
-            case ScorpionState.HIT:
-                break;
-            case ScorpionState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
+            navMeshAgent.angularSpeed = 1000;
         }
     }
 
     private void FixedUpdate()
     {
-        if (currentState != ScorpionState.DYING && currentState != ScorpionState.AGGRESSIVE && sensorController.IsTargetDetected())
+        if (currentState != ScorpionState.DYING && currentState != ScorpionState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(ScorpionState.AGGRESSIVE);
         }
@@ -261,15 +243,14 @@ public class ScorpionController : MonoBehaviour
                     return;
                 }
 
-                bool hasTarget = sensorController.IsTargetDetected();
-                if (!hasTarget)
+                if (!sensorController.HasTarget())
                 {
                     SwitchState(ScorpionState.CHECKING);
                     return;
                 }
 
-                _selectedTarget = sensorController.GetTargetFromSensors();
-                HandleAggressiveStoppingDistance();
+                lastTargetPosition = sensorController.GetTargetFromSensors().Center();
+                HandleAggressiveStoppingDistance(lastTargetPosition);
 
                 var canAttack = coolDownTime >= coolDownDuration && Helper.HasReachedDestination(navMeshAgent);
                 if (!canAttack)
@@ -278,7 +259,7 @@ public class ScorpionController : MonoBehaviour
                     break;
                 }
 
-                var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
+                var targetDirection = (lastTargetPosition - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
 
                 if (isAlignedWithTarget)
@@ -362,7 +343,12 @@ public class ScorpionController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case ScorpionAttackState.ANTICIPATION:
-                var lookDirection = _selectedTarget.Center() - transform.position;
+                var targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                }
+                var lookDirection = targetPosition - transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, transform.up);
                 transform.rotation = Quaternion.RotateTowards(
@@ -453,9 +439,9 @@ public class ScorpionController : MonoBehaviour
         }
     }
 
-    private void HandleAggressiveStoppingDistance()
+    private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
-        var toTarget = _selectedTarget.Center() - transform.position;
+        var toTarget = targetPosition - transform.position;
         var distanceToTarget = toTarget.magnitude;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * ScaledDeltaTime);
@@ -465,28 +451,20 @@ public class ScorpionController : MonoBehaviour
             return;
         }
 
-        else if (_selectedTarget == null)
+        if (distanceToTarget <= stoppingDistanceStay)
         {
-            Debug.LogWarning("Selected target is null, cannot handle aggressive stopping distance.");
-            return;
+            var fleeDirection = -lookDirection;
+            var ray = new Ray(transform.position, fleeDirection);
+            Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
+            var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
+            var fleeDestination = transform.position + fleeDirection * distance;
+            navMeshAgent.stoppingDistance = 0f;
+            navMeshAgent.destination = fleeDestination;
         }
         else
         {
-            if (distanceToTarget <= stoppingDistanceStay)
-            {
-                var fleeDirection = -lookDirection;
-                var ray = new Ray(transform.position, fleeDirection);
-                Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
-                var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
-                var fleeDestination = transform.position + fleeDirection * distance;
-                navMeshAgent.stoppingDistance = 0f;
-                navMeshAgent.destination = fleeDestination;
-            }
-            else
-            {
-                navMeshAgent.stoppingDistance = stoppingDistanceFollow;
-                navMeshAgent.destination = _selectedTarget.Center();
-            }
+            navMeshAgent.stoppingDistance = stoppingDistanceFollow;
+            navMeshAgent.destination = targetPosition;
         }
     }
 

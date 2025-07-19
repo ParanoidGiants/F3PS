@@ -90,7 +90,6 @@ public class YaggiSpitterController : MonoBehaviour
     [Space(10)]
     [Header("Aggressive Settings")]
     public YaggiSpitterStoppingDistanceState stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
-    public Hittable _selectedTarget;
     public float aggressiveMoveSpeed = 0f;
     public float aggressiveRotationSpeed;
     public float stoppingDistancePushBack = 3f;
@@ -126,7 +125,7 @@ public class YaggiSpitterController : MonoBehaviour
     public EnemyHealthUIPool _healthUIPool;
     public YaggiSpitterState currentState = YaggiSpitterState.IDLE;
     public bool isDead = false;
-    private Vector3 lastPosition;
+    private Vector3 lastTargetPosition;
 
     protected void Awake()
     {
@@ -261,7 +260,7 @@ public class YaggiSpitterController : MonoBehaviour
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
 
-        if (currentState != YaggiSpitterState.DYING && currentState != YaggiSpitterState.AGGRESSIVE && sensorController.IsTargetDetected())
+        if (currentState != YaggiSpitterState.DYING && currentState != YaggiSpitterState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(YaggiSpitterState.AGGRESSIVE);
         }
@@ -294,18 +293,16 @@ public class YaggiSpitterController : MonoBehaviour
                     return;
                 }
 
-                bool hasTarget = sensorController.IsTargetDetected();
-                if (!hasTarget)
+                if (!sensorController.HasTarget())
                 {
                     SwitchState(YaggiSpitterState.CHECKING);
                     return;
                 }
-                _selectedTarget = sensorController.GetTargetFromSensors();
-                checkingDestination = _selectedTarget.Center();
+                lastTargetPosition = sensorController.GetTargetFromSensors().Center();
+                checkingDestination = lastTargetPosition;
+                HandleAggressiveStoppingDistance(lastTargetPosition);
 
-                HandleAggressiveStoppingDistance();
-
-                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, lastTargetPosition);
                 var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackProjectileDistance;
                 if (!canAttack)
                 {
@@ -313,7 +310,7 @@ public class YaggiSpitterController : MonoBehaviour
                     break;
                 }
 
-                var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
+                var targetDirection = (lastTargetPosition - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
                 if (isAlignedWithTarget)
                 {
@@ -388,7 +385,13 @@ public class YaggiSpitterController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case YaggiSpitterAttackState.ANTICIPATION:
-                var targetPosition = _selectedTarget.Center();
+                var targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                    lastTargetPosition = targetPosition;
+                }
+
                 var lookDirection = targetPosition - transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, transform.up);
@@ -451,9 +454,9 @@ public class YaggiSpitterController : MonoBehaviour
     }
 
 
-    private void HandleAggressiveStoppingDistance()
+    private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
-        var toTarget = _selectedTarget.Center() - transform.position;
+        var toTarget = targetPosition - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(
             transform.rotation,
@@ -468,12 +471,7 @@ public class YaggiSpitterController : MonoBehaviour
             return;
         }
 
-        if (_selectedTarget == null)
-        {
-            return;
-        }
-
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
         if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
@@ -505,7 +503,7 @@ public class YaggiSpitterController : MonoBehaviour
         {
             stoppingDistanceState = YaggiSpitterStoppingDistanceState.STAYING;
             navMeshAgent.isStopped = true;
-            navMeshAgent.destination = _selectedTarget.Center();
+            navMeshAgent.destination = lastTargetPosition;
             animator.SetFloat("Speed", 0f);
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.PUSHED)
@@ -519,7 +517,7 @@ public class YaggiSpitterController : MonoBehaviour
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.FOLLOWING)
         {
-            navMeshAgent.destination = _selectedTarget.Center();
+            navMeshAgent.destination = targetPosition;
         }
     }
 

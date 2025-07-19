@@ -9,13 +9,6 @@ namespace F3PS.Damage.Take
     {
         private ThirdPersonController _controller;
 
-        public Action<Hittable> OnDestroyed;
-
-        private void OnDestroy()
-        {
-            OnDestroyed?.Invoke(this);
-        }
-
         void Awake()
         {
             _controller = FindFirstObjectByType<ThirdPersonController>();

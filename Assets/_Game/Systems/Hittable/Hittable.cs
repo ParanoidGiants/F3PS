@@ -8,7 +8,9 @@ public class Hittable : MonoBehaviour
 
     [Header("Settings")]
     public float damageMultiplier;
-        
+
+    public event Action<Hittable> onDisabled;
+
     protected Collider _collider;
         
     public Vector3 Center()
@@ -21,5 +23,10 @@ public class Hittable : MonoBehaviour
     public bool IsOwner(int instanceId)
     {
         return owner.GetInstanceID() == instanceId;
+    }
+
+    private void OnDisable()
+    {
+        onDisabled?.Invoke(this);
     }
 }

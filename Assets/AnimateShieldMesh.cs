@@ -85,4 +85,14 @@ public class AnimateShieldMesh : Hittable
         _hitFlashSequence.timeScale = timeScale;
         _hitFlashSequence.Play();
     }
+
+    private void OnDisable()
+    {
+        if (_hitFlashSequence != null && _hitFlashSequence.IsActive() && _hitFlashSequence.IsPlaying())
+        {
+            _hitFlashSequence.Kill();
+        }
+        shieldTransform.localScale = _originalScale;
+        shieldRenderer.material.DisableKeyword("_EMISSION");
+    }
 }

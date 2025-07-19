@@ -55,6 +55,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
     private void OnDisable()
     {
         mesh.SetActive(true);
+
     }
 
     Transform _touchedTransform;

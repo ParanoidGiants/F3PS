@@ -1,3 +1,4 @@
+using F3PS.AI.Sensors;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,9 @@ public class YaghotepSpawnMinionsAttack
     private NavMeshAgent _navMeshAgent;
 
     [Header("Debug")]
+    public SensorController _sensorController;
     public List<GameObject> spawnedMinions; 
     public YaghotepAttackState attackState;
-    public Hittable _selectedTarget;
     public float scaledDeltaTime;
     public float anticipationTime;
     public float recoveryTime;
@@ -36,10 +37,16 @@ public class YaghotepSpawnMinionsAttack
     public int projectileCount;
     public int maximumMinionCount;
 
-    public void Init(Transform parent, Collider[] collidersThatShouldntBeHit, Animator animator, NavMeshAgent navMeshAgent)
-    {
+    public void Init(
+        Transform parent,
+        SensorController sensorController,
+        Collider[] collidersThatShouldntBeHit,
+        Animator animator,
+        NavMeshAgent navMeshAgent
+    ) {
         _animator = animator;
         _navMeshAgent = navMeshAgent;
+        _sensorController = sensorController;
 
         projectilePool.Init(parent);
 
@@ -64,7 +71,7 @@ public class YaghotepSpawnMinionsAttack
                 _animator.SetTrigger("ChargeSpawn");
                 break;
             case YaghotepAttackState.ANTICIPATION:
-                var targetPosition = _selectedTarget.Center();
+                var targetPosition = _sensorController.GetTargetFromSensors().Center();
                 var lookDirection = targetPosition - _navMeshAgent.transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, _navMeshAgent.transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, _navMeshAgent.transform.up);

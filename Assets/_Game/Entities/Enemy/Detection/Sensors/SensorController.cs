@@ -41,7 +41,7 @@ namespace F3PS.AI.Sensors
             }
         }
         
-        public virtual bool IsTargetDetected()
+        public virtual bool HasTarget()
         {
             if (state == SensorState.IDLE)
             {

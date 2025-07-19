@@ -40,7 +40,7 @@ namespace F3PS.AI.States
                 return;
             }
 
-            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.IsTargetDetected())
+            if (stateType != StateType.AGGRESSIVE && stateManager.sensorController.HasTarget())
             {
                 stateManager.SwitchState(StateType.AGGRESSIVE);
             }

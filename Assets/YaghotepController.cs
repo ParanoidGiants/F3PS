@@ -5,11 +5,20 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum YaghotepAttackPhase
+{
+    INTRO = 0,
+    PROGRESSION = 1,
+    TWIST = 2,
+    CONCLUSION = 3
+}
+
 public enum YaghotepAttackType
 {
     SPAWN,
     FORMATION,
-    JUMP
+    JUMP,
+    NONE
 }
 
 public enum YaghotepStoppingDistanceState
@@ -55,6 +64,7 @@ public class YaghotepController : MonoBehaviour
     public Vector3 lastPosition;
     public bool debugIsStopped;
     public float debugStoppingDistance;
+    public YaghotepAttackPhase currentAttackPhase = YaghotepAttackPhase.INTRO;
 
     [Header("References")]
     public Animator animator;
@@ -107,7 +117,6 @@ public class YaghotepController : MonoBehaviour
     [Space(10)]
     [Header("Aggressive Settings")]
     public YaghotepStoppingDistanceState stoppingDistanceState = YaghotepStoppingDistanceState.STAYING;
-    public Hittable _selectedTarget;
     public float aggressiveMoveSpeed = 0f;
     public float aggressiveRotationSpeed;
     public float stoppingDistancePushBack = 3f;
@@ -126,19 +135,26 @@ public class YaghotepController : MonoBehaviour
         var parent = transform.parent;
         spawnAttack.Init(
             parent,
+            sensorController,
             collidersThatShouldntBeHit,
             animator,
             navMeshAgent
         );
         formationAttack.Init(
             parent,
+            sensorController,
             collidersThatShouldntBeHit,
             animator,
             navMeshAgent,
             transform
         );
 
-        jumpAttack.Init(animator, navMeshAgent);
+        jumpAttack.Init(
+            sensorController,
+            animator,
+            navMeshAgent,
+            collidersThatShouldntBeHit
+        );
     }
 
     private void Start()
@@ -236,7 +252,7 @@ public class YaghotepController : MonoBehaviour
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
 
-        if (currentState != YaghotepState.DYING && currentState != YaghotepState.AGGRESSIVE && sensorController.IsTargetDetected())
+        if (currentState != YaghotepState.DYING && currentState != YaghotepState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(YaghotepState.AGGRESSIVE);
         }
@@ -335,7 +351,7 @@ public class YaghotepController : MonoBehaviour
         }
 
 
-        if (attackState is YaghotepAttackState.NONE && !sensorController.IsTargetDetected())
+        if (attackState is YaghotepAttackState.NONE && !sensorController.HasTarget())
         {
             SwitchState(YaghotepState.CHECKING);
             return;
@@ -346,14 +362,13 @@ public class YaghotepController : MonoBehaviour
             if (currentAttackType is YaghotepAttackType.SPAWN)
             {
                 spawnAttack.scaledDeltaTime = ScaledDeltaTime;
-                spawnAttack._selectedTarget = _selectedTarget;
                 spawnAttack.HandleSpawnAttackProcedure();
                 return;
             }
             else if (currentAttackType is YaghotepAttackType.FORMATION)
             {
                 formationAttack.scaledDeltaTime = ScaledDeltaTime;
-                formationAttack._selectedTarget = _selectedTarget;
+                formationAttack.timeScale = TimeScale;
                 formationAttack.HandleFormationAttackProcedure();
                 return;
             }
@@ -361,7 +376,6 @@ public class YaghotepController : MonoBehaviour
             {
                 jumpAttack.scaledDeltaTime = ScaledDeltaTime;
                 jumpAttack.timeScale = TimeScale;
-                jumpAttack._selectedTarget = _selectedTarget;
                 jumpAttack.HandleJumpAttackProcedure();
                 return;
             }
@@ -372,29 +386,14 @@ public class YaghotepController : MonoBehaviour
         }
 
 
-        _selectedTarget = sensorController.GetTargetFromSensors();
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
-        checkingDestination = _selectedTarget.Center();
+        var selectedTarget = sensorController.GetTargetFromSensors();
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, selectedTarget.Center());
+        checkingDestination = selectedTarget.Center();
 
         HandleAggressiveStoppingDistance();
 
-
-
-        if (spawnAttack.AreAllMinionsDead())
-        {
-            currentAttackType = YaghotepAttackType.SPAWN;
-        }
-        else if (spawnAttack.HasReachedMaximumMinions())
-        {
-            if (distanceToTarget <= jumpAttack.attackDistance)
-            {
-                currentAttackType = YaghotepAttackType.JUMP;
-            }
-            else
-            {
-                currentAttackType = YaghotepAttackType.FORMATION;
-            }
-        }
+        DetermineAttackPhase();
+        DetermineAttackType(distanceToTarget);
 
 
         switch (currentAttackType)
@@ -411,13 +410,15 @@ public class YaghotepController : MonoBehaviour
                 jumpAttack.scaledDeltaTime = ScaledDeltaTime;
                 jumpAttack.UpdateCoolDown();
                 break;
+            case YaghotepAttackType.NONE:
+                break;
             default:
                 Debug.LogError($"Unknown attack type: {currentAttackType}");
                 return;
 
         }
 
-        var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
+        var targetDirection = (selectedTarget.Center() - transform.position).normalized;
         bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
         if (!isAlignedWithTarget)
         {
@@ -438,9 +439,105 @@ public class YaghotepController : MonoBehaviour
         }
     }
 
+    private void DetermineAttackPhase()
+    {
+        if (health <= 0.25f * maxHealth && currentAttackPhase is YaghotepAttackPhase.TWIST)
+        {
+            currentAttackPhase = YaghotepAttackPhase.CONCLUSION;
+            navMeshAgent.speed = 2f * aggressiveMoveSpeed;
+            spawnAttack.projectileCount = 7;
+
+            jumpAttack.jumpUpDuration = 0.5f;
+            jumpAttack.stayInMidAirDuration = 0.25f;
+            jumpAttack.fallDuration = 0.1f;
+            jumpAttack.shockWaveExpansionSpeed = 30f;
+            jumpAttack.attackDistance *= 2f;
+            jumpAttack.jumpDistance *= 2f;
+        }
+        else if (health <= 0.5f * maxHealth && currentAttackPhase is YaghotepAttackPhase.PROGRESSION)
+        {
+            currentAttackPhase = YaghotepAttackPhase.TWIST;
+            navMeshAgent.speed = 1.5f * aggressiveMoveSpeed;
+            spawnAttack.projectileCount += 2;
+        }
+        else if (health <= 0.75f * maxHealth && currentAttackPhase is YaghotepAttackPhase.INTRO)
+        {
+            currentAttackPhase = YaghotepAttackPhase.PROGRESSION;
+            navMeshAgent.speed = 1.25f * aggressiveMoveSpeed;
+            spawnAttack.projectileCount += 1;
+            spawnAttack.coolDownDuration -= 2f;
+        }
+    }
+
+    private void DetermineAttackType(float distanceToTarget)
+    {
+        switch (currentAttackPhase)
+        {
+            case YaghotepAttackPhase.INTRO:
+                if (!spawnAttack.HasReachedMaximumMinions() && currentAttackType is YaghotepAttackType.SPAWN
+                    || spawnAttack.AreAllMinionsDead())
+                {
+                    currentAttackType = YaghotepAttackType.SPAWN;
+                }
+                else
+                {
+                    currentAttackType = YaghotepAttackType.NONE;
+                }
+                break;
+            case YaghotepAttackPhase.PROGRESSION:
+                if (distanceToTarget <= jumpAttack.attackDistance)
+                {
+                    currentAttackType = YaghotepAttackType.JUMP;
+                }
+                else if (!spawnAttack.HasReachedMaximumMinions() && currentAttackType is YaghotepAttackType.SPAWN
+                    || spawnAttack.AreAllMinionsDead())
+                {
+                    currentAttackType = YaghotepAttackType.SPAWN;
+                }
+                else
+                {
+                    currentAttackType = YaghotepAttackType.NONE;
+                }
+                break;
+            case YaghotepAttackPhase.TWIST:
+                if (distanceToTarget <= jumpAttack.attackDistance)
+                {
+                    currentAttackType = YaghotepAttackType.JUMP;
+                }
+                else if (!spawnAttack.HasReachedMaximumMinions() && currentAttackType is YaghotepAttackType.SPAWN
+                    || spawnAttack.AreAllMinionsDead())
+                {
+                    currentAttackType = YaghotepAttackType.SPAWN;
+                }
+                else
+                {
+                    currentAttackType = YaghotepAttackType.FORMATION;
+                }
+                break;
+            case YaghotepAttackPhase.CONCLUSION:
+                if (distanceToTarget <= jumpAttack.attackDistance)
+                {
+                    currentAttackType = YaghotepAttackType.JUMP;
+                }
+                else if (!spawnAttack.HasReachedMaximumMinions() && currentAttackType is YaghotepAttackType.SPAWN
+                    || spawnAttack.AreAllMinionsDead())
+                {
+                    currentAttackType = YaghotepAttackType.SPAWN;
+                }
+                else
+                {
+                    currentAttackType = YaghotepAttackType.FORMATION;
+                }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(currentAttackPhase), currentAttackPhase, null);
+        }
+    }
+
     private void HandleAggressiveStoppingDistance()
     {
-        var toTarget = _selectedTarget.Center() - transform.position;
+        var selectedTarget = sensorController.GetTargetFromSensors();
+        var toTarget = selectedTarget.Center() - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(
             transform.rotation,
@@ -455,16 +552,16 @@ public class YaghotepController : MonoBehaviour
             return;
         }
 
-        if (_selectedTarget == null)
+        if (selectedTarget == null)
         {
             return;
         }
 
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, selectedTarget.Center());
         if (stoppingDistanceState == YaghotepStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, _selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, selectedTarget.Center());
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.STAYING
             && distanceToTarget < stoppingDistancePushBack)
@@ -482,7 +579,7 @@ public class YaghotepController : MonoBehaviour
             && distanceToTarget > stoppingDistanceStay
         )
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.STAYING, _selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.STAYING, selectedTarget.Center());
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.PUSHED)
         {
@@ -495,7 +592,7 @@ public class YaghotepController : MonoBehaviour
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.FOLLOWING)
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, _selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, selectedTarget.Center());
         }
     }
 

@@ -1,3 +1,4 @@
+using F3PS.AI.Sensors;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,9 +11,10 @@ public class YaghotepFormationAttack
     private Transform _transform;
 
     [Header("Debug")]
-    public Hittable _selectedTarget;
+    public SensorController sensorController;
     public YaghotepAttackState attackState;
     public float scaledDeltaTime;
+    public float timeScale = 1f;
     public float anticipationTime;
     public float executionTime;
     public int executionCount;
@@ -21,6 +23,7 @@ public class YaghotepFormationAttack
 
     [Space(10)]
     [Header("References")]
+    public PlayMuzzle playMuzzle;
     public Transform projectileSpawnPoint;
     public ObjectPool projectilePool;
     public AnimationClip anticipationAnimationClip;
@@ -35,12 +38,21 @@ public class YaghotepFormationAttack
     public float formationRadius;
     public float projectileSpeed;
     public float projectileGravityScale;
+    private Vector3 lastTargetPosition;
 
-    public void Init(Transform parent, Collider[] collidersThatShouldntBeHit, Animator animator, NavMeshAgent navMeshAgent, Transform transform)
+    public void Init(
+        Transform parent,
+        SensorController sensorController,
+        Collider[] collidersThatShouldntBeHit,
+        Animator animator,
+        NavMeshAgent navMeshAgent,
+        Transform transform
+    )
     {
         _animator = animator;
         _navMeshAgent = navMeshAgent;
         _transform = transform;
+        this.sensorController = sensorController;
 
         projectilePool.Init(parent);
 
@@ -69,7 +81,18 @@ public class YaghotepFormationAttack
                 _animator.SetTrigger("ChargeFormation");
                 break;
             case YaghotepAttackState.ANTICIPATION:
-                targetPosition = _selectedTarget.Center();
+                targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                    lastTargetPosition = targetPosition;
+                }
+                targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                    lastTargetPosition = targetPosition;
+                }
                 lookDirection = targetPosition - _navMeshAgent.transform.position;
                 newForward = Vector3.ProjectOnPlane(lookDirection, _navMeshAgent.transform.up);
                 newRotation = Quaternion.LookRotation(newForward, _navMeshAgent.transform.up);
@@ -96,7 +119,12 @@ public class YaghotepFormationAttack
                     _animator.SetTrigger("Recover");
                     return;
                 }
-                targetPosition = _selectedTarget.Center();
+                targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                    lastTargetPosition = targetPosition;
+                }
                 lookDirection = targetPosition - _navMeshAgent.transform.position;
                 newForward = Vector3.ProjectOnPlane(lookDirection, _navMeshAgent.transform.up);
                 newRotation = Quaternion.LookRotation(newForward, _navMeshAgent.transform.up);
@@ -112,6 +140,7 @@ public class YaghotepFormationAttack
 
                 float angleStep = 360f / projectileCount;
                 var right = Vector3.Cross(forward, Vector3.up).normalized;
+                playMuzzle.Play(timeScale);
                 for (int i = 0; i < projectileCount; i++)
                 {
                     float angle = i * angleStep;

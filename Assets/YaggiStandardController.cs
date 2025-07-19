@@ -94,12 +94,13 @@ public class YaggiStandardController : MonoBehaviour
     [Space(10)]
     [Header("Aggressive Settings")]
     public YaggiStandardStoppingDistanceState stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
-    public Hittable _selectedTarget;
     public float aggressiveMoveSpeed = 0f;
     public float aggressiveRotationSpeed;
     public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
+    public Vector3 lastTargetPosition = Vector3.zero;
+
     [Header("Attack")]
     public Vector3 _attackForward;
     public YaggiStandardAttackState attackState = YaggiStandardAttackState.NONE;
@@ -249,7 +250,7 @@ public class YaggiStandardController : MonoBehaviour
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
 
-        if (currentState != YaggiStandardState.DYING && currentState != YaggiStandardState.AGGRESSIVE && sensorController.IsTargetDetected())
+        if (currentState != YaggiStandardState.DYING && currentState != YaggiStandardState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(YaggiStandardState.AGGRESSIVE);
         }
@@ -282,18 +283,17 @@ public class YaggiStandardController : MonoBehaviour
                     return;
                 }
 
-                bool hasTarget = sensorController.IsTargetDetected();
-                if (!hasTarget)
+                if (!sensorController.HasTarget())
                 {
                     SwitchState(YaggiStandardState.CHECKING);
                     return;
                 }
-                _selectedTarget = sensorController.GetTargetFromSensors();
-                checkingDestination = _selectedTarget.Center();
+                lastTargetPosition = sensorController.GetTargetFromSensors().Center();
+                checkingDestination = lastTargetPosition;
 
-                HandleAggressiveStoppingDistance();
+                HandleAggressiveStoppingDistance(lastTargetPosition);
 
-                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+                var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, lastTargetPosition);
                 var canAttack = coolDownTime >= coolDownDuration && distanceToTarget <= attackExecutionDistance;
                 if (!canAttack)
                 {
@@ -301,7 +301,7 @@ public class YaggiStandardController : MonoBehaviour
                     break;
                 }
 
-                var targetDirection = (_selectedTarget.Center() - transform.position).normalized;
+                var targetDirection = (lastTargetPosition - transform.position).normalized;
                 bool isAlignedWithTarget = Helper.IsOrientedOnXZ(transform.forward, targetDirection, 0.01f);
                 if (isAlignedWithTarget)
                 {
@@ -379,7 +379,13 @@ public class YaggiStandardController : MonoBehaviour
                 animator.SetTrigger("Charge");
                 break;
             case YaggiStandardAttackState.ANTICIPATION:
-                var lookDirection = _selectedTarget.Center() - transform.position;
+                var targetPosition = lastTargetPosition;
+                if (sensorController.HasTarget())
+                {
+                    targetPosition = sensorController.GetTargetFromSensors().Center();
+                    lastTargetPosition = targetPosition;
+                }
+                var lookDirection = targetPosition - transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, transform.up);
                 transform.rotation = Quaternion.RotateTowards(
@@ -434,9 +440,9 @@ public class YaggiStandardController : MonoBehaviour
     }
 
 
-    private void HandleAggressiveStoppingDistance()
+    private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
-        var toTarget = _selectedTarget.Center() - transform.position;
+        var toTarget = targetPosition - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(
             transform.rotation,
@@ -445,18 +451,13 @@ public class YaggiStandardController : MonoBehaviour
         );
 
 
-        if (!sensorController.IsTargetInLineOfSight())
+        if (!sensorController.IsTargetInLineOfSight() || !sensorController.HasTarget())
         {
             navMeshAgent.stoppingDistance = 0;
             return;
         }
 
-        if (_selectedTarget == null)
-        {
-            return;
-        }
-
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, _selectedTarget.Center());
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
         if (stoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
@@ -487,7 +488,7 @@ public class YaggiStandardController : MonoBehaviour
         ) {
             stoppingDistanceState = YaggiStandardStoppingDistanceState.STAYING;
             navMeshAgent.isStopped = true;
-            navMeshAgent.destination = _selectedTarget.Center();
+            navMeshAgent.destination = targetPosition;
             animator.SetFloat("Speed", 0f);
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED)
@@ -501,7 +502,7 @@ public class YaggiStandardController : MonoBehaviour
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING)
         {
-            navMeshAgent.destination = _selectedTarget.Center();
+            navMeshAgent.destination = targetPosition;
         }
     }
 

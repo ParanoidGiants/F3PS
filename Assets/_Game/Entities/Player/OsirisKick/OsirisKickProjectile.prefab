@@ -645,6 +645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36493b538b6d5ad459fa69e910dfa0ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _physicsTimeObject: {fileID: 0}
   hitParticleSystem: {fileID: 8767138684050436427}
   mesh: {fileID: 3210354824842243319}
   owner: {fileID: 0}
@@ -698,7 +699,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   useGravity: 1
   defaultMass: 0
-  gravityScale: 1
+  gravityScale: 0
   currentTimeScale: 1
   isTimeFrozen: 0
   isMovingByThotMind: 0

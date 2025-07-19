@@ -60,7 +60,7 @@ namespace F3PS.AI.States
                 return;
             }
             
-            bool hasTarget = stateManager.sensorController.IsTargetDetected();
+            bool hasTarget = stateManager.sensorController.HasTarget();
             if (!hasTarget)
             {
                 stateManager.SwitchState(StateType.CHECKING);
@@ -86,7 +86,7 @@ namespace F3PS.AI.States
             }
             
             if (_currentAttack.isActive
-                || !stateManager.sensorController.IsTargetDetected()
+                || !stateManager.sensorController.HasTarget()
                 || !_selectedTarget
             )
                 return;

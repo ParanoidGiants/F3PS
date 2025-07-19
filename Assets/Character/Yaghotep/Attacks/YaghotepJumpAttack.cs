@@ -1,3 +1,4 @@
+using F3PS.AI.Sensors;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,7 +12,7 @@ public class YaghotepJumpAttack
 
     [Header("Debug")]
     public YaghotepAttackState attackState;
-    public Hittable _selectedTarget;
+    public SensorController _sensorController;
     public bool _hasLanded;
     public float scaledDeltaTime;
     public float anticipationTime;
@@ -54,11 +55,18 @@ public class YaghotepJumpAttack
     public float shockWaveMaxRadius;
 
 
-    public void Init(Animator animator, NavMeshAgent navMeshAgent)
+    public void Init(
+        SensorController sensorController,
+        Animator animator,
+        NavMeshAgent navMeshAgent,
+        Collider[] collidersToIgnore
+    )
     {
+        _sensorController = sensorController;
         _animator = animator;
         _navMeshAgent = navMeshAgent;
         _transform = navMeshAgent.transform;
+        donutShockwave.Init(collidersToIgnore);
     }
 
     public void HandleJumpAttackProcedure()
@@ -79,7 +87,7 @@ public class YaghotepJumpAttack
                 _animator.SetTrigger("ChargeJump");
                 break;
             case YaghotepAttackState.ANTICIPATION:
-                var targetPosition = _selectedTarget.Center();
+                var targetPosition = _sensorController.GetTargetFromSensors().Center();
                 var lookDirection = targetPosition - _transform.position;
                 var newForward = Vector3.ProjectOnPlane(lookDirection, _transform.up);
                 var newRotation = Quaternion.LookRotation(newForward, _transform.up);
@@ -142,15 +150,6 @@ public class YaghotepJumpAttack
                 }
                 else if (fallTime >= fallDuration)
                 {
-                    _transform.position = landingPosition;
-                    attackState = YaghotepAttackState.RECOVERY;
-                    _animator.SetTrigger("Recover");
-                }
-                break;
-            case YaghotepAttackState.RECOVERY:
-                recoveryTime += scaledDeltaTime;
-                if (recoveryTime >= recoveryAnimationClip.length)
-                {
                     // Spawn shockwave
                     donutShockwave.StartShockwave(
                         landingPosition,
@@ -160,6 +159,15 @@ public class YaghotepJumpAttack
                         shockWaveMaxRadius,
                         timeScale
                     );
+                    _transform.position = landingPosition;
+                    attackState = YaghotepAttackState.RECOVERY;
+                    _animator.SetTrigger("Recover");
+                }
+                break;
+            case YaghotepAttackState.RECOVERY:
+                recoveryTime += scaledDeltaTime;
+                if (recoveryTime >= recoveryAnimationClip.length)
+                {
                     attackState = YaghotepAttackState.NONE;
                     _navMeshAgent.Warp(landingPosition);
                     _navMeshAgent.updatePosition = true;

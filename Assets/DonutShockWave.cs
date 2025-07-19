@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 using DG.Tweening;
 
 public class DonutShockwave : MonoBehaviour
 {
     [Header("Debug")]
+    public Material ringMaterial;
+    public Tween scaleTween;
+    public Color originalColor;
+    public float fadeProgress;
     public bool isActive = false;
     public Vector3 initialScale;
     public Vector3 center;
@@ -20,22 +23,28 @@ public class DonutShockwave : MonoBehaviour
 
     [Space(10)]
     [Header("References")]
-    public TimeObject timeObject;
+    public Collider ringCollider;
+    public Renderer ringRenderer;
+    public CameraShake cameraShake;
 
     [Space(10)]
     [Header("Settings")]
     public float height = 1f;
+    public float fadeOutDuration = 1f; // Duration of fade out effect in seconds
     
-    private Renderer ringRenderer;
-    private Material ringMaterial;
-    private Tween scaleTween;
 
-    void Start()
+    void Awake()
     {
-        ringRenderer = GetComponent<Renderer>();
-        if (ringRenderer != null)
+        ringMaterial = ringRenderer.material;
+        originalColor = ringMaterial.color;
+        gameObject.SetActive(false);
+    }
+
+    public void Init(Collider[] collidersToIgnore)
+    {
+        foreach (var colliderToIgnore in collidersToIgnore)
         {
-            ringMaterial = ringRenderer.material;
+            Physics.IgnoreCollision(ringCollider, colliderToIgnore);
         }
     }
 
@@ -54,38 +63,56 @@ public class DonutShockwave : MonoBehaviour
         damage = shockWaveDamage;
         timeScale = shockWavetimeScale;
 
+        Debug.Log(timeScale);
+
+        gameObject.SetActive(true);
         innerRadius = 0f;
+        fadeProgress = 0f;
         isActive = true;
         hitObjects.Clear();
-        gameObject.SetActive(true);
         initialScale = transform.localScale;
 
-        // Kill any existing tween
+        Color color = originalColor;
+        color.a = 1f;
+        ringMaterial.color = color;
+        
         if (scaleTween != null && scaleTween.IsActive())
         {
             scaleTween.Kill();
         }
 
-        // Calculate animation duration based on expansion speed and max radius
-        float duration = maxRadius / expansionSpeed;
-        
-        // Animate the scale using DOTween
+        cameraShake.Shake(1f);
+
+        float duration = maxRadius / (expansionSpeed * timeScale);
         scaleTween = DOTween.To(() => 0f, (float value) => {
             innerRadius = value;
             outerRadius = value + shockWaveThickness;
             
-            var scale = initialScale * outerRadius;
-            scale.y = initialScale.y;
+            var scale = Vector3.one * outerRadius;
+            scale.z = 1f;
             transform.localScale = scale;
+
+            // Calculate fade out progress
+            if (value >= maxRadius - fadeOutDuration * expansionSpeed)
+            {
+                float fadeStartValue = maxRadius - fadeOutDuration * expansionSpeed;
+                fadeProgress = (value - fadeStartValue) / (fadeOutDuration * expansionSpeed);
+                fadeProgress = Mathf.Clamp01(fadeProgress);
+            }
 
             // Update shader properties
             if (ringMaterial != null)
             {
-                ringMaterial.SetFloat("_InnerRadius", innerRadius/outerRadius * 0.5f);
-                ringMaterial.SetFloat("_OuterRadius", 0.5f);
+                ringMaterial.SetFloat("_InnerRadius", 0);
+                ringMaterial.SetFloat("_OuterRadius", 0.49f);
+                
+                // Update alpha for fade out
+                Color color = originalColor;
+                color.a = 1f - fadeProgress;
+                ringMaterial.color = color;
             }
         }, maxRadius, duration)
-        .SetEase(Ease.Linear)
+        .SetEase(Ease.OutCubic)
         .OnComplete(() => {
             isActive = false;
             transform.localScale = initialScale;
@@ -103,23 +130,24 @@ public class DonutShockwave : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (!isActive) return;
+        if (fadeProgress > 0f)
+        {
+            return;
+        }
 
         Hittable hittable = other.GetComponent<Hittable>();
         if (hittable == null) return;
 
-        Debug.Log("Hit: " + hittable.name);
 
         if (hitObjects.Contains(hittable.owner.GetInstanceID()))
             return;
 
         if (Mathf.Abs(hittable.transform.position.y - center.y) > height)
             return;
-        Debug.Log("Height: Check");
 
         float dist = Vector3.Distance(hittable.transform.position, center);
         if (dist < innerRadius && dist > outerRadius)
             return;
-        Debug.Log("Distance: Check");
 
         hittable.OnHit(damage, hittable.transform.position - transform.position);
         hitObjects.Add(hittable.owner.GetInstanceID());

@@ -93,6 +93,9 @@ namespace StarterAssets
         [SerializeField] private float _targetYaw;
         [SerializeField] private float _lookYaw;
         [SerializeField] private Vector3 _lastInputDirection;
+        public float noDamageAfterHitDuration;
+        public float noDamageAfterHitTime = 0f;
+        public bool wasHitAndIsInvincibleForTime = false;
 
         [Header("Audio")]
         public AudioClip LandingAudioClip;
@@ -139,6 +142,16 @@ namespace StarterAssets
             if (!Inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
+
+            if (wasHitAndIsInvincibleForTime)
+            {
+                noDamageAfterHitTime += Time.deltaTime;
+                if (noDamageAfterHitTime >= noDamageAfterHitDuration)
+                {
+                    wasHitAndIsInvincibleForTime = false;
+                    noDamageAfterHitTime = 0f;
+                }
+            }
 
             animator.SetBool(_animIDGrounded, _isGrounded);
 
@@ -554,12 +567,15 @@ namespace StarterAssets
             }
         }
 
+
         public void Hit(int damage, Vector3 hitDirection)
         {
-            if (_isDying)
+            if (_isDying || wasHitAndIsInvincibleForTime)
             {
                 return;
             }
+
+
             _playerEventController.UpdateCurrentHealth(_data.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
             if (_data.CurrentHealth <= 0 && !_isDying)
