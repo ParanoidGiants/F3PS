@@ -66,6 +66,7 @@ public class HorusPalmProjectile : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("HorusPalmProjectile OnCollisionEnter with " + collision.gameObject.name);
         if (_isHit)
         {
             return;

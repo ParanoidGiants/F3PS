@@ -478,10 +478,10 @@ public class YaggiShieldSpitterController : MonoBehaviour
             && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             navMeshAgent.stoppingDistance = 0;
             navMeshAgent.destination = fleeDestination;
             navMeshAgent.isStopped = false;
@@ -503,10 +503,10 @@ public class YaggiShieldSpitterController : MonoBehaviour
         else if (stoppingDistanceState == YaggiShieldSpitterStoppingDistanceState.PUSHED)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             navMeshAgent.destination = fleeDestination;
         }
         else if (stoppingDistanceState == YaggiShieldSpitterStoppingDistanceState.FOLLOWING)

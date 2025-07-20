@@ -556,21 +556,21 @@ public class YaghotepController : MonoBehaviour
         {
             return;
         }
-
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, selectedTarget.Center());
+        var targetPosition = selectedTarget.Center();
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
         if (stoppingDistanceState == YaghotepStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, targetPosition);
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.STAYING
             && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaghotepStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.FOLLOWING
@@ -579,20 +579,20 @@ public class YaghotepController : MonoBehaviour
             && distanceToTarget > stoppingDistanceStay
         )
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.STAYING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.STAYING, targetPosition);
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.PUSHED)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaghotepStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaghotepStoppingDistanceState.FOLLOWING)
         {
-            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaghotepStoppingDistanceState.FOLLOWING, targetPosition);
         }
     }
 
@@ -621,6 +621,12 @@ public class YaghotepController : MonoBehaviour
         }
         stoppingDistanceState = state;
         SetDestination(destination);
+    }
+
+    private void SetDestination(Vector3 position)
+    {
+        navMeshDestination.position = position;
+        navMeshAgent.destination = position;
     }
 
     public virtual void Hit(int damage)
@@ -678,11 +684,5 @@ public class YaghotepController : MonoBehaviour
 
         checkingDestination = transform.position - hitDirection;
         SwitchState(YaghotepState.CHECKING);
-    }
-
-    private void SetDestination(Vector3 position)
-    {
-        navMeshDestination.position = position;
-        navMeshAgent.destination = position;
     }
 }

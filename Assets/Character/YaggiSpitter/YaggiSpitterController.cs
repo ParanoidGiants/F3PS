@@ -459,7 +459,7 @@ public class YaggiSpitterController : MonoBehaviour
     private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
         var selectedTarget = sensorController.GetTargetFromSensors();
-        var toTarget = selectedTarget.Center() - transform.position;
+        var toTarget = targetPosition - transform.position;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(
             transform.rotation,
@@ -479,20 +479,20 @@ public class YaggiSpitterController : MonoBehaviour
             return;
         }
 
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, selectedTarget.Center());
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
         if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
-            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.FOLLOWING, targetPosition);
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.STAYING
             && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.FOLLOWING
@@ -501,20 +501,20 @@ public class YaggiSpitterController : MonoBehaviour
             && distanceToTarget > stoppingDistanceStay
         )
         {
-            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.STAYING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.STAYING, targetPosition);
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.PUSHED)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaggiSpitterStoppingDistanceState.FOLLOWING)
         {
-            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiSpitterStoppingDistanceState.FOLLOWING, targetPosition);
         }
     }
 

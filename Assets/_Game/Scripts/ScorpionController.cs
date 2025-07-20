@@ -7,6 +7,13 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum ScorpionStoppingDistanceState
+{
+    PUSHED,
+    FOLLOWING,
+    STAYING
+}
+
 public enum ScorpionState
 {
     IDLE,
@@ -81,7 +88,9 @@ public class ScorpionController : MonoBehaviour
 
     [Space(10)]
     [Header("Aggressive Settings")]
+    public ScorpionStoppingDistanceState stoppingDistanceState = ScorpionStoppingDistanceState.STAYING;
     public float rotationSpeed;
+    public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
 
@@ -119,7 +128,6 @@ public class ScorpionController : MonoBehaviour
     public EnemyHealthUIPool _healthUIPool;
     public ScorpionState currentState = ScorpionState.IDLE;
     public bool isDead = false;
-    private Vector3 lastPosition;
 
     protected void Awake()
     {
@@ -144,10 +152,6 @@ public class ScorpionController : MonoBehaviour
 
     private void EnterState(ScorpionState state)
     {
-        var traveledDistance = Vector3.Distance(lastPosition, transform.position);
-        animator.SetFloat("Speed", traveledDistance > 0.1f ? 1 : 0);
-        lastPosition = transform.position;
-
         UpdateSensorState(state);
         switch (state)
         {
@@ -163,6 +167,7 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
                 break;
             case ScorpionState.AGGRESSIVE:
+                stoppingDistanceState = ScorpionStoppingDistanceState.STAYING;
                 navMeshAgent.isStopped = false;
                 navMeshAgent.angularSpeed = 0f;
                 navMeshAgent.speed = runSpeed * TimeScale;
@@ -400,7 +405,7 @@ public class ScorpionController : MonoBehaviour
                 {
                     attackState = ScorpionAttackState.NONE;
                     coolDownTime = 0f;
-                    navMeshAgent.isStopped = false;
+                    SetupStoppingDistanceState(stoppingDistanceState, navMeshAgent.destination);
                 }
                 break;
             case ScorpionAttackState.NONE:
@@ -437,31 +442,89 @@ public class ScorpionController : MonoBehaviour
 
     private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
+        var selectedTarget = sensorController.GetTargetFromSensors();
         var toTarget = targetPosition - transform.position;
-        var distanceToTarget = toTarget.magnitude;
         var lookDirection = Vector3.ProjectOnPlane(toTarget.normalized, Vector3.up);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * ScaledDeltaTime);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            Quaternion.LookRotation(lookDirection),
+            rotationSpeed * ScaledDeltaTime
+        );
+
         if (!sensorController.IsTargetInLineOfSight())
         {
             navMeshAgent.stoppingDistance = 0;
             return;
         }
 
-        if (distanceToTarget <= stoppingDistanceStay)
+        if (selectedTarget == null)
+        {
+            return;
+        }
+
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
+        if (stoppingDistanceState == ScorpionStoppingDistanceState.STAYING
+            && distanceToTarget > stoppingDistanceFollow)
+        {
+            SetupStoppingDistanceState(ScorpionStoppingDistanceState.FOLLOWING, targetPosition);
+        }
+        else if (stoppingDistanceState == ScorpionStoppingDistanceState.STAYING
+            && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
-            Physics.Raycast(ray, out var hit, stoppingDistanceFollow);
-            var distance = Mathf.Max(stoppingDistanceFollow, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
-            navMeshAgent.stoppingDistance = 0f;
-            navMeshAgent.destination = fleeDestination;
+            var ray = new Ray(targetPosition, fleeDirection);
+            Physics.Raycast(ray, out var hit, stoppingDistanceStay);
+            var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
+            var fleeDestination = targetPosition + fleeDirection * distance;
+            SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
         }
-        else
+        else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING
+            && distanceToTarget < stoppingDistanceStay
+            || stoppingDistanceState == ScorpionStoppingDistanceState.PUSHED
+            && distanceToTarget > stoppingDistanceStay
+        )
         {
-            navMeshAgent.stoppingDistance = stoppingDistanceFollow;
-            navMeshAgent.destination = targetPosition;
+            SetupStoppingDistanceState(ScorpionStoppingDistanceState.STAYING, targetPosition);
         }
+        else if (stoppingDistanceState == ScorpionStoppingDistanceState.PUSHED)
+        {
+            var fleeDirection = -lookDirection;
+            var ray = new Ray(targetPosition, fleeDirection);
+            Physics.Raycast(ray, out var hit, stoppingDistanceStay);
+            var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
+            var fleeDestination = targetPosition + fleeDirection * distance;
+            SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
+        }
+        else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING)
+        {
+            SetupStoppingDistanceState(ScorpionStoppingDistanceState.FOLLOWING, targetPosition);
+        }
+    }
+
+    private void SetupStoppingDistanceState(ScorpionStoppingDistanceState state, Vector3 destination)
+    {
+        switch (state)
+        {
+            case ScorpionStoppingDistanceState.PUSHED:
+                navMeshAgent.isStopped = false;
+                navMeshAgent.stoppingDistance = 0;
+                animator.SetFloat("Speed", -1f);
+                break;
+            case ScorpionStoppingDistanceState.STAYING:
+                navMeshAgent.stoppingDistance = stoppingDistanceFollow;
+                navMeshAgent.isStopped = true;
+                animator.SetFloat("Speed", 0f);
+                break;
+            case ScorpionStoppingDistanceState.FOLLOWING:
+                navMeshAgent.stoppingDistance = 0;
+                navMeshAgent.isStopped = false;
+                animator.SetFloat("Speed", 1f);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        }
+        stoppingDistanceState = state;
+        navMeshAgent.destination = destination;
     }
 
     public virtual void Hit(int damage)

@@ -460,20 +460,20 @@ public class YaggiStandardController : MonoBehaviour
             return;
         }
 
-        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, selectedTarget.Center());
+        var distanceToTarget = Helper.GetPathLengthOnNavMesh(transform.position, targetPosition);
         if (stoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
             && distanceToTarget > stoppingDistanceFollow)
         {
-            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.FOLLOWING, targetPosition);
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.STAYING
             && distanceToTarget < stoppingDistancePushBack)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING
@@ -482,20 +482,20 @@ public class YaggiStandardController : MonoBehaviour
             && distanceToTarget > stoppingDistanceStay
         )
         {
-            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.STAYING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.STAYING, targetPosition);
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.PUSHED)
         {
             var fleeDirection = -lookDirection;
-            var ray = new Ray(transform.position, fleeDirection);
+            var ray = new Ray(targetPosition, fleeDirection);
             Physics.Raycast(ray, out var hit, stoppingDistanceStay);
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
-            var fleeDestination = transform.position + fleeDirection * distance;
+            var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.PUSHED, fleeDestination);
         }
         else if (stoppingDistanceState == YaggiStandardStoppingDistanceState.FOLLOWING)
         {
-            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.FOLLOWING, selectedTarget.Center());
+            SetupStoppingDistanceState(YaggiStandardStoppingDistanceState.FOLLOWING, targetPosition);
         }
     }
 
