@@ -43,12 +43,14 @@ public class ScorpionController : MonoBehaviour
     public GameObject hittableParent;
     public GameObject chargeFlare;
     public Collider attackHitBox;
+    public Transform uiHealthBarAnchor;
 
     [Space(20)]
     [Header("Settings")]
     public int health;
     public int maxHealth = 100;
-    public float moveSpeed;
+    public float walkSpeed;
+    public float runSpeed;
 
     [Space(10)]
     [Header("Idle Settings")]
@@ -56,12 +58,7 @@ public class ScorpionController : MonoBehaviour
     public float idleTime = 0f;
 
     [Space(10)]
-    [Header("Patrol Settings")]
-    public float patrolMoveSpeed = 0f;
-
-    [Space(10)]
     [Header("Checking Settings")]
-    public float checkingMoveSpeed = 0f;
     public Vector3 checkingDestination = Vector3.zero;
 
     [Space(10)]
@@ -84,7 +81,6 @@ public class ScorpionController : MonoBehaviour
 
     [Space(10)]
     [Header("Aggressive Settings")]
-    public float aggressiveMoveSpeed = 0f;
     public float rotationSpeed;
     public float stoppingDistanceStay = 3f;
     public float stoppingDistanceFollow = 1f;
@@ -136,7 +132,7 @@ public class ScorpionController : MonoBehaviour
         EnterState(ScorpionState.IDLE);
         
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
-        _healthUIPool.CreateEnemyHealthUI(transform);
+        _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
     }
 
     private void SwitchState(ScorpionState newState)
@@ -161,7 +157,7 @@ public class ScorpionController : MonoBehaviour
                 break;
             case ScorpionState.PATROLLING:
                 navMeshAgent.isStopped = false;
-                navMeshAgent.speed = patrolMoveSpeed * TimeScale;
+                navMeshAgent.speed = walkSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
@@ -169,11 +165,11 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.AGGRESSIVE:
                 navMeshAgent.isStopped = false;
                 navMeshAgent.angularSpeed = 0f;
-                navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
+                navMeshAgent.speed = runSpeed * TimeScale;
                 break;
             case ScorpionState.CHECKING:
                 navMeshAgent.isStopped = false;
-                navMeshAgent.speed = checkingMoveSpeed * TimeScale;
+                navMeshAgent.speed = runSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 navMeshAgent.destination = checkingDestination;
                 animator.SetFloat("Speed", 1f);
@@ -478,11 +474,11 @@ public class ScorpionController : MonoBehaviour
         MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
         if (health <= 0)
         {
-            _healthUIPool.RemoveEnemyHealthUI(transform);
+            _healthUIPool.RemoveEnemyHealthUI(uiHealthBarAnchor);
             SwitchState(ScorpionState.DYING);
             return;
         }
-        _healthUIPool.OnHitTarget(transform, health, maxHealth);
+        _healthUIPool.OnHitTarget(uiHealthBarAnchor, health, maxHealth);
         animateMesh.HitFlash();
     }
 

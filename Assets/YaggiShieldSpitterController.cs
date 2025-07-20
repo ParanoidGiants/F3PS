@@ -49,12 +49,14 @@ public class YaggiShieldSpitterController : MonoBehaviour
     public SensorController sensorController;
     public GameObject hittableParent;
     public Collider[] collidersThatShouldntBeHit;
+    public Transform uiHealthBarAnchor;
 
     [Space(20)]
     [Header("Settings")]
     public int health;
     public int maxHealth = 100;
-    public float moveSpeed;
+    public float walkSpeed;
+    public float runSpeed;
 
     [Space(10)]
     [Header("Idle Settings")]
@@ -62,12 +64,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
     public float idleTime = 0f;
 
     [Space(10)]
-    [Header("Patrol Settings")]
-    public float patrolMoveSpeed = 0f;
-
-    [Space(10)]
     [Header("Checking Settings")]
-    public float checkingMoveSpeed = 0f;
     public Vector3 checkingDestination = Vector3.zero;
 
     [Space(10)]
@@ -92,7 +89,6 @@ public class YaggiShieldSpitterController : MonoBehaviour
     [Header("Aggressive Settings")]
     public YaggiShieldSpitterStoppingDistanceState stoppingDistanceState = YaggiShieldSpitterStoppingDistanceState.STAYING;
     public Vector3 lastTargetPosition = Vector3.zero;
-    public float aggressiveMoveSpeed = 0f;
     public float aggressiveRotationSpeed;
     public float stoppingDistancePushBack = 3f;
     public float stoppingDistanceStay = 3f;
@@ -113,13 +109,13 @@ public class YaggiShieldSpitterController : MonoBehaviour
     public float coolDownDuration;
 
     [Header("Attack Anticipation")]
+    public AnimationClip attackAnticipationAnimation;
     public float attackAnticipationTime = 0f;
-    public float attackAnticipationDuration = 1f;
     public float attackAnticipationRotationSpeed = 100f;
 
     [Header("Attack Recovery")]
+    public AnimationClip attackRecoveryAnimation;
     public float attackRecoveryTime = 0f;
-    public float attackRecoveryDuration = 1f;
 
     [Space(20)]
     [Header("Watchers")]
@@ -147,7 +143,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
 
         EnterState(YaggiShieldSpitterState.IDLE);
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
-        _healthUIPool.CreateEnemyHealthUI(transform);
+        _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
     }
 
     private void SwitchState(YaggiShieldSpitterState newState)
@@ -169,21 +165,21 @@ public class YaggiShieldSpitterController : MonoBehaviour
                 break;
             case YaggiShieldSpitterState.PATROLLING:
                 navMeshAgent.isStopped = false;
-                navMeshAgent.speed = patrolMoveSpeed * TimeScale;
+                navMeshAgent.speed = walkSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
-                animator.SetFloat("Speed", 1f);
+                animator.SetFloat("Speed", 0.5f);
                 break;
             case YaggiShieldSpitterState.AGGRESSIVE:
                 stoppingDistanceState = YaggiShieldSpitterStoppingDistanceState.STAYING;
                 navMeshAgent.isStopped = true;
                 navMeshAgent.angularSpeed = 0f;
-                navMeshAgent.speed = aggressiveMoveSpeed * TimeScale;
+                navMeshAgent.speed = runSpeed * TimeScale;
                 break;
             case YaggiShieldSpitterState.CHECKING:
                 navMeshAgent.isStopped = false;
-                navMeshAgent.speed = checkingMoveSpeed * TimeScale;
+                navMeshAgent.speed = runSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 navMeshAgent.destination = checkingDestination;
                 animator.SetFloat("Speed", 1f);
@@ -414,7 +410,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
 
                 attackAnticipationTime += ScaledDeltaTime;
 
-                if (attackAnticipationTime >= attackAnticipationDuration)
+                if (attackAnticipationTime >= attackAnticipationAnimation.length)
                 {
                     attackState = YaggiShieldSpitterAttackState.RECOVERY;
                     animator.SetTrigger("Recover");
@@ -436,7 +432,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
                 break;
             case YaggiShieldSpitterAttackState.RECOVERY:
                 attackRecoveryTime += ScaledDeltaTime;
-                if (attackRecoveryTime >= attackRecoveryDuration)
+                if (attackRecoveryTime >= attackRecoveryAnimation.length)
                 {
                     attackState = YaggiShieldSpitterAttackState.NONE;
                     coolDownTime = 0f;
@@ -529,11 +525,11 @@ public class YaggiShieldSpitterController : MonoBehaviour
         MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
         if (health <= 0)
         {
-            _healthUIPool.RemoveEnemyHealthUI(transform);
+            _healthUIPool.RemoveEnemyHealthUI(uiHealthBarAnchor);
             SwitchState(YaggiShieldSpitterState.DYING);
             return;
         }
-        _healthUIPool.OnHitTarget(transform, health, maxHealth);
+        _healthUIPool.OnHitTarget(uiHealthBarAnchor, health, maxHealth);
         animateMesh.HitFlash();
     }
 

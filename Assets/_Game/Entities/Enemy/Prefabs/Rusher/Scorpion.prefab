@@ -161,6 +161,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4360854681893100}
+  - {fileID: 8921227478702339612}
   m_Father: {fileID: 1303918254061530425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1660023863
@@ -468,13 +469,13 @@ MonoBehaviour:
   hittableParent: {fileID: 1823029999151333275}
   chargeFlare: {fileID: 590738213}
   attackHitBox: {fileID: 7123907103778620744}
+  uiHealthBarAnchor: {fileID: 8921227478702339612}
   health: 50
   maxHealth: 500
-  moveSpeed: 5
+  walkSpeed: 0
+  runSpeed: 0
   idleDuration: 5
   idleTime: 0
-  patrolMoveSpeed: 7
-  checkingMoveSpeed: 7
   checkingDestination: {x: 0, y: 0, z: 0}
   suspiciousTime: 0
   suspiciousDuration: 2
@@ -484,8 +485,6 @@ MonoBehaviour:
   fadingOut: 0
   dieTime: 1
   fadeOutDuration: 1
-  _selectedTarget: {fileID: 0}
-  aggressiveMoveSpeed: 10
   rotationSpeed: 90
   stoppingDistanceStay: 5
   stoppingDistanceFollow: 6
@@ -494,6 +493,7 @@ MonoBehaviour:
   coolDownDuration: 3
   hitTargetEarly: 0
   _attackForward: {x: 0, y: 0, z: 0}
+  lastTargetPosition: {x: 0, y: 0, z: 0}
   attackAnticipationTime: 0
   attackAnticipationDuration: 1
   attackAnticipationDistance: 1
@@ -1089,6 +1089,37 @@ MonoBehaviour:
   _meshRenderer: {fileID: 6558898132686104760}
   _targetCandidates: []
   eyes: {fileID: 219634598174967269}
+--- !u!1 &7141707353255675196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8921227478702339612}
+  m_Layer: 7
+  m_Name: UIHealthBarAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8921227478702339612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7141707353255675196}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.886, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1410692698}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7468692103487293910
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,6 +2551,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderers:
   - {fileID: 137853726022972922}
+  timeObject: {fileID: 0}
+  setEmission: 0
   hitFlashAnimate: 0
   timeFlashAnimate: 0
   timeFlashAnimateTimeScale: 1
