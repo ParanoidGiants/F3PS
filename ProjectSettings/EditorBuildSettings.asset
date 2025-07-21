@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Game/Scenes/_level_blockout_draft.unity
+    guid: 76b81d65aefda8f44ab225b4f60de693
+  - enabled: 1
     path: Assets/_Game/Scenes/_level_blockout_merge.unity
     guid: da42d25bf2bc0f744933d88bf77aac3c
   - enabled: 1

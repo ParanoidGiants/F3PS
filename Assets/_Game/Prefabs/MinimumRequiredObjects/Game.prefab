@@ -122,6 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLoading: 0
   sceneNames:
+  - _level_blockout_draft
   - _moving_platforms
   - _level_blockout_merge
   - _puzzle_00
@@ -278,8 +279,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputs: {fileID: 5736421558823638681}
   PlayerData:
-    CurrentHealth: 100
-    MaxHealth: 100
+    CurrentHealth: 300
+    MaxHealth: 300
     CurrentStamina: 0
     MaxStamina: 1
     StaminaRecoveryRate: 0.2
@@ -306,15 +307,15 @@ MonoBehaviour:
     DodgeLandTimer: 0.05
     DodgeCoolDownTimer: 0.25
     UnlockedAttacks: 0100000002000000
-    ActiveAttack: 0
+    ActiveAttack: 1
     OsirisKickData:
       Damage: 2
       NumberOfProjectiles: 8
-      StaminaCost: 0.2
-      SpreadAngle: 10
+      StaminaCost: 0.05
+      SpreadAngle: 5
       AttackSpeed: 100
       AttackCoolDownTimer: 0.2
-      ProjectileLifeDuration: 5
+      ProjectileLifeDuration: 0.2
     HorusPalmData:
       Damage: 20
       AttackSpeed: 100
@@ -323,15 +324,15 @@ MonoBehaviour:
       StaminaCost: 0.3
       ProjectileLifeDuration: 5
     UnlockedSkills: 010000000200000003000000
-    ActiveSkill: 0
+    ActiveSkill: 1
     KhonsuSphereSkillData:
       TargetSize: 30
-      ActiveDuration: 60
+      ActiveDuration: 20
       ThrowPower: 20
-      ChangeTimeScaleSpeed: 0.05
+      ChangeTimeScaleSpeed: 0
       IsEnabled: 0
       Position: {x: 0, y: 0, z: 0}
-      TimeScale: 1
+      TimeScale: 0.2
       ActiveTime: 0
     AnubisScrollSkillData:
       CoolDownTime: 0.5
