@@ -99,9 +99,34 @@ public class YaghotepSpawnProjectile : MonoBehaviour
         NavMeshHit hit;
         var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
         var rotation = Quaternion.LookRotation(forward, Vector3.up);
+
         if (NavMesh.SamplePosition(intendedSpawn, out hit, 20f, NavMesh.AllAreas))
         {
-            var enemy = Instantiate(enemyPrefab, hit.position, rotation);
+            var enemy = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity);
+            Transform enemyTransform = null;
+            NavMeshAgent enemyNavMeshAgent = null;
+            if (random == 0)
+            {
+                var yaggiStandard = enemy.GetComponentInChildren<YaggiStandardController>();
+                enemyTransform = yaggiStandard.transform;
+                enemyNavMeshAgent = yaggiStandard.navMeshAgent;
+            }
+            else if (random == 1)
+            {
+                var yaggiSpitter = enemy.GetComponentInChildren<YaggiSpitterController>();
+                enemyTransform = yaggiSpitter.transform;
+                enemyNavMeshAgent = yaggiSpitter.navMeshAgent;
+            }
+            else
+            {
+                var yaggiShield = enemy.GetComponentInChildren<YaggiShieldSpitterController>();
+                enemyTransform = yaggiShield.transform;
+                enemyNavMeshAgent = yaggiShield.navMeshAgent;
+            }
+            enemyTransform.position = hit.position;
+            enemyTransform.rotation = rotation;
+            enemyNavMeshAgent.Warp(hit.position);
+
             onEnemySpawned?.Invoke(enemy);
         }
         else

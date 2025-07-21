@@ -4,16 +4,12 @@ namespace F3PS.AI.Sensors
 {
     public class VisionSensor : BaseSensor
     {
-        [Space(10)]
-        [Header("Reference")]
-        public Transform eyes;
-
         public bool IsTargetInSight()
         {
             if (!HasTarget || TargetCandidates.Count < 2) return false;
 
             int targetsInSight = 0;
-            var position = eyes.position;
+            var position = transform.position;
             for (int i = 0; i < TargetCandidates.Count && targetsInSight < 2; i++)
             {
                 var targetPosition = TargetCandidates[i].Center();

@@ -81,7 +81,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -160,7 +160,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -221,7 +221,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -495,7 +495,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -844,7 +844,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1166,7 +1166,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1484,7 +1484,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1868,7 +1868,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2282,7 +2282,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2559,7 +2559,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2836,7 +2836,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3113,7 +3113,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3358,7 +3358,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3704,7 +3704,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4008,7 +4008,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4114,7 +4114,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4202,7 +4202,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4317,7 +4317,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4414,7 +4414,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4520,7 +4520,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4653,7 +4653,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4723,7 +4723,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4793,7 +4793,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4854,7 +4854,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4924,7 +4924,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4994,7 +4994,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5055,7 +5055,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5125,7 +5125,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5195,7 +5195,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5265,7 +5265,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5335,7 +5335,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5405,7 +5405,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5475,7 +5475,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5545,7 +5545,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5615,7 +5615,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -5685,7 +5685,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
   m_CompressedRotationCurves: []
   m_EulerCurves: []
   m_PositionCurves:
@@ -6010,7 +6010,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -6323,7 +6323,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -6546,7 +6546,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -6805,7 +6805,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -6875,7 +6875,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -6981,7 +6981,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -7060,7 +7060,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -7652,7 +7652,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -7884,7 +7884,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLowerC
+    path: Root/Hip/Abomen/Jaw_Lower/LipLowerC
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -7954,7 +7954,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -8024,7 +8024,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -8085,7 +8085,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -8155,7 +8155,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves: []
@@ -8700,7 +8700,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -8775,7 +8775,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -8850,7 +8850,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -8925,7 +8925,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9009,7 +9009,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9093,7 +9093,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9177,7 +9177,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9261,7 +9261,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9327,7 +9327,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9393,7 +9393,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9459,7 +9459,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9525,7 +9525,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -9798,7 +9798,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -10071,7 +10071,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -10344,7 +10344,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -10617,7 +10617,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -10971,7 +10971,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -11325,7 +11325,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -11679,7 +11679,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -12033,7 +12033,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -12360,7 +12360,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -12687,7 +12687,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -13014,7 +13014,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -13341,7 +13341,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -13650,7 +13650,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -13959,7 +13959,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -14268,7 +14268,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -14577,7 +14577,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -14958,7 +14958,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -15339,7 +15339,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -15720,7 +15720,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16101,7 +16101,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16518,7 +16518,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16935,7 +16935,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -17352,7 +17352,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -17769,7 +17769,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -18051,7 +18051,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -18333,7 +18333,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -18615,7 +18615,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -18897,7 +18897,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -19179,7 +19179,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -19461,7 +19461,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -19743,7 +19743,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -20025,7 +20025,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -20307,7 +20307,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -20589,7 +20589,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -20871,7 +20871,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -21153,7 +21153,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -21399,7 +21399,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -21645,7 +21645,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -21891,7 +21891,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -22137,7 +22137,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -22482,7 +22482,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -22827,7 +22827,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -23172,7 +23172,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -23517,7 +23517,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -23826,7 +23826,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -24135,7 +24135,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -24444,7 +24444,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -24753,7 +24753,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -24864,7 +24864,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -24975,7 +24975,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25086,7 +25086,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25197,7 +25197,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25290,7 +25290,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25383,7 +25383,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25476,7 +25476,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25569,7 +25569,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25689,7 +25689,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25809,7 +25809,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -25929,7 +25929,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26049,7 +26049,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26151,7 +26151,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26253,7 +26253,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26355,7 +26355,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26457,7 +26457,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26568,7 +26568,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26679,7 +26679,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26790,7 +26790,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -26901,7 +26901,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27039,7 +27039,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27177,7 +27177,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27315,7 +27315,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27453,7 +27453,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27528,7 +27528,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27603,7 +27603,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27678,7 +27678,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27753,7 +27753,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27828,7 +27828,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27903,7 +27903,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -27978,7 +27978,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28053,7 +28053,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28119,7 +28119,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28185,7 +28185,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28251,7 +28251,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28317,7 +28317,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28392,7 +28392,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28467,7 +28467,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28542,7 +28542,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28617,7 +28617,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28692,7 +28692,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28767,7 +28767,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28842,7 +28842,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28917,7 +28917,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -28983,7 +28983,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29049,7 +29049,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29115,7 +29115,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29181,7 +29181,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29256,7 +29256,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29331,7 +29331,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29406,7 +29406,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29481,7 +29481,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29556,7 +29556,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29631,7 +29631,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29706,7 +29706,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29781,7 +29781,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29856,7 +29856,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -29931,7 +29931,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30006,7 +30006,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30081,7 +30081,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30156,7 +30156,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30231,7 +30231,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30306,7 +30306,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30381,7 +30381,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30456,7 +30456,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30531,7 +30531,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30606,7 +30606,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30681,7 +30681,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30756,7 +30756,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30831,7 +30831,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30906,7 +30906,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -30981,7 +30981,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31056,7 +31056,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31131,7 +31131,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31206,7 +31206,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31281,7 +31281,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31356,7 +31356,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31431,7 +31431,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31506,7 +31506,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31581,7 +31581,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31656,7 +31656,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.x
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31731,7 +31731,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.y
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31806,7 +31806,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.z
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -31881,7 +31881,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalRotation.w
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -32208,7 +32208,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -32535,7 +32535,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -32862,7 +32862,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -33180,7 +33180,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -33498,7 +33498,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -33816,7 +33816,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -34044,7 +34044,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -34272,7 +34272,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -34500,7 +34500,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpperC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -34764,7 +34764,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35028,7 +35028,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35292,7 +35292,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35367,7 +35367,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35442,7 +35442,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35517,7 +35517,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35628,7 +35628,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35739,7 +35739,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35850,7 +35850,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LipUpper1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -35934,7 +35934,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -36018,7 +36018,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -36102,7 +36102,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -36699,7 +36699,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -37296,7 +37296,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -37893,7 +37893,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38130,7 +38130,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLowerC
+    path: Root/Hip/Abomen/Jaw_Lower/LipLowerC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38367,7 +38367,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLowerC
+    path: Root/Hip/Abomen/Jaw_Lower/LipLowerC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38604,7 +38604,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLowerC
+    path: Root/Hip/Abomen/Jaw_Lower/LipLowerC
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38679,7 +38679,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38754,7 +38754,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38829,7 +38829,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38904,7 +38904,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -38979,7 +38979,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39054,7 +39054,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39120,7 +39120,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39186,7 +39186,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39252,7 +39252,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower1.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower1.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39327,7 +39327,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39402,7 +39402,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39477,7 +39477,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39553,7 +39553,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39628,7 +39628,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39703,7 +39703,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39787,7 +39787,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39871,7 +39871,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -39955,7 +39955,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40021,7 +40021,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40087,7 +40087,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40153,7 +40153,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head
+    path: Root/Hip/Abomen/Chest/Head
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40426,7 +40426,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40699,7 +40699,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -40972,7 +40972,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -41326,7 +41326,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -41680,7 +41680,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -42034,7 +42034,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -42361,7 +42361,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -42688,7 +42688,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -43015,7 +43015,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -43324,7 +43324,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -43633,7 +43633,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -43942,7 +43942,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -44323,7 +44323,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -44704,7 +44704,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -45085,7 +45085,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -45502,7 +45502,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -45919,7 +45919,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -46336,7 +46336,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -46618,7 +46618,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -46900,7 +46900,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -47182,7 +47182,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -47464,7 +47464,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -47746,7 +47746,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -48028,7 +48028,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -48310,7 +48310,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -48592,7 +48592,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -48874,7 +48874,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -49120,7 +49120,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -49366,7 +49366,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -49612,7 +49612,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -49957,7 +49957,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -50302,7 +50302,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -50647,7 +50647,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -50956,7 +50956,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -51265,7 +51265,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -51574,7 +51574,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -51685,7 +51685,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -51796,7 +51796,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -51907,7 +51907,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52000,7 +52000,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52093,7 +52093,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52186,7 +52186,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52306,7 +52306,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52426,7 +52426,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52546,7 +52546,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52648,7 +52648,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52750,7 +52750,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52852,7 +52852,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -52963,7 +52963,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53074,7 +53074,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53185,7 +53185,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53323,7 +53323,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53461,7 +53461,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53599,7 +53599,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53674,7 +53674,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53749,7 +53749,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53824,7 +53824,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper
+    path: Root/Hip/Abomen/Chest/Jaw_Upper
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53899,7 +53899,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -53974,7 +53974,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54049,7 +54049,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54115,7 +54115,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54181,7 +54181,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54247,7 +54247,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
+    path: Root/Hip/Abomen/Chest/Jaw_Upper/LippUpper2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54322,7 +54322,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54397,7 +54397,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54472,7 +54472,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54547,7 +54547,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54622,7 +54622,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54697,7 +54697,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.L
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54763,7 +54763,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54829,7 +54829,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54895,7 +54895,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower/LipLower2.R
+    path: Root/Hip/Abomen/Jaw_Lower/LipLower2.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -54970,7 +54970,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55045,7 +55045,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55120,7 +55120,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55195,7 +55195,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55270,7 +55270,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55345,7 +55345,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55420,7 +55420,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55495,7 +55495,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55570,7 +55570,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55645,7 +55645,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55720,7 +55720,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55795,7 +55795,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55870,7 +55870,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -55945,7 +55945,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56020,7 +56020,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56095,7 +56095,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56170,7 +56170,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56245,7 +56245,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56320,7 +56320,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56395,7 +56395,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56470,7 +56470,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56545,7 +56545,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56620,7 +56620,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56695,7 +56695,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56770,7 +56770,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.x
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56845,7 +56845,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.y
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -56920,7 +56920,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAngles.z
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
     classID: 4
     script: {fileID: 0}
     flags: 0

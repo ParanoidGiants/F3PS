@@ -81,7 +81,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -169,7 +169,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen
+    path: Root/Hip/Abomen
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -230,7 +230,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest
+    path: Root/Hip/Abomen/Chest
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -345,7 +345,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -442,7 +442,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidUpper1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -521,7 +521,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
+    path: Root/Hip/Abomen/Chest/Head/Eye1M/Eye1/LidLower1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -636,7 +636,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/Eye2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -715,7 +715,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidLower2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -812,7 +812,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
+    path: Root/Hip/Abomen/Chest/Head/Eye2M/LidUpper2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -909,7 +909,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow
+    path: Root/Hip/Abomen/Chest/Head/Brow
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1006,7 +1006,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.R
+    path: Root/Hip/Abomen/Chest/Head/Brow.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1103,7 +1103,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Brow.L
+    path: Root/Hip/Abomen/Chest/Head/Brow.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1218,7 +1218,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1315,7 +1315,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidUpper3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1394,7 +1394,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
+    path: Root/Hip/Abomen/Chest/Head/Eye3M/Eye3/LidLower3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1473,7 +1473,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Head/Hat
+    path: Root/Hip/Abomen/Chest/Head/Hat
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1570,7 +1570,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1712,7 +1712,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1836,7 +1836,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1978,7 +1978,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
+    path: Root/Hip/Abomen/Chest/Shoulder.L/Arm_Upper.L/Arm_Lower.L/Hand.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2066,7 +2066,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2208,7 +2208,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2350,7 +2350,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2492,7 +2492,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
+    path: Root/Hip/Abomen/Chest/Shoulder.R/Arm_Upper.R/Arm_Lower.R/Hand.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2544,7 +2544,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Abomen/Jaw_Lower
+    path: Root/Hip/Abomen/Jaw_Lower
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2686,7 +2686,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L
+    path: Root/Hip/Thigh.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2828,7 +2828,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L
+    path: Root/Hip/Thigh.L/Shin.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -2970,7 +2970,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.L/Shin.L/Foot.L
+    path: Root/Hip/Thigh.L/Shin.L/Foot.L
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3094,7 +3094,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Tail1
+    path: Root/Hip/Tail1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3227,7 +3227,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Tail1/Tail2
+    path: Root/Hip/Tail1/Tail2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3369,7 +3369,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R
+    path: Root/Hip/Thigh.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3511,7 +3511,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R
+    path: Root/Hip/Thigh.R/Shin.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3653,7 +3653,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Thigh.R/Shin.R/Foot.R
+    path: Root/Hip/Thigh.R/Shin.R/Foot.R
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3705,7 +3705,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
   m_CompressedRotationCurves: []
   m_EulerCurves: []
   m_PositionCurves:
@@ -3850,7 +3850,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip
+    path: Root/Hip
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -3992,7 +3992,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Yaghotep/Root/Hip/Belly
+    path: Root/Hip/Belly
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves: []

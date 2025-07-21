@@ -1143,9 +1143,8 @@ MonoBehaviour:
   damageMultiplier: 0
   shieldRenderer: {fileID: 1065109067293895950}
   shieldTransform: {fileID: 1431301772511512769}
-  animationDuration: 0
   animationScale: 1.1
-  hitFlashEmissionColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmissionColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
   currentHitFlashEmissionColor: {r: 0, g: 0, b: 0, a: 1}
   hitFlashEaseInAnimationDuration: 0.1
   hitFlashEaseOutAnimationDuration: 0.1
