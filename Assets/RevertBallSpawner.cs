@@ -25,6 +25,7 @@ public class RevertBallSpawner : MonoBehaviour
             revertBalls.Add(revertBall);
             ball.SetActive(false);
         }
+        time = spawnEverySeconds;
     }
 
     private void Update()
@@ -39,10 +40,7 @@ public class RevertBallSpawner : MonoBehaviour
         var nextBall = revertBalls[currentlySpawnedBallIndex];
         nextBall.gameObject.SetActive(true);
         currentlySpawnedBallIndex++;
-        if (currentlySpawnedBallIndex >= ballCount)
-        {
-            currentlySpawnedBallIndex = 0;
-        }
+        currentlySpawnedBallIndex %= ballCount;
     }
 
     private void OnTriggerEnter(Collider other)

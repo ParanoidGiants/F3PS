@@ -10,11 +10,14 @@ public class RevertBall : MonoBehaviour
     public float _lifeTime;
     public float _lifeDuration;
 
+    public bool isInitialized = false;
+
     public void Init(Transform targetPlacePoint, Transform spawnPoint, float lifeTime)
     {
         _targetPlacePoint = targetPlacePoint;
         _spawnPoint = spawnPoint;
         _lifeDuration = lifeTime;
+        isInitialized = true;
     }
 
     private void Update()
@@ -38,13 +41,17 @@ public class RevertBall : MonoBehaviour
 
     }
 
-    private void Onable()
+    private void OnEnable()
     {
+        if (!isInitialized)
+        {
+            return;
+        }
+        _lifeTime = 0f;
         transform.position = _spawnPoint.position;
         transform.rotation = Quaternion.identity;
         _rb = GetComponent<Rigidbody>();
         _rb.linearVelocity = Vector3.down;
         _rb.angularVelocity = Vector3.zero;
-        _lifeTime = 0f;
     }
 }
