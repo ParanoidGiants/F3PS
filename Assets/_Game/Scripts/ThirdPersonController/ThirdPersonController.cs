@@ -1,6 +1,8 @@
 ﻿using F3PS;
 using UnityEngine;
 using TimeBending;
+using DG.Tweening;
+
 
 
 
@@ -96,6 +98,10 @@ namespace StarterAssets
         public float noDamageAfterHitDuration;
         public float noDamageAfterHitTime = 0f;
         public bool wasHitAndIsInvincibleForTime = false;
+        public bool isBeingThrownBackByHammer = false;
+        public float hammerThrowBackSpeed = 2f;
+
+        [Space(10)]
 
         [Header("Audio")]
         public AudioClip LandingAudioClip;
@@ -613,6 +619,39 @@ namespace StarterAssets
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius
             );
+        }
+
+        public void ThrowBackAt(Vector3 position, float throwBackSpeed)
+        {
+            if (isBeingThrownBackByHammer)
+            {
+                return;
+            }
+
+            var direction = position - transform.position;
+            Hit(10, direction.normalized);
+
+            Inputs.canControlPlayer = false;
+            isBeingThrownBackByHammer = true;
+            var targetPosition = position;
+            var easePosition = position - direction.normalized;
+            var duration = direction.magnitude / throwBackSpeed;
+            var easeDirection = easePosition - position;
+            var linearDuration = easeDirection.magnitude / throwBackSpeed;
+            var easeDuration = 1f / throwBackSpeed;
+
+            Debug.DrawLine(transform.position, easePosition, Color.red, 10f);
+            Debug.DrawLine(easePosition, targetPosition, Color.green, 10f);
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(_rigidbody.DOMove(easePosition, linearDuration).SetEase(Ease.Linear));
+            sequence.Append(_rigidbody.DOMove(targetPosition, easeDuration).SetEase(Ease.OutCubic));
+            sequence.OnComplete(() =>
+            {
+                Inputs.canControlPlayer = true;
+                isBeingThrownBackByHammer = false;
+            });
+            sequence.Play();
         }
     }
 }
