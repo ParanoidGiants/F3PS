@@ -8,16 +8,24 @@ public class KhonsuSphereProjectile : MonoBehaviour
     private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
     private KhonsuSphereSkillData KhonsuSphereData => PlayerEventController.Data.KhonsuSphereSkillData;
 
+    [Header("Debug")]
+    public Transform _touchedTransform;
+    public Vector3 _stickToLocalPosition;
+    public Rigidbody _rigidbody;
+    public bool _isInitialized = false;
+    public bool _isHit = false;
+    public bool _isUpAndRunning = false;
+    public float _speed;
+    public Collider[] _collidersToIgnore;
+
     [Header("Reference")]
     public Transform userSpace;
     public KhonsuSphere khonsuSphere;
     public CinemachineImpulseSource shakeSource;
     public float animationDuration = 0.5f;
-    private bool _isUpAndRunning = false;
     public GameObject mesh;
     public HitBox hitBox;
-    public Rigidbody rb;
-    public Collider col;
+    public Collider _collider;
 
     [Header("Settings")]
     public float shakePower = 1f;
@@ -27,10 +35,11 @@ public class KhonsuSphereProjectile : MonoBehaviour
     public bool IsKhonsuSphereActiveAndEnabled => khonsuSphere.isActiveAndEnabled;
     public bool IsProjectileUpAndRunning => _isUpAndRunning;
 
-    private float _speed;
-    private bool _isHit = false;
-    private Collider[] collidersToIgnore;
-    private bool _isInitialized = false;
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
+    }
 
     private void Start()
     {
@@ -44,10 +53,10 @@ public class KhonsuSphereProjectile : MonoBehaviour
             return;
         }
 
+        _rigidbody.isKinematic = false;
+        _collider.enabled = true;
+
         transform.SetParent(userSpace);
-        rb.isKinematic = false;
-        rb.constraints = RigidbodyConstraints.None;
-        col.enabled = true;
         khonsuSphere.gameObject.SetActive(false);
         SetupProjectile();
     }
@@ -58,9 +67,6 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     }
 
-    Transform _touchedTransform;
-    Vector3 _stickToLocalPosition;
-
     private void OnCollisionEnter(Collision other)
     {
         if (_isHit)
@@ -68,12 +74,11 @@ public class KhonsuSphereProjectile : MonoBehaviour
             return;
         }
         _isHit = true;
-        rb.isKinematic = true;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        col.enabled = false;
+        _rigidbody.isKinematic = true;
+        _collider.enabled = false;
         ActivateKhonsuSphere();
         _touchedTransform = other.transform;
-        _stickToLocalPosition = _touchedTransform.InverseTransformPoint(transform.position);
+        _stickToLocalPosition = _touchedTransform.InverseTransformPoint(other.GetContact(0).point);
     }
 
     private void Update()
@@ -83,32 +88,37 @@ public class KhonsuSphereProjectile : MonoBehaviour
         var activeTime = KhonsuSphereData.ActiveTime + Time.deltaTime;
         PlayerEventController.SetKhonsuSphereActiveTime(activeTime);
 
-        transform.position = _touchedTransform.TransformPoint(_stickToLocalPosition);
-
         if (activeTime > KhonsuSphereData.ActiveDuration)
         {
             DeactivateKhonsuSphere();
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (!_isHit) return;
+
+        _rigidbody.MovePosition(_touchedTransform.TransformPoint(_stickToLocalPosition));
+    }
+
     public void Init(Collider[] colliders)
     {
-        collidersToIgnore = colliders;
+        _collidersToIgnore = colliders;
         _isInitialized = true;
     }
 
     private void SetupProjectile()
     {
         _isHit = false;
-        foreach (var hittableCollider in collidersToIgnore)
+        foreach (var hittableCollider in _collidersToIgnore)
         {
-            Physics.IgnoreCollision(col, hittableCollider);
+            Physics.IgnoreCollision(_collider, hittableCollider);
         }
-        rb.isKinematic = false;
-        rb.linearVelocity = transform.forward * _speed;
+        _rigidbody.isKinematic = false;
+        _rigidbody.linearVelocity = transform.forward * _speed;
         PlayerEventController.SetKhonsuSphereActiveTime(0f);
         enableCollisionsTime = 0f;
-        col.enabled = true;
+        _collider.enabled = true;
     }
 
     private void ActivateKhonsuSphere()
