@@ -3,17 +3,39 @@ using UnityEngine;
 
 public class RotateBackAndForthOverTime : MonoBehaviour
 {
+    [Header("Debug")]
+    public Rigidbody _rigidbody;
+    public TimeObject _timeObject;
+    public Tween _tween;
+
+    [Space(10)]
+    [Header("References")]
     public Transform from;
     public Transform to;
+
+    [Space(10)]
+    [Header("Settings")]
     public float duration = 1f;
     public Ease easeType = Ease.InOutSine;
 
+    void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+        _timeObject = GetComponent<TimeObject>();
+    }
+
     void Start()
     {
-        transform.rotation = from.rotation;
-
-        transform.DORotate(to.rotation.eulerAngles, duration, RotateMode.Fast)
+        _rigidbody.rotation = from.rotation;
+        _tween = _rigidbody.DORotate(to.rotation.eulerAngles, duration, RotateMode.Fast)
             .SetEase(easeType)
+            .SetUpdate(UpdateType.Fixed)
             .SetLoops(-1, LoopType.Yoyo);
+        _timeObject.OnTimeScaleChanged += OnTimeScaleChanged;
+    }
+
+    private void OnTimeScaleChanged(float timeScale)
+    {
+        _tween.timeScale = timeScale;
     }
 }
