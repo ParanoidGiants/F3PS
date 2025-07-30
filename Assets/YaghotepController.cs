@@ -261,7 +261,7 @@ public class YaghotepController : MonoBehaviour
         switch (currentState)
         {
             case YaghotepState.IDLE:
-                if (idleDuration < 0f)
+                if (idleDuration < 0f || patrolManager.PatrolPointCount == 0)
                 {
                     return;
                 }
