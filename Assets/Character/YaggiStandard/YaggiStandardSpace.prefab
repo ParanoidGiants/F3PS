@@ -803,7 +803,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 7964649710802316153}
   _targetCandidates: []
-  eyes: {fileID: 2573455661225070654}
+  eyes: {fileID: 3752928452022811528}
 --- !u!1 &7148289014345272476
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,7 +824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &233499469016343175
 Transform:
   m_ObjectHideFlags: 0
@@ -955,7 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 338527817359186250}
   _targetCandidates: []
-  eyes: {fileID: 233499469016343175}
+  eyes: {fileID: 3752928452022811528}
 --- !u!1 &7678737448576687941
 GameObject:
   m_ObjectHideFlags: 0

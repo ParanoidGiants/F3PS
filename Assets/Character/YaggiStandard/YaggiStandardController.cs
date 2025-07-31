@@ -233,20 +233,6 @@ public class YaggiStandardController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var color = Color.white;
-        switch (stoppingDistanceState)
-        {
-            case YaggiStandardStoppingDistanceState.PUSHED:
-                color = Color.red;
-                break;
-            case YaggiStandardStoppingDistanceState.FOLLOWING:
-                color = Color.yellow;
-                break;
-            case YaggiStandardStoppingDistanceState.STAYING:
-                color = Color.green;
-                break;
-        }
-        Debug.DrawLine(transform.position, navMeshAgent.destination, color, 4f);
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 

@@ -4,12 +4,19 @@ namespace F3PS.AI.Sensors
 {
     public class VisionSensor : BaseSensor
     {
-        public bool IsTargetInSight()
+        public bool IsTargetInSight { get; private set; }
+        public Transform eyes;
+
+        private void FixedUpdate()
         {
-            if (!HasTarget || TargetCandidates.Count < 2) return false;
+            if (!HasTarget || TargetCandidates.Count < 2)
+            {
+                IsTargetInSight = false;
+                return;
+            }
 
             int targetsInSight = 0;
-            var position = transform.position;
+            var position = eyes.position;
             for (int i = 0; i < TargetCandidates.Count && targetsInSight < 2; i++)
             {
                 var targetPosition = TargetCandidates[i].Center();
@@ -17,12 +24,16 @@ namespace F3PS.AI.Sensors
                 var playerPartDistance = direction.magnitude;
                 direction.Normalize();
                 // check if something is between the player and the eyes
-                if (!Physics.Raycast(position, direction, playerPartDistance, Helper.DefaultLayer))
+                var color = Color.red;
+                if (!Physics.Raycast(position, direction, out var hit, playerPartDistance, Helper.DefaultLayer))
                 {
                     targetsInSight++;
+                    color = Color.green;
                 }
+                Debug.Log(gameObject.name);
+                Debug.DrawLine(position, targetPosition, color);
             }
-            return targetsInSight >= 2;
+            IsTargetInSight = targetsInSight >= 2;
         }
     }
 }

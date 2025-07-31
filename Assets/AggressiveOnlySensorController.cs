@@ -5,7 +5,7 @@ public class AggressiveOnlySensorController : SensorController
 {
     public override bool IsTargetInLineOfSight()
     {
-        return aggressiveVision.IsTargetInSight();
+        return aggressiveVision.IsTargetInSight;
     }
 
     public override void SetState(SensorState state)

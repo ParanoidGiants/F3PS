@@ -640,9 +640,6 @@ namespace StarterAssets
             var linearDuration = easeDirection.magnitude / throwBackSpeed;
             var easeDuration = 1f / throwBackSpeed;
 
-            Debug.DrawLine(transform.position, easePosition, Color.red, 10f);
-            Debug.DrawLine(easePosition, targetPosition, Color.green, 10f);
-
             var sequence = DOTween.Sequence();
             sequence.Append(_rigidbody.DOMove(easePosition, linearDuration).SetEase(Ease.Linear));
             sequence.Append(_rigidbody.DOMove(targetPosition, easeDuration).SetEase(Ease.OutCubic));

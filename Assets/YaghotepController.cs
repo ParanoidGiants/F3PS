@@ -234,20 +234,6 @@ public class YaghotepController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        var color = Color.white;
-        switch (stoppingDistanceState)
-        {
-            case YaghotepStoppingDistanceState.PUSHED:
-                color = Color.red;
-                break;
-            case YaghotepStoppingDistanceState.FOLLOWING:
-                color = Color.yellow;
-                break;
-            case YaghotepStoppingDistanceState.STAYING:
-                color = Color.green;
-                break;
-        }
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 

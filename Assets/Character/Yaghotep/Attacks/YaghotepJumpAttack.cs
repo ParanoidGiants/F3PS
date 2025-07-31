@@ -118,7 +118,6 @@ public class YaghotepJumpAttack
                     );
                     _transform.position = nextPosition;
                     jumpUpTime += scaledDeltaTime;
-                    Debug.DrawRay(endPos, Vector3.down * 100f, Color.red, 0.1f);
                     _animator.SetFloat("JumpVelocity", 1f - (jumpUpTime / jumpUpDuration) * 0.9f + 0.1f);
                 }
                 else if (jumpUpTime >= jumpUpDuration && stayInMidAirTime == 0f)

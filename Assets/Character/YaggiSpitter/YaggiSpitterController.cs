@@ -243,21 +243,6 @@ public class YaggiSpitterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        var color = Color.white;
-        switch (stoppingDistanceState)
-        {
-            case YaggiSpitterStoppingDistanceState.PUSHED:
-                color = Color.red;
-                break;
-            case YaggiSpitterStoppingDistanceState.FOLLOWING:
-                color = Color.yellow;
-                break;
-            case YaggiSpitterStoppingDistanceState.STAYING:
-                color = Color.green;
-                break;
-        }
-        Debug.DrawLine(transform.position, navMeshAgent.destination, color, 4f);
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 

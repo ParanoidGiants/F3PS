@@ -36,7 +36,7 @@ public class DoorController : MonoBehaviour
     [SerializeField] private bool _open;
     [SerializeField] private float _animationDuration = 5f;
     [SerializeField] private float _openPosition = 1.5f;
-    [SerializeField] private float _closePosition = 0.5f;
+    [SerializeField] private float _closePosition = 0.5f;   
 
     public void OpenDoor()
     {
@@ -54,7 +54,7 @@ public class DoorController : MonoBehaviour
         _cameraRumble.TriggerRumble(animationDuration);
     }
 
-    private void CloseDoor()
+    public void CloseDoor()
     {
         if (!_open)
         {
