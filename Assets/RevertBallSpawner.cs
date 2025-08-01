@@ -19,7 +19,7 @@ public class RevertBallSpawner : MonoBehaviour
         for (int i = 0; i < ballCount; i++)
         {
             var spawnPosition = ballSpawnPoint.position;
-            var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation);
+            var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation, transform.parent);
             var revertBall = ball.GetComponent<RevertBall>();
             revertBall.Init(targetPlacePoint, ballSpawnPoint, ballLifeDuration);
             revertBalls.Add(revertBall);

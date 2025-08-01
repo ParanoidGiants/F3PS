@@ -15,6 +15,7 @@ public enum YaggiStandardStoppingDistanceState
 
 public enum YaggiStandardState
 {
+    IS_FALLING,
     IDLE,
     AGGRESSIVE,
     CHECKING,
@@ -131,18 +132,35 @@ public class YaggiStandardController : MonoBehaviour
     public YaggiStandardState currentState = YaggiStandardState.IDLE;
     public bool isDead = false;
     private Vector3 lastPosition;
+    public bool isFalling;
+    public Rigidbody _rigidbody;
 
     protected void Awake()
     {
+        Debug.Log("Is Awaking");
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
     }
 
     private void Start()
     {
+        Debug.Log("Is Starting");
         health = maxHealth;
         patrolManager.Init();
-        EnterState(YaggiStandardState.IDLE);
+        if (isFalling)
+        {
+            EnterState(YaggiStandardState.IS_FALLING);
+        }
         _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Is Destroying");
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("Is Osable");
     }
 
     private void SwitchState(YaggiStandardState newState)
@@ -157,6 +175,10 @@ public class YaggiStandardController : MonoBehaviour
         UpdateSensorState(state);
         switch (state)
         {
+            case YaggiStandardState.IS_FALLING:
+                _rigidbody.isKinematic = false;
+                navMeshAgent.enabled = false;
+                break;
             case YaggiStandardState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
@@ -208,6 +230,10 @@ public class YaggiStandardController : MonoBehaviour
     {
         switch (currentState)
         {
+            case YaggiStandardState.IS_FALLING:
+                _rigidbody.isKinematic = true;
+                navMeshAgent.enabled = true;
+                break;
             case YaggiStandardState.IDLE:
                 break;
             case YaggiStandardState.PATROLLING:
@@ -233,6 +259,10 @@ public class YaggiStandardController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (currentState == YaggiStandardState.IS_FALLING)
+        {
+            return;
+        }
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
@@ -560,6 +590,7 @@ public class YaggiStandardController : MonoBehaviour
 
     public void Died()
     {
+        Debug.Log("Is Dying");
         Destroy(gameObject);
     }
 

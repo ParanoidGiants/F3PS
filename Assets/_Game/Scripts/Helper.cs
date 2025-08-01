@@ -8,6 +8,7 @@ public static class Helper
 {
     public static LayerMask PlayerLayer => LayerMask.GetMask("Character");
     public static LayerMask DefaultLayer => LayerMask.GetMask("Default");
+    public static LayerMask GroundLayer => LayerMask.GetMask("Ground");
     public static LayerMask ProjectileLayer => LayerMask.GetMask("Projectile");
     public static LayerMask EnemyLayer => LayerMask.GetMask("Enemy");
     public static LayerMask HittableLayer => LayerMask.GetMask("Hittable");

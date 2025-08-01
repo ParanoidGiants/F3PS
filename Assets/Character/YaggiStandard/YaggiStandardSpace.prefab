@@ -388,7 +388,7 @@ MonoBehaviour:
   health: 0
   maxHealth: 500
   moveSpeed: 5
-  idleDuration: 0
+  idleDuration: 3
   idleTime: 0
   patrolMoveSpeed: 5
   checkingMoveSpeed: 5
@@ -803,7 +803,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 7964649710802316153}
   _targetCandidates: []
-  eyes: {fileID: 3752928452022811528}
+  eyes: {fileID: 1001731546606777916}
 --- !u!1 &7148289014345272476
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,7 +824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &233499469016343175
 Transform:
   m_ObjectHideFlags: 0
@@ -955,7 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 338527817359186250}
   _targetCandidates: []
-  eyes: {fileID: 3752928452022811528}
+  eyes: {fileID: 1001731546606777916}
 --- !u!1 &7678737448576687941
 GameObject:
   m_ObjectHideFlags: 0
