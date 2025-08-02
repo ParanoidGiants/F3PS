@@ -19,7 +19,7 @@ public class SwitchesController : MonoBehaviour
         }
     }
 
-    private void OnDsable()
+    private void OnDisable()
     {
         foreach (var _switch in switches)
         {
@@ -29,20 +29,25 @@ public class SwitchesController : MonoBehaviour
 
     private void OnSwitchStateChanged()
     {
+        if (_isDoorOpen)
+        {
+            return;
+        }
         var areAllSwitchesTurnedOn = true;
         foreach (var _switch in switches)
         {
             areAllSwitchesTurnedOn &= _switch._isSwitchTurnedOn;
         }
-        if (_isDoorOpen && !areAllSwitchesTurnedOn)
+        if (!areAllSwitchesTurnedOn)
         {
-            doorController.CloseDoor();
-        }
-        else if (!_isDoorOpen && areAllSwitchesTurnedOn)
-        {
-            doorController.OpenDoor();
+            return;
         }
 
-        _isDoorOpen = areAllSwitchesTurnedOn;
+        foreach (var _switch in switches)
+        {
+            _switch.FixTurnOn();
+        }
+        doorController.OpenDoor();
+        _isDoorOpen = true;
     }
 }

@@ -247,7 +247,6 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
     {
         if (currentState == FromSpawnerYaggiStandardState.FALLING)
         {
-            Debug.Log("FIXEDUPDATE");
             if (Physics.Raycast(transform.position, Vector3.down, 1f, Helper.GroundLayer))
             {
                 SwitchState(FromSpawnerYaggiStandardState.IDLE);

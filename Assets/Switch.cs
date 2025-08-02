@@ -7,6 +7,7 @@ public class Switch : MonoBehaviour
     [Header("Debug")]
     public int _entitiesOnSwitch;
     public bool _isSwitchTurnedOn;
+    public bool _isSwitchFixedOn;
     public List<GameObject> _entities;
     public Renderer _renderer;
 
@@ -15,6 +16,12 @@ public class Switch : MonoBehaviour
     public Material switchOff;
     public Action OnSwitchStateChanged;
 
+    internal void FixTurnOn()
+    {
+        _isSwitchFixedOn = true;
+        _renderer.material = switchOn;
+    }
+
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
@@ -22,6 +29,11 @@ public class Switch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_isSwitchFixedOn)
+        {
+            return;
+        }
+
         _entitiesOnSwitch++;
 
         if (!_isSwitchTurnedOn)
@@ -34,6 +46,11 @@ public class Switch : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (_isSwitchFixedOn)
+        {
+            return;
+        }
+
         _entitiesOnSwitch--;
         if (_entitiesOnSwitch == 0)
         {
