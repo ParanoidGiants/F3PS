@@ -1,57 +1,38 @@
 using System;
+using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
 
 public class RevertBall : MonoBehaviour
 {
-    private Rigidbody _rb;
     private Transform _targetPlacePoint;
-    public Transform _spawnPoint;
-    public float _lifeTime;
-    public float _lifeDuration;
+    public Animator _animator;
 
-    public bool isInitialized = false;
-
-    public void Init(Transform targetPlacePoint, Transform spawnPoint, float lifeTime)
+    public void Init(Transform targetPlacePoint)
     {
         _targetPlacePoint = targetPlacePoint;
-        _spawnPoint = spawnPoint;
-        _lifeDuration = lifeTime;
-        isInitialized = true;
     }
 
-    private void Update()
+    public void StartRun(float speed)
     {
-        _lifeTime += Time.deltaTime;
-        if (_lifeTime >= _lifeDuration)
-        {
-            gameObject.SetActive(false);
-        }
+        _animator.speed = speed;
+        _animator.SetTrigger("Start");
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
+        if (collision.gameObject.TryGetComponent<HorusPalmProjectile>(out var _) || collision.gameObject.TryGetComponent<OsirisKickProjectile>(out var _))
         {
-
+            gameObject.SetActive(false);
             return;
         }
-        player.transform.position = _targetPlacePoint.position;
-        gameObject.SetActive(false);
 
-    }
-
-    private void OnEnable()
-    {
-        if (!isInitialized)
+        if (collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
         {
+            player.transform.position = _targetPlacePoint.position;
+            gameObject.SetActive(false);
             return;
         }
-        _lifeTime = 0f;
-        transform.position = _spawnPoint.position;
-        transform.rotation = Quaternion.identity;
-        _rb = GetComponent<Rigidbody>();
-        _rb.linearVelocity = Vector3.down;
-        _rb.angularVelocity = Vector3.zero;
+
     }
 }

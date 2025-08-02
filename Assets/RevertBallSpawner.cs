@@ -11,7 +11,7 @@ public class RevertBallSpawner : MonoBehaviour
     public int ballCount;
     public float time;
     public float spawnEverySeconds;
-    public float ballLifeDuration;
+    public float ballSpeed;
     public int currentlySpawnedBallIndex = 0;
 
     private void Awake()
@@ -21,9 +21,8 @@ public class RevertBallSpawner : MonoBehaviour
             var spawnPosition = ballSpawnPoint.position;
             var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation, transform.parent);
             var revertBall = ball.GetComponent<RevertBall>();
-            revertBall.Init(targetPlacePoint, ballSpawnPoint, ballLifeDuration);
+            revertBall.Init(targetPlacePoint);
             revertBalls.Add(revertBall);
-            ball.SetActive(false);
         }
         time = spawnEverySeconds;
     }
@@ -38,17 +37,8 @@ public class RevertBallSpawner : MonoBehaviour
         time %= spawnEverySeconds;
 
         var nextBall = revertBalls[currentlySpawnedBallIndex];
-        nextBall.gameObject.SetActive(true);
+        nextBall.StartRun(ballSpeed);
         currentlySpawnedBallIndex++;
         currentlySpawnedBallIndex %= ballCount;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!other.gameObject.TryGetComponent<RevertBall>(out var ball))
-        {
-            return;
-        }
-        ball.gameObject.SetActive(false);
     }
 }
