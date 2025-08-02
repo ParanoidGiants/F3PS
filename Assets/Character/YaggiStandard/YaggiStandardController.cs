@@ -15,7 +15,6 @@ public enum YaggiStandardStoppingDistanceState
 
 public enum YaggiStandardState
 {
-    IS_FALLING,
     IDLE,
     AGGRESSIVE,
     CHECKING,
@@ -132,8 +131,6 @@ public class YaggiStandardController : MonoBehaviour
     public YaggiStandardState currentState = YaggiStandardState.IDLE;
     public bool isDead = false;
     private Vector3 lastPosition;
-    public bool isFalling;
-    public Rigidbody _rigidbody;
 
     protected void Awake()
     {
@@ -146,10 +143,6 @@ public class YaggiStandardController : MonoBehaviour
         Debug.Log("Is Starting");
         health = maxHealth;
         patrolManager.Init();
-        if (isFalling)
-        {
-            EnterState(YaggiStandardState.IS_FALLING);
-        }
         _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
     }
 
@@ -175,10 +168,6 @@ public class YaggiStandardController : MonoBehaviour
         UpdateSensorState(state);
         switch (state)
         {
-            case YaggiStandardState.IS_FALLING:
-                _rigidbody.isKinematic = false;
-                navMeshAgent.enabled = false;
-                break;
             case YaggiStandardState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
@@ -230,10 +219,6 @@ public class YaggiStandardController : MonoBehaviour
     {
         switch (currentState)
         {
-            case YaggiStandardState.IS_FALLING:
-                _rigidbody.isKinematic = true;
-                navMeshAgent.enabled = true;
-                break;
             case YaggiStandardState.IDLE:
                 break;
             case YaggiStandardState.PATROLLING:
@@ -259,10 +244,6 @@ public class YaggiStandardController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentState == YaggiStandardState.IS_FALLING)
-        {
-            return;
-        }
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
