@@ -11,10 +11,12 @@ public class FallOnTouch : MonoBehaviour
     public bool isTouched;
     public bool isFalling;
     private TriggerZone _triggerZone;
+    private Vector3 startPosition;
 
     private void Awake()
     {
         _triggerZone = GetComponentInChildren<TriggerZone>();
+        startPosition = transform.position;
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.isKinematic = true;
         _rigidbody.useGravity = false;
@@ -45,6 +47,20 @@ public class FallOnTouch : MonoBehaviour
         isTouched = false;
         shakeUntilFallTime = 0;
         shakeAnimation.Pause();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!Helper.IsInLayerMask(collision.gameObject, Helper.GroundLayer))
+        {
+            return;
+        }
+        transform.position = startPosition;
+        _rigidbody.isKinematic = true;
+        _rigidbody.useGravity = false;
+        shakeAnimation.Pause();
+        isFalling = false;
+        isTouched = false;
     }
 
     private void Update()
