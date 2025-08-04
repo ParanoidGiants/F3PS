@@ -1,86 +1,128 @@
-using StarterAssets;
 using System;
 using UnityEngine;
 
+
 public class PlatformMover : MonoBehaviour
 {
+    [Header("Path Reference")]
     public MovePath path;
-    public float speed = 5f;
-    public float waitDuration = 2f;
 
-    private int _currentWaypointIndex = 0;
+    [Space(10)]
+    [Header("Movement Settings")]
+    public float movementSpeed = 5f;
+    [Tooltip("This is only used when the from and to waypoints have the same position")]
+    public float rotationSpeed = 5f;
+    public float waitDuration = 2f;
+    public int currentWaypointIndex = 0;
+
+
     private float waitTimer = 0f;
     private bool moveBackwards = false;
+    private Rigidbody _rigidbody;
     private PlatformTimeObject _timeObject;
+    private float FixedDeltaTime => _timeObject != null ? _timeObject.ScaledFixedDeltaTime : Time.fixedDeltaTime;
 
-    public int CurrentWayPointIndex { get { return _currentWaypointIndex; } set { _currentWaypointIndex = value; } }
-    private float DeltaTime => _timeObject.ScaledDeltaTime;
+    public Transform fromWaypoint;
+    public Transform toWaypoint;
+    public float translationBetweenWaypointsTime = 0f;
+    public float translationBetweenWayPointsDuration;
 
     private void Awake()
     {
         _timeObject = GetComponent<PlatformTimeObject>();
+        _rigidbody = GetComponent<Rigidbody>();
+        if (_rigidbody == null)
+        {
+            Debug.LogError("PlatformMover requires a Rigidbody component.", this);
+        }
     }
 
     private void Start()
     {
-        transform.position = path.waypoints[0].position;
+        _rigidbody.position = path.waypoints[0].position;
+        currentWaypointIndex = 1;
+        SetupPathFromTo(0, currentWaypointIndex);
     }
 
-    void Update()
+    private void SetupPathFromTo(int from, int to)
+    {
+        fromWaypoint = path.waypoints[from];
+        toWaypoint = path.waypoints[to];
+        translationBetweenWayPointsDuration = Vector3.Distance(fromWaypoint.position, toWaypoint.position) / movementSpeed;
+        translationBetweenWaypointsTime = 0f;
+    }
+
+    void FixedUpdate()
     {
         if (waitTimer > 0f)
         {
-            waitTimer -= DeltaTime;
+            waitTimer -= FixedDeltaTime;
             return;
         }
 
         var waypoints = path.waypoints;
         if (waypoints.Count == 0) return;
 
-        // Move towards the current waypoint
-        Transform targetWaypoint = waypoints[_currentWaypointIndex];
-        Vector3 direction = targetWaypoint.position - transform.position;
-        float distanceThisFrame = speed * DeltaTime;
 
-        if (direction.magnitude <= distanceThisFrame)
+        if (translationBetweenWaypointsTime >= translationBetweenWayPointsDuration)
         {
-            // Snap to the waypoint and move to the next one
-            transform.position = targetWaypoint.position;
+            _rigidbody.MovePosition(toWaypoint.position);
+            _rigidbody.MoveRotation(toWaypoint.rotation);
             DetermineNextWayPoint();
         }
-        else
-        {
-            // Move the platform
-            transform.Translate(direction.normalized * distanceThisFrame, Space.World);
-        }
+
+        var currentPosition = Vector3.Lerp(fromWaypoint.position, toWaypoint.position, translationBetweenWaypointsTime / translationBetweenWayPointsDuration);
+        _rigidbody.MovePosition(currentPosition);
+
+        var currentRotation = Quaternion.Slerp(fromWaypoint.rotation, toWaypoint.rotation, translationBetweenWaypointsTime / translationBetweenWayPointsDuration);
+        _rigidbody.MoveRotation(currentRotation);
+
+        translationBetweenWaypointsTime += FixedDeltaTime;
     }
 
     private void DetermineNextWayPoint()
     {
+        var oldWaypointIndex = currentWaypointIndex;
         if (path.loop)
         {
-            _currentWaypointIndex = (_currentWaypointIndex + 1) % path.waypoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % path.waypoints.Count;
             waitTimer = waitDuration;
         }
         else if (moveBackwards)
         {
-            CurrentWayPointIndex--;
-            if (CurrentWayPointIndex < 0)
+            currentWaypointIndex--;
+            if (currentWaypointIndex < 0)
             {
                 moveBackwards = false;
-                CurrentWayPointIndex = 1;
+                currentWaypointIndex = 1;
                 waitTimer = waitDuration;
             }
         }
         else
         {
-            CurrentWayPointIndex++;
-            if (CurrentWayPointIndex >= path.waypoints.Count)
+            currentWaypointIndex++;
+            if (currentWaypointIndex >= path.waypoints.Count)
             {
                 moveBackwards = true;
-                CurrentWayPointIndex = path.waypoints.Count - 2;
+                currentWaypointIndex = path.waypoints.Count - 2;
                 waitTimer = waitDuration;
             }
         }
+        SetupPathFromTo(oldWaypointIndex, currentWaypointIndex);
+        fromWaypoint = path.waypoints[oldWaypointIndex];
+        toWaypoint = path.waypoints[currentWaypointIndex];
+        translationBetweenWayPointsDuration = Vector3.Distance(fromWaypoint.position, toWaypoint.position) / movementSpeed;
+        if (translationBetweenWayPointsDuration <= 0f)
+        {
+            Debug.LogWarning("Translation duration is zero or negative, using rotation speed to determine duration.", this);
+            translationBetweenWayPointsDuration = Quaternion.Angle(fromWaypoint.rotation, toWaypoint.rotation) / rotationSpeed;
+        }
+        if (translationBetweenWayPointsDuration <= 0f)
+        {
+            Debug.LogError("The position and rotation of the two waypoints is equal.");
+            Debug.LogError("Please ensure that the from and to waypoints are not the same.");
+        }
+
+        translationBetweenWaypointsTime = 0f;
     }
 }

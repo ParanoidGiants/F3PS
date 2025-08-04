@@ -1,3 +1,5 @@
+using System;
+
 public class PhysicsTimeObject : TimeObject
 {
     protected const double TOLERANCE = 0.001f;
@@ -42,5 +44,10 @@ public class PhysicsTimeObject : TimeObject
     {
         outline.Activate();
         base.Activate(initialTimeScale);
+    }
+
+    public void DeactivateOutline()
+    {
+        outline.Deactivate();
     }
 }

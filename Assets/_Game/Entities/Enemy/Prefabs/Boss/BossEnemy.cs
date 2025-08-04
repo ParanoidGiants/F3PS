@@ -85,7 +85,7 @@ namespace F3PS.Enemy
             health = Mathf.Max(health, 0);
             // Debug.Log("Boss Took " + damage + " damage");
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", body.transform);
-            _healthUIPool.OnHitBoss(this);
+            // _healthUIPool.OnHitBoss(this);
             if (health <= maxHealth * 2f / 3f && !rushersReleased)
             {
                 ReleaseRushers();

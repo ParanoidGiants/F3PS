@@ -1,11 +1,11 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SelectableSkillHUD : MonoBehaviour
 {
-    public CanvasGroup[] associatedCanvasGroups;
+    public Skill skillType;
     public RectTransform _rectTransform;
+    public CanvasGroup canvasGroup;
 
     private Sequence _selectAnimation;
 
@@ -18,10 +18,7 @@ public class SelectableSkillHUD : MonoBehaviour
         _selectAnimation = DOTween.Sequence();
         _selectAnimation.Append(_rectTransform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack));
 
-        foreach (var canvasGroup in associatedCanvasGroups)
-        {
-            _selectAnimation.Insert(0, canvasGroup.DOFade(1f, 0.2f));
-        }
+        _selectAnimation.Insert(0, canvasGroup.DOFade(1f, 0.2f));
     }
 
     public void Deselect()
@@ -31,12 +28,8 @@ public class SelectableSkillHUD : MonoBehaviour
             _selectAnimation.Kill();
         }
         _selectAnimation = DOTween.Sequence();
-        _selectAnimation.Append(_rectTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack));
+        _selectAnimation.Append(_rectTransform.DOScale(1f, .2f).SetEase(Ease.OutBack));
 
-        foreach (var canvasGroup in associatedCanvasGroups)
-        {
-            _selectAnimation.Insert(0, canvasGroup.DOFade(1f, 0.2f));
-            _selectAnimation.Insert(0, canvasGroup.DOFade(0.2f, 0.2f));
-        }
+        _selectAnimation.Insert(0, canvasGroup.DOFade(.2f, .2f));
     }
 }

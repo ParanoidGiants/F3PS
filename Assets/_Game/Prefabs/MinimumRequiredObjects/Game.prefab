@@ -122,8 +122,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLoading: 0
   sceneNames:
+  - _level_blockout_draft
   - _moving_platforms
   - _level_blockout_merge
+  - _puzzle_00
+  - _puzzle_01
   backDrop: {fileID: 1664451570}
 --- !u!1 &1871273289
 GameObject:
@@ -276,22 +279,83 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputs: {fileID: 5736421558823638681}
   PlayerData:
-    CurrentHealth: 0
-    MaxHealth: 100
-    ActiveSkill: 0
-    ActiveAttack: 0
+    CurrentHealth: 300
+    MaxHealth: 300
+    CurrentStamina: 0
+    MaxStamina: 1
+    StaminaRecoveryRate: 0.2
+    IsRecoveringStamina: 0
+    IsDepletingStamina: 0
+    SprintDepletionRate: 0.1
+    SprintSpeed: 70
+    SpeedChangeRate: 10
+    AscendHeight: 8
+    AscendDuration: 0.2
+    GlideDuration: 2
+    GlideDepletionRate: 0.25
+    LandingDepth: 20
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5
     RotationSpeedYaw: 0.5
-    MoveSpeed: 50
+    MoveSpeed: 30
     AimSpeed: 40
-    SprintSpeed: 70
-    SpeedChangeRate: 10
-    JumpHeight: 5
+    JumpCoolDownTimer: 0.25
+    JumpHeight: 4
     DodgeHeight: 1.2
-    DodgeSpeed: 60
-    SprintDepletionRate: 10
+    DodgeSpeed: 40
+    DodgeAscendTimer: 0.05
+    DodgeLandTimer: 0.05
+    DodgeCoolDownTimer: 0.25
+    UnlockedAttacks: 0100000002000000
+    ActiveAttack: 1
+    OsirisKickData:
+      Damage: 2
+      NumberOfProjectiles: 8
+      StaminaCost: 0.05
+      SpreadAngle: 5
+      AttackSpeed: 100
+      AttackCoolDownTimer: 0.2
+      ProjectileLifeDuration: 0.2
+    HorusPalmData:
+      Damage: 20
+      AttackSpeed: 100
+      ImpactForceMultiplier: 0.1
+      AttackCoolDownTimer: 0.2
+      StaminaCost: 0.3
+      ProjectileLifeDuration: 5
+    UnlockedSkills: 010000000200000003000000
+    ActiveSkill: 1
+    KhonsuSphereSkillData:
+      TargetSize: 30
+      ActiveDuration: 20
+      ThrowPower: 20
+      ChangeTimeScaleSpeed: 0
+      IsEnabled: 0
+      Position: {x: 0, y: 0, z: 0}
+      TimeScale: 0.2
+      ActiveTime: 0
+    AnubisScrollSkillData:
+      CoolDownTime: 0.5
+      Duration: 2
+      Speed: 1
+      ScrollSpeed: 1
+      MinimumDistance: 3
+      MaximumDistance: 50
+      FrameDuration: 0.1
+      State: 0
+      CurrentFrame: 0
+      TotalFrames: 0
+      CurrentRecordingTime: 0
+    ThotMindSkillData:
+      PushPullSpeed: 10
+      RotateTimer: 1
+      MoveSpeed: 5
+      MinimumDistance: 3
+      MaximumDistance: 50
+      MaximumThrowSpeed: 50
+    UnlockedAbilities: 0200000001000000
   _fps: 60
+  isMenuOpen: 0
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,7 +405,7 @@ MonoBehaviour:
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
   bubbleTimeScale: 0
-  telekinesisPushPull: 0
+  pushPull: 0
   jump: 0
   sprint: 0
   shoot: 0

@@ -33,7 +33,7 @@ namespace F3PS.AI.Sensors
                 return 0;
             });
 
-            hittable.OnDestroyed += HandleTargetDestroyed;
+            hittable.onDisabled += HandleTargetDestroyed;
         }
 
         private void OnTriggerExit(Collider other)
@@ -43,12 +43,13 @@ namespace F3PS.AI.Sensors
 
             // RemoveHittableCandidate(hittable);
             _targetCandidates.Remove(hittable);
-            hittable.OnDestroyed -= HandleTargetDestroyed;
+            hittable.onDisabled -= HandleTargetDestroyed;
         }
 
         private void HandleTargetDestroyed(Hittable target)
         {
             _targetCandidates.Remove(target);
+            target.onDisabled -= HandleTargetDestroyed;
         }
 
         public void SetActive(bool active)

@@ -3,7 +3,7 @@ using UnityEngine;
 public class OutlineTimeObject : MonoBehaviour
 {
     private MeshRenderer _meshRenderer;
-    public MeshFilter meshFilterToCloneFrom;
+    public Mesh mesh;
     public Material material;
     public Color freeze;
     public Color normal;
@@ -29,6 +29,6 @@ public class OutlineTimeObject : MonoBehaviour
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         var meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = meshFilterToCloneFrom.mesh;
+        meshFilter.mesh = mesh;
     }
 }

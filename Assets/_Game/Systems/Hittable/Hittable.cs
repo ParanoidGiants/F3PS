@@ -1,22 +1,32 @@
+using System;
 using UnityEngine;
 
-namespace F3PS.Damage.Take
+public class Hittable : MonoBehaviour
 {
-    public class Hittable : MonoBehaviour
+    [Header("Reference")]
+    public GameObject owner;
+
+    [Header("Settings")]
+    public float damageMultiplier;
+
+    public event Action<Hittable> onDisabled;
+
+    protected Collider _collider;
+        
+    public Vector3 Center()
     {
-        [Header("Settings")]
-        public float damageMultiplier;
-        
-        protected Collider _collider;
-        protected int _hittableId;
+        return _collider.bounds.center;
+    }
 
-        public int HittableId => _hittableId;
-        
-        public Vector3 Center()
-        {
-            return _collider.bounds.center;
-        }
+    public virtual void OnHit(int damage, Vector3 hitDirection) { }
 
-        public virtual void OnHit(HitBox hitBy, Vector3 hitDirection) { }
+    public bool IsOwner(int instanceId)
+    {
+        return owner.GetInstanceID() == instanceId;
+    }
+
+    private void OnDisable()
+    {
+        onDisabled?.Invoke(this);
     }
 }

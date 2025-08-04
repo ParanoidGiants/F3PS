@@ -1,28 +1,43 @@
 using F3PS;
 using StarterAssets;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
+    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+
     [Header("References")]
     public Transform playerSpace;
     public Crosshair crosshair;
-    public SelectSkillControllerHUD selectSkillControllerHUD;
         
     [Header("Skills")]
-    public TelekinesisController telekinesisController;
-    public RewindController rewindController;
-    public TimeBubbleController timeBubbleController;
+    public ThotMindController thotMindController;
+    public AnubisScrollController anubisScrollController;
+    public KhonsuSphereController khonsuSphereController;
 
     private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
     private bool _isSkillSwitched;
 
+    private void OnEnable()
+    {
+        PlayerEventController.OnActiveSkillChanged += SetActiveSkill;
+    }
+
+    private void OnDisable()
+    {
+        PlayerEventController.OnActiveSkillChanged -= SetActiveSkill;
+    }
+
     public void Init()
     {
         _inputs = GameManager.Instance.inputs;
         crosshair.gameObject.SetActive(true);
-        SetActiveSkill(GameManager.Instance.PlayerData.ActiveSkill);
+        SetActiveSkill(PlayerData.ActiveSkill);
+        PlayerEventController.SetActiveSkill(PlayerData.ActiveSkill);
     }
 
     public void OnUpdate()
@@ -32,44 +47,47 @@ public class SkillManager : MonoBehaviour
             _inputs.skill,
             _inputs.grab,
             _inputs.look,
-            _inputs.telekinesisPushPull
+            _inputs.pushPull
         );
     }
 
     public void OnFixedUpdate()
     {
+
         _aimTargetPosition = crosshair.GetTargetPosition();
 
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.OnFixedUpdate();
+            case Skill.ThotMind:
+                thotMindController.OnFixedUpdate();
                 break;
-            case Skill.Rewind:
-                rewindController.OnFixedUpdate();
+            case Skill.AnubisScroll:
+                anubisScrollController.OnFixedUpdate();
                 break;
             default:
                 break;
         }
+
+        anubisScrollController.OnFixedUpdateForCurrentCandidate();
     }
 
-    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float telekinesisPushPull)
+    private void HandleActiveSkill(bool skill, bool grab, Vector2 look, float thotMindPushPull)
     {
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.OnUpdate(
+            case Skill.ThotMind:
+                thotMindController.OnUpdate(
                     skill,
                     grab,
                     look,
-                    telekinesisPushPull
+                    thotMindPushPull
                 );
                 break;
-            case Skill.Rewind:
-                rewindController.OnUpdate(skill, grab, telekinesisPushPull);
+            case Skill.AnubisScroll:
+                anubisScrollController.OnUpdate(skill, grab, thotMindPushPull);
                 break;
-            case Skill.TimeBubble:
-                timeBubbleController.OnUpdate(skill, telekinesisPushPull, _aimTargetPosition);
+            case Skill.KhonsuSphere:
+                khonsuSphereController.OnUpdate(skill, thotMindPushPull, _aimTargetPosition);
                 break;
             default:
                 break;
@@ -78,6 +96,11 @@ public class SkillManager : MonoBehaviour
 
     private void HandleSwitchSkill(bool switchWeapon)
     {
+        if (!AreAnyTwoSkillsUnlocked())
+        {
+            return;
+        }
+
         if (!switchWeapon)
         {
             _isSkillSwitched = false;
@@ -90,33 +113,42 @@ public class SkillManager : MonoBehaviour
         }
 
         _isSkillSwitched = true;
-        var activeSkill = GameManager.Instance.PlayerData.ActiveSkill;
-        var nextSkill = (Skill)(((int)activeSkill + 1) % 3);
+        var activeSkillIndex = PlayerData.UnlockedSkills.IndexOf(PlayerData.ActiveSkill);
+        var nextSkillIndex = ((activeSkillIndex + 1) % PlayerData.UnlockedSkills.Count);
+        var nextSkill = PlayerData.UnlockedSkills[nextSkillIndex];
+        PlayerEventController.SetActiveSkill(nextSkill);
+        PlayerData.ActiveSkill = nextSkill;
         SetActiveSkill(nextSkill);
+    }
+
+    private bool AreAnyTwoSkillsUnlocked()
+    {
+        return PlayerData.UnlockedSkills.Count(s => s != Skill.None) > 1;
     }
 
     private void SetActiveSkill(Skill nextSkill)
     {
-        selectSkillControllerHUD.SelectSkillHud((int)nextSkill);
-        GameManager.Instance.PlayerData.ActiveSkill = nextSkill;
         switch (nextSkill)
         {
-            case Skill.Telekinesis:
-                telekinesisController.gameObject.SetActive(true);
-                rewindController.gameObject.SetActive(false);
-                timeBubbleController.gameObject.SetActive(false);
+            case Skill.ThotMind:
+                thotMindController.gameObject.SetActive(true);
+                anubisScrollController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
-            case Skill.Rewind:
-                telekinesisController.gameObject.SetActive(false);
-                rewindController.gameObject.SetActive(true);
-                timeBubbleController.gameObject.SetActive(false);
+            case Skill.AnubisScroll:
+                thotMindController.gameObject.SetActive(false);
+                anubisScrollController.gameObject.SetActive(true);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
-            case Skill.TimeBubble:
-                telekinesisController.gameObject.SetActive(false);
-                rewindController.gameObject.SetActive(false);
-                timeBubbleController.gameObject.SetActive(true);
+            case Skill.KhonsuSphere:
+                thotMindController.gameObject.SetActive(false);
+                anubisScrollController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(true);
                 break;
             default:
+                thotMindController.gameObject.SetActive(false);
+                anubisScrollController.gameObject.SetActive(false);
+                khonsuSphereController.gameObject.SetActive(false);
                 break;
         }
     }
@@ -125,14 +157,32 @@ public class SkillManager : MonoBehaviour
     {
         switch (GameManager.Instance.PlayerData.ActiveSkill)
         {
-            case Skill.Telekinesis:
-                return telekinesisController.isMovingObjectThisFrame;
-            case Skill.Rewind:
-                return rewindController.IsAiming();
-            case Skill.TimeBubble:
-                return timeBubbleController.IsAiming();
+            case Skill.ThotMind:
+                return thotMindController.isMovingObjectThisFrame;
+            case Skill.AnubisScroll:
+                return anubisScrollController.IsAiming();
+            case Skill.KhonsuSphere:
+                return khonsuSphereController.IsAiming();
             default:
                 return false;
+        }
+    }
+
+    internal void OnLateUpdate()
+    {
+
+        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        {
+            case Skill.ThotMind:
+                thotMindController.OnLateUpdate();
+                break;
+
+            case Skill.AnubisScroll:
+                anubisScrollController.OnLateUpdate();
+                break;
+
+            default:
+                break;
         }
     }
 }

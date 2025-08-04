@@ -1,3 +1,4 @@
+using F3PS.AI.States;
 using F3PS.AI.States.Action;
 using F3PS.Enemy;
 using StarterAssets;
@@ -7,14 +8,11 @@ namespace F3PS.Damage.Take
 {
     public class EnemyHittable : Hittable
     {
-        private int _playerId;
         public BaseEnemy enemy;
 
         void Awake()
         {
             _collider = GetComponent<Collider>();
-            _hittableId = enemy.GetInstanceID();
-            _playerId = FindFirstObjectByType<ThirdPersonController>().transform.parent.GetInstanceID();
         }
 
         private void OnEnable()
@@ -28,17 +26,14 @@ namespace F3PS.Damage.Take
         }
 
         override
-        public void OnHit(HitBox hitBy, Vector3 hitDirection)
+        public void OnHit(int damage, Vector3 hitDirection)
         {
             if (enemy.IsDead)
             {
                 return;
             }
-            enemy.Hit((int)(damageMultiplier * hitBy.damage));
-            if (hitBy.attackerId == _playerId)
-            {
-                OnHitByPlayer(hitDirection);
-            }
+            enemy.Hit((int)(damageMultiplier * damage));
+            OnHitByPlayer(hitDirection);
         }
 
         private void OnHitByPlayer(Vector3 hitDirection)

@@ -15,7 +15,7 @@ namespace F3PS.AI.Sensors
         public void SetState(SensorState state) { }
 
         override
-        public bool IsTargetDetected()
+        public bool HasTarget()
         {
             return aggressiveMovement.HasTarget;
         }

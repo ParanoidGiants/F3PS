@@ -18,16 +18,16 @@ public class PlatformRecorder : MonoBehaviour
     public Renderer[] renderers;
     public Material _default;
     public Material resume;
-    public Material rewind;
+    public Material anubisScroll;
     public Material floating;
 
     [Space(20)]
     [Header("Watchers")]
     public float currentRecordingTime = 0;
     public int currentFrame = 0;
-    public Vector3 timeBubbleCenter;
-    public float timeBubbleRadius;
-    public RecorderState state;
+    public Vector3 khonsuSphereCenter;
+    public float khonsuSphereRadius;
+    public AnubisScrollState state;
     public bool isRecording = false;
     public float aliveTime = 0f;
 
@@ -43,7 +43,7 @@ public class PlatformRecorder : MonoBehaviour
 
     protected virtual void Awake()
     {
-        state = RecorderState.None;
+        state = AnubisScrollState.None;
     }
 
     void Update()
@@ -94,7 +94,7 @@ public class PlatformRecorder : MonoBehaviour
         Log($"Record Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWayPointIndex, MathUtils.IntEquals);
+        // wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWaypointIndex, MathUtils.IntEquals);
     }
 
     private void RecordInitialFrame()
@@ -103,7 +103,7 @@ public class PlatformRecorder : MonoBehaviour
         Log($"Record Initial Frame {currentFrame}: {transform.position}");
         positions.RecordIfChanged(currentFrame, transform.position, MathUtils.Vector3Equals);
         rotations.RecordIfChanged(currentFrame, transform.rotation, MathUtils.QuaternionEquals);
-        wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWayPointIndex, MathUtils.IntEquals);
+        // wayPoints.RecordIfChanged(currentFrame, platformMover.CurrentWaypointIndex, MathUtils.IntEquals);
     }
 
     private void RecordFutureFramePosition(int frame, Vector3 position)
@@ -157,14 +157,14 @@ public class PlatformRecorder : MonoBehaviour
     {
         switch (state)
         {
-            case RecorderState.None:
+            case AnubisScrollState.None:
                 break;
 
-            case RecorderState.Record:
+            case AnubisScrollState.Record:
                 Record();
                 break;
 
-            case RecorderState.Playback:
+            case AnubisScrollState.Playback:
                 Playback();
                 break;
 
@@ -180,10 +180,10 @@ public class PlatformRecorder : MonoBehaviour
         Log("Restore Initial Frame");
         transform.position = positions.GetValueAtFrame(0);
         transform.rotation = rotations.GetValueAtFrame(0);
-        platformMover.CurrentWayPointIndex = wayPoints.GetValueAtFrame(0);
+        // platformMover.CurrentWaypointIndex = wayPoints.GetValueAtFrame(0);
         currentFrame = 0;
 
-        state = RecorderState.Record;
+        state = AnubisScrollState.Record;
         positions.ClearAllExceptFirstFrame();
         rotations.ClearAllExceptFirstFrame();
         wayPoints.ClearAllExceptFirstFrame();
@@ -193,8 +193,8 @@ public class PlatformRecorder : MonoBehaviour
     {
         Log("Change Direction to Playback");
 
-        Array.ForEach(renderers, r => r.material = rewind);
-        state = RecorderState.Playback;
+        Array.ForEach(renderers, r => r.material = anubisScroll);
+        state = AnubisScrollState.Playback;
 
         currentRecordingTime += ScaledDeltaTime;
         var segmentDirection = transform.position - positions.GetValueAtFrame(currentFrame);
@@ -208,21 +208,21 @@ public class PlatformRecorder : MonoBehaviour
     public void StartRecording(Vector3 centerPosition, float radius)
     {
         Log("Start Recording");
-        timeBubbleCenter = centerPosition;
-        timeBubbleRadius = radius;
+        khonsuSphereCenter = centerPosition;
+        khonsuSphereRadius = radius;
         isRecording = true;
         currentFrame = 0;
         currentRecordingTime = 0;
         Array.ForEach(renderers, r => r.material = resume);
         RecordInitialFrame();
-        state = RecorderState.Record;
+        state = AnubisScrollState.Record;
     }
 
     public void StopRecording()
     {
         Log("Stop Recording");
         Resume();
-        state = RecorderState.None;
+        state = AnubisScrollState.None;
         isRecording = false;
         Array.ForEach(renderers, r => r.material = _default);
         positions.ClearAll();
@@ -238,11 +238,11 @@ public class PlatformRecorder : MonoBehaviour
 
     public bool IsMovingForward()
     {
-        return state == RecorderState.Record && currentFrame > 1;
+        return state == AnubisScrollState.Record && currentFrame > 1;
     }
 
     public bool IsInSphere()
     {
-        return MathUtils.IsPositionInsideOfSphere(transform.position, timeBubbleCenter, timeBubbleRadius);
+        return MathUtils.IsPositionInsideOfSphere(transform.position, khonsuSphereCenter, khonsuSphereRadius);
     }
 }

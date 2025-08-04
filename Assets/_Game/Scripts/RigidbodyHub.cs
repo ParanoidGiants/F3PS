@@ -1,3 +1,4 @@
+using F3PS;
 using System;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class RigidbodyHub : MonoBehaviour
     private const double TIME_SCALE_TOLERANCE = 0.001f;
     public Rigidbody _rigidbody;
 
-    [Header("Time Bubble Settings")]
+    [Header("Khonsu Sphere Settings")]
     public bool useGravity = true;
     public float defaultMass;
     public float gravityScale = 1.0f;
@@ -14,26 +15,26 @@ public class RigidbodyHub : MonoBehaviour
     public bool isTimeFrozen = false;
 
     [Space(10)]
-    [Header("Telekinesis Settings")]
-    public bool isMovingByTelekinesis = false;
-    public float maximumThrowSpeed = 10.0f;
+    [Header("ThotMind Settings")]
+    public bool isMovingByThotMind = false;
 
     [Space(10)]
-    [Header("Rewind Settings")]
-    public bool isRewinding = false;
+    [Header("AnubisScroll Settings")]
+    public bool isAnubisScrolling = false;
 
     [Space(10)]
     [Header("Watchers")]
-    public int constraintsFreezeAllCommandCount = 0;
+    public int setKinematicCount = 0;
     public Vector3 unbiasedTimeFreezeAngularVelocity;
     public Vector3 unbiasedTimeFreezeVelocity;
+    internal Vector3 Position => _rigidbody.position;
+    internal Quaternion Rotation => _rigidbody.rotation;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
         defaultMass = _rigidbody.mass;
-        maximumThrowSpeed = FindFirstObjectByType<TelekinesisController>(FindObjectsInactive.Include).maximumThrowSpeed;
     }
 
     void FixedUpdate()
@@ -58,22 +59,22 @@ public class RigidbodyHub : MonoBehaviour
             if (isTimeFrozen)
             {
                 isTimeFrozen = false;
-                if (!isMovingByTelekinesis && !isRewinding)
+                if (!isMovingByThotMind && !isAnubisScrolling)
                 {
-                    FreeFromConstraints();
+                    UnsetKinematic();
                     _rigidbody.linearVelocity = unbiasedTimeFreezeVelocity * timeScale;
                     _rigidbody.angularVelocity = unbiasedTimeFreezeAngularVelocity * timeScale;
                 }
             }
             else
             {
-                if (!isMovingByTelekinesis)
+                if (!isMovingByThotMind)
                 {
                     _rigidbody.linearVelocity *= relation;
                     _rigidbody.angularVelocity *= relation;
                 }
             }
-            if (!isMovingByTelekinesis)
+            if (!isMovingByThotMind)
             {
                 _rigidbody.mass = defaultMass / (timeScale * timeScale);
             }
@@ -81,11 +82,11 @@ public class RigidbodyHub : MonoBehaviour
         else if (!isTimeFrozen)
         {
             isTimeFrozen = true;
-            if (!isMovingByTelekinesis)
+            if (!isMovingByThotMind)
             {
                 unbiasedTimeFreezeVelocity = _rigidbody.linearVelocity / currentTimeScale;
                 unbiasedTimeFreezeAngularVelocity = _rigidbody.angularVelocity / currentTimeScale;
-                FreezeAll();
+                SetKinematic();
             }
         }
         currentTimeScale = timeScale;
@@ -93,34 +94,36 @@ public class RigidbodyHub : MonoBehaviour
     #endregion TIME SCALE
 
     #region TELEKINESIS
-    public void SetTelekinesisVelocity(Vector3 velocity)
+    public void SetThotMindVelocity(Vector3 velocity)
     {
         _rigidbody.linearVelocity = velocity;
     }
 
-    public void StartTelekinesisMoving()
+    public void StartThotMindMoving()
     {
-        isMovingByTelekinesis = true;
+        isMovingByThotMind = true;
         useGravity = false;
+        _rigidbody.isKinematic = false;
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.mass = defaultMass;
     }
 
-    internal void StopTelekinesisMoving(float maximumThrowSpeed)
+    internal void StopThotMindMoving(float maximumThrowSpeed)
     {
-        isMovingByTelekinesis = false;
+        isMovingByThotMind = false;
         useGravity = true;
+        _rigidbody.constraints = RigidbodyConstraints.None;
         var throwVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed);
         if (isTimeFrozen)
         {
-            FreezeAll();
+            SetKinematic();
             SetUnbiasedVelocity(throwVelocity);
         }
         else
         {
-            FreeFromConstraints();
+            UnsetKinematic();
             _rigidbody.mass = defaultMass / (currentTimeScale * currentTimeScale);
             _rigidbody.linearVelocity = throwVelocity * currentTimeScale;
             _rigidbody.angularVelocity = Vector3.zero;
@@ -129,20 +132,20 @@ public class RigidbodyHub : MonoBehaviour
     #endregion TELEKINESIS
 
     #region GENERAL
-    public void FreezeAll()
+    public void SetKinematic()
     {
-        constraintsFreezeAllCommandCount++;
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        setKinematicCount++;
+        _rigidbody.isKinematic = true;
     }
 
-    public void FreeFromConstraints()
+    public void UnsetKinematic()
     {
-        constraintsFreezeAllCommandCount--;
-        if (constraintsFreezeAllCommandCount > 0)
+        setKinematicCount--;
+        if (setKinematicCount > 0)
         {
             return;
         }
-        _rigidbody.constraints = RigidbodyConstraints.None;
+        _rigidbody.isKinematic = false;
     }
 
     public Vector3 GetCurrentUnbiasedAngularVelocity()
@@ -159,9 +162,12 @@ public class RigidbodyHub : MonoBehaviour
         {
             return unbiasedTimeFreezeVelocity;
         }
-        if (isMovingByTelekinesis)
+        if (isMovingByThotMind)
         {
-            return Vector3.ClampMagnitude(_rigidbody.linearVelocity, maximumThrowSpeed) / currentTimeScale;
+            return Vector3.ClampMagnitude(
+                _rigidbody.linearVelocity,
+                GameManager.Instance.PlayerData.ThotMindSkillData.MaximumThrowSpeed
+            ) / currentTimeScale;
         }
         return _rigidbody.linearVelocity / currentTimeScale;
     }
@@ -194,16 +200,26 @@ public class RigidbodyHub : MonoBehaviour
     #region REWIND
     public void SetupForRecording(Vector3 unbiasedVelocity, Vector3 unbiasedAngularVelocity)
     {
-        FreeFromConstraints();
+        UnsetKinematic();
         SetUnbiasedVelocity(unbiasedVelocity);
         SetUnbiasedAngularVelocity(unbiasedAngularVelocity);
-        isRewinding = false;
+        isAnubisScrolling = false;
     }
 
     public void SetupForPlayback()
     {
-        FreezeAll();
-        isRewinding = true;
+        SetKinematic();
+        isAnubisScrolling = true;
+    }
+
+    public void MovePosition(Vector3 position)
+    {
+        _rigidbody.MovePosition(position);
+    }
+
+    public void MoveRotation(Quaternion quaternion)
+    {
+        _rigidbody.MoveRotation(quaternion);
     }
     #endregion REWIND
 }

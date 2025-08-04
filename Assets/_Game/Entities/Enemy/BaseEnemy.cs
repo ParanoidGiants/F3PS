@@ -103,12 +103,11 @@ namespace F3PS.Enemy
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", body.transform);
             if (health <= 0)
             {
-                _healthUIPool.OnKillTarget(body.transform);
                 _isDead = true;
                 _stateManager.SwitchState(StateType.DYING);
                 return;
             }
-            _healthUIPool.OnHitTarget(this);
+            _healthUIPool.OnHitTarget(body.transform, health, maxHealth);
             animateMesh.HitFlash();
             _stateManager.Hit();
         }
@@ -137,6 +136,7 @@ namespace F3PS.Enemy
         {
             Dead?.Invoke();
             Destroy(gameObject);
+            _healthUIPool.DisableBossUI();
         }
     }
 }

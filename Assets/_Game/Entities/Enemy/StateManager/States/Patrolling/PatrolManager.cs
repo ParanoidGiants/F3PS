@@ -15,6 +15,8 @@ public class PatrolManager : MonoBehaviour
     private int _currentPatrolPointIndex;
     public Vector3 CurrentPatrolPoint => _patrolPoints[_currentPatrolPointIndex].position;
 
+    public int PatrolPointCount => _patrolPoints.Count;
+
     public void Init()
     {
         enemyId = transform.parent.gameObject.GetInstanceID();

@@ -1,11 +1,13 @@
 ﻿using F3PS;
 using UnityEngine;
 using TimeBending;
+using DG.Tweening;
+
+
 
 
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
 using DarkTonic.MasterAudio;
 #endif
 
@@ -14,13 +16,11 @@ using DarkTonic.MasterAudio;
 
 namespace StarterAssets
 {
+
     [RequireComponent(typeof(Rigidbody))]
     public class ThirdPersonController : MonoBehaviour
     {
-        private PlayerData _playerModel;
-        private PlayerEventController _playerEventController;
-
-        [Space(20)]
+        private StarterAssetsInputs Inputs => GameManager.Instance.inputs;
         [Header("References")]
         public StaminaManager staminaManager;
         public TimeManager timeManager;
@@ -31,26 +31,27 @@ namespace StarterAssets
         public Animator animator;
         public Transform armature;
 
-
         [Space(10)]
         [Header("Camera Settings")]
         public ThirdPersonCameraSettings cameraSettings;
 
         [Space(10)]
         [Header("Jump Settings")]
-        public float jumpCoolDownTimer = 0.25f;
         public float jumpCoolDownTime;
-
+        public GameObject landingPlane;
+        public float ascendTime = 0f;
+        public bool isAscending = false;
+        public float glideTime = 0f;
+        public bool isGliding = false;
+        public bool wasJumpPressedLastFrame = false;
+        public bool wasDodgePressedLastFrame = false;
 
         [Space(10)]
         [Header("Dodge Settings")]
-        public float _dodgeAscendTime;
-        public float DodgeAscendTimer = 0.5f;
-        public float _dodgeLandTime;
-        public float DodgeLandTimer = 0.5f;
-        public Vector3 dodgeDirection = Vector3.forward;
-        public float dodgeCoolDownTimer = 0.25f;
+        public float dodgeAscendTime;
+        public float dodgeLandTime;
         public float dodgeCoolDownTime;
+        public Vector3 dodgeDirection = Vector3.forward;
 
         [Space(10)]
         [Header("Stair Climbing")]
@@ -69,13 +70,15 @@ namespace StarterAssets
         public float _groundedCoyoteTime = 0f;
         public float GroundedOffset = -0.14f;
         public float GroundedRadius = 0.28f;
+        public LayerMask SolidGroundLayers;
         public LayerMask GroundLayers;
-
-        [Space(10)]
-        [Header("Platform")]
-        public Transform currentGround;
         public Vector3 groundNormal;
-        public Vector3 lastGroundPosition;
+
+        [Header("Fall of ground")]
+        public Vector3 lastValidGroundPosition = Vector3.zero;
+        public Vector3 beforeLastValidGroundPosition = Vector3.zero;
+        public float checkGroundTimer = 1f;
+        public float checkGroundTime = 0f;
 
         [Header("Watchers")]
         [SerializeField] private bool _isGrounded;
@@ -92,6 +95,13 @@ namespace StarterAssets
         [SerializeField] private float _targetYaw;
         [SerializeField] private float _lookYaw;
         [SerializeField] private Vector3 _lastInputDirection;
+        public float noDamageAfterHitDuration;
+        public float noDamageAfterHitTime = 0f;
+        public bool wasHitAndIsInvincibleForTime = false;
+        public bool isBeingThrownBackByHammer = false;
+        public float hammerThrowBackSpeed = 2f;
+
+        [Space(10)]
 
         [Header("Audio")]
         public AudioClip LandingAudioClip;
@@ -101,64 +111,90 @@ namespace StarterAssets
         // animation IDs
         private readonly int _animIDSpeed = Animator.StringToHash("Speed");
         private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
-        private readonly int _animIDJump = Animator.StringToHash("Jump");
-        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
         private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         private readonly int _animIDDodge = Animator.StringToHash("Dodge");
         private readonly int _animIDHit = Animator.StringToHash("Hit");
-
-        public Vector3 lastValidGroundPosition = Vector3.zero;
-        public Vector3 beforeLastValidGroundPosition = Vector3.zero;
-        public float checkGroundTimer = 1f;
-        public float checkGroundTime = 0f;
+        private readonly int _animIDVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
         private Rigidbody _rigidbody;
-
+        private PlayerData _data;
+        private PlayerEventController _playerEventController;
 
         public bool IsGrounded => _isGrounded;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _playerModel = GameManager.Instance.PlayerData;
+            _data = GameManager.Instance.PlayerData;
             _playerEventController = GameManager.Instance.PlayerEventController;
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         private void Start()
         {
             cameraSettings.Start();
-            jumpCoolDownTime = jumpCoolDownTimer;
-            dodgeCoolDownTime = dodgeCoolDownTimer;
+            jumpCoolDownTime = _data.JumpCoolDownTimer;
+            dodgeCoolDownTime = _data.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
         }
         private void Update()
         {
             if (GameManager.Instance.isMenuOpen) return;
-            
+            if (_isDying) return;
+
             cameraSettings.HandleFreeCamera();
 
-            if (!GameManager.Instance.inputs.canControlPlayer) return;
+            if (!Inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
             if (_isDying) return;
+
+            if (wasHitAndIsInvincibleForTime)
+            {
+                noDamageAfterHitTime += Time.deltaTime;
+                if (noDamageAfterHitTime >= noDamageAfterHitDuration)
+                {
+                    wasHitAndIsInvincibleForTime = false;
+                    noDamageAfterHitTime = 0f;
+                }
+            }
 
             animator.SetBool(_animIDGrounded, _isGrounded);
 
             skillManager.OnUpdate();
             attackManager.OnUpdate();
-            
-            _isSprinting = staminaManager.Sprint();
-            HandlePlatformTransform();
+
+            HandleSprintInput();
+            HandleGlidingInput();
         }
+
+        private void LateUpdate()
+        {
+            if (!GameManager.Instance.isMenuOpen && !skillManager.thotMindController.isRotatingObjectThisFrame)
+            {
+                cameraSettings.CameraTargetRotation();
+            }
+            if (Inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            {
+                skillManager.OnLateUpdate();
+            }
+        }
+
+        [Header("Platform Movement")]
+        private Rigidbody _activePlatform;
+        private Vector3 _platformPositionOffset;
+        private Quaternion _platformRotationOffset;
+        private Vector3 _lastPlatformPosition;
+        private Vector3 _lastPlatformOffsetPosition;
+        private Quaternion _lastPlatformRotation;
+        private Vector3 _platformVelocity;
 
         private void FixedUpdate()
         {
-            if (!GameManager.Instance.inputs.canControlPlayer) return;
-            if (timeManager.isPaused) return;
-            if (_isDying) return;
-
+            if (!Inputs.canControlPlayer || timeManager.isPaused || _isDying) return;
 
             GroundedCheck();
+            UpdatePlatformVelocity();
             HandleFallAndGravity();
 
             skillManager.OnFixedUpdate();
@@ -169,60 +205,131 @@ namespace StarterAssets
                 JumpAndDodge();
             }
 
-            if (_isDodging)
-            {
-                HandleDodgeRoll();
-            }
-            else
-            {
-                Move(skillManager.IsAiming());
-                HandleClimbingStairs();
-            }
+            Move(skillManager.IsAiming());
         }
-
-        private void LateUpdate()
+        private void UpdatePlatformVelocity()
         {
-            if (GameManager.Instance.isMenuOpen) return;
-            if (skillManager.telekinesisController.isRotatingObjectThisFrame) return;
-
-            cameraSettings.CameraTargetRotation();
-        }
-
-
-        private void HandlePlatformTransform()
-        {
-            if (!_isGrounded)
+            if (_activePlatform == null)
             {
+                _platformVelocity = Vector3.zero;
                 return;
             }
 
-            var platformDirection = currentGround.position - lastGroundPosition;
-            lastGroundPosition = currentGround.position;
-            transform.position += platformDirection;
+            var rotationDelta = _activePlatform.rotation * Quaternion.Inverse(_lastPlatformRotation);
+            Vector3 positionDelta = _activePlatform.position - _lastPlatformPosition;
+
+            var yawDelta = Quaternion.Euler(0, rotationDelta.eulerAngles.y, 0);
+            transform.rotation = yawDelta * transform.rotation;
+            _platformPositionOffset = transform.position - _activePlatform.position;
+            Vector3 rotatedOffset = rotationDelta * _platformPositionOffset;
+
+            Vector3 totalDisplacement = positionDelta + (rotatedOffset - _platformPositionOffset);
+
+            _platformVelocity = totalDisplacement / Time.fixedDeltaTime;
+
+            _lastPlatformPosition = _activePlatform.position;
+            _lastPlatformRotation = _activePlatform.rotation;
         }
 
+        private void GroundedCheck()
+        {
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+
+            if (Physics.SphereCast(spherePosition + Vector3.up * 0.1f, GroundedRadius, Vector3.down, out RaycastHit hit, 0.2f, GroundLayers, QueryTriggerInteraction.Ignore))
+            {
+                _isGrounded = true;
+                groundNormal = hit.normal;
+
+                Rigidbody newPlatform = hit.collider.GetComponentInParent<Rigidbody>();
+                if (_activePlatform != newPlatform)
+                {
+                    SwitchActivePlatform(newPlatform);
+                }
+            }
+            else
+            {
+                _isGrounded = false;
+                groundNormal = Vector3.up;
+
+                if (_activePlatform != null)
+                {
+                    SwitchActivePlatform(null);
+                }
+            }
+        }
+
+        private void SwitchActivePlatform(Rigidbody newPlatform)
+        {
+            _activePlatform = newPlatform;
+
+            if (_activePlatform != null)
+            {
+                _platformPositionOffset = transform.position - _activePlatform.position;
+                _lastPlatformPosition = _activePlatform.position;
+                _lastPlatformRotation = _activePlatform.rotation;
+            }
+        }
         private void Move(bool isAiming)
         {
-            float targetSpeed = 0f;
-            if (GameManager.Instance.inputs.move.magnitude > 0f)
+            if (_isDodging)
             {
-                if (isAiming)
+
+                if (dodgeAscendTime >= _data.DodgeAscendTimer && dodgeLandTime >= _data.DodgeLandTimer)
                 {
-                    targetSpeed = _playerModel.AimSpeed;
+                    _isDodging = false;
+                    return;
                 }
-                else if (_isSprinting)
+                else if (dodgeAscendTime < _data.DodgeAscendTimer)
                 {
-                    targetSpeed = _playerModel.SprintSpeed;
+                    dodgeAscendTime += Time.deltaTime;
+                }
+                else if (_isGrounded)
+                {
+                    dodgeAscendTime = _data.DodgeAscendTimer;
+                    dodgeLandTime += Time.deltaTime;
                 }
                 else
                 {
-                    targetSpeed = _playerModel.MoveSpeed;
+                    dodgeAscendTime = _data.DodgeAscendTimer;
+                }
+
+                var currentTime = dodgeAscendTime + dodgeLandTime;
+                var totalTime = _data.DodgeAscendTimer + _data.DodgeLandTimer;
+                var timeFactor = currentTime / totalTime;
+                timeFactor = Mathf.Min(timeFactor, 1f);
+                var speed = Mathf.Lerp(_data.DodgeSpeed, 0f, Mathf.Pow(timeFactor, 4f));
+                _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
+                _lookYaw = Mathf.SmoothDampAngle(
+                    transform.eulerAngles.y,
+                    _targetYaw,
+                    ref _rotationVelocity,
+                    _data.RotationSmoothTime * Time.unscaledDeltaTime
+                );
+                _rigidbody.linearVelocity = dodgeDirection * speed
+                    + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
+                return;
+            }
+
+            float targetSpeed = 0f;
+            if (Inputs.move.magnitude > 0f)
+            {
+                if (isAiming)
+                {
+                    targetSpeed = _data.AimSpeed;
+                }
+                else if (_isSprinting)
+                {
+                    targetSpeed = _data.SprintSpeed;
+                }
+                else
+                {
+                    targetSpeed = _data.MoveSpeed;
                 }
             }
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
             float speedOffset = 0.1f;
-            float inputMagnitude = GameManager.Instance.inputs.analogMovement ? GameManager.Instance.inputs.move.magnitude : 1f;
+            float inputMagnitude = Inputs.analogMovement ? Inputs.move.magnitude : 1f;
             if (currentHorizontalSpeed < targetSpeed - speedOffset
                 || currentHorizontalSpeed > targetSpeed + speedOffset
             )
@@ -230,7 +337,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
                     targetSpeed * inputMagnitude,
-                    Time.deltaTime * _playerModel.SpeedChangeRate
+                    Time.deltaTime * _data.SpeedChangeRate
                 );
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
@@ -242,168 +349,153 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(
                 _animationBlend,
                 targetSpeed,
-                Time.deltaTime * _playerModel.SpeedChangeRate
+                Time.deltaTime * _data.SpeedChangeRate
             );
             if (_animationBlend < 0.01f) _animationBlend = 0f;
-            if (GameManager.Instance.inputs.move.sqrMagnitude > 0f)
+            if (Inputs.move.sqrMagnitude > 0f)
             {
-                _lastInputDirection = new Vector3(GameManager.Instance.inputs.move.x, 0.0f, GameManager.Instance.inputs.move.y).normalized;
+                _lastInputDirection = new Vector3(Inputs.move.x, 0.0f, Inputs.move.y).normalized;
             }
             _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
             _lookYaw = Mathf.SmoothDampAngle(
                 transform.eulerAngles.y,
                 _targetYaw,
                 ref _rotationVelocity,
-                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
+                _data.RotationSmoothTime * Time.unscaledDeltaTime
             );
-            
+
             if (isAiming)
             {
                 var cameraForward = cameraSettings.defaultCamera.transform.forward;
                 var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
                 armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
             }
-            else if(GameManager.Instance.inputs.move.magnitude > 0f)
+            else if (Inputs.move.magnitude > 0f)
             {
                 armature.rotation = Quaternion.Euler(0.0f, _lookYaw, 0.0f);
             }
 
             var verticalVelocity = new Vector3(0.0f, currentVerticalSpeed, 0.0f);
-            if (GameManager.Instance.inputs.move.magnitude > 0f)
+            if (Inputs.move.magnitude > 0f)
             {
                 Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
                 var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
-                _rigidbody.linearVelocity = (verticalVelocity + moveVelocity);
+                _rigidbody.linearVelocity = verticalVelocity + moveVelocity + _platformVelocity; ;
             }
             else
             {
-                _rigidbody.linearVelocity = verticalVelocity;
+                _rigidbody.linearVelocity = verticalVelocity + _platformVelocity; ;
             }
 
             animator.SetFloat(_animIDSpeed, _animationBlend);
             animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
         }
 
-        private void HandleClimbingStairs()
+        private void HandleGlidingInput()
         {
-            if (GameManager.Instance.inputs.move == Vector2.zero)
+            if (!isGliding)
             {
-                isStairsClimbing = false;
                 return;
             }
 
-            Vector3 lookDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-            var moveVelocity = Vector3.ProjectOnPlane(lookDirection, groundNormal) * _speed;
-            Vector3 moveDirection = new Vector3(GameManager.Instance.inputs.move.x, 0, GameManager.Instance.inputs.move.y);
-            Vector3 forwardDirection = moveVelocity.normalized;
-
-            Vector3 lowerRayStart = transform.position + Vector3.up * 0.05f;
-
-            RaycastHit lowerHit;
-            Debug.DrawLine(lowerRayStart, lowerRayStart + forwardDirection * StepCheckDistance, Color.blue);
-            isStairAtLower = Physics.Raycast(lowerRayStart, forwardDirection, out lowerHit, StepCheckDistance, GroundLayers);
-
-            Vector3 upperRayStart = lowerRayStart + Vector3.up * (MaxStepHeight - 0.05f);
-            Debug.DrawLine(upperRayStart, upperRayStart + forwardDirection * StepCheckDistance, Color.green);
-            isStairAtUpper = Physics.Raycast(upperRayStart, forwardDirection, StepCheckDistance, GroundLayers);
-
-            if (!isStairsClimbing && isStairAtLower && !isStairAtUpper)
+            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina)
             {
-                isStairsClimbing = true;
-            }
-            else if (isStairsClimbing && !isStairAtLower)
-            {
-                isStairsClimbing = false;
-            }
-            else if (isStairsClimbing)
-            {
-                _rigidbody.linearVelocity = new Vector3(
-                    _rigidbody.linearVelocity.x,
-                    StepUpForce,
-                    _rigidbody.linearVelocity.z
-                );
-            }
-        }
-
-        private void DoDodge()
-        {
-            currentVerticalSpeed = Mathf.Sqrt(_playerModel.DodgeHeight * -2f * Gravity);
-            _isDodging = true;
-            _dodgeAscendTime = DodgeAscendTimer;
-            _dodgeLandTime = DodgeLandTimer;
-            _groundedCoyoteTime = groundedCoyoteDuration;
-
-            _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
-            dodgeDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-            animator.SetBool(_animIDDodge, true);
-            MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
-        }
-
-        private void HandleDodgeRoll()
-        {
-            if (_dodgeAscendTime <= 0f && _dodgeLandTime <= 0f)
-            {
-                _isDodging = false;
-                return;
-            }
-            else if (_dodgeAscendTime > 0f)
-            {
-                _dodgeAscendTime -= Time.deltaTime;
-            }
-            else if (_isGrounded)
-            {
-                _dodgeAscendTime = 0;
-                _dodgeLandTime -= Time.deltaTime;
+                isGliding = false;
             }
             else
             {
-                _dodgeAscendTime = 0f;
+                staminaManager.Deplete(glideDepletionRate);
             }
-
-            var timeFactor = (_dodgeAscendTime + _dodgeLandTime) / (DodgeAscendTimer + DodgeLandTimer);
-            timeFactor = Mathf.Max(timeFactor, 0f);
-            var speed = Mathf.Lerp(
-                0f,
-                _playerModel.DodgeSpeed,
-                Mathf.Pow(timeFactor,4f)
-            );
-            _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
-            _lookYaw = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y,
-                _targetYaw,
-                ref _rotationVelocity,
-                _playerModel.RotationSmoothTime * Time.unscaledDeltaTime
-            );
-            _rigidbody.linearVelocity = dodgeDirection * speed
-                + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
         }
+
+        private void HandleSprintInput()
+        {
+            var moving = Inputs.move != Vector2.zero;
+            var sprint = Inputs.sprint;
+            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
+            {
+                _isSprinting = false;
+                return;
+            }
+            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
+            {
+                _isSprinting = false;
+            }
+            else
+            {
+                staminaManager.Deplete(sprintStaminaDepletion);
+                _isSprinting = true;
+            }
+        }
+
+        public void ResetToLastGroundPosition()
+        {
+            transform.position = beforeLastValidGroundPosition + Vector3.up;
+            _rigidbody.linearVelocity = Vector3.zero;
+        }
+
 
         private void JumpAndDodge()
         {
-            var jumpInput = GameManager.Instance.inputs.jump;
-            var dodgeInput = GameManager.Instance.inputs.dodge;
-            if (_isGrounded || groundedCoyoteDuration > _groundedCoyoteTime)
+            var jumpInput = Inputs.jump;
+            var jump = jumpInput && !wasJumpPressedLastFrame;
+            wasJumpPressedLastFrame = jumpInput;
+
+            var dodgeInput = Inputs.dodge;
+            var dodge = dodgeInput && !wasDodgePressedLastFrame;
+            wasDodgePressedLastFrame = dodgeInput;
+            if (isAscending 
+                || isGliding
+                || !_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
+            ) {
+                return;
+            }
+
+            if (jump && jumpCoolDownTime <= 0.0f)
             {
-                if (jumpInput && jumpCoolDownTime <= 0.0f)
-                {
-                    DoJump();
-                    _groundedCoyoteTime = groundedCoyoteDuration;
-                }
-                else if (dodgeInput && dodgeCoolDownTime <= 0.0f)
-                {
-                    DoDodge();
-                    _groundedCoyoteTime = groundedCoyoteDuration;
-                }
+                // the square root of H * -2 * G = how much velocity needed to reach desired height
+                currentVerticalSpeed = Mathf.Sqrt(_data.JumpHeight * -2f * Gravity);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+                _groundedCoyoteTime = groundedCoyoteDuration;
+
+                isAscending = true;
+                ascendTime = 0f;
+            }
+            else if (dodge && dodgeCoolDownTime <= 0.0f)
+            {
+                // the square root of H * -2 * G = how much velocity needed to reach desired height
+                currentVerticalSpeed = Mathf.Sqrt(_data.DodgeHeight * -2f * Gravity);
+                animator.SetBool(_animIDDodge, true);
+                MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+                _groundedCoyoteTime = groundedCoyoteDuration;
+
+                _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
+                dodgeDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
+                _isDodging = true;
+                dodgeAscendTime = 0f;
+                dodgeLandTime = 0f;
             }
         }
 
-        private void HandleFallAndGravity()
+        private void UpdateLandingPlane()
         {
-            var cooledDown = jumpCoolDownTime <= 0.0f && dodgeCoolDownTime <= 0.0f;
+            Physics.Raycast(
+                new Ray(transform.position, Vector3.down),
+                out RaycastHit hit,
+                _data.LandingDepth,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
+            landingPlane.transform.position = hit.point + Vector3.up * 0.01f;
+        }
+
+        private void  HandleFallAndGravity()
+        {
+            var jumpInput = Inputs.jump;
             if (_isGrounded)
             {
-                animator.SetBool(_animIDJump, false);
-                animator.SetBool(_animIDFreeFall, false);
                 animator.SetBool(_animIDDodge, false);
 
                 _groundedCoyoteTime = 0f;
@@ -418,24 +510,47 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
+            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
+            {
+                UpdateLandingPlane();
+                ascendTime += Time.deltaTime;
+                if (ascendTime >= _data.AscendDuration)
+                {
+                    isAscending = false;
+                    isGliding = true;
+                    landingPlane.SetActive(true);
+                    UpdateLandingPlane();
+                    ascendTime = _data.AscendDuration;
+                }
+                var maximumJumpSpeed = Mathf.Sqrt(_data.AscendHeight * -2f * Gravity);
+                var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
+                easing = Mathf.Clamp01(easing);
+                currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
+            }
+            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
+            {
+                UpdateLandingPlane();
+                glideTime += Time.deltaTime;
+                if (glideTime >= _data.GlideDuration)
+                {
+                    isGliding = false;
+                    glideTime = 0f;
+                }
+                currentVerticalSpeed = 0f;
+            }
             else
             {
-                animator.SetBool(_animIDFreeFall, true);
-                _groundedCoyoteTime += Time.deltaTime;
+                landingPlane.SetActive(false);
+                isAscending = false;
+                isGliding = false;
+                ascendTime = 0f;
+                glideTime = 0f;
 
-                dodgeCoolDownTime = dodgeCoolDownTimer;
-                jumpCoolDownTime = jumpCoolDownTimer;
+                _groundedCoyoteTime += Time.deltaTime;
                 currentVerticalSpeed += Gravity * Time.deltaTime;
                 currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
             }
-        }
-
-        private void DoJump()
-        {
-            // the square root of H * -2 * G = how much velocity needed to reach desired height
-            currentVerticalSpeed = Mathf.Sqrt(_playerModel.JumpHeight * -2f * Gravity);
-            animator.SetBool(_animIDJump, true);
-            MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
+            animator.SetFloat(_animIDVerticalVelocity, currentVerticalSpeed);
         }
 
         private void OnFootstep(AnimationEvent animationEvent)
@@ -458,15 +573,18 @@ namespace StarterAssets
             }
         }
 
+
         public void Hit(int damage, Vector3 hitDirection)
         {
-            if (_isDying)
+            if (_isDying || wasHitAndIsInvincibleForTime)
             {
                 return;
             }
-            _playerEventController.UpdateCurrentHealth(_playerModel.CurrentHealth - damage);
+
+
+            _playerEventController.UpdateCurrentHealth(_data.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
-            if (_playerModel.CurrentHealth <= 0 && !_isDying)
+            if (_data.CurrentHealth <= 0 && !_isDying)
             {
                 _isDying = true;
                 Die(hitDirection);
@@ -488,59 +606,6 @@ namespace StarterAssets
             SceneLoader.Instance.ReloadScene(5f);
         }
 
-        private void GroundedCheck()
-        {
-            Vector3 spherePosition = new Vector3(
-                transform.position.x,
-                transform.position.y - GroundedOffset,
-                transform.position.z
-            );
-            _isGrounded = Physics.CheckSphere(
-                spherePosition,
-                GroundedRadius,
-                GroundLayers,
-                QueryTriggerInteraction.Ignore
-            );
-
-            if (!_isGrounded)
-            {
-                currentGround = null;
-                groundNormal = Vector3.up;
-                checkGroundTime = 0f;
-                return;
-            }
-            Ray groundRay = new Ray(
-                spherePosition,
-                Vector3.down
-            );
-            Debug.DrawRay(groundRay.origin, groundRay.direction * GroundedRadius, Color.red);
-            // check if the ray hits the ground
-
-            if (!Physics.Raycast(groundRay, out RaycastHit hit, 2f * GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore))
-            {
-                groundNormal = Vector3.up;
-                _isGrounded = false;
-                checkGroundTime = 0f;
-                return;
-            }
-
-            var groundedObject = hit.transform;
-            groundNormal = hit.normal;
-            if (groundedObject != currentGround)
-            {
-                currentGround = groundedObject;
-                lastGroundPosition = currentGround.position;
-            }
-
-            checkGroundTime += Time.deltaTime;
-            if (checkGroundTime >= checkGroundTimer)
-            {
-                beforeLastValidGroundPosition = lastValidGroundPosition;
-                lastValidGroundPosition = transform.position;
-                checkGroundTime = 0f;
-            }
-        }
-
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -556,20 +621,34 @@ namespace StarterAssets
             );
         }
 
-        public void ResetToLastGroundPosition()
+        public void ThrowBackAt(Vector3 position, float throwBackSpeed)
         {
-            transform.position = lastValidGroundPosition + Vector3.up;
-            _rigidbody.linearVelocity = Vector3.zero;
-        }
+            if (isBeingThrownBackByHammer)
+            {
+                return;
+            }
 
-        public void PauseGame()
-        {
+            var direction = position - transform.position;
+            Hit(10, direction.normalized);
 
-        }
+            Inputs.canControlPlayer = false;
+            isBeingThrownBackByHammer = true;
+            var targetPosition = position;
+            var easePosition = position - direction.normalized;
+            var duration = direction.magnitude / throwBackSpeed;
+            var easeDirection = easePosition - position;
+            var linearDuration = easeDirection.magnitude / throwBackSpeed;
+            var easeDuration = 1f / throwBackSpeed;
 
-        public void ResumeGame()
-        {
-            throw new System.NotImplementedException();
+            var sequence = DOTween.Sequence();
+            sequence.Append(_rigidbody.DOMove(easePosition, linearDuration).SetEase(Ease.Linear));
+            sequence.Append(_rigidbody.DOMove(targetPosition, easeDuration).SetEase(Ease.OutCubic));
+            sequence.OnComplete(() =>
+            {
+                Inputs.canControlPlayer = true;
+                isBeingThrownBackByHammer = false;
+            });
+            sequence.Play();
         }
     }
 }

@@ -7,10 +7,10 @@ namespace F3PS.AI.States
         [Space(10)]
         [Header("Specific Settings")]
         public AnimateMesh animateMesh;
-        public AnimationClip dieAnimation;
         private float _dieTime;
         private float _fadeOutTime = 1f;
         private bool _fadeOut = false;
+        public AnimationClip dieAnimation;
 
         override
         public void OnEnter()

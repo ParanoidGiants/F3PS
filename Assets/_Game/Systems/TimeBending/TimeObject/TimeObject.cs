@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimeObject : MonoBehaviour
@@ -7,6 +8,8 @@ public class TimeObject : MonoBehaviour
     public float currentTimeScale = 1;
     public float additionalTimeScale = 1;
     public float ScaledDeltaTime => currentTimeScale * Time.deltaTime;
+    public float ScaledFixedDeltaTime => currentTimeScale * Time.fixedDeltaTime;
+    public Action<float> OnTimeScaleChanged;
 
     private void Awake()
     {
@@ -20,13 +23,18 @@ public class TimeObject : MonoBehaviour
 
     protected virtual void InitReferences() {}
 
-    public virtual void PitchTimeScale(float newTimeScale)
+    public virtual void PitchTimeScale(float timeScale)
     {
+        var newTimeScale = timeScale == 1f
+            ? 1f
+            : timeScale * additionalTimeScale;
+
         if (currentTimeScale == newTimeScale)
         {
             return;
         }
         currentTimeScale = newTimeScale;
+        OnTimeScaleChanged?.Invoke(newTimeScale);
     }
 
     public virtual void Deactivate()
