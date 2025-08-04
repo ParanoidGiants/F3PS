@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FallOnTouch : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
+    private RigidbodyHub _rigidbodyHub;
     public Tween shakeAnimation;
     public float shakeUntilFallDuration;
     public float shakeUntilFallTime;
@@ -17,9 +17,9 @@ public class FallOnTouch : MonoBehaviour
     {
         _triggerZone = GetComponentInChildren<TriggerZone>();
         startPosition = transform.position;
-        _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.isKinematic = true;
-        _rigidbody.useGravity = false;
+        _rigidbodyHub = GetComponent<RigidbodyHub>();
+        _rigidbodyHub.SetKinematic();
+        _rigidbodyHub.useGravity = false;
         shakeAnimation = transform.DOShakePosition(shakeUntilFallDuration, 0.1f);
         shakeAnimation.SetAutoKill(false);
         shakeAnimation.Pause();
@@ -56,8 +56,8 @@ public class FallOnTouch : MonoBehaviour
             return;
         }
         transform.position = startPosition;
-        _rigidbody.isKinematic = true;
-        _rigidbody.useGravity = false;
+        _rigidbodyHub.useGravity = false;
+        _rigidbodyHub.SetKinematic();
         shakeAnimation.Pause();
         isFalling = false;
         isTouched = false;
@@ -76,8 +76,8 @@ public class FallOnTouch : MonoBehaviour
         {
             shakeAnimation.Pause();
             isFalling = true;
-            _rigidbody.isKinematic = false;
-            _rigidbody.useGravity = true;
+            _rigidbodyHub.useGravity = true;
+            _rigidbodyHub.UnsetKinematic();
         }
     }
 }
