@@ -18,15 +18,12 @@ public class YaggiSpawner : MonoBehaviour
 
     private void SpawnEnemyAt(Transform spawnPoint)
     {
-        Debug.Log(spawnPoint.name);
-        Debug.Log(transform.name);
         var enemy = Instantiate(yaggiPrefab, Vector3.zero, Quaternion.identity, transform);
         var yaggi = enemy.GetComponentInChildren<FromSpawnerYaggiStandardController>();
         yaggi.navMeshAgent.Warp(spawnPoint.position);
         var onEnemyDied = enemy.GetComponent<OnEnemyDied>();
         enemyDiedSpawnPoints.Add(onEnemyDied, spawnPoint);
         onEnemyDied.OnEnemyDiedEvent += RespawnHandler;
-        Debug.Log("SPAWNED");
     }
 
     void RespawnHandler(GameObject oldEnemy)

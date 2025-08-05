@@ -13,6 +13,7 @@ namespace F3PS
         private static GameManager _instance;
         public static GameManager Instance => _instance;
         public SaveGameManager saveGameManager;
+        public SpawnPointManager spawnPointManager;
         
         public StarterAssetsInputs inputs;
         public bool IsCurrentDeviceMouse
@@ -49,7 +50,11 @@ namespace F3PS
             DOTween.Init();
             PlayerEventController = new PlayerEventController(PlayerData);
             _playerInput = inputs.GetComponent<PlayerInput>();
-            saveGameManager.SaveCurrentPlayerData();
+            if (saveGameManager.HasGameSaveData())
+            {
+                saveGameManager.LoadCurrentPlayerData();
+            }
+            
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif

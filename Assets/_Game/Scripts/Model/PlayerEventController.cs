@@ -8,6 +8,15 @@ public class PlayerEventController
         Data = model;
     }
 
+    #region Progress
+    public event Action<int> OnCurrentSpawnPointChanged;
+    public void UpdateCurrentSpawnPoint(int currentSpawnPoint)
+    {
+        OnCurrentSpawnPointChanged?.Invoke(currentSpawnPoint);
+        Data.CurrentSpawnPoint = currentSpawnPoint;
+    }
+    #endregion Progress
+
     #region Stamina
 
     public event Action OnStaminaUnlocked;
