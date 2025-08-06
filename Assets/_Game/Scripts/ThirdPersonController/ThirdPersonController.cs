@@ -2,6 +2,8 @@
 using UnityEngine;
 using TimeBending;
 using DG.Tweening;
+using System.Collections;
+
 
 
 
@@ -128,20 +130,38 @@ namespace StarterAssets
             _data = GameManager.Instance.PlayerData;
             _playerEventController = GameManager.Instance.PlayerEventController;
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            cameraSettings.Awake();
         }
 
         private void Start()
         {
-            cameraSettings.Start();
             jumpCoolDownTime = _data.JumpCoolDownTimer;
             dodgeCoolDownTime = _data.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
+
+            StartCoroutine(Spawn());
+        }
+
+        private IEnumerator Spawn()
+        {
             var spawnPoint = GameManager.Instance.spawnPointManager.GetCurrentSpawnPosition();
             Debug.Log("Set Player to " + spawnPoint.name);
             _rigidbody.MovePosition(spawnPoint.position);
             _rigidbody.MoveRotation(spawnPoint.rotation);
+            
+            yield return new WaitForFixedUpdate();
+            cameraSettings.Start();
+            
+            // After camera settings are initialized, synchronize player rotation variables
+            _targetYaw = cameraSettings.cameraTargetYaw;
+            _lookYaw = cameraSettings.cameraTargetYaw;
+            _rotationVelocity = 0f;
+            
+            // Reset the armature rotation to match the camera target yaw
+            armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
         }
+        
         private void Update()
         {
             if (GameManager.Instance.isMenuOpen) return;
@@ -371,7 +391,8 @@ namespace StarterAssets
             if (isAiming)
             {
                 var cameraForward = cameraSettings.defaultCamera.transform.forward;
-                var armatureForward = (new Vector3(cameraForward.x, 0f, cameraForward.z)).normalized;
+                var cameraForwardXZ = new Vector3(cameraForward.x, 0f, cameraForward.z);
+                var armatureForward = cameraForwardXZ.normalized;
                 armature.rotation = Quaternion.LookRotation(armatureForward, Vector3.up);
             }
             else if (Inputs.move.magnitude > 0f)
