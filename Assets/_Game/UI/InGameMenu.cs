@@ -1,7 +1,5 @@
 using F3PS;
-using StarterAssets;
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class InGameMenu : MonoBehaviour
 {
@@ -75,8 +73,14 @@ public class InGameMenu : MonoBehaviour
         levelSelection.SetActive(true);
     }
 
-    public void OnRestartLevel()
+    public void OnRestartFromCheckpoint()
     {
+        SceneLoader.Instance.ReloadScene();
+    }
+
+    public void OnRestartGame()
+    {
+        GameManager.Instance.saveGameManager.ResetSaveGame();
         SceneLoader.Instance.ReloadScene();
     }
 }

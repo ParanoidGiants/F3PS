@@ -119,24 +119,22 @@ namespace StarterAssets
         private readonly int _animIDVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
         private Rigidbody _rigidbody;
-        private PlayerData _data;
-        private PlayerEventController _playerEventController;
+        private PlayerData Data => GameManager.Instance.PlayerData;
+        private PlayerEventController DataEventController => GameManager.Instance.PlayerEventController;
 
         public bool IsGrounded => _isGrounded;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _data = GameManager.Instance.PlayerData;
-            _playerEventController = GameManager.Instance.PlayerEventController;
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             cameraSettings.Awake();
         }
 
         private void Start()
         {
-            jumpCoolDownTime = _data.JumpCoolDownTimer;
-            dodgeCoolDownTime = _data.DodgeCoolDownTimer;
+            jumpCoolDownTime = Data.JumpCoolDownTimer;
+            dodgeCoolDownTime = Data.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
 
@@ -298,36 +296,36 @@ namespace StarterAssets
             if (_isDodging)
             {
 
-                if (dodgeAscendTime >= _data.DodgeAscendTimer && dodgeLandTime >= _data.DodgeLandTimer)
+                if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
                 {
                     _isDodging = false;
                     return;
                 }
-                else if (dodgeAscendTime < _data.DodgeAscendTimer)
+                else if (dodgeAscendTime < Data.DodgeAscendTimer)
                 {
                     dodgeAscendTime += Time.deltaTime;
                 }
                 else if (_isGrounded)
                 {
-                    dodgeAscendTime = _data.DodgeAscendTimer;
+                    dodgeAscendTime = Data.DodgeAscendTimer;
                     dodgeLandTime += Time.deltaTime;
                 }
                 else
                 {
-                    dodgeAscendTime = _data.DodgeAscendTimer;
+                    dodgeAscendTime = Data.DodgeAscendTimer;
                 }
 
                 var currentTime = dodgeAscendTime + dodgeLandTime;
-                var totalTime = _data.DodgeAscendTimer + _data.DodgeLandTimer;
+                var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
                 var timeFactor = currentTime / totalTime;
                 timeFactor = Mathf.Min(timeFactor, 1f);
-                var speed = Mathf.Lerp(_data.DodgeSpeed, 0f, Mathf.Pow(timeFactor, 4f));
+                var speed = Mathf.Lerp(Data.DodgeSpeed, 0f, Mathf.Pow(timeFactor, 4f));
                 _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
                 _lookYaw = Mathf.SmoothDampAngle(
                     transform.eulerAngles.y,
                     _targetYaw,
                     ref _rotationVelocity,
-                    _data.RotationSmoothTime * Time.unscaledDeltaTime
+                    Data.RotationSmoothTime * Time.unscaledDeltaTime
                 );
                 _rigidbody.linearVelocity = dodgeDirection * speed
                     + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
@@ -339,15 +337,15 @@ namespace StarterAssets
             {
                 if (isAiming)
                 {
-                    targetSpeed = _data.AimSpeed;
+                    targetSpeed = Data.AimSpeed;
                 }
                 else if (_isSprinting)
                 {
-                    targetSpeed = _data.SprintSpeed;
+                    targetSpeed = Data.SprintSpeed;
                 }
                 else
                 {
-                    targetSpeed = _data.MoveSpeed;
+                    targetSpeed = Data.MoveSpeed;
                 }
             }
 
@@ -361,7 +359,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
                     targetSpeed * inputMagnitude,
-                    Time.deltaTime * _data.SpeedChangeRate
+                    Time.deltaTime * Data.SpeedChangeRate
                 );
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
@@ -373,7 +371,7 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(
                 _animationBlend,
                 targetSpeed,
-                Time.deltaTime * _data.SpeedChangeRate
+                Time.deltaTime * Data.SpeedChangeRate
             );
             if (_animationBlend < 0.01f) _animationBlend = 0f;
             if (Inputs.move.sqrMagnitude > 0f)
@@ -385,7 +383,7 @@ namespace StarterAssets
                 transform.eulerAngles.y,
                 _targetYaw,
                 ref _rotationVelocity,
-                _data.RotationSmoothTime * Time.unscaledDeltaTime
+                Data.RotationSmoothTime * Time.unscaledDeltaTime
             );
 
             if (isAiming)
@@ -423,7 +421,7 @@ namespace StarterAssets
                 return;
             }
 
-            var glideDepletionRate = _data.GlideDepletionRate * Time.deltaTime;
+            var glideDepletionRate = Data.GlideDepletionRate * Time.deltaTime;
             if (staminaManager.IsRecoveringStamina)
             {
                 isGliding = false;
@@ -438,7 +436,7 @@ namespace StarterAssets
         {
             var moving = Inputs.move != Vector2.zero;
             var sprint = Inputs.sprint;
-            if (!sprint || !_data.UnlockedAbilities.Contains(Ability.Sprint))
+            if (!sprint || !Data.UnlockedAbilities.Contains(Ability.Sprint))
             {
                 _isSprinting = false;
                 return;
@@ -481,7 +479,7 @@ namespace StarterAssets
             if (jump && jumpCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
-                currentVerticalSpeed = Mathf.Sqrt(_data.JumpHeight * -2f * Gravity);
+                currentVerticalSpeed = Mathf.Sqrt(Data.JumpHeight * -2f * Gravity);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                 _groundedCoyoteTime = groundedCoyoteDuration;
 
@@ -491,7 +489,7 @@ namespace StarterAssets
             else if (dodge && dodgeCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
-                currentVerticalSpeed = Mathf.Sqrt(_data.DodgeHeight * -2f * Gravity);
+                currentVerticalSpeed = Mathf.Sqrt(Data.DodgeHeight * -2f * Gravity);
                 animator.SetBool(_animIDDodge, true);
                 MasterAudio.PlaySound3DAtTransformAndForget("Player_jump", transform);
                 _groundedCoyoteTime = groundedCoyoteDuration;
@@ -509,7 +507,7 @@ namespace StarterAssets
             Physics.Raycast(
                 new Ray(transform.position, Vector3.down),
                 out RaycastHit hit,
-                _data.LandingDepth,
+                Data.LandingDepth,
                 GroundLayers,
                 QueryTriggerInteraction.Ignore
             );
@@ -535,28 +533,28 @@ namespace StarterAssets
                     dodgeCoolDownTime -= Time.deltaTime;
                 }
             }
-            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
+            else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
             {
                 UpdateLandingPlane();
                 ascendTime += Time.deltaTime;
-                if (ascendTime >= _data.AscendDuration)
+                if (ascendTime >= Data.AscendDuration)
                 {
                     isAscending = false;
                     isGliding = true;
                     landingPlane.SetActive(true);
                     UpdateLandingPlane();
-                    ascendTime = _data.AscendDuration;
+                    ascendTime = Data.AscendDuration;
                 }
-                var maximumJumpSpeed = Mathf.Sqrt(_data.AscendHeight * -2f * Gravity);
-                var easing = Helper.Easing.EaseInQuad(ascendTime / _data.AscendDuration);
+                var maximumJumpSpeed = Mathf.Sqrt(Data.AscendHeight * -2f * Gravity);
+                var easing = Helper.Easing.EaseInQuad(ascendTime / Data.AscendDuration);
                 easing = Mathf.Clamp01(easing);
                 currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
             }
-            else if (_data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
+            else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {
                 UpdateLandingPlane();
                 glideTime += Time.deltaTime;
-                if (glideTime >= _data.GlideDuration)
+                if (glideTime >= Data.GlideDuration)
                 {
                     isGliding = false;
                     glideTime = 0f;
@@ -607,9 +605,9 @@ namespace StarterAssets
             }
 
 
-            _playerEventController.UpdateCurrentHealth(_data.CurrentHealth - damage);
+            DataEventController.UpdateCurrentHealth(Data.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
-            if (_data.CurrentHealth <= 0 && !_isDying)
+            if (Data.CurrentHealth <= 0 && !_isDying)
             {
                 _isDying = true;
                 Die(hitDirection);

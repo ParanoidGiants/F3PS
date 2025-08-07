@@ -54,6 +54,10 @@ namespace F3PS
             {
                 saveGameManager.LoadCurrentPlayerData();
             }
+            else
+            {
+                saveGameManager.SaveInitialPlayerData();
+            }
             
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
