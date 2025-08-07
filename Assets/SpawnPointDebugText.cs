@@ -7,10 +7,16 @@ public class SpawnPointDebugText : MonoBehaviour
 {
     public TextMeshProUGUI spawnPointText;
 
-    void OnEnable()
+    private void OnEnable()
     {
         GameManager.Instance.PlayerEventController.OnCurrentSpawnPointChanged += OnCurrentSpawnPointChanged;
     }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.PlayerEventController.OnCurrentSpawnPointChanged -= OnCurrentSpawnPointChanged;
+    }
+
 
     private void OnCurrentSpawnPointChanged(int spawnPoint)
     {
