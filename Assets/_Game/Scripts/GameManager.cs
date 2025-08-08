@@ -48,8 +48,7 @@ namespace F3PS
             _instance = this;
             DontDestroyOnLoad(gameObject);
             DOTween.Init();
-            PlayerEventController = new PlayerEventController(PlayerData);
-            _playerInput = inputs.GetComponent<PlayerInput>();
+            
             if (saveGameManager.HasGameSaveData())
             {
                 saveGameManager.LoadCurrentPlayerData();
@@ -58,6 +57,8 @@ namespace F3PS
             {
                 saveGameManager.SaveInitialPlayerData();
             }
+            PlayerEventController = new PlayerEventController(PlayerData);
+            _playerInput = inputs.GetComponent<PlayerInput>();
             
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
