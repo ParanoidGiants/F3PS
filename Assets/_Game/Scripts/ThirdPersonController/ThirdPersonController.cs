@@ -144,7 +144,6 @@ namespace StarterAssets
         private IEnumerator Spawn()
         {
             var spawnPoint = GameManager.Instance.spawnPointManager.GetCurrentSpawnPosition();
-            Debug.Log("Set Player to " + spawnPoint.name);
             _rigidbody.MovePosition(spawnPoint.position);
             _rigidbody.MoveRotation(spawnPoint.rotation);
             

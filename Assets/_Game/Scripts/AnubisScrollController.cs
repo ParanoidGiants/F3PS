@@ -32,9 +32,13 @@ public class AnubisScrollController : MonoBehaviour
 
     private void Awake()
     {
-        PlayerEventController.SetAnubisScrollState(AnubisScrollState.None);
         _crosshair = FindFirstObjectByType<Crosshair>();
         _lineRenderer = GetComponent<LineRenderer>();
+    }
+
+    private void Start()
+    {
+        PlayerEventController.SetAnubisScrollState(AnubisScrollState.None);
     }
 
     private void OnEnable()

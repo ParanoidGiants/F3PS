@@ -21,15 +21,10 @@ public class PlayerHealthHUD : MonoBehaviour
         PlayerEventController.OnCurrentHealthChanged -= UpdateHealth;
     }
 
-    void Start()
-    {
-        healthBar.fillAmount = 1f;
-    }
-
     private void UpdateHealth(int currentHealth)
     {
         float healthPercentage = (float)currentHealth / PlayerData.MaxHealth;
         healthBar.fillAmount = healthPercentage;
-        healthBarBackground.DOFillAmount(healthPercentage, 0.5f).SetDelay(0.5f);
+        healthBarBackground.DOFillAmount(healthPercentage, 0.1f).SetDelay(0.2f);
     }
 }

@@ -14,7 +14,7 @@ namespace F3PS
         public static GameManager Instance => _instance;
         public SaveGameManager saveGameManager;
         public SpawnPointManager spawnPointManager;
-        
+
         public StarterAssetsInputs inputs;
         public bool IsCurrentDeviceMouse
         {
@@ -48,26 +48,24 @@ namespace F3PS
             _instance = this;
             DontDestroyOnLoad(gameObject);
             DOTween.Init();
-            
-            if (saveGameManager.HasGameSaveData())
-            {
-                saveGameManager.LoadCurrentPlayerData();
-            }
-            else
-            {
-                saveGameManager.SaveInitialPlayerData();
-            }
-            PlayerEventController = new PlayerEventController(PlayerData);
             _playerInput = inputs.GetComponent<PlayerInput>();
-            
+            PlayerEventController = new PlayerEventController();
+            PlayerEventController.Initialize(PlayerData);
+
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
+        }
 
+
+        public void SavePlayerData(int _)
+        {
+            saveGameManager.SavePlayerData(PlayerData);
         }
 
         private void Start()
         {
+            PlayerEventController.OnCurrentSpawnPointChanged += SavePlayerData;
             Application.targetFrameRate = _fps;
         }
 
@@ -86,6 +84,20 @@ namespace F3PS
             inputs.canControlPlayer = true;
             inputs.SetCursorLockedState(true);
             isMenuOpen = false;
+
+            if (saveGameManager.HasGameSaveData())
+            {
+                // Load Save Game
+                PlayerData = saveGameManager.LoadCurrentPlayerData();
+            }
+            else
+            {
+                // Create New Save Game with data from Inspector
+                saveGameManager.SaveDefaultPlayerData(PlayerData);
+                saveGameManager.SavePlayerData(PlayerData);
+            }
+            PlayerEventController.Initialize(PlayerData);
+            Debug.Log("DATA INITIALIZED");
         }
 
         public void ResumeGameAfterMenuClosed()

@@ -3,9 +3,34 @@ using System;
 public class PlayerEventController
 {
     public PlayerData Data { get; private set; }
-    public PlayerEventController(PlayerData model)
+
+    public void Initialize(PlayerData model)
     {
         Data = model;
+        UpdateCurrentSpawnPoint(Data.CurrentSpawnPoint);
+        UpdateStamina(Data.CurrentStamina);
+        UpdateMaxStamina(Data.MaxStamina);
+        UpdateIsRecoveringStamina(Data.IsRecoveringStamina);
+        UpdateIsDepletingStamina(Data.IsDepletingStamina);
+        SetActiveAttack(Data.ActiveAttack);
+        SetActiveSkill(Data.ActiveSkill);
+        SetAnubisScrollState(Data.AnubisScrollSkillData.State);
+        SetAnubisScrollCurrentFrame(Data.AnubisScrollSkillData.CurrentFrame);
+        SetAnubisScrollTotalFrames(Data.AnubisScrollSkillData.TotalFrames);
+        SetAnubisScrollCurrentRecordingTime(Data.AnubisScrollSkillData.CurrentRecordingTime);
+        SetKhonsuSphereTimeScale(Data.KhonsuSphereSkillData.TimeScale);
+        SetKhonsuSphereActiveTime(Data.KhonsuSphereSkillData.ActiveTime);
+        UpdateMaxHealth(Data.MaxHealth);
+        UpdateCurrentHealth(Data.CurrentHealth);
+        UpdateRotationSmoothTime(Data.RotationSmoothTime);
+        UpdateRotationSpeedPitch(Data.RotationSpeedPitch);
+        UpdateRotationSpeedYaw(Data.RotationSpeedYaw);
+        UpdateMoveSpeed(Data.MoveSpeed);
+        UpdateSprintSpeed(Data.SprintSpeed);
+        UpdateSpeedChangeRate(Data.SpeedChangeRate);
+        UpdateJumpHeight(Data.JumpHeight);
+        UpdateDodgeHeight(Data.DodgeHeight);
+        UpdateDodgeSpeed(Data.DodgeSpeed);
     }
 
     #region Progress
@@ -70,7 +95,6 @@ public class PlayerEventController
             UnityEngine.Debug.LogError(attack + " is already unlocked.");
             return;
         }
-        OnAttackUnlocked?.Invoke(attack);
 
         Data.UnlockedAttacks.Add(attack);
         if (Data.ActiveAttack == Attack.None)
@@ -78,6 +102,7 @@ public class PlayerEventController
             SetActiveAttack(attack);
         }
         UnlockStamina();
+        OnAttackUnlocked?.Invoke(attack);
     }
     #endregion Attack
 
@@ -96,7 +121,6 @@ public class PlayerEventController
         {
             return;
         }
-        OnSkillUnlocked?.Invoke(skill);
 
         Data.UnlockedSkills.Add(skill);
         if (Data.ActiveSkill == Skill.None)
@@ -104,6 +128,7 @@ public class PlayerEventController
             SetActiveSkill(skill);
         }
         UnlockStamina();
+        OnSkillUnlocked?.Invoke(skill);
     }
 
     #region KhonsuSphere
@@ -159,7 +184,6 @@ public class PlayerEventController
     public event Action<Ability> OnAbilityUnlocked;
     public void UnlockAbility(Ability ability)
     {
-        OnAbilityUnlocked?.Invoke(ability);
         if (Data.UnlockedAbilities.Contains(ability))
         {
             UnityEngine.Debug.LogError(ability + " is already unlocked.");
@@ -167,19 +191,19 @@ public class PlayerEventController
         }
         Data.UnlockedAbilities.Add(ability);
         UnlockStamina();
+        OnAbilityUnlocked?.Invoke(ability);
     }
     #endregion Abilities
 
     #region Health
     public event Action<int> OnMaxHealthChanged;
-    public event Action<int> OnCurrentHealthChanged;
-
     public void UpdateMaxHealth(int maxHealth)
     {
         Data.MaxHealth = maxHealth;
         OnMaxHealthChanged?.Invoke(maxHealth);
     }
 
+    public event Action<int> OnCurrentHealthChanged;
     public void UpdateCurrentHealth(int currentHealth)
     {
         Data.CurrentHealth = currentHealth;
@@ -188,55 +212,63 @@ public class PlayerEventController
     #endregion Health
 
     #region Movement
-    public event Action<int> OnRotationSmoothTimeChanged;
-    public event Action<float> OnRotationSpeedPitchChanged;
-    public event Action<float> OnRotationSpeedYawChanged;
-    public event Action<float> OnMoveSpeedChanged;
-    public event Action<float> OnSprintSpeedChanged;
-    public event Action<float> OnSpeedChangeRateChanged;
-    public event Action<float> OnJumpHeightChanged;
-    public event Action<float> OnDodgeHeightChanged;
-    public event Action<float> OnDodgeSpeedChanged;
-    public void UpdateRotationSmoothTime(int rotationSmoothTime)
+    public event Action<float> OnRotationSmoothTimeChanged;
+    public void UpdateRotationSmoothTime(float rotationSmoothTime)
     {
         Data.RotationSmoothTime = rotationSmoothTime;
         OnRotationSmoothTimeChanged?.Invoke(rotationSmoothTime);
     }
+
+    public event Action<float> OnRotationSpeedPitchChanged;
     public void UpdateRotationSpeedPitch(float rotationSpeedPitch)
     {
         Data.RotationSpeedPitch = rotationSpeedPitch;
         OnRotationSpeedPitchChanged?.Invoke(rotationSpeedPitch);
     }
+
+    public event Action<float> OnRotationSpeedYawChanged;
     public void UpdateRotationSpeedYaw(float rotationSpeedYaw)
     {
         Data.RotationSpeedYaw = rotationSpeedYaw;
         OnRotationSpeedYawChanged?.Invoke(rotationSpeedYaw);
     }
+
+    public event Action<float> OnMoveSpeedChanged;
     public void UpdateMoveSpeed(float moveSpeed)
     {
         Data.MoveSpeed = moveSpeed;
         OnMoveSpeedChanged?.Invoke(moveSpeed);
     }
+
+    public event Action<float> OnSprintSpeedChanged;
     public void UpdateSprintSpeed(float sprintSpeed)
     {
         Data.SprintSpeed = sprintSpeed;
         OnSprintSpeedChanged?.Invoke(sprintSpeed);
     }
+
+    public event Action<float> OnSpeedChangeRateChanged;
     public void UpdateSpeedChangeRate(float speedChangeRate)
     {
         Data.SpeedChangeRate = speedChangeRate;
         OnSpeedChangeRateChanged?.Invoke(speedChangeRate);
     }
+
+    public event Action<float> OnJumpHeightChanged;
     public void UpdateJumpHeight(float jumpHeight)
     {
         Data.JumpHeight = jumpHeight;
         OnJumpHeightChanged?.Invoke(jumpHeight);
     }
+
+    public event Action<float> OnDodgeHeightChanged;
     public void UpdateDodgeHeight(float dodgeHeight)
     {
         Data.DodgeHeight = dodgeHeight;
         OnDodgeHeightChanged?.Invoke(dodgeHeight);
     }
+
+    public event Action<float> OnDodgeSpeedChanged;
     public void UpdateDodgeSpeed(float dodgeSpeed)
     {
         Data.DodgeSpeed = dodgeSpeed;

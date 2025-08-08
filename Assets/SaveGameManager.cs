@@ -7,19 +7,13 @@ public class SaveGameManager : MonoBehaviour
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
 
-    private void Start()
-    {
-        GameManager.Instance.PlayerEventController.OnCurrentSpawnPointChanged += SavePlayerData;
-    }
-
-    public void SavePlayerData(int spawnPointIndex)
+    public void SavePlayerData(PlayerData playerData)
     {
         try
         {
-            var playerDataJson = JsonUtility.ToJson(GameManager.Instance.PlayerData);
+            var playerDataJson = JsonUtility.ToJson(playerData);
             PlayerPrefs.SetString(GAME_DATA, playerDataJson);
             PlayerPrefs.Save();
-            Debug.Log($"Saved Game Data at SpawnPoint {spawnPointIndex}");
             Debug.Log(playerDataJson);
         }
         catch (Exception ex)
@@ -31,14 +25,14 @@ public class SaveGameManager : MonoBehaviour
         }
     }
 
-    public void LoadCurrentPlayerData()
+    public PlayerData LoadCurrentPlayerData()
     {
         Debug.Log("Loading GameData...");
         var playerDataJson = PlayerPrefs.GetString(GAME_DATA);
         PlayerData playerData = JsonUtility.FromJson<PlayerData>(playerDataJson);
-        GameManager.Instance.PlayerData = playerData;
         Debug.Log("Loaded GameData");
         Debug.Log(playerDataJson);
+        return playerData;
     }
 
     public bool HasGameSaveData()
@@ -54,11 +48,9 @@ public class SaveGameManager : MonoBehaviour
         Debug.Log("Resetting Save State");
     }
 
-    public void SaveInitialPlayerData()
+    public void SaveDefaultPlayerData(PlayerData playerData)
     {
-        Debug.Log("Overwriting GameData with default values...");
-        SavePlayerData(0);
-        PlayerData playerData = GameManager.Instance.PlayerData;
+        Debug.Log("Overwriting default GameData...");
         var playerDataJson = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString(DEFAULT_GAME_DATA, playerDataJson);
         PlayerPrefs.Save();

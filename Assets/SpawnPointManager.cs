@@ -37,7 +37,6 @@ public class SpawnPointManager : MonoBehaviour
 
     public Transform GetCurrentSpawnPosition()
     {
-        Debug.Log("Current SpawnPoint: " + PlayerData.CurrentSpawnPoint);
         return spawnPoints[PlayerData.CurrentSpawnPoint].transform;
     }
 }
