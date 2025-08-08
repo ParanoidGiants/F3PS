@@ -2,6 +2,7 @@ using DG.Tweening;
 using StarterAssets;
 using System;
 using TimeBending;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -50,7 +51,7 @@ namespace F3PS
             DOTween.Init();
             _playerInput = inputs.GetComponent<PlayerInput>();
             PlayerEventController = new PlayerEventController();
-            PlayerEventController.Initialize(PlayerData);
+            InitializeGameData();
 
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
@@ -85,6 +86,11 @@ namespace F3PS
             inputs.SetCursorLockedState(true);
             isMenuOpen = false;
 
+            InitializeGameData();
+        }
+
+        private void InitializeGameData()
+        {
             if (saveGameManager.HasGameSaveData())
             {
                 // Load Save Game
