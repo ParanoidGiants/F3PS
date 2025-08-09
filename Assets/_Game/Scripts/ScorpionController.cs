@@ -1,7 +1,5 @@
 using DarkTonic.MasterAudio;
 using F3PS.AI.Sensors;
-using F3PS.AI.States;
-using F3PS.Damage.Take;
 using F3PS.Enemy.UI;
 using System;
 using UnityEngine;
@@ -158,6 +156,7 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.IDLE:
                 idleTime = 0f;
                 navMeshAgent.isStopped = true;
+                animator.SetFloat("Speed", 0f);
                 break;
             case ScorpionState.PATROLLING:
                 navMeshAgent.isStopped = false;
@@ -165,6 +164,7 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
+                animator.SetFloat("Speed", 1f);
                 break;
             case ScorpionState.AGGRESSIVE:
                 stoppingDistanceState = ScorpionStoppingDistanceState.STAYING;
@@ -477,6 +477,7 @@ public class ScorpionController : MonoBehaviour
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
             var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
+            animator.SetFloat("Speed", -1f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING
             && distanceToTarget < stoppingDistanceStay
@@ -485,6 +486,7 @@ public class ScorpionController : MonoBehaviour
         )
         {
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.STAYING, targetPosition);
+            animator.SetFloat("Speed", 0f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.PUSHED)
         {
@@ -494,10 +496,12 @@ public class ScorpionController : MonoBehaviour
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
             var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
+            animator.SetFloat("Speed", -1f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING)
         {
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.FOLLOWING, targetPosition);
+            animator.SetFloat("Speed", 1f);
         }
     }
 
@@ -569,7 +573,7 @@ public class ScorpionController : MonoBehaviour
 
     public void Died()
     {
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     public void HitByPlayerFrom(Vector3 hitDirection)
