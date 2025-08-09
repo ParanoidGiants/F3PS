@@ -35,10 +35,10 @@ public class ThirdPersonCameraSettings
         currentCameraTarget = PlayerCameraTarget;
     }
 
-    public void Start()
+    public void Spawn(SpawnPointManager spawnPointManager)
     {
         // Get the current spawn point's rotation to ensure camera starts at the correct orientation
-        var spawnPoint = GameManager.Instance.spawnPointManager.GetCurrentSpawnPosition();
+        var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
         cameraTargetYaw = spawnPoint.rotation.eulerAngles.y;
         
         if (defaultCamera != null)

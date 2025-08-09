@@ -14,7 +14,6 @@ namespace F3PS
         private static GameManager _instance;
         public static GameManager Instance => _instance;
         public SaveGameManager saveGameManager;
-        public SpawnPointManager spawnPointManager;
 
         public StarterAssetsInputs inputs;
         public bool IsCurrentDeviceMouse
@@ -91,19 +90,21 @@ namespace F3PS
 
         private void InitializeGameData()
         {
-            if (saveGameManager.HasGameSaveData())
+            if (saveGameManager.enabled)
             {
-                // Load Save Game
-                PlayerData = saveGameManager.LoadCurrentPlayerData();
-            }
-            else
-            {
-                // Create New Save Game with data from Inspector
-                saveGameManager.SaveDefaultPlayerData(PlayerData);
-                saveGameManager.SavePlayerData(PlayerData);
+                if (saveGameManager.HasGameSaveData())
+                {
+                    // Load Save Game
+                    PlayerData = saveGameManager.LoadCurrentPlayerData();
+                }
+                else
+                {
+                    // Create New Save Game with data from Inspector
+                    saveGameManager.SaveDefaultPlayerData(PlayerData);
+                    saveGameManager.SavePlayerData(PlayerData);
+                }
             }
             PlayerEventController.Initialize(PlayerData);
-            Debug.Log("DATA INITIALIZED");
         }
 
         public void ResumeGameAfterMenuClosed()

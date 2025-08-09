@@ -32,6 +32,7 @@ namespace StarterAssets
         public HittableManager hittableManager;
         public Animator animator;
         public Transform armature;
+        public SpawnPointManager spawnPointManager;
 
         [Space(10)]
         [Header("Camera Settings")]
@@ -138,17 +139,20 @@ namespace StarterAssets
             skillManager.Init();
             attackManager.Init();
 
-            StartCoroutine(Spawn());
+            if (spawnPointManager.enabled)
+            {
+                StartCoroutine(Spawn());
+            }
         }
 
         private IEnumerator Spawn()
         {
-            var spawnPoint = GameManager.Instance.spawnPointManager.GetCurrentSpawnPosition();
+            var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
             _rigidbody.MovePosition(spawnPoint.position);
             _rigidbody.MoveRotation(spawnPoint.rotation);
             
             yield return new WaitForFixedUpdate();
-            cameraSettings.Start();
+            cameraSettings.Spawn(spawnPointManager);
             
             // After camera settings are initialized, synchronize player rotation variables
             _targetYaw = cameraSettings.cameraTargetYaw;

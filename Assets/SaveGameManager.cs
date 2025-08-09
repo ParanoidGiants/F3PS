@@ -9,6 +9,7 @@ public class SaveGameManager : MonoBehaviour
 
     public void SavePlayerData(PlayerData playerData)
     {
+        Debug.Log("Saving GameData...");
         try
         {
             var playerDataJson = JsonUtility.ToJson(playerData);
