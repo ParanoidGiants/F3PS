@@ -26,7 +26,7 @@ PrefabInstance:
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: unfillPerSecond
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
