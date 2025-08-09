@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,13 @@ public class SceneLoader : MonoBehaviour
         _instance = this;
     }
 
+    private void Start()
+    {
+        isLoading = true;
+        backDrop.gameObject.SetActive(true);
+        HideBackdrop();
+    }
+
     public void ReloadScene(float delay = 0f)
     {
         if (isLoading) return;
@@ -52,8 +60,17 @@ public class SceneLoader : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         backDrop.gameObject.SetActive(true);
-        // Create a new color with zero opacity (alpha = 0)
-        Color targetColor = new Color(backDrop.color.r, backDrop.color.g, backDrop.color.b, 0f);
+        HideBackdrop();
+    }
+
+    private void HideBackdrop()
+    {
+        Color initialColor = backDrop.color;
+        initialColor.a = 1f;
+        Color targetColor = backDrop.color;
+        targetColor.a = 0f;
+
+        backDrop.color = initialColor;
         backDrop.DOColor(targetColor, 0.5f)
             .OnComplete(() => {
                 backDrop.gameObject.SetActive(false);

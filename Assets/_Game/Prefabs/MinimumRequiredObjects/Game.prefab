@@ -263,6 +263,7 @@ Transform:
   - {fileID: 8393937154899864563}
   - {fileID: 8130985201199294695}
   - {fileID: 1679984050}
+  - {fileID: 6439659538927075417}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &153210392170721217
@@ -277,16 +278,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b35957b527efc041a89a9e4adf14202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveGameManager: {fileID: 2927450651173564445}
   inputs: {fileID: 5736421558823638681}
   PlayerData:
+    CurrentSpawnPoint: 0
     CurrentHealth: 300
     MaxHealth: 300
-    CurrentStamina: 0
+    CurrentStamina: 1
     MaxStamina: 1
     StaminaRecoveryRate: 0.2
     IsRecoveringStamina: 0
     IsDepletingStamina: 0
-    SprintDepletionRate: 0.1
+    SprintDepletionRate: 0.02
     SprintSpeed: 70
     SpeedChangeRate: 10
     AscendHeight: 8
@@ -297,21 +300,21 @@ MonoBehaviour:
     RotationSmoothTime: 0.12
     RotationSpeedPitch: 0.5
     RotationSpeedYaw: 0.5
-    MoveSpeed: 30
+    MoveSpeed: 400
     AimSpeed: 40
     JumpCoolDownTimer: 0.25
     JumpHeight: 4
     DodgeHeight: 1.2
-    DodgeSpeed: 40
+    DodgeSpeed: 20
     DodgeAscendTimer: 0.05
     DodgeLandTimer: 0.05
     DodgeCoolDownTimer: 0.25
-    UnlockedAttacks: 0100000002000000
-    ActiveAttack: 1
+    UnlockedAttacks: 
+    ActiveAttack: 0
     OsirisKickData:
-      Damage: 2
+      Damage: 6
       NumberOfProjectiles: 8
-      StaminaCost: 0.05
+      StaminaCost: 0.3
       SpreadAngle: 5
       AttackSpeed: 100
       AttackCoolDownTimer: 0.2
@@ -319,12 +322,12 @@ MonoBehaviour:
     HorusPalmData:
       Damage: 20
       AttackSpeed: 100
-      ImpactForceMultiplier: 0.1
+      ImpactForceMultiplier: 0
       AttackCoolDownTimer: 0.2
       StaminaCost: 0.3
       ProjectileLifeDuration: 5
-    UnlockedSkills: 010000000200000003000000
-    ActiveSkill: 1
+    UnlockedSkills: 
+    ActiveSkill: 0
     KhonsuSphereSkillData:
       TargetSize: 30
       ActiveDuration: 20
@@ -353,9 +356,53 @@ MonoBehaviour:
       MinimumDistance: 3
       MaximumDistance: 50
       MaximumThrowSpeed: 50
-    UnlockedAbilities: 0200000001000000
+    UnlockedAbilities: 
   _fps: 60
   isMenuOpen: 0
+--- !u!1 &2655460542351779540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6439659538927075417}
+  - component: {fileID: 2927450651173564445}
+  m_Layer: 0
+  m_Name: SaveGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6439659538927075417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655460542351779540}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 153210392170721218}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2927450651173564445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655460542351779540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ab75d84b9ff5343b513519f9790986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,9 +36,8 @@ public class AttackManager : MonoBehaviour
         _inputs = GameManager.Instance.inputs;
         osirisKickController.Init();
         horusPalmController.Init();
-        SetActiveAttack(ActiveAttack);
-        PlayerEventController.SetActiveAttack(ActiveAttack);
-        Debug.Log("AttackManaeger Initialized");
+        // SetActiveAttack(ActiveAttack);
+        // PlayerEventController.SetActiveAttack(ActiveAttack);
     }
     public void OnUpdate()
     {

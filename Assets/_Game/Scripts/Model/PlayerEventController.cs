@@ -3,10 +3,44 @@ using System;
 public class PlayerEventController
 {
     public PlayerData Data { get; private set; }
-    public PlayerEventController(PlayerData model)
+
+    public void Initialize(PlayerData model)
     {
         Data = model;
+        UpdateCurrentSpawnPoint(Data.CurrentSpawnPoint);
+        UpdateStamina(Data.CurrentStamina);
+        UpdateMaxStamina(Data.MaxStamina);
+        UpdateIsRecoveringStamina(Data.IsRecoveringStamina);
+        UpdateIsDepletingStamina(Data.IsDepletingStamina);
+        SetActiveAttack(Data.ActiveAttack);
+        SetActiveSkill(Data.ActiveSkill);
+        SetAnubisScrollState(Data.AnubisScrollSkillData.State);
+        SetAnubisScrollCurrentFrame(Data.AnubisScrollSkillData.CurrentFrame);
+        SetAnubisScrollTotalFrames(Data.AnubisScrollSkillData.TotalFrames);
+        SetAnubisScrollCurrentRecordingTime(Data.AnubisScrollSkillData.CurrentRecordingTime);
+        SetKhonsuSphereTimeScale(Data.KhonsuSphereSkillData.TimeScale);
+        SetKhonsuSphereActiveTime(Data.KhonsuSphereSkillData.ActiveTime);
+        UpdateMaxHealth(Data.MaxHealth);
+        UpdateCurrentHealth(Data.CurrentHealth);
+        UpdateRotationSmoothTime(Data.RotationSmoothTime);
+        UpdateRotationSpeedPitch(Data.RotationSpeedPitch);
+        UpdateRotationSpeedYaw(Data.RotationSpeedYaw);
+        UpdateMoveSpeed(Data.MoveSpeed);
+        UpdateSprintSpeed(Data.SprintSpeed);
+        UpdateSpeedChangeRate(Data.SpeedChangeRate);
+        UpdateJumpHeight(Data.JumpHeight);
+        UpdateDodgeHeight(Data.DodgeHeight);
+        UpdateDodgeSpeed(Data.DodgeSpeed);
     }
+
+    #region Progress
+    public event Action<int> OnCurrentSpawnPointChanged;
+    public void UpdateCurrentSpawnPoint(int currentSpawnPoint)
+    {
+        Data.CurrentSpawnPoint = currentSpawnPoint;
+        OnCurrentSpawnPointChanged?.Invoke(currentSpawnPoint);
+    }
+    #endregion Progress
 
     #region Stamina
 
@@ -19,29 +53,29 @@ public class PlayerEventController
     public event Action<float> OnStaminaChanged;
     public void UpdateStamina(float currentStamina)
     {
-        OnStaminaChanged?.Invoke(currentStamina);
         Data.CurrentStamina = currentStamina;
+        OnStaminaChanged?.Invoke(currentStamina);
     }
 
     public event Action<float> OnMaxStaminaChanged;
     public void UpdateMaxStamina(float maxStamina)
     {
-        OnMaxStaminaChanged?.Invoke(maxStamina);
         Data.MaxStamina = maxStamina;
+        OnMaxStaminaChanged?.Invoke(maxStamina);
     }
 
     public event Action<bool> OnIsRecoveringStaminaChanged;
     public void UpdateIsRecoveringStamina(bool isRecovering)
     {
-        OnIsRecoveringStaminaChanged?.Invoke(isRecovering);
         Data.IsRecoveringStamina = isRecovering;
+        OnIsRecoveringStaminaChanged?.Invoke(isRecovering);
     }
 
     public event Action<bool> OnIsDepletingStaminaChanged;
     public void UpdateIsDepletingStamina(bool isDepleting)
     {
-        OnIsDepletingStaminaChanged?.Invoke(isDepleting);
         Data.IsDepletingStamina = isDepleting;
+        OnIsDepletingStaminaChanged?.Invoke(isDepleting);
     }
     #endregion Stamina
 
@@ -49,8 +83,8 @@ public class PlayerEventController
     public event Action<Attack> OnActiveAttackChanged;
     public void SetActiveAttack(Attack attack)
     {
-        OnActiveAttackChanged?.Invoke(attack);
         Data.ActiveAttack = attack;
+        OnActiveAttackChanged?.Invoke(attack);
     }
 
     public event Action<Attack> OnAttackUnlocked;
@@ -61,7 +95,6 @@ public class PlayerEventController
             UnityEngine.Debug.LogError(attack + " is already unlocked.");
             return;
         }
-        OnAttackUnlocked?.Invoke(attack);
 
         Data.UnlockedAttacks.Add(attack);
         if (Data.ActiveAttack == Attack.None)
@@ -69,6 +102,7 @@ public class PlayerEventController
             SetActiveAttack(attack);
         }
         UnlockStamina();
+        OnAttackUnlocked?.Invoke(attack);
     }
     #endregion Attack
 
@@ -76,8 +110,8 @@ public class PlayerEventController
     public event Action<Skill> OnActiveSkillChanged;
     public void SetActiveSkill(Skill skill)
     {
-        OnActiveSkillChanged?.Invoke(skill);
         Data.ActiveSkill = skill;
+        OnActiveSkillChanged?.Invoke(skill);
     }
 
     public event Action<Skill> OnSkillUnlocked;
@@ -87,7 +121,6 @@ public class PlayerEventController
         {
             return;
         }
-        OnSkillUnlocked?.Invoke(skill);
 
         Data.UnlockedSkills.Add(skill);
         if (Data.ActiveSkill == Skill.None)
@@ -95,20 +128,21 @@ public class PlayerEventController
             SetActiveSkill(skill);
         }
         UnlockStamina();
+        OnSkillUnlocked?.Invoke(skill);
     }
 
     #region KhonsuSphere
     public event Action<float> OnKhonsuSphereTimeScaleChanged;
     public void SetKhonsuSphereTimeScale(float timeScale)
     {
-        OnKhonsuSphereTimeScaleChanged?.Invoke(timeScale);
         Data.KhonsuSphereSkillData.TimeScale = timeScale;
+        OnKhonsuSphereTimeScaleChanged?.Invoke(timeScale);
     }
     public event Action<float> OnKhonsuSphereActiveTimeChanged;
     public void SetKhonsuSphereActiveTime(float time)
     {
-        OnKhonsuSphereActiveTimeChanged?.Invoke(time);
         Data.KhonsuSphereSkillData.ActiveTime = time;
+        OnKhonsuSphereActiveTimeChanged?.Invoke(time);
     }
     #endregion KhonsuSphere
     
@@ -116,28 +150,28 @@ public class PlayerEventController
     public event Action<AnubisScrollState> OnAnubisScrollStateChanged;
     public void SetAnubisScrollState(AnubisScrollState state)
     {
-        OnAnubisScrollStateChanged?.Invoke(state);
         Data.AnubisScrollSkillData.State = state;
+        OnAnubisScrollStateChanged?.Invoke(state);
     }
 
     public event Action<int> OnAnubisScrollCurrentFrameChanged;
     public void SetAnubisScrollCurrentFrame(int frame)
     {
-        OnAnubisScrollCurrentFrameChanged?.Invoke(frame);
         Data.AnubisScrollSkillData.CurrentFrame = frame;
+        OnAnubisScrollCurrentFrameChanged?.Invoke(frame);
     }
     public event Action<int> OnAnubisScrollTotalFramesChanged;
     public void SetAnubisScrollTotalFrames(int totalFrames)
     {
-        OnAnubisScrollTotalFramesChanged?.Invoke(totalFrames);
         Data.AnubisScrollSkillData.TotalFrames = totalFrames;
+        OnAnubisScrollTotalFramesChanged?.Invoke(totalFrames);
     }
 
     public event Action<float> OnAnubisScrollCurrentRecordingTime;
     public void SetAnubisScrollCurrentRecordingTime(float time)
     {
-        OnAnubisScrollCurrentRecordingTime?.Invoke(time);
         Data.AnubisScrollSkillData.CurrentRecordingTime = time;
+        OnAnubisScrollCurrentRecordingTime?.Invoke(time);
     }
 
     #endregion AnubisScroll
@@ -150,7 +184,6 @@ public class PlayerEventController
     public event Action<Ability> OnAbilityUnlocked;
     public void UnlockAbility(Ability ability)
     {
-        OnAbilityUnlocked?.Invoke(ability);
         if (Data.UnlockedAbilities.Contains(ability))
         {
             UnityEngine.Debug.LogError(ability + " is already unlocked.");
@@ -158,80 +191,88 @@ public class PlayerEventController
         }
         Data.UnlockedAbilities.Add(ability);
         UnlockStamina();
+        OnAbilityUnlocked?.Invoke(ability);
     }
     #endregion Abilities
 
     #region Health
     public event Action<int> OnMaxHealthChanged;
-    public event Action<int> OnCurrentHealthChanged;
-
     public void UpdateMaxHealth(int maxHealth)
     {
-        OnMaxHealthChanged?.Invoke(maxHealth);
         Data.MaxHealth = maxHealth;
+        OnMaxHealthChanged?.Invoke(maxHealth);
     }
 
+    public event Action<int> OnCurrentHealthChanged;
     public void UpdateCurrentHealth(int currentHealth)
     {
-        OnCurrentHealthChanged?.Invoke(currentHealth);
         Data.CurrentHealth = currentHealth;
+        OnCurrentHealthChanged?.Invoke(currentHealth);
     }
     #endregion Health
 
     #region Movement
-    public event Action<int> OnRotationSmoothTimeChanged;
-    public event Action<float> OnRotationSpeedPitchChanged;
-    public event Action<float> OnRotationSpeedYawChanged;
-    public event Action<float> OnMoveSpeedChanged;
-    public event Action<float> OnSprintSpeedChanged;
-    public event Action<float> OnSpeedChangeRateChanged;
-    public event Action<float> OnJumpHeightChanged;
-    public event Action<float> OnDodgeHeightChanged;
-    public event Action<float> OnDodgeSpeedChanged;
-    public void UpdateRotationSmoothTime(int rotationSmoothTime)
+    public event Action<float> OnRotationSmoothTimeChanged;
+    public void UpdateRotationSmoothTime(float rotationSmoothTime)
     {
-        OnRotationSmoothTimeChanged?.Invoke(rotationSmoothTime);
         Data.RotationSmoothTime = rotationSmoothTime;
+        OnRotationSmoothTimeChanged?.Invoke(rotationSmoothTime);
     }
+
+    public event Action<float> OnRotationSpeedPitchChanged;
     public void UpdateRotationSpeedPitch(float rotationSpeedPitch)
     {
-        OnRotationSpeedPitchChanged?.Invoke(rotationSpeedPitch);
         Data.RotationSpeedPitch = rotationSpeedPitch;
+        OnRotationSpeedPitchChanged?.Invoke(rotationSpeedPitch);
     }
+
+    public event Action<float> OnRotationSpeedYawChanged;
     public void UpdateRotationSpeedYaw(float rotationSpeedYaw)
     {
-        OnRotationSpeedYawChanged?.Invoke(rotationSpeedYaw);
         Data.RotationSpeedYaw = rotationSpeedYaw;
+        OnRotationSpeedYawChanged?.Invoke(rotationSpeedYaw);
     }
+
+    public event Action<float> OnMoveSpeedChanged;
     public void UpdateMoveSpeed(float moveSpeed)
     {
-        OnMoveSpeedChanged?.Invoke(moveSpeed);
         Data.MoveSpeed = moveSpeed;
+        OnMoveSpeedChanged?.Invoke(moveSpeed);
     }
+
+    public event Action<float> OnSprintSpeedChanged;
     public void UpdateSprintSpeed(float sprintSpeed)
     {
-        OnSprintSpeedChanged?.Invoke(sprintSpeed);
         Data.SprintSpeed = sprintSpeed;
+        OnSprintSpeedChanged?.Invoke(sprintSpeed);
     }
+
+    public event Action<float> OnSpeedChangeRateChanged;
     public void UpdateSpeedChangeRate(float speedChangeRate)
     {
-        OnSpeedChangeRateChanged?.Invoke(speedChangeRate);
         Data.SpeedChangeRate = speedChangeRate;
+        OnSpeedChangeRateChanged?.Invoke(speedChangeRate);
     }
+
+    public event Action<float> OnJumpHeightChanged;
     public void UpdateJumpHeight(float jumpHeight)
     {
-        OnJumpHeightChanged?.Invoke(jumpHeight);
         Data.JumpHeight = jumpHeight;
+        OnJumpHeightChanged?.Invoke(jumpHeight);
     }
+
+    public event Action<float> OnDodgeHeightChanged;
     public void UpdateDodgeHeight(float dodgeHeight)
     {
-        OnDodgeHeightChanged?.Invoke(dodgeHeight);
         Data.DodgeHeight = dodgeHeight;
+        OnDodgeHeightChanged?.Invoke(dodgeHeight);
     }
+
+    public event Action<float> OnDodgeSpeedChanged;
     public void UpdateDodgeSpeed(float dodgeSpeed)
     {
-        OnDodgeSpeedChanged?.Invoke(dodgeSpeed);
         Data.DodgeSpeed = dodgeSpeed;
+        OnDodgeSpeedChanged?.Invoke(dodgeSpeed);
     }
     #endregion Movement
 }

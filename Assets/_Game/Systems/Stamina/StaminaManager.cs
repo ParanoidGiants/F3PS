@@ -10,11 +10,6 @@ public class StaminaManager : MonoBehaviour
 
     public bool IsRecoveringStamina => playerData.IsRecoveringStamina;
 
-    private void Awake()
-    {
-        playerEventController.UpdateStamina(playerData.MaxStamina);
-    }
-
     private void Update()
     {
         if (playerData.IsRecoveringStamina)

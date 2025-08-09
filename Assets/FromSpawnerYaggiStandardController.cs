@@ -140,7 +140,6 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("STARTED");
         health = maxHealth;
         patrolManager.Init();
         EnterState(FromSpawnerYaggiStandardState.FALLING);

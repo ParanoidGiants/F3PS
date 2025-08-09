@@ -29,11 +29,34 @@ public class ThirdPersonCameraSettings
     public bool wasFreeCameraLastFrame = false;
     public bool isFreeCameraActive = false;
 
-    public void Start()
+    public void Awake()
     {
-        currentCameraTarget = PlayerCameraTarget;
-        cameraTargetYaw = PlayerCameraTarget.rotation.eulerAngles.y;
         mainCamera = Camera.main.transform;
+        currentCameraTarget = PlayerCameraTarget;
+    }
+
+    public void Spawn(SpawnPointManager spawnPointManager)
+    {
+        // Get the current spawn point's rotation to ensure camera starts at the correct orientation
+        var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
+        cameraTargetYaw = spawnPoint.rotation.eulerAngles.y;
+        
+        if (defaultCamera != null)
+        {
+            // Set the camera to invalidate its previous state
+            defaultCamera.PreviousStateIsValid = false;
+
+            // Force the camera to immediately snap to its target
+            // This makes it appear as if the camera was always at the correct position
+            defaultCamera.InternalUpdateCameraState(Vector3.up, -1);
+        }
+
+        if (freeCamera != null)
+        {
+            // Also handle free camera if it exists
+            freeCamera.PreviousStateIsValid = false;
+            freeCamera.InternalUpdateCameraState(Vector3.up, -1);
+        }
     }
 
 

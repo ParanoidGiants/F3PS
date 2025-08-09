@@ -106,6 +106,9 @@ public class OsirisKickData
 [Serializable]
 public class PlayerData
 {
+    [Header("Progress")]
+    public int CurrentSpawnPoint = 0;
+
     [Header("Health")]
     public int CurrentHealth;
     public int MaxHealth = 100;
