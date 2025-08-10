@@ -27,10 +27,8 @@ public class SpawnPointManager : MonoBehaviour
 
     private void OnSpawnPointEntered(int index)
     {
-        Debug.Log("SpawnPoint " + index + " entered");
         if (PlayerData.CurrentSpawnPoint < index)
         {
-            Debug.Log("Updating SpawnPoint");
             PlayerEventController.UpdateCurrentSpawnPoint(index);
         }
     }

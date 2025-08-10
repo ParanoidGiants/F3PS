@@ -9,7 +9,6 @@ public class SaveGameManager : MonoBehaviour
 
     public void SavePlayerData(PlayerData playerData)
     {
-        Debug.Log("Saving GameData...");
         try
         {
             var playerDataJson = JsonUtility.ToJson(playerData);
@@ -28,10 +27,8 @@ public class SaveGameManager : MonoBehaviour
 
     public PlayerData LoadCurrentPlayerData()
     {
-        Debug.Log("Loading GameData...");
         var playerDataJson = PlayerPrefs.GetString(GAME_DATA);
         PlayerData playerData = JsonUtility.FromJson<PlayerData>(playerDataJson);
-        Debug.Log("Loaded GameData");
         Debug.Log(playerDataJson);
         return playerData;
     }
@@ -46,12 +43,10 @@ public class SaveGameManager : MonoBehaviour
         var defaultGameDataJson = PlayerPrefs.GetString(DEFAULT_GAME_DATA);
         PlayerPrefs.SetString(GAME_DATA, defaultGameDataJson);
         PlayerPrefs.Save();
-        Debug.Log("Resetting Save State");
     }
 
     public void SaveDefaultPlayerData(PlayerData playerData)
     {
-        Debug.Log("Overwriting default GameData...");
         var playerDataJson = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString(DEFAULT_GAME_DATA, playerDataJson);
         PlayerPrefs.Save();
