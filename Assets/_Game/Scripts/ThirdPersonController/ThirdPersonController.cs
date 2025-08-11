@@ -179,7 +179,6 @@ namespace StarterAssets
                 if (noDamageAfterHitTime >= noDamageAfterHitDuration)
                 {
                     wasHitAndIsInvincibleForTime = false;
-                    noDamageAfterHitTime = 0f;
                 }
             }
 
@@ -622,6 +621,9 @@ namespace StarterAssets
             }
             cameraSettings.cameraShake.Shake(damage);
             animateMesh.HitFlash();
+
+            wasHitAndIsInvincibleForTime = true;
+            noDamageAfterHitTime = 0f;
         }
 
         private void Die(Vector3 hitDirection)
@@ -656,7 +658,6 @@ namespace StarterAssets
             }
 
             var direction = position - transform.position;
-            Hit(10, direction.normalized);
 
             Inputs.canControlPlayer = false;
             isBeingThrownBackByHammer = true;
