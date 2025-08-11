@@ -173,6 +173,7 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.speed = runSpeed * TimeScale;
                 break;
             case ScorpionState.CHECKING:
+                Debug.Log("Checking!");
                 navMeshAgent.isStopped = false;
                 navMeshAgent.speed = runSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
@@ -246,6 +247,7 @@ public class ScorpionController : MonoBehaviour
 
                 if (!sensorController.HasTarget())
                 {
+                    checkingDestination = navMeshAgent.destination;
                     SwitchState(ScorpionState.CHECKING);
                     return;
                 }

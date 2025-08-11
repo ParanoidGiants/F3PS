@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SwitchesController : MonoBehaviour
 {
     [Header("Debug")]
-    public bool _isDoorOpen;
+    public bool _areSwitchesFixed;
 
     [Space(10)]
     [Header("References")]
     public List<Switch> switches;
-    public DoorController doorController;
+    public UnityEvent onSwitchTriggered;
 
     private void OnEnable()
     {
@@ -29,7 +30,7 @@ public class SwitchesController : MonoBehaviour
 
     private void OnSwitchStateChanged()
     {
-        if (_isDoorOpen)
+        if (_areSwitchesFixed)
         {
             return;
         }
@@ -47,7 +48,7 @@ public class SwitchesController : MonoBehaviour
         {
             _switch.FixTurnOn();
         }
-        doorController.OpenDoor();
-        _isDoorOpen = true;
+        onSwitchTriggered.Invoke();
+        _areSwitchesFixed = true;
     }
 }

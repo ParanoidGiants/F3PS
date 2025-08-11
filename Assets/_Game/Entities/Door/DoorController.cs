@@ -1,5 +1,14 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
+
+public enum DoorState
+{
+    OPENING,
+    OPEN,
+    CLOSING,
+    CLOSED
+}
 
 public class DoorController : MonoBehaviour
 {
@@ -7,66 +16,83 @@ public class DoorController : MonoBehaviour
     [Header("Debug")]
     public bool debug = false;
     public bool openClose = false;
-    private void Update()
-    {
-        if (!debug)
-        {
-            return;
-        }
-        if (!_open && openClose)
-        {
-            OpenDoor();
-        }
-
-        if (_open && !openClose)
-        {
-            CloseDoor();
-        }
-    }
 
     #endregion DEBUG
 
     [Space(10)]
     [Header("Reference")]
-    [SerializeField] private Transform _door;
-    [SerializeField] private CameraRumble _cameraRumble;
+    public Transform _door;
+    public CameraRumble _cameraRumble;
+    public TimeObject _timeObject;
 
     [Space(10)]
     [Header("Watcher")]
-    [SerializeField] private bool _open;
-    [SerializeField] private float _animationDuration = 5f;
-    [SerializeField] private float _openPosition = 1.5f;
-    [SerializeField] private float _closePosition = 0.5f;   
+    public DoorState state = DoorState.CLOSED;
+    public float _animationTime = 0f;
+    public float _animationDuration = 5f;
+    public float _openPosition = 1.5f;
+    public float _closePosition = 0.5f;
 
+    private void Update()
+    {
+        if (debug)
+        {
+            if ((state is DoorState.CLOSED || state is DoorState.CLOSING) && openClose)
+            {
+                OpenDoor();
+            }
+
+            if ((state is DoorState.OPEN || state is DoorState.OPENING) && !openClose)
+            {
+                CloseDoor();
+            }
+        }
+        if (state is DoorState.OPENING)
+        {
+            _animationTime += _timeObject.ScaledDeltaTime;
+            var position = _door.localPosition;
+            position.y = Mathf.Lerp(_closePosition, _openPosition, _animationTime / _animationDuration);
+            _door.localPosition = position;
+            _cameraRumble.Rumble();
+            if (_animationTime >= _animationDuration)
+            {
+                _animationTime = _animationDuration;
+                state = DoorState.OPEN;
+            }
+        }
+        else if (state is DoorState.CLOSING)
+        {
+            _animationTime -= _timeObject.ScaledDeltaTime;
+            var position = _door.localPosition;
+            position.y = Mathf.Lerp(_closePosition, _openPosition, _animationTime / _animationDuration);
+            _door.localPosition = position;
+            _cameraRumble.Rumble();
+            if (_animationTime <= 0f)
+            {
+                _animationTime = 0f;
+                state = DoorState.CLOSED;
+            }
+        }
+    }
     public void OpenDoor()
     {
-        if (_open)
+        Debug.Log("Open Door");
+        if (state is DoorState.OPENING || state is DoorState.OPEN)
         {
             return;
         }
-        _open = true;
-
-        // Kill any existing animation on _door
-        DOTween.Kill(_door);
-
-        float animationDuration = _animationDuration * (_openPosition - _door.localPosition.y) / (_openPosition - _closePosition);
-        _door.DOLocalMoveY(_openPosition, animationDuration);
-        _cameraRumble.TriggerRumble(animationDuration);
+        state = DoorState.OPENING;
+        Debug.Log("Opening Door");
     }
 
     public void CloseDoor()
     {
-        if (!_open)
+        Debug.Log("Close Door");
+        if (state is DoorState.CLOSING || state is DoorState.CLOSED)
         {
             return;
         }
-        _open = false;
-
-        // Kill any existing animation on _door
-        DOTween.Kill(_door);
-
-        float animationDuration = _animationDuration * (_door.localPosition.y - _closePosition) / (_openPosition - _closePosition);
-        _door.DOLocalMoveY(_closePosition, animationDuration);
-        _cameraRumble.TriggerRumble(animationDuration);
+        state = DoorState.CLOSING;
+        Debug.Log("Closing Door");
     }
 }

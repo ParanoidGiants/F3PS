@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.55, y: 17.38, z: 155.14}
-  m_LocalScale: {x: 9.2699995, y: 12.310929, z: 3}
+  m_LocalScale: {x: 4.635, y: 6.7710114, z: 1.3499999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6170025711916257229}
@@ -49,9 +49,11 @@ MonoBehaviour:
   openClose: 0
   _door: {fileID: 6170025711916257229}
   _cameraRumble: {fileID: 1963815624320440943}
-  _open: 0
-  _animationDuration: 0.5
-  _openPosition: 1.5
+  _timeObject: {fileID: 3363122017524659530}
+  state: 3
+  _animationTime: 0
+  _animationDuration: 2
+  _openPosition: -0.5
   _closePosition: 0.5
 --- !u!1 &6170025711916257230
 GameObject:
@@ -69,6 +71,7 @@ GameObject:
   - component: {fileID: 6170025711916257232}
   - component: {fileID: 1963815624320440943}
   - component: {fileID: 7360493094221911683}
+  - component: {fileID: 3363122017524659530}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -277,3 +280,18 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &3363122017524659530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170025711916257230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfTimeZones: 0
+  currentTimeScale: 1
+  additionalTimeScale: 1
