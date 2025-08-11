@@ -99,7 +99,7 @@
                     "name": "Dodge",
                     "type": "PassThrough",
                     "id": "24ceefe5-fea3-4336-b9b3-00db0c1eaaca",
-                    "expectedControlType": "DiscreteButton",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -350,7 +350,7 @@
                 {
                     "name": "",
                     "id": "aa29a721-8a3d-4b6c-9e16-3cd873020ab6",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -438,7 +438,7 @@
                 {
                     "name": "",
                     "id": "f5169e88-f266-4fe9-9a2d-f8acbe775ff3",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -603,7 +603,7 @@
                 {
                     "name": "",
                     "id": "fcd70c84-c0af-4e75-b46e-e58d5f827b27",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
