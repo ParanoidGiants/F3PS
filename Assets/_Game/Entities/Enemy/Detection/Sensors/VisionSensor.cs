@@ -24,12 +24,17 @@ namespace F3PS.AI.Sensors
                 var playerPartDistance = direction.magnitude;
                 direction.Normalize();
                 // check if something is between the player and the eyes
+                Debug.DrawRay(position, direction * playerPartDistance, Color.green);
                 if (!Physics.Raycast(position, direction, out var hit, playerPartDistance, Helper.DefaultLayer))
                 {
                     targetsInSight++;
                 }
+                else
+                {
+                    Debug.DrawLine(position, hit.point, Color.red);
+                }
             }
-            IsTargetInSight = targetsInSight >= 2;
+            IsTargetInSight = targetsInSight > 0;
         }
     }
 }
