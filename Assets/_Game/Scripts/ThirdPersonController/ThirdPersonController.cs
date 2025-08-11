@@ -135,7 +135,6 @@ namespace StarterAssets
         private void Start()
         {
             jumpCoolDownTime = Data.JumpCoolDownTimer;
-            dodgeCoolDownTime = Data.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
 
@@ -489,7 +488,7 @@ namespace StarterAssets
                 isAscending = true;
                 ascendTime = 0f;
             }
-            else if (dodge && dodgeCoolDownTime <= 0.0f)
+            else if (dodge && dodgeCoolDownTime <= 0.0f && !staminaManager.IsRecoveringStamina)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(Data.DodgeHeight * -2f * Gravity);
@@ -502,6 +501,8 @@ namespace StarterAssets
                 _isDodging = true;
                 dodgeAscendTime = 0f;
                 dodgeLandTime = 0f;
+                dodgeCoolDownTime = Data.DodgeCoolDownTimer;
+                staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
         }
 
