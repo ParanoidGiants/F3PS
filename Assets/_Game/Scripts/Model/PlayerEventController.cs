@@ -97,12 +97,12 @@ public class PlayerEventController
         }
 
         Data.UnlockedAttacks.Add(attack);
+        UnlockStamina();
+        OnAttackUnlocked?.Invoke(attack);
         if (Data.ActiveAttack == Attack.None)
         {
             SetActiveAttack(attack);
         }
-        UnlockStamina();
-        OnAttackUnlocked?.Invoke(attack);
     }
     #endregion Attack
 
@@ -123,12 +123,12 @@ public class PlayerEventController
         }
 
         Data.UnlockedSkills.Add(skill);
+        UnlockStamina();
+        OnSkillUnlocked?.Invoke(skill);
         if (Data.ActiveSkill == Skill.None)
         {
             SetActiveSkill(skill);
         }
-        UnlockStamina();
-        OnSkillUnlocked?.Invoke(skill);
     }
 
     #region KhonsuSphere
