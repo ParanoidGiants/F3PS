@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 1823029999567002505}
-  damage: 10
+  damage: 20
 --- !u!1 &690318467157581653
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +488,7 @@ MonoBehaviour:
   attackAnticipationEndPosition: {x: 0, y: 0, z: 0}
   attackExecutionTime: 0
   attackExecutionDuration: 0.25
-  attackExecutionDistance: 11
+  attackExecutionDistance: 18
   attackExecutionStartPosition: {x: 0, y: 0, z: 0}
   attackExecutionEndPosition: {x: 0, y: 0, z: 0}
   attackRecoveryTime: 0
