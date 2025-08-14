@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class RevertBall : MonoBehaviour
 {
-    private Transform _targetPlacePoint;
+    private Transform _revertPlayerToPoint;
     public Animator _animator;
 
-    public void Init(Transform targetPlacePoint)
+    public void Init(Transform revertPlayerToPoint)
     {
-        _targetPlacePoint = targetPlacePoint;
+        _revertPlayerToPoint = revertPlayerToPoint;
     }
 
     public void StartRun(float speed)
@@ -29,7 +29,7 @@ public class RevertBall : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
         {
-            player.transform.position = _targetPlacePoint.position;
+            player.transform.position = _revertPlayerToPoint.position;
             gameObject.SetActive(false);
             return;
         }

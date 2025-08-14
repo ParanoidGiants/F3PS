@@ -6,7 +6,7 @@ public class RevertBallSpawner : MonoBehaviour
 {
     public GameObject revertBallPrefab;
     public List<RevertBall> revertBalls;
-    public Transform targetPlacePoint;
+    public Transform revertPlayerToPoint;
     public Transform ballSpawnPoint;
     public int ballCount;
     public float time;
@@ -21,7 +21,7 @@ public class RevertBallSpawner : MonoBehaviour
             var spawnPosition = ballSpawnPoint.position;
             var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation, transform.parent);
             var revertBall = ball.GetComponent<RevertBall>();
-            revertBall.Init(targetPlacePoint);
+            revertBall.Init(revertPlayerToPoint);
             revertBalls.Add(revertBall);
         }
         time = spawnEverySeconds;
