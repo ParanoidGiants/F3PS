@@ -96,7 +96,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isHit) return;
+        if (!_isHit && _touchedTransform == null) return;
 
         _rigidbody.MovePosition(_touchedTransform.TransformPoint(_stickToLocalPosition));
     }
