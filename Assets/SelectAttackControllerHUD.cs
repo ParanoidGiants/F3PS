@@ -23,7 +23,7 @@ public class SelectAttackControllerHUD : MonoBehaviour
         PlayerEventController.OnAttackUnlocked -= UnlockHud;
     }
 
-    public void Awake()
+    public void Start()
     {
         foreach (var attackHud in attackHuds)
         {

@@ -24,7 +24,7 @@ public class SelectSkillControllerHUD : MonoBehaviour
         PlayerEventController.OnSkillUnlocked -= UnlockHud;
     }
 
-    private void Awake()
+    private void Start()
     {
         foreach (var skillHud in skillHuds)
         {
