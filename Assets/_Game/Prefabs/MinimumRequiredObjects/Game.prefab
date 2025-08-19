@@ -123,10 +123,6 @@ MonoBehaviour:
   isLoading: 0
   sceneNames:
   - _level_blockout_draft
-  - _moving_platforms
-  - _level_blockout_merge
-  - _puzzle_00
-  - _puzzle_01
   backDrop: {fileID: 1664451570}
 --- !u!1 &1871273289
 GameObject:
@@ -280,83 +276,87 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveGameManager: {fileID: 2927450651173564445}
   inputs: {fileID: 5736421558823638681}
-  PlayerData:
-    CurrentSpawnPoint: 0
-    CurrentHealth: 300
-    MaxHealth: 300
-    CurrentStamina: 1
-    MaxStamina: 1
-    StaminaRecoveryRate: 0.2
-    IsRecoveringStamina: 0
-    IsDepletingStamina: 0
-    SprintDepletionRate: 0.02
-    SprintSpeed: 70
-    SpeedChangeRate: 10
-    AscendHeight: 8
-    AscendDuration: 0.2
-    GlideDuration: 2
-    GlideDepletionRate: 0.25
-    LandingDepth: 20
-    RotationSmoothTime: 0.12
-    RotationSpeedPitch: 0.5
-    RotationSpeedYaw: 0.5
-    MoveSpeed: 400
-    AimSpeed: 40
-    JumpCoolDownTimer: 0.25
-    JumpHeight: 4
-    DodgeHeight: 1.2
-    DodgeSpeed: 20
-    DodgeAscendTimer: 0.05
-    DodgeLandTimer: 0.05
-    DodgeCoolDownTimer: 0.25
-    UnlockedAttacks: 
-    ActiveAttack: 0
-    OsirisKickData:
-      Damage: 6
-      NumberOfProjectiles: 8
-      StaminaCost: 0.3
-      SpreadAngle: 5
-      AttackSpeed: 100
-      AttackCoolDownTimer: 0.2
-      ProjectileLifeDuration: 0.2
-    HorusPalmData:
-      Damage: 20
-      AttackSpeed: 100
-      ImpactForceMultiplier: 0
-      AttackCoolDownTimer: 0.2
-      StaminaCost: 0.3
-      ProjectileLifeDuration: 5
-    UnlockedSkills: 
-    ActiveSkill: 0
-    KhonsuSphereSkillData:
-      TargetSize: 30
-      ActiveDuration: 20
-      ThrowPower: 20
-      ChangeTimeScaleSpeed: 0
-      IsEnabled: 0
-      Position: {x: 0, y: 0, z: 0}
-      TimeScale: 0.2
-      ActiveTime: 0
-    AnubisScrollSkillData:
-      CoolDownTime: 0.5
-      Duration: 2
-      Speed: 1
-      ScrollSpeed: 1
-      MinimumDistance: 3
-      MaximumDistance: 50
-      FrameDuration: 0.1
-      State: 0
-      CurrentFrame: 0
-      TotalFrames: 0
-      CurrentRecordingTime: 0
-    ThotMindSkillData:
-      PushPullSpeed: 10
-      RotateTimer: 1
-      MoveSpeed: 5
-      MinimumDistance: 3
-      MaximumDistance: 50
-      MaximumThrowSpeed: 50
-    UnlockedAbilities: 
+  GameData:
+    PlayerData:
+      MoveSpeed: 35
+      SpeedChangeRate: 15
+      SprintDepletionRate: 0.05
+      SprintSpeed: 60
+      JumpHeight: 8
+      JumpCoolDownTimer: 0.25
+      DodgeHeight: 1.5
+      DodgeSpeed: 30
+      DodgeAscendTimer: 0.05
+      DodgeLandTimer: 0.1
+      DodgeCoolDownTimer: 0.4
+      DodgeStaminaDepletionRate: 0.15
+      RotationSmoothTime: 0.12
+      RotationSpeedPitch: 0.2
+      RotationSpeedYaw: 0.2
+      AimSpeed: 2
+      CurrentSpawnPoint: 0
+      CurrentHealth: 0
+      MaxHealth: 100
+      CurrentStamina: 0
+      MaxStamina: 1
+      StaminaRecoveryRate: 1
+      IsRecoveringStamina: 0
+      IsDepletingStamina: 0
+      AscendHeight: 1
+      AscendDuration: 1
+      GlideDuration: 1
+      GlideDepletionRate: 0.05
+      LandingDepth: 20
+      UnlockedAttacks: 
+      ActiveAttack: 0
+      OsirisKickData:
+        Damage: 10
+        NumberOfProjectiles: 8
+        StaminaCost: 10
+        SpreadAngle: 45
+        AttackSpeed: 100
+        AttackCoolDownTimer: 0.2
+        ProjectileLifeDuration: 5
+      HorusPalmData:
+        Damage: 10
+        AttackSpeed: 100
+        ImpactForceMultiplier: 1
+        AttackCoolDownTimer: 0.2
+        StaminaCost: 0.3
+        ProjectileLifeDuration: 5
+      UnlockedSkills: 
+      ActiveSkill: 0
+      KhonsuSphereSkillData:
+        TargetSize: 10
+        ActiveDuration: 5
+        ThrowPower: 1
+        ChangeTimeScaleSpeed: 1
+        IsEnabled: 0
+        Position: {x: 0, y: 0, z: 0}
+        TimeScale: 1
+        ActiveTime: 0
+      AnubisScrollSkillData:
+        CoolDownTime: 0.5
+        Duration: 2
+        Speed: 1
+        ScrollSpeed: 1
+        MinimumDistance: 3
+        MaximumDistance: 50
+        FrameDuration: 0.1
+        State: 0
+        CurrentFrame: 0
+        TotalFrames: 0
+        CurrentRecordingTime: 0
+      ThotMindSkillData:
+        PushPullSpeed: 5
+        RotateTimer: 1
+        MoveSpeed: 5
+        MinimumDistance: 3
+        MaximumDistance: 50
+        MaximumThrowSpeed: 3
+      UnlockedAbilities: 02000000
+    EnemiesData: []
+    SwitchesData: []
   _fps: 60
   isMenuOpen: 0
 --- !u!1 &2655460542351779540
@@ -375,7 +375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6439659538927075417
 Transform:
   m_ObjectHideFlags: 0
@@ -496,8 +496,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
