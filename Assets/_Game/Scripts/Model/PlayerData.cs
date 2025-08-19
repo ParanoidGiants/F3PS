@@ -106,6 +106,41 @@ public class OsirisKickData
 [Serializable]
 public class PlayerData
 {
+    [Space(10)]
+    [Header("Move Settings")]
+    public float MoveSpeed = 40;
+    public float SpeedChangeRate = 10.0f;
+
+    [Space(10)]
+    [Header("Sprint Settings")]
+    [Range(0f, 1f)]
+    public float SprintDepletionRate = 0.05f;
+    public float SprintSpeed = 5.335f;
+    
+    [Space(10)]
+    [Header("Jump Settings")]
+    public float JumpHeight = 8;
+    public float JumpCoolDownTimer = 0.25f;
+
+    [Space(10)]
+    [Header("Dodge Settings")]
+    public float DodgeHeight = 1.2f;
+    public float DodgeSpeed = 60f;
+    public float DodgeAscendTimer = 0.5f;
+    public float DodgeLandTimer = 0.5f;
+    public float DodgeCoolDownTimer = 0.25f;
+    public float DodgeStaminaDepletionRate = 0.15f;
+
+    [Space(10)]
+    [Header("Rotation Settings")]   
+    [Range(0.0f, 0.3f)]
+    public float RotationSmoothTime = 0.12f;
+    [Range(0.0f, 1f)]
+    public float RotationSpeedPitch = 0.2f;
+    [Range(0.0f, 1f)]
+    public float RotationSpeedYaw = 0.2f;
+    public float AimSpeed = 2.0f;
+
     [Header("Progress")]
     public int CurrentSpawnPoint = 0;
 
@@ -125,13 +160,6 @@ public class PlayerData
     public bool IsDepletingStamina = false;
 
     [Space(10)]
-    [Header("Sprint Settings")]
-    [Range(0f, 1f)]
-    public float SprintDepletionRate = 0.05f;
-    public float SprintSpeed = 5.335f;
-    public float SpeedChangeRate = 10.0f;
-
-    [Space(10)]
     [Header("Ascende and Glide Settings")]
     public float AscendHeight = 1f;
     public float AscendDuration = 1f;
@@ -139,30 +167,6 @@ public class PlayerData
     public float GlideDepletionRate = 0.05f;
     public float LandingDepth = 20f;
 
-    [Space(10)]
-    [Header("Move Settings")]
-    [Range(0.0f, 0.3f)]
-    public float RotationSmoothTime = 0.12f;
-    [Range(0.0f, 1f)]
-    public float RotationSpeedPitch = 0.2f;
-    [Range(0.0f, 1f)]
-    public float RotationSpeedYaw = 0.2f;
-    public float MoveSpeed = 2.0f;
-    public float AimSpeed = 2.0f;
-
-    [Space(10)]
-    [Header("Jump Settings")]
-    public float JumpCoolDownTimer = 0.25f;
-    public float JumpHeight = 1.2f;
-
-    [Space(10)]
-    [Header("Dodge Settings")]
-    public float DodgeHeight = 1.2f;
-    public float DodgeSpeed = 60f;
-    public float DodgeAscendTimer = 0.5f;
-    public float DodgeLandTimer = 0.5f;
-    public float DodgeCoolDownTimer = 0.25f;
-    public float DodgeStaminaDepletionRate = 0.15f;
 
     [Space(20)]
     [Header("Attacks")]

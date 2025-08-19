@@ -351,11 +351,8 @@ namespace StarterAssets
             }
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
-            float speedOffset = 0.1f;
-            float inputMagnitude = Inputs.analogMovement ? Inputs.move.magnitude : 1f;
-            if (currentHorizontalSpeed < targetSpeed - speedOffset
-                || currentHorizontalSpeed > targetSpeed + speedOffset
-            )
+            float inputMagnitude = Mathf.Clamp01(Inputs.move.magnitude);
+            if (currentHorizontalSpeed < targetSpeed)
             {
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
