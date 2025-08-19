@@ -5,7 +5,7 @@ using F3PS;
 
 public class KhonsuSphereProjectile : MonoBehaviour
 {
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
     private KhonsuSphereSkillData KhonsuSphereData => PlayerEventController.Data.KhonsuSphereSkillData;
 
     [Header("Debug")]

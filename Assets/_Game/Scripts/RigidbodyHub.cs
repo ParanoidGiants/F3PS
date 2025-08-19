@@ -166,7 +166,7 @@ public class RigidbodyHub : MonoBehaviour
         {
             return Vector3.ClampMagnitude(
                 _rigidbody.linearVelocity,
-                GameManager.Instance.PlayerData.ThotMindSkillData.MaximumThrowSpeed
+                GameManager.Instance.GameData.PlayerData.ThotMindSkillData.MaximumThrowSpeed
             ) / currentTimeScale;
         }
         return _rigidbody.linearVelocity / currentTimeScale;

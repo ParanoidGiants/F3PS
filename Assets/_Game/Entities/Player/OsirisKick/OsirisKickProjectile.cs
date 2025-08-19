@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class OsirisKickProjectile : MonoBehaviour
 {
-    private OsirisKickData OsirisKickData => GameManager.Instance.PlayerData.OsirisKickData;
+    private OsirisKickData OsirisKickData => GameManager.Instance.GameData.PlayerData.OsirisKickData;
     private Collider[] _ownerColliders;
     private Rigidbody _rigidbody;
     private Collider _collider;

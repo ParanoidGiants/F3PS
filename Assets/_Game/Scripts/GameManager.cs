@@ -1,8 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using StarterAssets;
-using System;
 using TimeBending;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -31,8 +32,7 @@ namespace F3PS
         private PlayerInput _playerInput;
 #endif
 
-        public PlayerData PlayerData;
-        public PlayerEventController PlayerEventController;
+        public GameData GameData;
         [SerializeField] private int _fps = 60;
         public bool isMenuOpen;
 
@@ -49,23 +49,60 @@ namespace F3PS
             DontDestroyOnLoad(gameObject);
             DOTween.Init();
             _playerInput = inputs.GetComponent<PlayerInput>();
-            PlayerEventController = new PlayerEventController();
-            InitializeGameData();
+            
+            InitializeSaveData();
 
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
         }
 
-
-        public void SavePlayerData(int _)
+        private void InitializeSaveData()
         {
-            saveGameManager.SavePlayerData(PlayerData);
+            if (saveGameManager.isActiveAndEnabled && !saveGameManager.HasGameSaveData())
+            /*
+            ** Save game data with values found in inspector and scene.
+            **/
+            {
+                // register enemies from scene
+                var enemiesInstanceIds = new List<int>();
+                var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
+                var yaggiStandards = FindObjectsByType<YaggiStandardController>(FindObjectsSortMode.InstanceID);
+                var yaggiSpitters = FindObjectsByType<YaggiSpitterController>(FindObjectsSortMode.InstanceID);
+                var yaggiShieldSpitters = FindObjectsByType<YaggiShieldSpitterController>(FindObjectsSortMode.InstanceID);
+                enemiesInstanceIds.AddRange(scorpions.Select(scorpion => scorpion.gameObject.GetInstanceID()));
+                enemiesInstanceIds.AddRange(yaggiStandards.Select(yaggiStandard => yaggiStandard.gameObject.GetInstanceID()));
+                enemiesInstanceIds.AddRange(yaggiSpitters.Select(yaggiSpitter => yaggiSpitter.gameObject.GetInstanceID()));
+                enemiesInstanceIds.AddRange(yaggiShieldSpitters.Select(yaggiShieldSpitter => yaggiShieldSpitter.gameObject.GetInstanceID()));
+                GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
+
+                // register switches from scene
+                var switchesInstanceIds = new List<int>();
+                var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
+                var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
+                switchesInstanceIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.GetInstanceID()));
+                switchesInstanceIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
+                GameData.RegisterAllSwitches(switchesInstanceIds.ToArray());
+
+                saveGameManager.SaveDefaultGameData(GameData);
+                saveGameManager.SaveGameData(GameData);
+            }
+            else if (saveGameManager.isActiveAndEnabled && saveGameManager.HasGameSaveData())
+            /*
+            ** Use Existing save game data.
+            **/
+            {
+                GameData = saveGameManager.LoadCurrentGameData();
+            }
+            /*
+            ** Else dont use save game data.
+            ** Just use values found in inspector and scene.
+            */
+            GameData.PlayerEventController.InitializeData(GameData.PlayerData);
         }
 
         private void Start()
         {
-            PlayerEventController.OnCurrentSpawnPointChanged += SavePlayerData;
             Application.targetFrameRate = _fps;
         }
 
@@ -84,27 +121,7 @@ namespace F3PS
             inputs.canControlPlayer = true;
             inputs.SetCursorLockedState(true);
             isMenuOpen = false;
-
-            InitializeGameData();
-        }
-
-        private void InitializeGameData()
-        {
-            if (saveGameManager.enabled)
-            {
-                if (saveGameManager.HasGameSaveData())
-                {
-                    // Load Save Game
-                    PlayerData = saveGameManager.LoadCurrentPlayerData();
-                }
-                else
-                {
-                    // Create New Save Game with data from Inspector
-                    saveGameManager.SaveDefaultPlayerData(PlayerData);
-                    saveGameManager.SavePlayerData(PlayerData);
-                }
-            }
-            PlayerEventController.Initialize(PlayerData);
+            InitializeSaveData();
         }
 
         public void ResumeGameAfterMenuClosed()

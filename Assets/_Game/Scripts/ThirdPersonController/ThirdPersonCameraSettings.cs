@@ -103,10 +103,10 @@ public class ThirdPersonCameraSettings
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplierPitch = GameManager.Instance.IsCurrentDeviceMouse
                 ? 1.0f
-                : Time.unscaledDeltaTime * GameManager.Instance.PlayerData.RotationSpeedPitch;
+                : Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedPitch;
             float deltaTimeMultiplierYaw = GameManager.Instance. IsCurrentDeviceMouse
                 ? 1.0f
-                : Time.unscaledDeltaTime * GameManager.Instance.PlayerData.RotationSpeedYaw;
+                : Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedYaw;
 
             cameraTargetYaw += look.x * deltaTimeMultiplierYaw;
             cameraTargetPitch += look.y * deltaTimeMultiplierPitch;

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class KhonsuSphere : MonoBehaviour
 {
-    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.PlayerData.KhonsuSphereSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.GameData.PlayerData.KhonsuSphereSkillData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
 
     public List<TimeObject> timeObjects = new List<TimeObject>();
     private Renderer _renderer;

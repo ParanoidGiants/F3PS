@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class SelectSkillControllerHUD : MonoBehaviour
 {
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
 
     public SelectableSkillHUD[] skillHuds;
 

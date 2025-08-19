@@ -120,8 +120,8 @@ namespace StarterAssets
         private readonly int _animIDVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
         private Rigidbody _rigidbody;
-        private PlayerData Data => GameManager.Instance.PlayerData;
-        private PlayerEventController DataEventController => GameManager.Instance.PlayerEventController;
+        private PlayerData Data => GameManager.Instance.GameData.PlayerData;
+        private PlayerEventController DataEventController => GameManager.Instance.GameData.PlayerEventController;
 
         public bool IsGrounded => _isGrounded;
 
@@ -442,7 +442,7 @@ namespace StarterAssets
                 _isSprinting = false;
                 return;
             }
-            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            var sprintStaminaDepletion = GameManager.Instance.GameData.PlayerData.SprintDepletionRate * Time.deltaTime;
             if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
             {
                 _isSprinting = false;

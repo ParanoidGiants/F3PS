@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class StaminaUI : MonoBehaviour
 {
-    public PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    public PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
     public Image staminaBar;
     public Animator animator;
 

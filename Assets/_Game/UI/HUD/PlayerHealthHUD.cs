@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerHealthHUD : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
 
     public Image healthBar;
     public Image healthBarBackground;

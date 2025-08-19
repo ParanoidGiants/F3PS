@@ -7,14 +7,14 @@ public class SaveGameManager : MonoBehaviour
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
 
-    public void SavePlayerData(PlayerData playerData)
+    public void SaveGameData(GameData gameData)
     {
         try
         {
-            var playerDataJson = JsonUtility.ToJson(playerData);
-            PlayerPrefs.SetString(GAME_DATA, playerDataJson);
+            var gameDataJson = JsonUtility.ToJson(gameData);
+            PlayerPrefs.SetString(GAME_DATA, gameDataJson);
             PlayerPrefs.Save();
-            Debug.Log(playerDataJson);
+            Debug.Log(gameDataJson);
         }
         catch (Exception ex)
         {
@@ -25,12 +25,12 @@ public class SaveGameManager : MonoBehaviour
         }
     }
 
-    public PlayerData LoadCurrentPlayerData()
+    public GameData LoadCurrentGameData()
     {
-        var playerDataJson = PlayerPrefs.GetString(GAME_DATA);
-        PlayerData playerData = JsonUtility.FromJson<PlayerData>(playerDataJson);
-        Debug.Log(playerDataJson);
-        return playerData;
+        var gameDataJson = PlayerPrefs.GetString(GAME_DATA);
+        GameData gameData = JsonUtility.FromJson<GameData>(gameDataJson);
+        Debug.Log(gameDataJson);
+        return gameData;
     }
 
     public bool HasGameSaveData()
@@ -45,10 +45,10 @@ public class SaveGameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void SaveDefaultPlayerData(PlayerData playerData)
+    public void SaveDefaultGameData(GameData gameData)
     {
-        var playerDataJson = JsonUtility.ToJson(playerData);
-        PlayerPrefs.SetString(DEFAULT_GAME_DATA, playerDataJson);
+        var gameDataJson = JsonUtility.ToJson(gameData);
+        PlayerPrefs.SetString(DEFAULT_GAME_DATA, gameDataJson);
         PlayerPrefs.Save();
     }
 }

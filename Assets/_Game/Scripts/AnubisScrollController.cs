@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class AnubisScrollController : MonoBehaviour
 {
-    private AnubisScrollSkillData AnubisScrollSkillData => GameManager.Instance.PlayerData.AnubisScrollSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private AnubisScrollSkillData AnubisScrollSkillData => GameManager.Instance.GameData.PlayerData.AnubisScrollSkillData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
 
     [Header("References")]
     public SelectSkillControllerHUD selectSkillControllerHUD;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class HorusPalmProjectile : MonoBehaviour
 {
-    private HorusPalmData HorusPalmData => GameManager.Instance.PlayerData.HorusPalmData;
+    private HorusPalmData HorusPalmData => GameManager.Instance.GameData.PlayerData.HorusPalmData;
 
     private Collider[] _ownerColliders;
     private HitBox _hitBox;

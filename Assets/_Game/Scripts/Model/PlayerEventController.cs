@@ -4,7 +4,7 @@ public class PlayerEventController
 {
     public PlayerData Data { get; private set; }
 
-    public void Initialize(PlayerData model)
+    public void InitializeData(PlayerData model)
     {
         Data = model;
         UpdateCurrentSpawnPoint(Data.CurrentSpawnPoint);

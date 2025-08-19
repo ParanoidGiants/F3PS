@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpawnPointManager : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
     public List<SpawnPoint> spawnPoints;
 
     private void OnEnable()

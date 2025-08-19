@@ -19,12 +19,12 @@ public class UnlockAbility : MonoBehaviour
             return;
         }
 
-        if (GameManager.Instance.PlayerData.UnlockedAbilities.Contains(ability))
+        if (GameManager.Instance.GameData.PlayerData.UnlockedAbilities.Contains(ability))
         {
             return;
         }
 
-        GameManager.Instance.PlayerEventController.UnlockAbility(ability);
+        GameManager.Instance.GameData.PlayerEventController.UnlockAbility(ability);
         Destroy(gameObject);
     }
 }
