@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
 
@@ -17,22 +15,27 @@ public class RevertBall : MonoBehaviour
     {
         _animator.speed = speed;
         _animator.SetTrigger("Start");
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<HorusPalmProjectile>(out var _) || collision.gameObject.TryGetComponent<OsirisKickProjectile>(out var _))
         {
-            gameObject.SetActive(false);
+            Deactivate();
             return;
         }
 
         if (collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
         {
             player.transform.position = _revertPlayerToPoint.position;
-            gameObject.SetActive(false);
+            Deactivate();
             return;
         }
+    }
 
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
