@@ -327,13 +327,13 @@ MonoBehaviour:
       UnlockedSkills: 
       ActiveSkill: 0
       KhonsuSphereSkillData:
-        TargetSize: 10
-        ActiveDuration: 5
-        ThrowPower: 1
-        ChangeTimeScaleSpeed: 1
+        TargetSize: 20
+        ActiveDuration: 20
+        ThrowPower: 30
+        ChangeTimeScaleSpeed: 0
         IsEnabled: 0
         Position: {x: 0, y: 0, z: 0}
-        TimeScale: 1
+        TimeScale: 0.2
         ActiveTime: 0
       AnubisScrollSkillData:
         CoolDownTime: 0.5
@@ -375,7 +375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6439659538927075417
 Transform:
   m_ObjectHideFlags: 0
@@ -468,7 +468,7 @@ MonoBehaviour:
   menu: 0
   freeCamera: 0
   analogMovement: 0
-  cursorLocked: 1
+  cursorLocked: 0
   cursorInputForLook: 1
 --- !u!114 &5871156267789381035
 MonoBehaviour:
@@ -496,8 +496,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: Gamepad
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}

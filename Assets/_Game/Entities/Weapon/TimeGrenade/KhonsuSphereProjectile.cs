@@ -147,6 +147,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
                 khonsuSphere.Clear();
                 khonsuSphere.gameObject.SetActive(false);
                 gameObject.SetActive(false);
+                _touchedTransform = null;
             });
     }
 

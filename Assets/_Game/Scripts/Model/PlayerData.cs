@@ -28,15 +28,15 @@ public enum Attack
 public class KhonsuSphereSkillData
 {
     [Header("Settings")]
-    public float TargetSize = 10f;
-    public float ActiveDuration = 5f;
-    public float ThrowPower = 1f;
-    public float ChangeTimeScaleSpeed = 1f;
+    public float TargetSize = 20;
+    public float ActiveDuration = 20;
+    public float ThrowPower = 30;
+    public float ChangeTimeScaleSpeed = 0;
 
     [Header("Watchers")]
     public bool IsEnabled = false;
     public Vector3 Position = Vector3.zero;
-    public float TimeScale = 1f;
+    public float TimeScale = 0.2f;
     public float ActiveTime = 0f;
 }
 
@@ -83,9 +83,9 @@ public class ThotMindSkillData
 [Serializable]
 public class HorusPalmData
 {
-    public int Damage = 10;
+    public int Damage = 20;
     public float AttackSpeed = 100f;
-    public float ImpactForceMultiplier = 1.0f;
+    public float ImpactForceMultiplier = 1;
     public float AttackCoolDownTimer = 0.2f;
     public float StaminaCost = 0.3f;
     public float ProjectileLifeDuration = 5f;
@@ -134,16 +134,16 @@ public class PlayerData
     [Space(10)]
     [Header("Stamina")]
     [Range(0f, 1f)]
-    public float CurrentStamina;
+    public float CurrentStamina = 1;
     [Range(0f, 1f)]
-    public float MaxStamina = 1f;
+    public float MaxStamina = 1;
     [Range(0f, 1f)]
     public float StaminaRecoveryRate = 0.2f;
     public bool IsRecoveringStamina = false;
     public bool IsDepletingStamina = false;
 
     [Header("Health")]
-    public int CurrentHealth;
+    public int CurrentHealth = 100;
     public int MaxHealth = 100;
 
     [Space(10)]
