@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class KhonsuSphereHUD : MonoBehaviour
 {
     private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.GameData.PlayerData.KhonsuSphereSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     public GameObject khonsuSphereBar;
     public Image lifeTimeCircle;

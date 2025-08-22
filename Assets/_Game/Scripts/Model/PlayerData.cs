@@ -190,5 +190,5 @@ public class PlayerData
 
     [Space(20)]
     [Header("Abilities")]
-    public List<Ability> UnlockedAbilities;
+    public List<Ability> UnlockedAbilities = new(){ Ability.Sprint };
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class StaminaManager : MonoBehaviour
 {
     public PlayerData playerData => GameManager.Instance.GameData.PlayerData;
-    public PlayerEventController playerEventController => GameManager.Instance.GameData.PlayerEventController;
+    public PlayerEventController playerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     public bool isDepleting = false;
 

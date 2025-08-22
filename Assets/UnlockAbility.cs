@@ -24,7 +24,7 @@ public class UnlockAbility : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.GameData.PlayerEventController.UnlockAbility(ability);
+        GameManager.Instance.saveGameManager.PlayerEventController.UnlockAbility(ability);
         Destroy(gameObject);
     }
 }

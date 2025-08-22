@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AnubisScrollHUD : MonoBehaviour
 {
     private AnubisScrollSkillData AnubisScrollData => GameManager.Instance.GameData.PlayerData.AnubisScrollSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     public GameObject anubisScrollBar;
     public Image stateIcon;

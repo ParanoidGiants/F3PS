@@ -7,7 +7,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Header("References")]
     public Transform playerSpace;

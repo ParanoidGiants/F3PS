@@ -121,7 +121,7 @@ namespace StarterAssets
 
         private Rigidbody _rigidbody;
         private PlayerData Data => GameManager.Instance.GameData.PlayerData;
-        private PlayerEventController DataEventController => GameManager.Instance.GameData.PlayerEventController;
+        private PlayerEventController DataEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
         public bool IsGrounded => _isGrounded;
 

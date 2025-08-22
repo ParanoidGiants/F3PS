@@ -6,7 +6,7 @@ using UnityEngine;
 public class HorusPalmController : MonoBehaviour
 {
     private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Space(10)]
     [Header("Attack Settings")]

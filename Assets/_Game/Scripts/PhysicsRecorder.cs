@@ -5,7 +5,7 @@ using UnityEngine;
 public class PhysicsRecorder : MonoBehaviour
 {
     private AnubisScrollSkillData AnubisScrollSkillData => GameManager.Instance.GameData.PlayerData.AnubisScrollSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     private RigidbodyHub _rigidbodyHub;
     private const float THRESHOLD = 0.001f;

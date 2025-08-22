@@ -6,7 +6,7 @@ using UnityEngine;
 public class AttackManager : MonoBehaviour
 {
     private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.GameData.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Header("References")]
     public Crosshair crosshair;

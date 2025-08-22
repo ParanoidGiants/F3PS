@@ -9,12 +9,12 @@ public class SpawnPointDebugText : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.GameData.PlayerEventController.OnCurrentSpawnPointChanged += OnCurrentSpawnPointChanged;
+        GameManager.Instance.saveGameManager.PlayerEventController.OnCurrentSpawnPointChanged += OnCurrentSpawnPointChanged;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.GameData.PlayerEventController.OnCurrentSpawnPointChanged -= OnCurrentSpawnPointChanged;
+        GameManager.Instance.saveGameManager.PlayerEventController.OnCurrentSpawnPointChanged -= OnCurrentSpawnPointChanged;
     }
 
 

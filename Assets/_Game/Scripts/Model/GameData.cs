@@ -5,7 +5,6 @@ using System.Linq;
 public class GameData
 {
     public PlayerData PlayerData;
-    public PlayerEventController PlayerEventController;
     public EnemyData[] EnemiesData;
     public SwitchData[] SwitchesData;
 

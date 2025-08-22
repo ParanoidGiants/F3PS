@@ -32,7 +32,7 @@ public class UnlockAttack : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.GameData.PlayerEventController.UnlockAttack(attack);
+        GameManager.Instance.saveGameManager.PlayerEventController.UnlockAttack(attack);
         Destroy(gameObject);
     }
 }

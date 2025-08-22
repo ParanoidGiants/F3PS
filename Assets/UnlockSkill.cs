@@ -32,7 +32,7 @@ public class UnlockSkill : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.GameData.PlayerEventController.UnlockSkill(skill);
+        GameManager.Instance.saveGameManager.PlayerEventController.UnlockSkill(skill);
         Destroy(gameObject);
     }
 }
