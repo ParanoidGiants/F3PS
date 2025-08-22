@@ -51,7 +51,6 @@ GameObject:
   - component: {fileID: 1668350425890771933}
   - component: {fileID: 2709915003970431875}
   - component: {fileID: 3320033453617420016}
-  - component: {fileID: 285594339508574563}
   - component: {fileID: 8334923066002264857}
   m_Layer: 18
   m_Name: quetcher
@@ -425,21 +424,6 @@ MonoBehaviour:
   throwBackPoint: {fileID: 4200457782014003301}
   throwBackSpeed: 10
   damage: 20
---- !u!114 &285594339508574563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097884163583121058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountOfTimeZones: 0
-  currentTimeScale: 1
-  additionalTimeScale: 0.1
 --- !u!54 &8334923066002264857
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -482,6 +466,7 @@ GameObject:
   - component: {fileID: 7611031447279275979}
   - component: {fileID: 5287427392036431376}
   - component: {fileID: 7029698964490374363}
+  - component: {fileID: 4286904222286983814}
   m_Layer: 18
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1327,6 +1312,21 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &4286904222286983814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2967638825032515041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706f2236bfd70d847a27f9a5480dccc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfTimeZones: 0
+  currentTimeScale: 1
+  additionalTimeScale: 0.1
 --- !u!1 &3757648380905413760
 GameObject:
   m_ObjectHideFlags: 0

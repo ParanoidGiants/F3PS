@@ -5,8 +5,8 @@ public class RotateBackAndForthOverTime : MonoBehaviour
 {
     [Header("Debug")]
     public Rigidbody _rigidbody;
-    public TimeObject _timeObject;
     public Tween _tween;
+    public TimeObject _timeObject;
 
     [Space(10)]
     [Header("References")]
@@ -21,7 +21,7 @@ public class RotateBackAndForthOverTime : MonoBehaviour
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _timeObject = GetComponent<TimeObject>();
+        _timeObject = GetComponentInChildren<TimeObject>();
     }
 
     void Start()
