@@ -60,10 +60,10 @@ namespace F3PS
         private void InitializeSaveData()
         {
             if (saveGameManager.isActiveAndEnabled && !saveGameManager.HasGameSaveData())
-            /*
-            ** Save game data with values found in inspector and scene.
-            **/
             {
+                /*
+                ** Save game data with values found in inspector and scene.
+                **/
                 // register enemies from scene
                 var enemiesInstanceIds = new List<int>();
                 var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
@@ -88,16 +88,24 @@ namespace F3PS
                 saveGameManager.SaveGameData(GameData);
             }
             else if (saveGameManager.isActiveAndEnabled && saveGameManager.HasGameSaveData())
-            /*
-            ** Use Existing save game data.
-            **/
             {
+                /*
+                ** Use Existing save game data.
+                **/
                 GameData = saveGameManager.LoadCurrentGameData();
             }
+            else
+            {
+                /*
+                ** Else dont use save game data.
+                ** Just use values found in inspector and scene.
+                */
+            }
             /*
-            ** Else dont use save game data.
-            ** Just use values found in inspector and scene.
+            ** In any case initialize data
             */
+            
+            GameData.PlayerEventController = new PlayerEventController();
             GameData.PlayerEventController.InitializeData(GameData.PlayerData);
         }
 

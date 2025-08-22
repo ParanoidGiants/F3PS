@@ -108,14 +108,14 @@ public class PlayerData
 {
     [Space(10)]
     [Header("Move Settings")]
-    public float MoveSpeed = 40;
-    public float SpeedChangeRate = 10.0f;
+    public float MoveSpeed = 30;
+    public float SpeedChangeRate = 15;
 
     [Space(10)]
     [Header("Sprint Settings")]
     [Range(0f, 1f)]
     public float SprintDepletionRate = 0.05f;
-    public float SprintSpeed = 5.335f;
+    public float SprintSpeed = 60;
     
     [Space(10)]
     [Header("Jump Settings")]
@@ -124,12 +124,27 @@ public class PlayerData
 
     [Space(10)]
     [Header("Dodge Settings")]
-    public float DodgeHeight = 1.2f;
-    public float DodgeSpeed = 60f;
-    public float DodgeAscendTimer = 0.5f;
-    public float DodgeLandTimer = 0.5f;
-    public float DodgeCoolDownTimer = 0.25f;
+    public float DodgeHeight = 1.5f;
+    public float DodgeSpeed = 30f;
+    public float DodgeAscendTimer = 0.05f;
+    public float DodgeLandTimer = 0.1f;
+    public float DodgeCoolDownTimer = 0.4f;
     public float DodgeStaminaDepletionRate = 0.15f;
+
+    [Space(10)]
+    [Header("Stamina")]
+    [Range(0f, 1f)]
+    public float CurrentStamina;
+    [Range(0f, 1f)]
+    public float MaxStamina = 1f;
+    [Range(0f, 1f)]
+    public float StaminaRecoveryRate = 0.2f;
+    public bool IsRecoveringStamina = false;
+    public bool IsDepletingStamina = false;
+
+    [Header("Health")]
+    public int CurrentHealth;
+    public int MaxHealth = 100;
 
     [Space(10)]
     [Header("Rotation Settings")]   
@@ -143,21 +158,6 @@ public class PlayerData
 
     [Header("Progress")]
     public int CurrentSpawnPoint = 0;
-
-    [Header("Health")]
-    public int CurrentHealth;
-    public int MaxHealth = 100;
-
-    [Space(10)]
-    [Header("Stamina")]
-    [Range(0f, 1f)]
-    public float CurrentStamina;
-    [Range(0f, 1f)]
-    public float MaxStamina = 1f;
-    [Range(0f, 1f)]
-    public float StaminaRecoveryRate = 5;
-    public bool IsRecoveringStamina = false;
-    public bool IsDepletingStamina = false;
 
     [Space(10)]
     [Header("Ascende and Glide Settings")]

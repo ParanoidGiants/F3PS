@@ -9,12 +9,6 @@ public class GameData
     public EnemyData[] EnemiesData;
     public SwitchData[] SwitchesData;
 
-    public GameData()
-    {
-        PlayerData = new PlayerData();
-        PlayerEventController = new PlayerEventController();
-    }
-
     public void RegisterEnemy(int instanceId)
     {
         var enemyData = new EnemyData();

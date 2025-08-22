@@ -278,7 +278,7 @@ MonoBehaviour:
   inputs: {fileID: 5736421558823638681}
   GameData:
     PlayerData:
-      MoveSpeed: 35
+      MoveSpeed: 30
       SpeedChangeRate: 15
       SprintDepletionRate: 0.05
       SprintSpeed: 60
@@ -290,18 +290,18 @@ MonoBehaviour:
       DodgeLandTimer: 0.1
       DodgeCoolDownTimer: 0.4
       DodgeStaminaDepletionRate: 0.15
+      CurrentStamina: 1
+      MaxStamina: 1
+      StaminaRecoveryRate: 0.2
+      IsRecoveringStamina: 0
+      IsDepletingStamina: 0
+      CurrentHealth: 100
+      MaxHealth: 100
       RotationSmoothTime: 0.12
       RotationSpeedPitch: 0.2
       RotationSpeedYaw: 0.2
       AimSpeed: 2
       CurrentSpawnPoint: 0
-      CurrentHealth: 0
-      MaxHealth: 100
-      CurrentStamina: 0
-      MaxStamina: 1
-      StaminaRecoveryRate: 1
-      IsRecoveringStamina: 0
-      IsDepletingStamina: 0
       AscendHeight: 1
       AscendDuration: 1
       GlideDuration: 1
@@ -318,7 +318,7 @@ MonoBehaviour:
         AttackCoolDownTimer: 0.2
         ProjectileLifeDuration: 5
       HorusPalmData:
-        Damage: 10
+        Damage: 20
         AttackSpeed: 100
         ImpactForceMultiplier: 1
         AttackCoolDownTimer: 0.2
