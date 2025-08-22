@@ -5,10 +5,6 @@ using DG.Tweening;
 using System.Collections;
 
 
-
-
-
-
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using DarkTonic.MasterAudio;
 #endif
@@ -536,19 +532,24 @@ namespace StarterAssets
             else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
             {
                 UpdateLandingPlane();
-                ascendTime += Time.deltaTime;
-                if (ascendTime >= Data.AscendDuration)
-                {
-                    isAscending = false;
-                    isGliding = true;
-                    landingPlane.SetActive(true);
-                    UpdateLandingPlane();
-                    ascendTime = Data.AscendDuration;
-                }
-                var maximumJumpSpeed = Mathf.Sqrt(Data.AscendHeight * -2f * Gravity);
-                var easing = Helper.Easing.EaseInQuad(ascendTime / Data.AscendDuration);
-                easing = Mathf.Clamp01(easing);
-                currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
+                
+                currentVerticalSpeed += Gravity * Time.deltaTime;
+                currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
+                isAscending = currentVerticalSpeed > 0f;
+                isGliding = !isAscending;
+                // ascendTime += Time.deltaTime;
+                // if (ascendTime >= Data.AscendDuration)
+                // {
+                //     isAscending = false;
+                //     isGliding = true;
+                //     landingPlane.SetActive(true);
+                //     UpdateLandingPlane();
+                //     ascendTime = Data.AscendDuration;
+                // }
+                // var maximumJumpSpeed = Mathf.Sqrt(Data.AscendHeight * -2f * Gravity);
+                // var easing = Helper.Easing.EaseInQuad(ascendTime / Data.AscendDuration);
+                // easing = Mathf.Clamp01(easing);
+                // currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
             }
             else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {
