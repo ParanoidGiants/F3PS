@@ -445,6 +445,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23c3543fecb559419f69d28cd913d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _healthUIPool: {fileID: 0}
+  currentState: 4
+  isDead: 0
+  checkingDestination: {x: 0, y: 0, z: 0}
   animator: {fileID: 95548461742404872}
   navMeshAgent: {fileID: 1038869799714516501}
   patrolManager: {fileID: 6372822854961854032}
@@ -459,9 +463,6 @@ MonoBehaviour:
   maxHealth: 200
   walkSpeed: 6
   runSpeed: 15
-  idleDuration: 0
-  idleTime: 0
-  checkingDestination: {x: 0, y: 0, z: 0}
   suspiciousTime: 0
   suspiciousDuration: 2
   suspiciousRotateSpeed: 30
@@ -471,7 +472,7 @@ MonoBehaviour:
   dieTime: 1
   fadeOutDuration: 1
   stoppingDistanceState: 2
-  rotationSpeed: 90
+  rotationSpeed: 360
   stoppingDistancePushBack: 5
   stoppingDistanceStay: 7
   stoppingDistanceFollow: 9
@@ -487,8 +488,8 @@ MonoBehaviour:
   attackAnticipationStartPosition: {x: 0, y: 0, z: 0}
   attackAnticipationEndPosition: {x: 0, y: 0, z: 0}
   attackExecutionTime: 0
-  attackExecutionDuration: 0.25
-  attackExecutionDistance: 18
+  attackExecutionDuration: 0.3
+  attackExecutionDistance: 25
   attackExecutionStartPosition: {x: 0, y: 0, z: 0}
   attackExecutionEndPosition: {x: 0, y: 0, z: 0}
   attackRecoveryTime: 0
@@ -496,9 +497,6 @@ MonoBehaviour:
   attackRecoveryDistance: 1
   attackRecoveryStartPosition: {x: 0, y: 0, z: 0}
   attackRecoveryEndPosition: {x: 0, y: 0, z: 0}
-  _healthUIPool: {fileID: 0}
-  currentState: 0
-  isDead: 0
 --- !u!1 &1554192902073504997
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,7 +835,7 @@ Transform:
   m_GameObject: {fileID: 3521068046704983537}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1076,6 +1074,7 @@ MonoBehaviour:
   _meshRenderer: {fileID: 6558898132686104760}
   _targetCandidates: []
   eyes: {fileID: 1829523528260659340}
+  AllHits: []
 --- !u!1 &7107084483964019830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,6 +1343,7 @@ MonoBehaviour:
   _meshRenderer: {fileID: 7242158487072921417}
   _targetCandidates: []
   eyes: {fileID: 1829523528260659340}
+  AllHits: []
 --- !u!1001 &541571674
 PrefabInstance:
   m_ObjectHideFlags: 0
