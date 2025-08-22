@@ -611,7 +611,10 @@ public class YaghotepController : MonoBehaviour
 
     private void SetDestination(Vector3 position)
     {
-        navMeshDestination.position = position;
+        if (navMeshDestination != null)
+        {
+            navMeshDestination.position = position;
+        }
         navMeshAgent.destination = position;
     }
 
