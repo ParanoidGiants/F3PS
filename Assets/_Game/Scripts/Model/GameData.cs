@@ -5,8 +5,8 @@ using System.Linq;
 public class GameData
 {
     public PlayerData PlayerData;
+    public SwitchesData SwitchesData;
     public EnemyData[] EnemiesData;
-    public SwitchData[] SwitchesData;
 
     public void RegisterEnemy(int instanceId)
     {
@@ -22,33 +22,11 @@ public class GameData
         enemyData.isAlive = false;
     }
 
-    public void RegisterSwitch(int instanceId)
-    {
-        var switchData = new SwitchData();
-        switchData.instanceId = instanceId;
-        switchData.isOn = false;
-        SwitchesData = SwitchesData.Append(switchData).ToArray();
-
-    }
-    public void SwitchOn(int instanceId)
-    {
-        var switchData = SwitchesData.First(x => x.instanceId == instanceId);
-        switchData.isOn = true;
-    }
-
     public void RegisterAllEnemies(int[] enemiesInstanceIds)
     {
         foreach (var instanceId in enemiesInstanceIds)
         {
             RegisterEnemy(instanceId);
-        }
-    }
-
-    public void RegisterAllSwitches(int[] switchesInstanceIds)
-    {
-        foreach (var instanceId in switchesInstanceIds)
-        {
-            RegisterSwitch(instanceId);
         }
     }
 }

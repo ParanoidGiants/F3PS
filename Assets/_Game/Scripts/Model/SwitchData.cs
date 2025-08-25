@@ -3,6 +3,6 @@ using System;
 [Serializable]
 public class SwitchData
 {
-    public int instanceId;
-    public bool isOn;
+    public string Id;
+    public bool IsTriggered;
 }

@@ -9,6 +9,8 @@ public class SaveGameManager : MonoBehaviour
 
     public GameData GameData;
     public PlayerEventController PlayerEventController;
+    public SwitchEventController SwitchEventController;
+
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
 
@@ -16,6 +18,7 @@ public class SaveGameManager : MonoBehaviour
     private void Awake()
     {
         PlayerEventController = new PlayerEventController();
+        SwitchEventController = new SwitchEventController();
     }
 
     private void OnEnable()
@@ -112,12 +115,13 @@ public class SaveGameManager : MonoBehaviour
                 GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
 
                 // register switches from scene
-                var switchesInstanceIds = new List<int>();
+                GameData.SwitchesData = new SwitchesData();
+                var switchesIds = new List<string>();
                 var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
-                switchesInstanceIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.GetInstanceID()));
-                var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
-                switchesInstanceIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
-                GameData.RegisterAllSwitches(switchesInstanceIds.ToArray());
+                switchesIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.name));
+                // var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
+                // switchesIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
+                GameData.SwitchesData.Initialize(switchesIds.ToArray());
 
                 SaveDefaultGameData();
                 SaveGameData();
@@ -136,5 +140,6 @@ public class SaveGameManager : MonoBehaviour
         */
 
         PlayerEventController.InitializeData(GameData.PlayerData);
+        SwitchEventController.InitializeData(GameData.SwitchesData);
     }
 }
