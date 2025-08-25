@@ -6,7 +6,7 @@ public class UnlockAttack : MonoBehaviour
 {
     public Attack attack;
 
-    private void Awake()
+    private void Start()
     {
         if (GameManager.Instance.GameData.PlayerData.UnlockedAttacks.Contains(attack))
         {

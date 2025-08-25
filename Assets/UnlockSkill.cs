@@ -6,7 +6,7 @@ public class UnlockSkill : MonoBehaviour
 {
     public Skill skill;
 
-    private void Awake()
+    private void Start()
     {
         if (GameManager.Instance.GameData.PlayerData.UnlockedSkills.Contains(skill))
         {
