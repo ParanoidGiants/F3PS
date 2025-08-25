@@ -114,8 +114,8 @@ public class SaveGameManager : MonoBehaviour
                 // register switches from scene
                 var switchesInstanceIds = new List<int>();
                 var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
-                var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
                 switchesInstanceIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.GetInstanceID()));
+                var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
                 switchesInstanceIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
                 GameData.RegisterAllSwitches(switchesInstanceIds.ToArray());
 
