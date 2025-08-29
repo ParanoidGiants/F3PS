@@ -1,6 +1,13 @@
 using System;
-using DG.Tweening;
+using F3PS;
 using UnityEngine;
+
+/*
+** This is a DoorController.
+** It is used to open and close doors.
+** It is also used to save the state of the door.
+** Closing a door is only for debugging purposes.
+*/
 
 public enum DoorState
 {
@@ -32,6 +39,16 @@ public class DoorController : MonoBehaviour
     public float _animationDuration = 5f;
     public float _openPosition = 1.5f;
     public float _closePosition = 0.5f;
+
+    private void OnEnable()
+    {
+        GameManager.Instance.saveGameManager.DoorEventController.OnDoorOpened += OnDoorOpened;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.saveGameManager.DoorEventController.OnDoorOpened -= OnDoorOpened;
+    }
 
     private void Update()
     {
@@ -74,6 +91,19 @@ public class DoorController : MonoBehaviour
             }
         }
     }
+
+    private void OnDoorOpened(string obj)
+    {
+        if (obj != gameObject.name || state is DoorState.OPENING)
+        {
+            return;
+        }
+        state = DoorState.OPEN;
+        var position = _door.localPosition;
+        position.y = _openPosition;
+        _door.localPosition = position;
+    }
+
     public void OpenDoor()
     {
         Debug.Log("Open Door");
@@ -82,6 +112,7 @@ public class DoorController : MonoBehaviour
             return;
         }
         state = DoorState.OPENING;
+        GameManager.Instance.saveGameManager.DoorEventController.UpdateDoorOpened(gameObject.name);
         Debug.Log("Opening Door");
     }
 

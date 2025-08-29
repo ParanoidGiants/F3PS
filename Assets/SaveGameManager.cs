@@ -10,6 +10,7 @@ public class SaveGameManager : MonoBehaviour
     public GameData GameData;
     public PlayerEventController PlayerEventController;
     public SwitchEventController SwitchEventController;
+    public DoorEventController DoorEventController;
 
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
@@ -19,6 +20,7 @@ public class SaveGameManager : MonoBehaviour
     {
         PlayerEventController = new PlayerEventController();
         SwitchEventController = new SwitchEventController();
+        DoorEventController = new DoorEventController();
     }
 
     private void OnEnable()
@@ -29,6 +31,13 @@ public class SaveGameManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerEventController.OnCurrentSpawnPointChanged -= OnCurrentSpawnPointChanged;
+    }
+
+    private void InitializeEventControllers()
+    {
+        PlayerEventController.InitializeData(GameData.PlayerData);
+        SwitchEventController.InitializeData(GameData.SwitchesData);
+        DoorEventController.InitializeData(GameData.DoorsData);
     }
 
     public GameData LoadCurrentGameData()
@@ -83,63 +92,88 @@ public class SaveGameManager : MonoBehaviour
 
     public void InitializeSaveData()
     {
-        Debug.Log("InitializeSaveData");
-        if (gameObject.activeSelf)
+        if (!gameObject.activeSelf)
         {
-            Debug.Log("isActiveAndEnabled");
-            if (HasSaveGameData())
-            {
-                Debug.Log("HasSaveGameData");
-                /*
-                ** Use Existing save game data.
-                **/
-                GameData = LoadCurrentGameData();
-            }
-            else
-            {
-                Debug.Log("HasNoSaveGameData");
-
-                /*
-                ** Save game data with values found in inspector and scene.
-                **/
-                // register enemies from scene
-                var enemiesInstanceIds = new List<int>();
-                var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
-                var yaggiStandards = FindObjectsByType<YaggiStandardController>(FindObjectsSortMode.InstanceID);
-                var yaggiSpitters = FindObjectsByType<YaggiSpitterController>(FindObjectsSortMode.InstanceID);
-                var yaggiShieldSpitters = FindObjectsByType<YaggiShieldSpitterController>(FindObjectsSortMode.InstanceID);
-                enemiesInstanceIds.AddRange(scorpions.Select(scorpion => scorpion.gameObject.GetInstanceID()));
-                enemiesInstanceIds.AddRange(yaggiStandards.Select(yaggiStandard => yaggiStandard.gameObject.GetInstanceID()));
-                enemiesInstanceIds.AddRange(yaggiSpitters.Select(yaggiSpitter => yaggiSpitter.gameObject.GetInstanceID()));
-                enemiesInstanceIds.AddRange(yaggiShieldSpitters.Select(yaggiShieldSpitter => yaggiShieldSpitter.gameObject.GetInstanceID()));
-                GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
-
-                // register switches from scene
-                GameData.SwitchesData = new SwitchesData();
-                var switchesIds = new List<string>();
-                var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
-                switchesIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.name));
-                // var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
-                // switchesIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
-                GameData.SwitchesData.Initialize(switchesIds.ToArray());
-
-                SaveDefaultGameData();
-                SaveGameData();
-            }
-        }
-        else
-        {
-            Debug.Log("Not isActiveAndEnabled");
             /*
-            ** Else save game data from Inspector is used.
+            ** Save game data from Inspector is used.
             ** Just use values found in inspector and scene.
             */
+            Debug.Log("Not isActiveAndEnabled");
+            InitializeEventControllers();
+            return;
         }
-        /*
-        ** In any case initialize data
-        */
 
-        PlayerEventController.InitializeData(GameData.PlayerData);
-        SwitchEventController.InitializeData(GameData.SwitchesData);
+        Debug.Log("isActiveAndEnabled");
+        if (HasSaveGameData())
+        {
+            /*
+            ** Use Existing save game data.
+            **/
+            Debug.Log("HasSaveGameData");
+            GameData = LoadCurrentGameData();
+            InitializeEventControllers();
+            return;
+        }
+
+        /*
+        ** Create Save game data with values found in inspector and scene.
+        **/
+        try
+        {
+            Debug.Log("HasNoSaveGameData");
+            CreateDefaultGameData();
+            InitializeEventControllers();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+            Debug.LogError("Failed to create default game data, using values from inspector and scene.");
+            return;
+        }
+    }
+
+    private void CreateDefaultGameData()
+    {
+        // register enemies from scene
+        var enemiesInstanceIds = new List<int>();
+        var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
+        var yaggiStandards = FindObjectsByType<YaggiStandardController>(FindObjectsSortMode.InstanceID);
+        var yaggiSpitters = FindObjectsByType<YaggiSpitterController>(FindObjectsSortMode.InstanceID);
+        var yaggiShieldSpitters = FindObjectsByType<YaggiShieldSpitterController>(FindObjectsSortMode.InstanceID);
+        enemiesInstanceIds.AddRange(scorpions.Select(scorpion => scorpion.gameObject.GetInstanceID()));
+        enemiesInstanceIds.AddRange(yaggiStandards.Select(yaggiStandard => yaggiStandard.gameObject.GetInstanceID()));
+        enemiesInstanceIds.AddRange(yaggiSpitters.Select(yaggiSpitter => yaggiSpitter.gameObject.GetInstanceID()));
+        enemiesInstanceIds.AddRange(yaggiShieldSpitters.Select(yaggiShieldSpitter => yaggiShieldSpitter.gameObject.GetInstanceID()));
+        GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
+
+        // register switches from scene
+        GameData.SwitchesData = new SwitchesData();
+        var switchesIds = new List<string>();
+        var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
+        switchesIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.name));
+        if (switchesIds.Count != switchesIds.Distinct().Count())
+        {
+            Debug.LogError("Every FillOnShot switch needs to have a unique name");
+            throw new Exception("Duplicate FillOnShot switches found");
+        }
+        // var standOnSwitches = FindObjectsByType<SwitchesController>(FindObjectsSortMode.InstanceID);
+        // switchesIds.AddRange(standOnSwitches.Select(standOnSwitch => standOnSwitch.gameObject.GetInstanceID()));
+        GameData.SwitchesData.Initialize(switchesIds.ToArray());
+
+        // register doors from scene
+        GameData.DoorsData = new DoorsData();
+        var doorsIds = new List<string>();
+        var doors = FindObjectsByType<DoorController>(FindObjectsSortMode.InstanceID);
+        doorsIds.AddRange(doors.Select(door => door.gameObject.name));
+        // are there any duplicate doors?
+        if (doorsIds.Count != doorsIds.Distinct().Count())
+        {
+            Debug.LogError("Every DoorController needs to have a unique name");
+            throw new Exception("Duplicate doors found");
+        }
+        GameData.DoorsData.Initialize(doorsIds.ToArray());
+
+        SaveDefaultGameData();
+        SaveGameData();
     }
 }

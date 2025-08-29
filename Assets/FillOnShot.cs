@@ -16,23 +16,6 @@ public class FillOnShot : MonoBehaviour
     public bool isFilled = false;
     public UnityEvent isFilledEvent;
 
-    private void Start()
-    {
-        var switchData = SwitchesData.Switches.First(s => s.Id == gameObject.name);
-        if (switchData == null)
-        {
-            Debug.LogWarning("Switch not registered");
-            return;
-        }
-        if (switchData.IsTriggered)
-        {
-            isFilled = true;
-            fill = 1;
-            isFilledEvent.Invoke();
-            return;
-        }
-    }
-
     private void OnEnable()
     {
         SwitchEventController.OnSwitchTriggered += OnSwitchTriggered;
@@ -59,6 +42,7 @@ public class FillOnShot : MonoBehaviour
             if (fill == 1f)
             {
                 SwitchEventController.UpdateSwitchTriggered(gameObject.name);
+                isFilledEvent.Invoke();
             }
         }
     }
@@ -70,7 +54,7 @@ public class FillOnShot : MonoBehaviour
             return;
         }
         isFilled = true;
-        isFilledEvent.Invoke();
+        fill = 1;
     }
 
     private void Update()

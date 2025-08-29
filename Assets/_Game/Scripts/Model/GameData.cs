@@ -6,6 +6,7 @@ public class GameData
 {
     public PlayerData PlayerData;
     public SwitchesData SwitchesData;
+    public DoorsData DoorsData;
     public EnemyData[] EnemiesData;
 
     public void RegisterEnemy(int instanceId)
