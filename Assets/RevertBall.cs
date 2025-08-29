@@ -15,7 +15,6 @@ public class RevertBall : MonoBehaviour
     {
         _animator.speed = speed;
         _animator.SetTrigger("Start");
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -28,7 +27,7 @@ public class RevertBall : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
         {
-            player.transform.position = _revertPlayerToPoint.position;
+            player.FreezeAndRevertToPosition(_revertPlayerToPoint.position, _revertPlayerToPoint.rotation);
             Deactivate();
             return;
         }

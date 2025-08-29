@@ -94,14 +94,14 @@ namespace F3PS
         public void ActivateFreeCamera()
         {
             FindFirstObjectByType<DebugUIController>().ShowFreeCameraText();
-            FindFirstObjectByType<HUDController>().canvasGroup.alpha = 0f;
+            FindFirstObjectByType<DebugHideHUDController>().HideHud();
             inputs.canControlPlayer = false;
         }
 
         internal void DeactivateFreeCamera()
         {
             FindFirstObjectByType<DebugUIController>().HideFreeCameraText();
-            FindFirstObjectByType<HUDController>().canvasGroup.alpha = 1f;
+            FindFirstObjectByType<DebugHideHUDController>().ShowHud();
             inputs.canControlPlayer = true;
         }
 

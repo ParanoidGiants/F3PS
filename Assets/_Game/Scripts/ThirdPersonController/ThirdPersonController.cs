@@ -136,24 +136,29 @@ namespace StarterAssets
 
             if (spawnPointManager.enabled)
             {
-                StartCoroutine(Spawn());
+                var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
+                SpawnAt(spawnPoint.position, spawnPoint.rotation);
             }
         }
 
-        private IEnumerator Spawn()
+        public void SpawnAt(Vector3 position, Quaternion rotation)
         {
-            var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
-            _rigidbody.MovePosition(spawnPoint.position);
-            _rigidbody.MoveRotation(spawnPoint.rotation);
-            
+            StartCoroutine(Spawn(position, rotation));
+        }
+
+        private IEnumerator Spawn(Vector3 position, Quaternion rotation)
+        {
+            _rigidbody.MovePosition(position);
+            _rigidbody.MoveRotation(rotation);
+
             yield return new WaitForFixedUpdate();
-            cameraSettings.Spawn(spawnPointManager);
-            
+            cameraSettings.Spawn(rotation);
+
             // After camera settings are initialized, synchronize player rotation variables
             _targetYaw = cameraSettings.cameraTargetYaw;
             _lookYaw = cameraSettings.cameraTargetYaw;
             _rotationVelocity = 0f;
-            
+
             // Reset the armature rotation to match the camera target yaw
             armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
         }
@@ -675,6 +680,44 @@ namespace StarterAssets
                 isBeingThrownBackByHammer = false;
             });
             sequence.Play();
+        }
+
+
+        private bool _freezeAndRevertCoroutineIsRunning;
+        public void FreezeAndRevertToPosition(Vector3 position, Quaternion rotation)
+        {
+            if (_freezeAndRevertCoroutineIsRunning)
+            {
+                return;
+            }
+            _freezeAndRevertCoroutineIsRunning = true;
+            StartCoroutine(FreezeAndRevertToPositionCoroutine(position, rotation));
+        }
+
+        private IEnumerator FreezeAndRevertToPositionCoroutine(Vector3 position, Quaternion rotation)
+        {
+            Debug.Log("FreezeAndRevertToPosition");
+            var flashScreenController = FindFirstObjectByType<FlashScreenController>();
+            animateMesh.FlashFreeze();
+            Inputs.canControlPlayer = false;
+            animator.speed = 0f;
+            _rigidbody.isKinematic = true;
+            yield return new WaitForSeconds(0.5f);
+            flashScreenController.CoverScreen();
+            _rigidbody.MovePosition(position);
+            _rigidbody.MoveRotation(rotation);
+            yield return new WaitForFixedUpdate();
+            cameraSettings.Spawn(rotation);
+            _targetYaw = cameraSettings.cameraTargetYaw;
+            _lookYaw = cameraSettings.cameraTargetYaw;
+            _rotationVelocity = 0f;
+            armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
+            flashScreenController.UncoverScreen();
+            animateMesh.Unfreeze();
+            animator.speed = 1f;
+            _rigidbody.isKinematic = false;
+            Inputs.canControlPlayer = true;
+            _freezeAndRevertCoroutineIsRunning = false;
         }
     }
 }
