@@ -31,8 +31,7 @@ jobs:
     outputs:
       blenderCached: ${{ steps.cache.outputs.cache-hit }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Cache Blender Archive
         id: cache
@@ -45,6 +44,21 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget https://download.blender.org/release/Blender${{ env.BLENDER_SHORT_VERSION }}/blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+
+      - name: Verify Blender archive exists
+        run: |
+          if [ ! -f blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz ]; then
+            echo "❌ Blender archive missing!"
+            exit 1
+          fi
+
+      - name: Upload Blender tarball artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blender-tarball
+          path: blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+          retention-days: 7
+
 
   buildWebGL:
     name: Build for WebGL 🖥️ and Deploy to Itch.io 🚀
@@ -70,6 +84,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: blender-tarball
+          path: .
+
 
       - name: Verify Blender archive presence
         run: ls -lh blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
