@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Header("References")]
     public Transform playerSpace;
@@ -155,7 +155,7 @@ public class SkillManager : MonoBehaviour
 
     public bool IsAiming()
     {
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (GameManager.Instance.GameData.PlayerData.ActiveSkill)
         {
             case Skill.ThotMind:
                 return thotMindController.isMovingObjectThisFrame;
@@ -171,7 +171,7 @@ public class SkillManager : MonoBehaviour
     internal void OnLateUpdate()
     {
 
-        switch (GameManager.Instance.PlayerData.ActiveSkill)
+        switch (GameManager.Instance.GameData.PlayerData.ActiveSkill)
         {
             case Skill.ThotMind:
                 thotMindController.OnLateUpdate();

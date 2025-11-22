@@ -5,7 +5,7 @@ using F3PS;
 
 public class KhonsuSphereProjectile : MonoBehaviour
 {
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
     private KhonsuSphereSkillData KhonsuSphereData => PlayerEventController.Data.KhonsuSphereSkillData;
 
     [Header("Debug")]
@@ -96,7 +96,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isHit) return;
+        if (!_isHit && _touchedTransform == null) return;
 
         _rigidbody.MovePosition(_touchedTransform.TransformPoint(_stickToLocalPosition));
     }
@@ -147,6 +147,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
                 khonsuSphere.Clear();
                 khonsuSphere.gameObject.SetActive(false);
                 gameObject.SetActive(false);
+                _touchedTransform = null;
             });
     }
 

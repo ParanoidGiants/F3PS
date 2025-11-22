@@ -15,7 +15,7 @@ public enum RotationCommand
 
 public class ThotMindController : MonoBehaviour
 {
-    private ThotMindSkillData ThotMindSkillData => GameManager.Instance.PlayerData.ThotMindSkillData;
+    private ThotMindSkillData ThotMindSkillData => GameManager.Instance.GameData.PlayerData.ThotMindSkillData;
     private const float ROTATION_INPUT_THRESHOLD = 0.3f;
 
     [Header("References")]

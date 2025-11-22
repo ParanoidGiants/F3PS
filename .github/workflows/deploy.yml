@@ -31,8 +31,7 @@ jobs:
     outputs:
       blenderCached: ${{ steps.cache.outputs.cache-hit }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Cache Blender Archive
         id: cache
@@ -46,11 +45,20 @@ jobs:
         run: |
           wget https://download.blender.org/release/Blender${{ env.BLENDER_SHORT_VERSION }}/blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
 
-      - name: Upload Blender tarball (debug only)
+      - name: Verify Blender archive exists
+        run: |
+          if [ ! -f blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz ]; then
+            echo "❌ Blender archive missing!"
+            exit 1
+          fi
+
+      - name: Upload Blender tarball artifact
         uses: actions/upload-artifact@v4
         with:
           name: blender-tarball
           path: blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+          retention-days: 7
+
 
   buildWebGL:
     name: Build for WebGL 🖥️ and Deploy to Itch.io 🚀
@@ -59,6 +67,16 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      - name: 🧹 Free up disk space (pre-clean)
+        run: |
+          echo "Before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost
+          sudo apt-get clean
+          docker system prune -af || true
+          echo "After cleanup:"
+          df -h
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -66,18 +84,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: blender-tarball
+          path: .
+
 
       - name: Verify Blender archive presence
-        run: |
-          echo "Current dir: $(pwd)"
-          ls -lh blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
+        run: ls -lh blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz
 
       - name: Prepare Docker build context
         run: |
           mkdir -p /tmp/docker-context
           mv blender-${{ env.BLENDER_FULL_VERSION }}-linux-x64.tar.xz /tmp/docker-context/
 
-      - name: Build UnityCI image with Blender
+      - name: 🐳 Build UnityCI image with Blender (clean layers)
         run: |
           docker build \
             --build-arg BLENDER_SHORT_VERSION=${{ env.BLENDER_SHORT_VERSION }} \
@@ -85,8 +103,11 @@ jobs:
             -f Dockerfile.unity-blender \
             -t unityci/editor:blender-added \
             /tmp/docker-context
+        # Optional: use buildx for better disk efficiency
+        env:
+          DOCKER_BUILDKIT: 1
 
-      - name: Build Unity project (WebGL)
+      - name: 🏗️ Build Unity project (WebGL)
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -94,9 +115,14 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          unityVersion: 6000.2.10f1
           customImage: 'unityci/editor:blender-added'
 
-      - name: Install Butler, zip the build and push it to itch.io
+      - name: 🧹 Prune Docker (post-clean)
+        if: always()
+        run: docker system prune -af || true
+
+      - name: 🚀 Install Butler, zip the build and push it to itch.io
         shell: bash
         env:
           BUTLER_GAME_ID: ${{ secrets.BUTLER_GAME_ID }}
@@ -131,12 +157,13 @@ jobs:
           elif [[ "$BRANCH" == release/* ]]; then SUFFIX="release"
           elif [[ "$BRANCH" == main ]]; then SUFFIX=""
           else echo "Branch not matched for deployment rules, exiting."; exit 1; fi
+
           if [ -n "$SUFFIX" ]; then
             TARGET="$BUTLER_GAME_ID-$SUFFIX:html5"
           else
             TARGET="$BUTLER_GAME_ID:html5"
           fi
-          
+
           echo "------------------------------------------------------------------------"
           echo "Pushing current build to itch.io to project $BUTLER_USER_NAME/$TARGET"
           echo "------------------------------------------------------------------------"

@@ -28,15 +28,15 @@ public enum Attack
 public class KhonsuSphereSkillData
 {
     [Header("Settings")]
-    public float TargetSize = 10f;
-    public float ActiveDuration = 5f;
-    public float ThrowPower = 1f;
-    public float ChangeTimeScaleSpeed = 1f;
+    public float TargetSize = 20;
+    public float ActiveDuration = 20;
+    public float ThrowPower = 30;
+    public float ChangeTimeScaleSpeed = 0;
 
     [Header("Watchers")]
     public bool IsEnabled = false;
     public Vector3 Position = Vector3.zero;
-    public float TimeScale = 1f;
+    public float TimeScale = 0.2f;
     public float ActiveTime = 0f;
 }
 
@@ -83,9 +83,9 @@ public class ThotMindSkillData
 [Serializable]
 public class HorusPalmData
 {
-    public int Damage = 10;
+    public int Damage = 20;
     public float AttackSpeed = 100f;
-    public float ImpactForceMultiplier = 1.0f;
+    public float ImpactForceMultiplier = 1;
     public float AttackCoolDownTimer = 0.2f;
     public float StaminaCost = 0.3f;
     public float ProjectileLifeDuration = 5f;
@@ -106,30 +106,58 @@ public class OsirisKickData
 [Serializable]
 public class PlayerData
 {
-    [Header("Progress")]
-    public int CurrentSpawnPoint = 0;
-
-    [Header("Health")]
-    public int CurrentHealth;
-    public int MaxHealth = 100;
-
     [Space(10)]
-    [Header("Stamina")]
-    [Range(0f, 1f)]
-    public float CurrentStamina;
-    [Range(0f, 1f)]
-    public float MaxStamina = 1f;
-    [Range(0f, 1f)]
-    public float StaminaRecoveryRate = 5;
-    public bool IsRecoveringStamina = false;
-    public bool IsDepletingStamina = false;
+    [Header("Move Settings")]
+    public float MoveSpeed = 30;
+    public float SpeedChangeRate = 15;
 
     [Space(10)]
     [Header("Sprint Settings")]
     [Range(0f, 1f)]
     public float SprintDepletionRate = 0.05f;
-    public float SprintSpeed = 5.335f;
-    public float SpeedChangeRate = 10.0f;
+    public float SprintSpeed = 60;
+    
+    [Space(10)]
+    [Header("Jump Settings")]
+    public float JumpHeight = 8;
+    public float JumpCoolDownTimer = 0.25f;
+
+    [Space(10)]
+    [Header("Dodge Settings")]
+    public float DodgeHeight = 1.5f;
+    public float DodgeSpeed = 30f;
+    public float DodgeAscendTimer = 0.05f;
+    public float DodgeLandTimer = 0.1f;
+    public float DodgeCoolDownTimer = 0.4f;
+    public float DodgeStaminaDepletionRate = 0.15f;
+
+    [Space(10)]
+    [Header("Stamina")]
+    [Range(0f, 1f)]
+    public float CurrentStamina = 1;
+    [Range(0f, 1f)]
+    public float MaxStamina = 1;
+    [Range(0f, 1f)]
+    public float StaminaRecoveryRate = 0.2f;
+    public bool IsRecoveringStamina = false;
+    public bool IsDepletingStamina = false;
+
+    [Header("Health")]
+    public int CurrentHealth = 100;
+    public int MaxHealth = 100;
+
+    [Space(10)]
+    [Header("Rotation Settings")]   
+    [Range(0.0f, 0.3f)]
+    public float RotationSmoothTime = 0.12f;
+    [Range(0.0f, 1f)]
+    public float RotationSpeedPitch = 0.2f;
+    [Range(0.0f, 1f)]
+    public float RotationSpeedYaw = 0.2f;
+    public float AimSpeed = 2.0f;
+
+    [Header("Progress")]
+    public int CurrentSpawnPoint = 0;
 
     [Space(10)]
     [Header("Ascende and Glide Settings")]
@@ -139,29 +167,6 @@ public class PlayerData
     public float GlideDepletionRate = 0.05f;
     public float LandingDepth = 20f;
 
-    [Space(10)]
-    [Header("Move Settings")]
-    [Range(0.0f, 0.3f)]
-    public float RotationSmoothTime = 0.12f;
-    [Range(0.0f, 1f)]
-    public float RotationSpeedPitch = 0.2f;
-    [Range(0.0f, 1f)]
-    public float RotationSpeedYaw = 0.2f;
-    public float MoveSpeed = 2.0f;
-    public float AimSpeed = 2.0f;
-
-    [Space(10)]
-    [Header("Jump Settings")]
-    public float JumpCoolDownTimer = 0.25f;
-    public float JumpHeight = 1.2f;
-
-    [Space(10)]
-    [Header("Dodge Settings")]
-    public float DodgeHeight = 1.2f;
-    public float DodgeSpeed = 60f;
-    public float DodgeAscendTimer = 0.5f;
-    public float DodgeLandTimer = 0.5f;
-    public float DodgeCoolDownTimer = 0.25f;
 
     [Space(20)]
     [Header("Attacks")]
@@ -185,6 +190,5 @@ public class PlayerData
 
     [Space(20)]
     [Header("Abilities")]
-    public List<Ability> UnlockedAbilities;
-
+    public List<Ability> UnlockedAbilities = new(){ Ability.Sprint };
 }

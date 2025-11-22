@@ -6,9 +6,9 @@ public class UnlockAttack : MonoBehaviour
 {
     public Attack attack;
 
-    private void Awake()
+    private void Start()
     {
-        if (GameManager.Instance.PlayerData.UnlockedAttacks.Contains(attack))
+        if (GameManager.Instance.GameData.PlayerData.UnlockedAttacks.Contains(attack))
         {
             Destroy(gameObject);
         }
@@ -27,12 +27,12 @@ public class UnlockAttack : MonoBehaviour
             return;
         }
 
-        if (GameManager.Instance.PlayerData.UnlockedAttacks.Contains(attack))
+        if (GameManager.Instance.GameData.PlayerData.UnlockedAttacks.Contains(attack))
         {
             return;
         }
 
-        GameManager.Instance.PlayerEventController.UnlockAttack(attack);
+        GameManager.Instance.saveGameManager.PlayerEventController.UnlockAttack(attack);
         Destroy(gameObject);
     }
 }

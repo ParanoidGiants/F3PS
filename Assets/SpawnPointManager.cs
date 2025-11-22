@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpawnPointManager : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
     public List<SpawnPoint> spawnPoints;
 
     private void OnEnable()
@@ -27,10 +27,8 @@ public class SpawnPointManager : MonoBehaviour
 
     private void OnSpawnPointEntered(int index)
     {
-        Debug.Log("SpawnPoint " + index + " entered");
         if (PlayerData.CurrentSpawnPoint < index)
         {
-            Debug.Log("Updating SpawnPoint");
             PlayerEventController.UpdateCurrentSpawnPoint(index);
         }
     }

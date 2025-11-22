@@ -1,13 +1,11 @@
 using F3PS;
-using JetBrains.Annotations;
 using System;
 using UnityEngine;
-using UnityEngine.Splines;
 
 public class PhysicsRecorder : MonoBehaviour
 {
-    private AnubisScrollSkillData AnubisScrollSkillData => GameManager.Instance.PlayerData.AnubisScrollSkillData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private AnubisScrollSkillData AnubisScrollSkillData => GameManager.Instance.GameData.PlayerData.AnubisScrollSkillData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     private RigidbodyHub _rigidbodyHub;
     private const float THRESHOLD = 0.001f;

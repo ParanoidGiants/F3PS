@@ -1,7 +1,6 @@
 using DarkTonic.MasterAudio;
+using F3PS;
 using F3PS.AI.Sensors;
-using F3PS.AI.States;
-using F3PS.Damage.Take;
 using F3PS.Enemy.UI;
 using System;
 using UnityEngine;
@@ -16,7 +15,6 @@ public enum ScorpionStoppingDistanceState
 
 public enum ScorpionState
 {
-    IDLE,
     AGGRESSIVE,
     CHECKING,
     SUSPICIOUS,
@@ -40,6 +38,13 @@ public class ScorpionController : MonoBehaviour
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
 
+    [Space(20)]
+    [Header("Debug")]
+    public EnemyHealthUIPool _healthUIPool;
+    public ScorpionState currentState = ScorpionState.PATROLLING;
+    public bool isDead = false;
+    public Vector3 checkingDestination = Vector3.zero;
+
     [Header("References")]
     public Animator animator;
     public NavMeshAgent navMeshAgent;
@@ -55,24 +60,15 @@ public class ScorpionController : MonoBehaviour
     [Space(20)]
     [Header("Settings")]
     public int health;
-    public int maxHealth = 100;
-    public float walkSpeed;
-    public float runSpeed;
-
-    [Space(10)]
-    [Header("Idle Settings")]
-    public float idleDuration = 0f;
-    public float idleTime = 0f;
-
-    [Space(10)]
-    [Header("Checking Settings")]
-    public Vector3 checkingDestination = Vector3.zero;
+    public int maxHealth = 200;
+    public float walkSpeed = 6;
+    public float runSpeed = 15;
 
     [Space(10)]
     [Header("Suspicious Settings")]
     public float suspiciousTime;
     public float suspiciousDuration = 2f;
-    public float suspiciousRotateSpeed = 30f;
+    public float suspiciousRotateSpeed = 360f;
     private Quaternion _startRotation;
 
     [Space(10)]
@@ -123,21 +119,11 @@ public class ScorpionController : MonoBehaviour
     public Vector3 attackRecoveryStartPosition;
     public Vector3 attackRecoveryEndPosition;
 
-    [Space(20)]
-    [Header("Watchers")]
-    public EnemyHealthUIPool _healthUIPool;
-    public ScorpionState currentState = ScorpionState.IDLE;
-    public bool isDead = false;
-
-    protected void Awake()
-    {
-    }
-
     private void Start()
     {
         health = maxHealth;
         patrolManager.Init();
-        EnterState(ScorpionState.IDLE);
+        EnterState(ScorpionState.PATROLLING);
         
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
         _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
@@ -155,16 +141,13 @@ public class ScorpionController : MonoBehaviour
         UpdateSensorState(state);
         switch (state)
         {
-            case ScorpionState.IDLE:
-                idleTime = 0f;
-                navMeshAgent.isStopped = true;
-                break;
             case ScorpionState.PATROLLING:
                 navMeshAgent.isStopped = false;
                 navMeshAgent.speed = walkSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
                 patrolManager.SetNextPatrolPoint();
                 navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
+                animator.SetFloat("Speed", 1f);
                 break;
             case ScorpionState.AGGRESSIVE:
                 stoppingDistanceState = ScorpionStoppingDistanceState.STAYING;
@@ -173,6 +156,7 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.speed = runSpeed * TimeScale;
                 break;
             case ScorpionState.CHECKING:
+                Debug.Log("Checking!");
                 navMeshAgent.isStopped = false;
                 navMeshAgent.speed = runSpeed * TimeScale;
                 navMeshAgent.stoppingDistance = 0f;
@@ -218,23 +202,10 @@ public class ScorpionController : MonoBehaviour
 
         switch (currentState)
         {
-            case ScorpionState.IDLE:
-                if (idleDuration < 0f || patrolManager.PatrolPointCount <= 0)
-                {
-                    return;
-                }
-                idleTime += ScaledDeltaTime;
-                if (idleDuration > idleTime)
-                {
-                    return;
-                }
-
-                SwitchState(ScorpionState.PATROLLING);
-                break;
-
             case ScorpionState.PATROLLING:
                 if (!Helper.HasReachedDestination(navMeshAgent)) return;
-                SwitchState(ScorpionState.IDLE);
+                patrolManager.SetNextPatrolPoint();
+                navMeshAgent.destination = patrolManager.CurrentPatrolPoint;
                 break;
 
             case ScorpionState.AGGRESSIVE:
@@ -246,6 +217,7 @@ public class ScorpionController : MonoBehaviour
 
                 if (!sensorController.HasTarget())
                 {
+                    checkingDestination = navMeshAgent.destination;
                     SwitchState(ScorpionState.CHECKING);
                     return;
                 }
@@ -278,12 +250,13 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.SUSPICIOUS:
                 suspiciousTime -= ScaledDeltaTime;
 
-                float isSuspiciousAnimateTime = Mathf.Sin(suspiciousTime / suspiciousDuration * (2f * Mathf.PI));
-                transform.rotation = _startRotation * Quaternion.Euler(0, suspiciousRotateSpeed * isSuspiciousAnimateTime, 0f);
+                float suspiciousAnimateTime = Mathf.Sin(suspiciousTime / suspiciousDuration * (2f * Mathf.PI));
+                var rotateY = suspiciousRotateSpeed * suspiciousAnimateTime;
+                transform.rotation = _startRotation * Quaternion.Euler(0, rotateY, 0f);
 
                 if (suspiciousTime > 0f) return;
 
-                SwitchState(ScorpionState.IDLE);
+                SwitchState(ScorpionState.PATROLLING);
                 break;
             case ScorpionState.RETURN_TO_IDLE:
                 break;
@@ -415,31 +388,6 @@ public class ScorpionController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        switch (currentState)
-        {
-            case ScorpionState.IDLE:
-                break;
-            case ScorpionState.AGGRESSIVE:
-                break;
-            case ScorpionState.CHECKING:
-                break;
-            case ScorpionState.SUSPICIOUS:
-                break;
-            case ScorpionState.RETURN_TO_IDLE:
-                break;
-            case ScorpionState.PATROLLING:
-                break;
-            case ScorpionState.HIT:
-                break;
-            case ScorpionState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
-        }
-    }
-
     private void HandleAggressiveStoppingDistance(Vector3 targetPosition)
     {
         var selectedTarget = sensorController.GetTargetFromSensors();
@@ -477,6 +425,7 @@ public class ScorpionController : MonoBehaviour
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
             var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
+            animator.SetFloat("Speed", -1f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING
             && distanceToTarget < stoppingDistanceStay
@@ -485,6 +434,7 @@ public class ScorpionController : MonoBehaviour
         )
         {
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.STAYING, targetPosition);
+            animator.SetFloat("Speed", 0f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.PUSHED)
         {
@@ -494,10 +444,12 @@ public class ScorpionController : MonoBehaviour
             var distance = Mathf.Max(stoppingDistanceStay, hit.distance);
             var fleeDestination = targetPosition + fleeDirection * distance;
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.PUSHED, fleeDestination);
+            animator.SetFloat("Speed", -1f);
         }
         else if (stoppingDistanceState == ScorpionStoppingDistanceState.FOLLOWING)
         {
             SetupStoppingDistanceState(ScorpionStoppingDistanceState.FOLLOWING, targetPosition);
+            animator.SetFloat("Speed", 1f);
         }
     }
 
@@ -569,7 +521,7 @@ public class ScorpionController : MonoBehaviour
 
     public void Died()
     {
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     public void HitByPlayerFrom(Vector3 hitDirection)

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class HorusPalmProjectile : MonoBehaviour
 {
-    private HorusPalmData HorusPalmData => GameManager.Instance.PlayerData.HorusPalmData;
+    private HorusPalmData HorusPalmData => GameManager.Instance.GameData.PlayerData.HorusPalmData;
 
     private Collider[] _ownerColliders;
     private HitBox _hitBox;
@@ -66,7 +66,6 @@ public class HorusPalmProjectile : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("HorusPalmProjectile OnCollisionEnter with " + collision.gameObject.name);
         if (_isHit)
         {
             return;

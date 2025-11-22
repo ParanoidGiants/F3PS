@@ -1,16 +1,14 @@
-using System;
-using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
 
 public class RevertBall : MonoBehaviour
 {
-    private Transform _targetPlacePoint;
+    private Transform _revertPlayerToPoint;
     public Animator _animator;
 
-    public void Init(Transform targetPlacePoint)
+    public void Init(Transform revertPlayerToPoint)
     {
-        _targetPlacePoint = targetPlacePoint;
+        _revertPlayerToPoint = revertPlayerToPoint;
     }
 
     public void StartRun(float speed)
@@ -23,16 +21,20 @@ public class RevertBall : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<HorusPalmProjectile>(out var _) || collision.gameObject.TryGetComponent<OsirisKickProjectile>(out var _))
         {
-            gameObject.SetActive(false);
+            Deactivate();
             return;
         }
 
         if (collision.gameObject.TryGetComponent<ThirdPersonController>(out var player))
         {
-            player.transform.position = _targetPlacePoint.position;
-            gameObject.SetActive(false);
+            player.FreezeAndRevertToPosition(_revertPlayerToPoint.position, _revertPlayerToPoint.rotation);
+            Deactivate();
             return;
         }
+    }
 
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }

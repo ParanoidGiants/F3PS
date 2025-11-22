@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class StaminaUI : MonoBehaviour
 {
-    public PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    public PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
     public Image staminaBar;
     public Animator animator;
 
     private void OnEnable()
     {
+        Debug.Log("Registering stamina listeners");
         PlayerEventController.OnStaminaChanged += UpdateStamina;
         PlayerEventController.OnIsRecoveringStaminaChanged += UpdateIsRecoveringStamina;
         PlayerEventController.OnIsDepletingStaminaChanged += UpdateIsDepletingStamina;

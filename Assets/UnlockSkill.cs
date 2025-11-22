@@ -6,9 +6,9 @@ public class UnlockSkill : MonoBehaviour
 {
     public Skill skill;
 
-    private void Awake()
+    private void Start()
     {
-        if (GameManager.Instance.PlayerData.UnlockedSkills.Contains(skill))
+        if (GameManager.Instance.GameData.PlayerData.UnlockedSkills.Contains(skill))
         {
             Destroy(gameObject);
         }
@@ -27,12 +27,12 @@ public class UnlockSkill : MonoBehaviour
             return;
         }
 
-        if (GameManager.Instance.PlayerData.UnlockedSkills.Contains(skill))
+        if (GameManager.Instance.GameData.PlayerData.UnlockedSkills.Contains(skill))
         {
             return;
         }
 
-        GameManager.Instance.PlayerEventController.UnlockSkill(skill);
+        GameManager.Instance.saveGameManager.PlayerEventController.UnlockSkill(skill);
         Destroy(gameObject);
     }
 }

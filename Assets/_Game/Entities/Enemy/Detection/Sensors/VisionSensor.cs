@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace F3PS.AI.Sensors
@@ -6,6 +8,7 @@ namespace F3PS.AI.Sensors
     {
         public bool IsTargetInSight { get; private set; }
         public Transform eyes;
+
 
         private void FixedUpdate()
         {
@@ -24,12 +27,12 @@ namespace F3PS.AI.Sensors
                 var playerPartDistance = direction.magnitude;
                 direction.Normalize();
                 // check if something is between the player and the eyes
-                if (!Physics.Raycast(position, direction, out var hit, playerPartDistance, Helper.DefaultLayer))
+                if (!Physics.Raycast(position, direction, out var hit, playerPartDistance, Helper.DefaultLayer | Helper.GroundLayer))
                 {
                     targetsInSight++;
                 }
             }
-            IsTargetInSight = targetsInSight >= 2;
+            IsTargetInSight = targetsInSight > 0;
         }
     }
 }

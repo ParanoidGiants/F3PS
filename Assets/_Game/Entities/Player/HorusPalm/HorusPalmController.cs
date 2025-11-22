@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class HorusPalmController : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Space(10)]
     [Header("Attack Settings")]
@@ -59,7 +59,9 @@ public class HorusPalmController : MonoBehaviour
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
-        var targetDirection = projectileSpawn.rotation * (targetPosition - projectileSpawn.position).normalized;
+        // no references, thats why it is commented out
+        // var targetDirection = projectileSpawn.rotation * (targetPosition - projectileSpawn.position).normalized;
+        
         var projectileObject = projectilePool.GetObject();
         var projectileTransform = projectileObject.transform;
         projectileTransform.position = projectileSpawn.position;

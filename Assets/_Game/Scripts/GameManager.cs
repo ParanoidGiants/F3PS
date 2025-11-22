@@ -1,8 +1,6 @@
 using DG.Tweening;
 using StarterAssets;
-using System;
 using TimeBending;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,6 +11,7 @@ namespace F3PS
     {
         private static GameManager _instance;
         public static GameManager Instance => _instance;
+        public GameData GameData => saveGameManager.GameData;
         public SaveGameManager saveGameManager;
 
         public StarterAssetsInputs inputs;
@@ -30,9 +29,6 @@ namespace F3PS
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
-
-        public PlayerData PlayerData;
-        public PlayerEventController PlayerEventController;
         [SerializeField] private int _fps = 60;
         public bool isMenuOpen;
 
@@ -49,24 +45,16 @@ namespace F3PS
             DontDestroyOnLoad(gameObject);
             DOTween.Init();
             _playerInput = inputs.GetComponent<PlayerInput>();
-            PlayerEventController = new PlayerEventController();
-            InitializeGameData();
 
 #if !ENABLE_INPUT_SYSTEM || !STARTER_ASSETS_PACKAGES_CHECKED
             LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
         }
 
-
-        public void SavePlayerData(int _)
-        {
-            saveGameManager.SavePlayerData(PlayerData);
-        }
-
         private void Start()
         {
-            PlayerEventController.OnCurrentSpawnPointChanged += SavePlayerData;
             Application.targetFrameRate = _fps;
+            saveGameManager.InitializeSaveData();
         }
 
         private void OnEnable()
@@ -84,27 +72,7 @@ namespace F3PS
             inputs.canControlPlayer = true;
             inputs.SetCursorLockedState(true);
             isMenuOpen = false;
-
-            InitializeGameData();
-        }
-
-        private void InitializeGameData()
-        {
-            if (saveGameManager.enabled)
-            {
-                if (saveGameManager.HasGameSaveData())
-                {
-                    // Load Save Game
-                    PlayerData = saveGameManager.LoadCurrentPlayerData();
-                }
-                else
-                {
-                    // Create New Save Game with data from Inspector
-                    saveGameManager.SaveDefaultPlayerData(PlayerData);
-                    saveGameManager.SavePlayerData(PlayerData);
-                }
-            }
-            PlayerEventController.Initialize(PlayerData);
+            saveGameManager.InitializeSaveData();
         }
 
         public void ResumeGameAfterMenuClosed()
@@ -126,14 +94,14 @@ namespace F3PS
         public void ActivateFreeCamera()
         {
             FindFirstObjectByType<DebugUIController>().ShowFreeCameraText();
-            FindFirstObjectByType<HUDController>().canvasGroup.alpha = 0f;
+            FindFirstObjectByType<DebugHideHUDController>().HideHud();
             inputs.canControlPlayer = false;
         }
 
         internal void DeactivateFreeCamera()
         {
             FindFirstObjectByType<DebugUIController>().HideFreeCameraText();
-            FindFirstObjectByType<HUDController>().canvasGroup.alpha = 1f;
+            FindFirstObjectByType<DebugHideHUDController>().ShowHud();
             inputs.canControlPlayer = true;
         }
 

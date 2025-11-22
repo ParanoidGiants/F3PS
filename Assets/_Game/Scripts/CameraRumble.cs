@@ -43,11 +43,16 @@ public class CameraRumble : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            float randomIntensity = Random.Range(rumbleIntensityRandomRange.x, rumbleIntensityRandomRange.y);
-            Vector3 randomDirection = Random.insideUnitSphere.normalized;
-            impulseSource.GenerateImpulse(randomIntensity*randomDirection);
+            Rumble();
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+    }
+
+    public void Rumble(float timeScale = 1f)
+    {
+        float randomIntensity = Random.Range(rumbleIntensityRandomRange.x, rumbleIntensityRandomRange.y);
+        Vector3 randomDirection = Random.insideUnitSphere.normalized;
+        impulseSource.GenerateImpulse(randomIntensity * randomDirection);
     }
 }

@@ -134,26 +134,14 @@ public class YaggiStandardController : MonoBehaviour
 
     protected void Awake()
     {
-        Debug.Log("Is Awaking");
         _healthUIPool = FindFirstObjectByType<EnemyHealthUIPool>();
     }
 
     private void Start()
     {
-        Debug.Log("Is Starting");
         health = maxHealth;
         patrolManager.Init();
         _healthUIPool.CreateEnemyHealthUI(uiHealthBarAnchor);
-    }
-
-    private void OnDestroy()
-    {
-        Debug.Log("Is Destroying");
-    }
-
-    private void OnDisable()
-    {
-        Debug.Log("Is Osable");
     }
 
     private void SwitchState(YaggiStandardState newState)
@@ -524,7 +512,10 @@ public class YaggiStandardController : MonoBehaviour
 
     private void SetDestination(Vector3 position)
     {
-        navMeshDestination.position = position;
+        if (navMeshDestination != null)
+        {
+            navMeshDestination.position = position;
+        }
         navMeshAgent.destination = position;
     }
 

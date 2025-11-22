@@ -3,7 +3,7 @@ using UnityEngine;
     
 public class KhonsuSphereController : MonoBehaviour
 {
-    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.PlayerData.KhonsuSphereSkillData;
+    private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.GameData.PlayerData.KhonsuSphereSkillData;
 
     [Header("References")]
     public Transform userSpace;

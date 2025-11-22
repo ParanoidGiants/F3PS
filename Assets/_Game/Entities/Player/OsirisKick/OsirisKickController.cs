@@ -5,7 +5,7 @@ using F3PS;
 
 public class OsirisKickController : MonoBehaviour
 {
-    private OsirisKickData osirisKickData => GameManager.Instance.PlayerData.OsirisKickData;
+    private OsirisKickData osirisKickData => GameManager.Instance.GameData.PlayerData.OsirisKickData;
 
     [Space(10)]
     [Header("Attack Settings")]

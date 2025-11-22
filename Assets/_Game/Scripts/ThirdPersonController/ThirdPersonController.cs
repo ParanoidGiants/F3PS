@@ -5,10 +5,6 @@ using DG.Tweening;
 using System.Collections;
 
 
-
-
-
-
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using DarkTonic.MasterAudio;
 #endif
@@ -120,8 +116,8 @@ namespace StarterAssets
         private readonly int _animIDVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
         private Rigidbody _rigidbody;
-        private PlayerData Data => GameManager.Instance.PlayerData;
-        private PlayerEventController DataEventController => GameManager.Instance.PlayerEventController;
+        private PlayerData Data => GameManager.Instance.GameData.PlayerData;
+        private PlayerEventController DataEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
         public bool IsGrounded => _isGrounded;
 
@@ -135,30 +131,34 @@ namespace StarterAssets
         private void Start()
         {
             jumpCoolDownTime = Data.JumpCoolDownTimer;
-            dodgeCoolDownTime = Data.DodgeCoolDownTimer;
             skillManager.Init();
             attackManager.Init();
 
             if (spawnPointManager.enabled)
             {
-                StartCoroutine(Spawn());
+                var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
+                SpawnAt(spawnPoint.position, spawnPoint.rotation);
             }
         }
 
-        private IEnumerator Spawn()
+        public void SpawnAt(Vector3 position, Quaternion rotation)
         {
-            var spawnPoint = spawnPointManager.GetCurrentSpawnPosition();
-            _rigidbody.MovePosition(spawnPoint.position);
-            _rigidbody.MoveRotation(spawnPoint.rotation);
-            
+            StartCoroutine(Spawn(position, rotation));
+        }
+
+        private IEnumerator Spawn(Vector3 position, Quaternion rotation)
+        {
+            _rigidbody.MovePosition(position);
+            _rigidbody.MoveRotation(rotation);
+
             yield return new WaitForFixedUpdate();
-            cameraSettings.Spawn(spawnPointManager);
-            
+            cameraSettings.Spawn(rotation);
+
             // After camera settings are initialized, synchronize player rotation variables
             _targetYaw = cameraSettings.cameraTargetYaw;
             _lookYaw = cameraSettings.cameraTargetYaw;
             _rotationVelocity = 0f;
-            
+
             // Reset the armature rotation to match the camera target yaw
             armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
         }
@@ -180,7 +180,6 @@ namespace StarterAssets
                 if (noDamageAfterHitTime >= noDamageAfterHitDuration)
                 {
                     wasHitAndIsInvincibleForTime = false;
-                    noDamageAfterHitTime = 0f;
                 }
             }
 
@@ -353,11 +352,8 @@ namespace StarterAssets
             }
 
             float currentHorizontalSpeed = new Vector3(_rigidbody.linearVelocity.x, 0.0f, _rigidbody.linearVelocity.z).magnitude;
-            float speedOffset = 0.1f;
-            float inputMagnitude = Inputs.analogMovement ? Inputs.move.magnitude : 1f;
-            if (currentHorizontalSpeed < targetSpeed - speedOffset
-                || currentHorizontalSpeed > targetSpeed + speedOffset
-            )
+            float inputMagnitude = Mathf.Clamp01(Inputs.move.magnitude);
+            if (currentHorizontalSpeed < targetSpeed)
             {
                 _speed = Mathf.Lerp(
                     currentHorizontalSpeed,
@@ -444,7 +440,7 @@ namespace StarterAssets
                 _isSprinting = false;
                 return;
             }
-            var sprintStaminaDepletion = GameManager.Instance.PlayerData.SprintDepletionRate * Time.deltaTime;
+            var sprintStaminaDepletion = GameManager.Instance.GameData.PlayerData.SprintDepletionRate * Time.deltaTime;
             if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
             {
                 _isSprinting = false;
@@ -489,7 +485,7 @@ namespace StarterAssets
                 isAscending = true;
                 ascendTime = 0f;
             }
-            else if (dodge && dodgeCoolDownTime <= 0.0f)
+            else if (dodge && dodgeCoolDownTime <= 0.0f && !staminaManager.IsRecoveringStamina)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(Data.DodgeHeight * -2f * Gravity);
@@ -502,6 +498,8 @@ namespace StarterAssets
                 _isDodging = true;
                 dodgeAscendTime = 0f;
                 dodgeLandTime = 0f;
+                dodgeCoolDownTime = Data.DodgeCoolDownTimer;
+                staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
         }
 
@@ -539,19 +537,24 @@ namespace StarterAssets
             else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isAscending)
             {
                 UpdateLandingPlane();
-                ascendTime += Time.deltaTime;
-                if (ascendTime >= Data.AscendDuration)
-                {
-                    isAscending = false;
-                    isGliding = true;
-                    landingPlane.SetActive(true);
-                    UpdateLandingPlane();
-                    ascendTime = Data.AscendDuration;
-                }
-                var maximumJumpSpeed = Mathf.Sqrt(Data.AscendHeight * -2f * Gravity);
-                var easing = Helper.Easing.EaseInQuad(ascendTime / Data.AscendDuration);
-                easing = Mathf.Clamp01(easing);
-                currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
+                
+                currentVerticalSpeed += Gravity * Time.deltaTime;
+                currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -maximumVerticalFallSpeed);
+                isAscending = currentVerticalSpeed > 0f;
+                isGliding = !isAscending;
+                // ascendTime += Time.deltaTime;
+                // if (ascendTime >= Data.AscendDuration)
+                // {
+                //     isAscending = false;
+                //     isGliding = true;
+                //     landingPlane.SetActive(true);
+                //     UpdateLandingPlane();
+                //     ascendTime = Data.AscendDuration;
+                // }
+                // var maximumJumpSpeed = Mathf.Sqrt(Data.AscendHeight * -2f * Gravity);
+                // var easing = Helper.Easing.EaseInQuad(ascendTime / Data.AscendDuration);
+                // easing = Mathf.Clamp01(easing);
+                // currentVerticalSpeed = Mathf.Lerp(maximumJumpSpeed, 0f, easing);
             }
             else if (Data.UnlockedAbilities.Contains(Ability.Glide) && jumpInput && isGliding)
             {
@@ -621,6 +624,9 @@ namespace StarterAssets
             }
             cameraSettings.cameraShake.Shake(damage);
             animateMesh.HitFlash();
+
+            wasHitAndIsInvincibleForTime = true;
+            noDamageAfterHitTime = 0f;
         }
 
         private void Die(Vector3 hitDirection)
@@ -655,7 +661,6 @@ namespace StarterAssets
             }
 
             var direction = position - transform.position;
-            Hit(10, direction.normalized);
 
             Inputs.canControlPlayer = false;
             isBeingThrownBackByHammer = true;
@@ -675,6 +680,44 @@ namespace StarterAssets
                 isBeingThrownBackByHammer = false;
             });
             sequence.Play();
+        }
+
+
+        private bool _freezeAndRevertCoroutineIsRunning;
+        public void FreezeAndRevertToPosition(Vector3 position, Quaternion rotation)
+        {
+            if (_freezeAndRevertCoroutineIsRunning)
+            {
+                return;
+            }
+            _freezeAndRevertCoroutineIsRunning = true;
+            StartCoroutine(FreezeAndRevertToPositionCoroutine(position, rotation));
+        }
+
+        private IEnumerator FreezeAndRevertToPositionCoroutine(Vector3 position, Quaternion rotation)
+        {
+            Debug.Log("FreezeAndRevertToPosition");
+            var flashScreenController = FindFirstObjectByType<FlashScreenController>();
+            animateMesh.FlashFreeze();
+            Inputs.canControlPlayer = false;
+            animator.speed = 0f;
+            _rigidbody.isKinematic = true;
+            yield return new WaitForSeconds(0.5f);
+            flashScreenController.CoverScreen();
+            _rigidbody.MovePosition(position);
+            _rigidbody.MoveRotation(rotation);
+            yield return new WaitForFixedUpdate();
+            cameraSettings.Spawn(rotation);
+            _targetYaw = cameraSettings.cameraTargetYaw;
+            _lookYaw = cameraSettings.cameraTargetYaw;
+            _rotationVelocity = 0f;
+            armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
+            flashScreenController.UncoverScreen();
+            animateMesh.Unfreeze();
+            animator.speed = 1f;
+            _rigidbody.isKinematic = false;
+            Inputs.canControlPlayer = true;
+            _freezeAndRevertCoroutineIsRunning = false;
         }
     }
 }

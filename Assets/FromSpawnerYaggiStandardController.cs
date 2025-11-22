@@ -216,8 +216,12 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
         {
             case FromSpawnerYaggiStandardState.FALLING:
                 _rigidbody.isKinematic = true;
-                navMeshAgent.enabled = true;
-                navMeshAgent.Warp(transform.position);
+                if (navMeshAgent != null)
+                {
+                    navMeshAgent.enabled = true;
+                    // Add a small delay to ensure the agent is properly enabled before warping
+                    StartCoroutine(WarpAgentAfterDelay());
+                }
                 break;
             case FromSpawnerYaggiStandardState.IDLE:
                 break;
@@ -241,6 +245,16 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
         }
     }
 
+    private IEnumerator WarpAgentAfterDelay()
+    {
+        // Wait for the end of frame to ensure the agent is properly enabled
+        yield return new WaitForEndOfFrame();
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            navMeshAgent.Warp(transform.position);
+        }
+    }
+
 
     private void FixedUpdate()
     {
@@ -248,7 +262,21 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, Vector3.down, 1f, Helper.GroundLayer))
             {
-                SwitchState(FromSpawnerYaggiStandardState.IDLE);
+                // Add error handling to prevent Navigation Overlay errors
+                try
+                {
+                    SwitchState(FromSpawnerYaggiStandardState.IDLE);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"Error switching from FALLING to IDLE state: {e.Message}");
+                    // Fallback: manually set the state without triggering the full state machine
+                    currentState = FromSpawnerYaggiStandardState.IDLE;
+                    if (navMeshAgent != null && navMeshAgent.enabled)
+                    {
+                        navMeshAgent.isStopped = true;
+                    }
+                }
             }
             return;
         }
@@ -532,7 +560,10 @@ public class FromSpawnerYaggiStandardController : MonoBehaviour
 
     private void SetDestination(Vector3 position)
     {
-        navMeshDestination.position = position;
+        if (navMeshDestination != null)
+        {
+            navMeshDestination.position = position;
+        }
         navMeshAgent.destination = position;
     }
 

@@ -850,7 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96736e2e88a2604e98788c19dd14c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeUntilFallDuration: 0
+  shakeUntilFallDuration: 1
   shakeUntilFallTime: 0
   isTouched: 0
   isFalling: 0

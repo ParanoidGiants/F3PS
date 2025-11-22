@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
-    private PlayerData PlayerData => GameManager.Instance.PlayerData;
-    private PlayerEventController PlayerEventController => GameManager.Instance.PlayerEventController;
+    private PlayerData PlayerData => GameManager.Instance.GameData.PlayerData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
+    private Attack ActiveAttack => GameManager.Instance.GameData.PlayerData.ActiveAttack;
 
     [Header("References")]
     public Crosshair crosshair;
@@ -18,8 +19,6 @@ public class AttackManager : MonoBehaviour
     private StarterAssetsInputs _inputs;
     private Vector3 _aimTargetPosition;
     private bool _isAttackSwitched;
-
-    private Attack ActiveAttack => GameManager.Instance.PlayerData.ActiveAttack;
 
     private void OnEnable()
     {
