@@ -20,9 +20,12 @@ public class FallOnTouch : MonoBehaviour
         _rigidbodyHub = GetComponent<RigidbodyHub>();
         _rigidbodyHub.SetKinematic();
         _rigidbodyHub.useGravity = false;
-        shakeAnimation = transform.DOShakePosition(shakeUntilFallDuration, 0.1f);
-        shakeAnimation.SetAutoKill(false);
-        shakeAnimation.Pause();
+        if (shakeUntilFallDuration != 0f)
+        {
+            shakeAnimation = transform.DOShakePosition(shakeUntilFallDuration, 0.1f);
+            shakeAnimation.SetAutoKill(false);
+            shakeAnimation.Pause();
+        }
         _triggerZone.OnTriggerZoneEnter += OnTriggerZoneEnter;
         _triggerZone.OnTriggerZoneExit += OnTriggerZoneExit;
     }
