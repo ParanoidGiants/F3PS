@@ -59,7 +59,9 @@ public class HorusPalmController : MonoBehaviour
         isAttacking = true;
         attackCoolDownTime = attackCoolDownTimer;
 
-        var targetDirection = projectileSpawn.rotation * (targetPosition - projectileSpawn.position).normalized;
+        // no references, thats why it is commented out
+        // var targetDirection = projectileSpawn.rotation * (targetPosition - projectileSpawn.position).normalized;
+        
         var projectileObject = projectilePool.GetObject();
         var projectileTransform = projectileObject.transform;
         projectileTransform.position = projectileSpawn.position;

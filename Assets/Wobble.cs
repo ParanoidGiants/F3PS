@@ -9,15 +9,15 @@ public class Liquid : MonoBehaviour
     public UpdateMode updateMode;
 
     [SerializeField]
-    float MaxWobble = 0.03f;
+    readonly float MaxWobble = 0.03f;
     [SerializeField]
-    float WobbleSpeedMove = 1f;
+    readonly float WobbleSpeedMove = 1f;
     [SerializeField]
-    float fillAmount = 0.5f;
+    readonly float fillAmount = 0.5f;
     [SerializeField]
-    float Recovery = 1f;
+    readonly float Recovery = 1f;
     [SerializeField]
-    float Thickness = 1f;
+    readonly float Thickness = 1f;
     [Range(0, 1)]
     public float CompensateShapeAmount;
     [SerializeField]
@@ -37,6 +37,7 @@ public class Liquid : MonoBehaviour
     float sinewave;
     float time = 0.5f;
     Vector3 comp;
+
 
     // Use this for initialization
     void Start()
@@ -76,7 +77,7 @@ public class Liquid : MonoBehaviour
 
         time += deltaTime;
 
-        if (deltaTime != 0)
+        if (!Mathf.Approximately(deltaTime, 0f))
         {
 
 
@@ -124,17 +125,17 @@ public class Liquid : MonoBehaviour
         if (CompensateShapeAmount > 0)
         {
             // only lerp if not paused/normal update
-            if (deltaTime != 0)
-            {
-                comp = Vector3.Lerp(comp, (worldPos - new Vector3(0, GetLowestPoint(), 0)), deltaTime * 10);
-            }
-            else
-            {
-                comp = (worldPos - new Vector3(0, GetLowestPoint(), 0));
-            }
+            Vector3 target = worldPos - new Vector3(0, GetLowestPoint(), 0);
 
-            pos = worldPos - transform.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
-        }
+            comp =
+                Mathf.Approximately(deltaTime, 0f)
+                ? target
+                : Vector3.Lerp(
+                    comp,
+                    target,
+                    deltaTime * 10
+                );
+        }   
         else
         {
             pos = worldPos - transform.position - new Vector3(0, fillAmount, 0);
@@ -163,13 +164,13 @@ public class Liquid : MonoBehaviour
             var angle = Mathf.Acos(q.w);
             gain = 2.0f * angle / (Mathf.Sin(angle) * Time.deltaTime);
         }
-        Vector3 angularVelocity = new Vector3(q.x * gain, q.y * gain, q.z * gain);
+        Vector3 angularMotionVelocity = new Vector3(q.x * gain, q.y * gain, q.z * gain);
 
-        if (float.IsNaN(angularVelocity.z))
+        if (float.IsNaN(angularMotionVelocity.z))
         {
-            angularVelocity = Vector3.zero;
+            angularMotionVelocity = Vector3.zero;
         }
-        return angularVelocity;
+        return angularMotionVelocity;
     }
 
     float GetLowestPoint()

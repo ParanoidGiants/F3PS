@@ -401,8 +401,11 @@ MonoBehaviour:
         MaximumDistance: 50
         MaximumThrowSpeed: 3
       UnlockedAbilities: 
+    SwitchesData:
+      Switches: []
+    DoorsData:
+      Doors: []
     EnemiesData: []
-    SwitchesData: []
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,7 +471,7 @@ MonoBehaviour:
   menu: 0
   freeCamera: 0
   analogMovement: 0
-  cursorLocked: 0
+  cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &5871156267789381035
 MonoBehaviour:

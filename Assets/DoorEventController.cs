@@ -16,12 +16,9 @@ public class DoorEventController
     public void InitializeData(DoorsData doorsData)
     {
         Data = doorsData;
-        foreach (var doorData in Data.Doors)
+        foreach (var doorData in Data.Doors.Where(x => x.IsOpen))
         {
-            if (doorData.IsOpen)
-            {
-                UpdateDoorOpened(doorData.Id);
-            }
+            UpdateDoorOpened(doorData.Id);
         }
     }
 }

@@ -16,12 +16,9 @@ public class SwitchEventController
     public void InitializeData(SwitchesData switchesData)
     {
         Data = switchesData;
-        foreach (var switchData in Data.Switches)
+        foreach (var switchData in Data.Switches.Where(x => x.IsTriggered))
         {
-            if (switchData.IsTriggered)
-            {
-                UpdateSwitchTriggered(switchData.Id);
-            }
+            UpdateSwitchTriggered(switchData.Id);
         }
     }
 }

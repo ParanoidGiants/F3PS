@@ -103,7 +103,7 @@ public class AnimateMesh : MonoBehaviour
             _timeSequence.Kill();
         }
         _timeSequence = DOTween.Sequence();
-        if (newTimeScale != 1f)
+        if (!Mathf.Approximately(newTimeScale, 1f))
         {
             _timeSequence.Insert(
                 0f,

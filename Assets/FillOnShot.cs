@@ -39,7 +39,7 @@ public class FillOnShot : MonoBehaviour
             fill += fillPerProjectile;
             fill = Mathf.Clamp01(fill);
             liquidRenderer.material.SetFloat("_Fill", fill);
-            if (fill == 1f)
+            if (Mathf.Approximately(fill, 1f))
             {
                 SwitchEventController.UpdateSwitchTriggered(gameObject.name);
                 isFilledEvent.Invoke();
