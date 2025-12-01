@@ -697,23 +697,27 @@ namespace StarterAssets
         private IEnumerator FreezeAndRevertToPositionCoroutine(Vector3 position, Quaternion rotation)
         {
             Debug.Log("FreezeAndRevertToPosition");
+            Debug.Log($"CurrentPosition: {_rigidbody.position}");
+            Debug.Log($"TargetPosition: {position}");
             var flashScreenController = FindFirstObjectByType<FlashScreenController>();
-            animateMesh.FlashFreeze();
+            animateMesh.FlashFreeze(0f);
             Inputs.canControlPlayer = false;
             animator.speed = 0f;
             _rigidbody.isKinematic = true;
-            yield return new WaitForSeconds(0.5f);
-            flashScreenController.CoverScreen();
+            flashScreenController.CoverScreen(0.1f);
             _rigidbody.MovePosition(position);
             _rigidbody.MoveRotation(rotation);
             yield return new WaitForFixedUpdate();
+            Debug.Log(_rigidbody.isKinematic);
+            Debug.Log($"New Position {_rigidbody.position}");
             cameraSettings.Spawn(rotation);
             _targetYaw = cameraSettings.cameraTargetYaw;
             _lookYaw = cameraSettings.cameraTargetYaw;
             _rotationVelocity = 0f;
             armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
-            flashScreenController.UncoverScreen();
-            animateMesh.Unfreeze();
+            flashScreenController.UncoverScreen(1f);
+            animateMesh.Unfreeze(0.5f);
+            yield return new WaitForFixedUpdate();
             animator.speed = 1f;
             _rigidbody.isKinematic = false;
             Inputs.canControlPlayer = true;

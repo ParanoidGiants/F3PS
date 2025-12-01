@@ -205,19 +205,11 @@ public class AnimateMesh : MonoBehaviour
     [Space(20)]
     [Header("Freeze Flash Animation Settings")]
     public Color freezeEmissionColor;
-    public float unfreezeDuration;
 
-    public void FlashFreeze()
-    {
-        SetEmission(freezeEmissionColor);
-    }
-
-    public void Unfreeze()
+    private void Flash(Color startEmission, Color endEmission, float duration)
     {
         var animate = 0f;
-        Color startEmission = freezeEmissionColor;
-        Color endEmission = Color.black;
-        Tweener unfreeze = DOTween.To(
+        Tweener flash = DOTween.To(
             () => animate,
             x =>
             {
@@ -226,8 +218,18 @@ public class AnimateMesh : MonoBehaviour
                 SetEmission(emission);
             },
             1f,
-            unfreezeDuration
+            duration
         );
+    }
+
+    public void FlashFreeze(float duration)
+    {
+        Flash(Color.black, freezeEmissionColor, duration);
+    }
+
+    public void Unfreeze(float duration)
+    {
+        Flash(freezeEmissionColor, Color.black, duration);
     }
 
     
