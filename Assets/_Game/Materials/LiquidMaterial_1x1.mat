@@ -52,13 +52,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fill: 1
+    - _Fill: 0
     - _FillAmount: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
     - _Emission: {r: 0, g: 4.1411767, b: 10.980392, a: 1}
-    - _FillMinMax: {r: -1, g: 1, b: 0, a: 0}
+    - _FillMinMax: {r: -2, g: 2, b: 0, a: 0}
     - _SideColor: {r: 0, g: 0.25822836, b: 0.8679245, a: 1}
     - _TopColor: {r: 0, g: 0.11706687, b: 0.3679245, a: 1}
   m_BuildTextureStacks: []

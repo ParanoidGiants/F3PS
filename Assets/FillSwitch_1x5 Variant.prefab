@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 1497354680331058001, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_Name
-      value: FillSwitch_5x5 Variant
+      value: FillSwitch_1x5 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1497354680331058001, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -26,12 +26,12 @@ PrefabInstance:
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: unfillPerSecond
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: fillPerProjectile
-      value: 0.06
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -76,12 +76,12 @@ PrefabInstance:
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -34.02
+      value: -31.5825
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.375
+      value: 11.625
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}

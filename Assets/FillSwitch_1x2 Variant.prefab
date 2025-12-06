@@ -11,12 +11,17 @@ PrefabInstance:
     - target: {fileID: 1497354680331058001, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_Name
-      value: FillSwitch_2x1 Variant
+      value: FillSwitch_1x2 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
+        type: 3}
+      propertyPath: unfillPerSecond
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: fillPerProjectile
-      value: 0.15
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -36,7 +41,7 @@ PrefabInstance:
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: isFilledEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: OpenDoor
       objectReference: {fileID: 0}
     - target: {fileID: 6778780155082368761, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -50,8 +55,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
-      propertyPath: m_LocalScale.z
+      propertyPath: m_LocalScale.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
@@ -61,12 +71,12 @@ PrefabInstance:
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.75
+      value: 2.125
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18
+      value: 21.6875
       objectReference: {fileID: 0}
     - target: {fileID: 8777046668030271146, guid: aef388df4e53e9f4e8fa1fb327700dc8,
         type: 3}
