@@ -11,6 +11,7 @@ public class SaveGameManager : MonoBehaviour
     public PlayerEventController PlayerEventController;
     public SwitchEventController SwitchEventController;
     public DoorEventController DoorEventController;
+    public EnemyEventController EnemyEventController;
 
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
@@ -21,6 +22,7 @@ public class SaveGameManager : MonoBehaviour
         PlayerEventController = new PlayerEventController();
         SwitchEventController = new SwitchEventController();
         DoorEventController = new DoorEventController();
+        EnemyEventController = new EnemyEventController();
     }
 
     private void OnEnable()
@@ -38,6 +40,7 @@ public class SaveGameManager : MonoBehaviour
         PlayerEventController.InitializeData(GameData.PlayerData);
         SwitchEventController.InitializeData(GameData.SwitchesData);
         DoorEventController.InitializeData(GameData.DoorsData);
+        EnemyEventController.InitializeData(GameData.EnemiesData);
     }
 
     public GameData LoadCurrentGameData()
@@ -135,16 +138,10 @@ public class SaveGameManager : MonoBehaviour
     private void CreateDefaultGameData()
     {
         // register enemies from scene
-        var enemiesInstanceIds = new List<int>();
-        var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
-        var yaggiStandards = FindObjectsByType<YaggiStandardController>(FindObjectsSortMode.InstanceID);
-        var yaggiSpitters = FindObjectsByType<YaggiSpitterController>(FindObjectsSortMode.InstanceID);
-        var yaggiShieldSpitters = FindObjectsByType<YaggiShieldSpitterController>(FindObjectsSortMode.InstanceID);
-        enemiesInstanceIds.AddRange(scorpions.Select(scorpion => scorpion.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiStandards.Select(yaggiStandard => yaggiStandard.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiSpitters.Select(yaggiSpitter => yaggiSpitter.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiShieldSpitters.Select(yaggiShieldSpitter => yaggiShieldSpitter.gameObject.GetInstanceID()));
-        GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
+        var enemyGroupNames = new List<string>();
+        var enemyGroups = FindObjectsByType<RegisterEnemy>(FindObjectsSortMode.InstanceID);
+        enemyGroupNames.AddRange(enemyGroups.Select(enemyGroup => enemyGroup.gameObject.name));
+        GameData.EnemiesData.Initialize(enemyGroupNames.ToArray());
 
         // register switches from scene
         GameData.SwitchesData = new SwitchesData();

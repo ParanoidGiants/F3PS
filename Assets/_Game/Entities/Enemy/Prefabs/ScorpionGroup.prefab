@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4319282282638530256}
   - component: {fileID: 6505323196243106772}
+  - component: {fileID: 6611291756449201201}
   m_Layer: 0
   m_Name: ScorpionGroup
   m_TagString: Untagged
@@ -48,13 +49,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   members:
   - {fileID: 1434856481559623364}
-  - {fileID: 0}
+  - {fileID: 1414381909171198911}
   OnGroupDestroy:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -64,6 +65,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &6611291756449201201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789725777079460351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfbacb4407a8cc4d81a58c68bfc8e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2363506152581953976
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +150,7 @@ PrefabInstance:
     - target: {fileID: 1769635576229462338, guid: a22a87cd7782f7348a2b613b666f096e,
         type: 3}
       propertyPath: m_Name
-      value: ScorpionSpace
+      value: ScorpionSpaceGroupMember (0)
       objectReference: {fileID: 0}
     - target: {fileID: 1769635576229462351, guid: a22a87cd7782f7348a2b613b666f096e,
         type: 3}
@@ -243,7 +256,7 @@ PrefabInstance:
     - target: {fileID: 1769635576229462338, guid: a22a87cd7782f7348a2b613b666f096e,
         type: 3}
       propertyPath: m_Name
-      value: ScorpionSpace Variant
+      value: ScorpionSpaceGroupMember (1)
       objectReference: {fileID: 0}
     - target: {fileID: 1769635576229462351, guid: a22a87cd7782f7348a2b613b666f096e,
         type: 3}
