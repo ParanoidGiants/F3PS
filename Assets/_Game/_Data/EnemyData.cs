@@ -3,6 +3,6 @@ using System;
 [Serializable]
 public class EnemyData
 {
-    public int instanceId;
+    public string name;
     public bool isAlive;
 }
