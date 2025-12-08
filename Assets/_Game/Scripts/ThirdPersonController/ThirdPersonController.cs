@@ -51,6 +51,7 @@ namespace StarterAssets
         public float dodgeLandTime;
         public float dodgeCoolDownTime;
         public Vector3 dodgeDirection = Vector3.forward;
+        private float _dodgeSpeed;
 
         [Space(10)]
         [Header("Stair Climbing")]
@@ -229,8 +230,57 @@ namespace StarterAssets
                 JumpAndDodge();
             }
 
-            Move(skillManager.IsAiming());
+            if (_isDodging)
+            {
+                HandleDodgeRoll();
+            }
+            else
+            {
+                Move(skillManager.IsAiming());
+            }
         }
+
+        private void HandleDodgeRoll()
+        {
+            if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
+            {
+                _isDodging = false;
+                return;
+            }
+            else if (dodgeAscendTime < Data.DodgeAscendTimer)
+            {
+                dodgeAscendTime += Time.deltaTime;
+            }
+            else if (_isGrounded)
+            {
+                dodgeAscendTime = Data.DodgeAscendTimer;
+                dodgeLandTime += Time.deltaTime;
+            }
+            else
+            {
+                dodgeAscendTime = Data.DodgeAscendTimer;
+            }
+
+            var currentTime = dodgeAscendTime + dodgeLandTime;
+            var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
+            var timeFactor = currentTime / totalTime;
+            timeFactor = Mathf.Min(timeFactor, 1f);
+            var speed = Mathf.Lerp(
+                _dodgeSpeed,
+                0f,
+                timeFactor
+            );
+            _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
+            _lookYaw = Mathf.SmoothDampAngle(
+                transform.eulerAngles.y,
+                _targetYaw,
+                ref _rotationVelocity,
+                Data.RotationSmoothTime * Time.unscaledDeltaTime
+            );
+            _rigidbody.linearVelocity = dodgeDirection * speed
+                + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
+        }
+
         private void UpdatePlatformVelocity()
         {
             if (_activePlatform == null)
@@ -295,49 +345,6 @@ namespace StarterAssets
         }
         private void Move(bool isAiming)
         {
-            if (_isDodging)
-            {
-
-                if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
-                {
-                    _isDodging = false;
-                    return;
-                }
-                else if (dodgeAscendTime < Data.DodgeAscendTimer)
-                {
-                    dodgeAscendTime += Time.deltaTime;
-                }
-                else if (_isGrounded)
-                {
-                    dodgeAscendTime = Data.DodgeAscendTimer;
-                    dodgeLandTime += Time.deltaTime;
-                }
-                else
-                {
-                    dodgeAscendTime = Data.DodgeAscendTimer;
-                }
-
-                var currentTime = dodgeAscendTime + dodgeLandTime;
-                var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
-                var timeFactor = currentTime / totalTime;
-                timeFactor = Mathf.Min(timeFactor, 1f);
-                var speed = Mathf.Lerp(
-                    Data.DodgeSpeed,
-                    0f,
-                    timeFactor
-                );
-                _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
-                _lookYaw = Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    _targetYaw,
-                    ref _rotationVelocity,
-                    Data.RotationSmoothTime * Time.unscaledDeltaTime
-                );
-                _rigidbody.linearVelocity = dodgeDirection * speed
-                    + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
-                return;
-            }
-
             float targetSpeed = 0f;
             if (Inputs.move.magnitude > 0f)
             {
@@ -463,7 +470,6 @@ namespace StarterAssets
             _rigidbody.linearVelocity = Vector3.zero;
         }
 
-
         private void JumpAndDodge()
         {
             var jumpInput = Inputs.jump;
@@ -503,6 +509,7 @@ namespace StarterAssets
                 _isDodging = true;
                 dodgeAscendTime = 0f;
                 dodgeLandTime = 0f;
+                _dodgeSpeed = _isSprinting ? Data.SprintSpeed / Data.MoveSpeed * Data.DodgeSpeed : Data.DodgeSpeed;
                 dodgeCoolDownTime = Data.DodgeCoolDownTimer;
                 staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
