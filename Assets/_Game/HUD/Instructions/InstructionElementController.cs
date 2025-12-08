@@ -4,6 +4,7 @@ using UnityEngine;
 public class InstructionElementController : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI instructionText;
+    public Animator animator;
     public Action OnInstructionFollowed;
 
     public void SetupInstructionToFollow(string text)
@@ -14,6 +15,11 @@ public class InstructionElementController : MonoBehaviour
     public void ProcessFollowedInstruction()
     {
         OnInstructionFollowed?.Invoke();
+        animator.SetTrigger("Followed");
+    }
+
+    public void DisableInstruction()
+    {
         gameObject.SetActive(false);
     }
 }

@@ -61,9 +61,9 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 10
   m_ChildAlignment: 8
-  m_Spacing: 0
+  m_Spacing: -10
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -194,6 +194,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 697162288596842930, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 32711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632026398013112812, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_text
+      value: Instructions loading...
       objectReference: {fileID: 0}
     - target: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
@@ -353,6 +363,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 697162288596842930, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 32711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632026398013112812, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_text
+      value: Instructions loading...
+      objectReference: {fileID: 0}
     - target: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
       propertyPath: m_Name
@@ -386,7 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InstructionOnSprint
   sprintingTime: 0
-  sprintingTimer: 3
+  sprintingTimer: 1
 --- !u!114 &3730339024447240275 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6409052971397062890, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
@@ -512,6 +532,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 697162288596842930, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 32711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632026398013112812, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_text
+      value: Instructions loading...
       objectReference: {fileID: 0}
     - target: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
@@ -671,6 +701,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 697162288596842930, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 32711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632026398013112812, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_text
+      value: Instructions loading...
+      objectReference: {fileID: 0}
     - target: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
       propertyPath: m_Name
@@ -679,7 +719,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5259252719497944301}
   m_SourcePrefab: {fileID: 100100000, guid: fe64ca4a82c58c147a9d6cfcc3caafaf, type: 3}
 --- !u!114 &2467565616044500518 stripped
 MonoBehaviour:
@@ -687,12 +731,30 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8849303209609807564}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4275502246041015092}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 727a3f6c0a4f5354e94e595e905e6b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InstructionElementController
+--- !u!1 &4275502246041015092 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+    type: 3}
+  m_PrefabInstance: {fileID: 8849303209609807564}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5259252719497944301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4275502246041015092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c336aaa86138bf46a0aa5f7654e2e66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InstructionOnThrowKhonsuSphere
 --- !u!224 &8928470361448344205 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 83112218014460993, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
@@ -819,7 +881,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8122735895740951919}
+      addedObject: {fileID: 2173490206627588100}
   m_SourcePrefab: {fileID: 100100000, guid: fe64ca4a82c58c147a9d6cfcc3caafaf, type: 3}
 --- !u!114 &2572368531194101693 stripped
 MonoBehaviour:
@@ -839,7 +901,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8882053066216382295}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8122735895740951919
+--- !u!114 &2173490206627588100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -851,7 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e691470932ca09845b4f325a765436a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InstructionFollowOnMove
-  threshold: 2
+  threshold: 1
 --- !u!224 &8819211540134638358 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 83112218014460993, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
@@ -965,6 +1027,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 697162288596842930, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 32711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632026398013112812, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
+        type: 3}
+      propertyPath: m_text
+      value: Instructions loading...
       objectReference: {fileID: 0}
     - target: {fileID: 4727276309203162616, guid: fe64ca4a82c58c147a9d6cfcc3caafaf,
         type: 3}
