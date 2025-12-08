@@ -46,11 +46,6 @@ public class AttackManager : MonoBehaviour
     public void OnFixedUpdate()
     {
         _aimTargetPosition = crosshair.GetTargetPosition();
-        switch (ActiveAttack)
-        {
-            default:
-                break;
-        }
     }
     private void HandleActiveAttack(bool attack, Vector2 look)
     {

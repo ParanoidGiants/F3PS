@@ -81,14 +81,14 @@ namespace StarterAssets
         public float checkGroundTime = 0f;
 
         [Header("Watchers")]
-        [SerializeField] private bool _isGrounded;
-        [SerializeField] private bool _isSprinting;
-        [SerializeField] private bool _isShooting;
-        [SerializeField] private bool _isReloading;
-        [SerializeField] private bool _isDodging;
-        [SerializeField] private bool _isSlowMoToggle;
-        [SerializeField] private bool _isSlowMoStarted;
-        [SerializeField] private bool _isDying;
+        public bool isGrounded;
+        public bool isSprinting;
+        public bool isShooting;
+        public bool isReloading;
+        public bool isDodging;
+        public bool isSlowMoToggle;
+        public bool isSlowMoStarted;
+        public bool isDying;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _speed;
         [SerializeField] private float _animationBlend;
@@ -120,7 +120,7 @@ namespace StarterAssets
         private PlayerData Data => GameManager.Instance.GameData.PlayerData;
         private PlayerEventController DataEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
-        public bool IsGrounded => _isGrounded;
+        public bool IsGrounded => isGrounded;
 
         private void Awake()
         {
@@ -167,13 +167,13 @@ namespace StarterAssets
         private void Update()
         {
             if (GameManager.Instance.isMenuOpen) return;
-            if (_isDying) return;
+            if (isDying) return;
 
             cameraSettings.HandleFreeCamera();
 
             if (!Inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
-            if (_isDying) return;
+            if (isDying) return;
 
             if (wasHitAndIsInvincibleForTime)
             {
@@ -184,7 +184,7 @@ namespace StarterAssets
                 }
             }
 
-            animator.SetBool(_animIDGrounded, _isGrounded);
+            animator.SetBool(_animIDGrounded, isGrounded);
 
             skillManager.OnUpdate();
             attackManager.OnUpdate();
@@ -199,7 +199,7 @@ namespace StarterAssets
             {
                 cameraSettings.CameraTargetRotation();
             }
-            if (Inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            if (Inputs.canControlPlayer && !timeManager.isPaused && !isDying)
             {
                 skillManager.OnLateUpdate();
             }
@@ -216,7 +216,7 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
-            if (!Inputs.canControlPlayer || timeManager.isPaused || _isDying) return;
+            if (!Inputs.canControlPlayer || timeManager.isPaused || isDying) return;
 
             GroundedCheck();
             UpdatePlatformVelocity();
@@ -230,7 +230,7 @@ namespace StarterAssets
                 JumpAndDodge();
             }
 
-            if (_isDodging)
+            if (isDodging)
             {
                 HandleDodgeRoll();
             }
@@ -244,14 +244,14 @@ namespace StarterAssets
         {
             if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
             {
-                _isDodging = false;
+                isDodging = false;
                 return;
             }
             else if (dodgeAscendTime < Data.DodgeAscendTimer)
             {
                 dodgeAscendTime += Time.deltaTime;
             }
-            else if (_isGrounded)
+            else if (isGrounded)
             {
                 dodgeAscendTime = Data.DodgeAscendTimer;
                 dodgeLandTime += Time.deltaTime;
@@ -311,7 +311,7 @@ namespace StarterAssets
 
             if (Physics.SphereCast(spherePosition + Vector3.up * 0.1f, GroundedRadius, Vector3.down, out RaycastHit hit, 0.2f, GroundLayers, QueryTriggerInteraction.Ignore))
             {
-                _isGrounded = true;
+                isGrounded = true;
                 groundNormal = hit.normal;
 
                 Rigidbody newPlatform = hit.collider.GetComponentInParent<Rigidbody>();
@@ -322,7 +322,7 @@ namespace StarterAssets
             }
             else
             {
-                _isGrounded = false;
+                isGrounded = false;
                 groundNormal = Vector3.up;
 
                 if (_activePlatform != null)
@@ -352,7 +352,7 @@ namespace StarterAssets
                 {
                     targetSpeed = Data.AimSpeed;
                 }
-                else if (_isSprinting)
+                else if (isSprinting)
                 {
                     targetSpeed = Data.SprintSpeed;
                 }
@@ -448,19 +448,19 @@ namespace StarterAssets
             var sprint = Inputs.sprint;
             if (!sprint)
             {
-                _isSprinting = false;
+                isSprinting = false;
                 return;
             }
 
             var sprintStaminaDepletion = GameManager.Instance.GameData.PlayerData.SprintDepletionRate * Time.deltaTime;
             if (staminaManager.IsRecoveringStamina || !moving)
             {
-                _isSprinting = false;
+                isSprinting = false;
             }
             else
             {
                 staminaManager.Deplete(sprintStaminaDepletion);
-                _isSprinting = true;
+                isSprinting = true;
             }
         }
 
@@ -481,7 +481,7 @@ namespace StarterAssets
             wasDodgePressedLastFrame = dodgeInput;
             if (isAscending 
                 || isGliding
-                || !_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
+                || !isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
             ) {
                 return;
             }
@@ -506,10 +506,10 @@ namespace StarterAssets
 
                 _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
                 dodgeDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-                _isDodging = true;
+                isDodging = true;
                 dodgeAscendTime = 0f;
                 dodgeLandTime = 0f;
-                _dodgeSpeed = _isSprinting ? Data.SprintSpeed / Data.MoveSpeed * Data.DodgeSpeed : Data.DodgeSpeed;
+                _dodgeSpeed = isSprinting ? Data.SprintSpeed / Data.MoveSpeed * Data.DodgeSpeed : Data.DodgeSpeed;
                 dodgeCoolDownTime = Data.DodgeCoolDownTimer;
                 staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
@@ -530,7 +530,7 @@ namespace StarterAssets
         private void  HandleFallAndGravity()
         {
             var jumpInput = Inputs.jump;
-            if (_isGrounded)
+            if (isGrounded)
             {
                 animator.SetBool(_animIDDodge, false);
 
@@ -617,7 +617,7 @@ namespace StarterAssets
 
         public void Hit(int damage, Vector3 hitDirection)
         {
-            if (_isDying || wasHitAndIsInvincibleForTime)
+            if (isDying || wasHitAndIsInvincibleForTime)
             {
                 return;
             }
@@ -625,9 +625,9 @@ namespace StarterAssets
 
             DataEventController.UpdateCurrentHealth(Data.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
-            if (Data.CurrentHealth <= 0 && !_isDying)
+            if (Data.CurrentHealth <= 0 && !isDying)
             {
-                _isDying = true;
+                isDying = true;
                 Die(hitDirection);
             }
             else
@@ -655,7 +655,7 @@ namespace StarterAssets
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
             Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-            if (_isGrounded) Gizmos.color = transparentGreen;
+            if (isGrounded) Gizmos.color = transparentGreen;
             else Gizmos.color = transparentRed;
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
