@@ -321,7 +321,11 @@ namespace StarterAssets
                 var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
                 var timeFactor = currentTime / totalTime;
                 timeFactor = Mathf.Min(timeFactor, 1f);
-                var speed = Mathf.Lerp(Data.DodgeSpeed, 0f, Mathf.Pow(timeFactor, 4f));
+                var speed = Mathf.Lerp(
+                    Data.DodgeSpeed,
+                    0f,
+                    timeFactor
+                );
                 _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
                 _lookYaw = Mathf.SmoothDampAngle(
                     transform.eulerAngles.y,
@@ -435,13 +439,14 @@ namespace StarterAssets
         {
             var moving = Inputs.move != Vector2.zero;
             var sprint = Inputs.sprint;
-            if (!sprint || !Data.UnlockedAbilities.Contains(Ability.Sprint))
+            if (!sprint)
             {
                 _isSprinting = false;
                 return;
             }
+
             var sprintStaminaDepletion = GameManager.Instance.GameData.PlayerData.SprintDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
+            if (staminaManager.IsRecoveringStamina || !moving)
             {
                 _isSprinting = false;
             }
