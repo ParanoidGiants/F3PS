@@ -98,7 +98,15 @@ public class KhonsuSphereProjectile : MonoBehaviour
     {
         if (!_isHit && _touchedTransform == null) return;
 
-        _rigidbody.MovePosition(_touchedTransform.TransformPoint(_stickToLocalPosition));
+        try
+        {
+            _rigidbody.MovePosition(_touchedTransform.TransformPoint(_stickToLocalPosition));
+        }
+        catch
+        {
+            Debug.LogWarning("Khonsu Sphere's touched transform is no longer valid.");
+            _touchedTransform = null;
+        }
     }
 
     public void Init(Collider[] colliders)
