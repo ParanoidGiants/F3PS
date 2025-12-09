@@ -325,7 +325,7 @@ MonoBehaviour:
   GameData:
     PlayerData:
       MoveSpeed: 30
-      SpeedChangeRate: 15
+      SpeedChangeRate: 10
       SprintDepletionRate: 0.05
       SprintSpeed: 45
       JumpHeight: 8
@@ -350,7 +350,7 @@ MonoBehaviour:
       CurrentSpawnPoint: 0
       AscendHeight: 1
       AscendDuration: 1
-      GlideDuration: 1
+      GlideDuration: 1.1
       GlideDepletionRate: 0.5
       LandingDepth: 20
       UnlockedAttacks: 
@@ -405,7 +405,8 @@ MonoBehaviour:
       Switches: []
     DoorsData:
       Doors: []
-    EnemiesData: []
+    EnemiesData:
+      Enemies: []
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,7 +463,6 @@ MonoBehaviour:
   skill: 0
   grab: 0
   aim: 0
-  reload: 0
   slowmo: 0
   dodge: 0
   switchWeapon: 0
