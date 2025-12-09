@@ -129,7 +129,6 @@ public class PlayerData
     public float DodgeAscendTimer = 0.05f;
     public float DodgeLandTimer = 0.1f;
     public float DodgeCoolDownTimer = 0.4f;
-    public float DodgeStaminaDepletionRate = 0.15f;
 
     [Space(10)]
     [Header("Stamina")]

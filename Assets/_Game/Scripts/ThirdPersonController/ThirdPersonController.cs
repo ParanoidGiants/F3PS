@@ -496,7 +496,7 @@ namespace StarterAssets
                 isAscending = true;
                 ascendTime = 0f;
             }
-            else if (dodge && dodgeCoolDownTime <= 0.0f && !staminaManager.IsRecoveringStamina)
+            else if (dodge && dodgeCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(Data.DodgeHeight * -2f * Gravity);
@@ -511,7 +511,6 @@ namespace StarterAssets
                 dodgeLandTime = 0f;
                 _dodgeSpeed = isSprinting ? Data.SprintSpeed / Data.MoveSpeed * Data.DodgeSpeed : Data.DodgeSpeed;
                 dodgeCoolDownTime = Data.DodgeCoolDownTimer;
-                staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
         }
 
