@@ -37,7 +37,8 @@ public enum YaghotepState
     RETURN_TO_IDLE,
     PATROLLING,
     HIT,
-    DYING
+    DYING,
+    DEAD
 }
 
 public enum YaghotepAttackState
@@ -218,6 +219,8 @@ public class YaghotepController : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
                 break;
+            case YaghotepState.DEAD:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
@@ -234,6 +237,11 @@ public class YaghotepController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (currentState is YaghotepState.DEAD)
+        {
+            return;
+        }
+
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
@@ -312,7 +320,7 @@ public class YaghotepController : MonoBehaviour
                     fadeOutDuration -= ScaledDeltaTime;
                     return;
                 }
-                Debug.Log("Enemy Dead");
+                SwitchState(YaghotepState.DEAD);
                 Died();
                 break;
             default:

@@ -22,7 +22,8 @@ public enum YaggiStandardState
     RETURN_TO_IDLE,
     PATROLLING,
     HIT,
-    DYING
+    DYING,
+    DEAD
 }
 
 public enum YaggiStandardAttackState
@@ -38,6 +39,8 @@ public class YaggiStandardController : MonoBehaviour
 {
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
+
+    public bool IsDead => currentState is YaggiStandardState.DEAD or YaggiStandardState.DYING;
 
     public bool debugIsStopped;
     public float debugStoppingDistance;
@@ -129,8 +132,6 @@ public class YaggiStandardController : MonoBehaviour
     [Header("Watchers")]
     public EnemyHealthUIPool _healthUIPool;
     public YaggiStandardState currentState = YaggiStandardState.IDLE;
-    public bool isDead = false;
-    private Vector3 lastPosition;
 
     protected void Awake()
     {
@@ -198,6 +199,8 @@ public class YaggiStandardController : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
                 break;
+            case YaggiStandardState.DEAD:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
@@ -205,33 +208,20 @@ public class YaggiStandardController : MonoBehaviour
 
     private void ExitState(YaggiStandardState currentState)
     {
-        switch (currentState)
+        if (currentState == YaggiStandardState.AGGRESSIVE)
         {
-            case YaggiStandardState.IDLE:
-                break;
-            case YaggiStandardState.PATROLLING:
-                break;
-            case YaggiStandardState.AGGRESSIVE:
-                navMeshAgent.angularSpeed = 1000;
-                break;
-            case YaggiStandardState.CHECKING:
-                break;
-            case YaggiStandardState.SUSPICIOUS:
-                break;
-            case YaggiStandardState.RETURN_TO_IDLE:
-                break;
-            case YaggiStandardState.HIT:
-                break;
-            case YaggiStandardState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
+            navMeshAgent.angularSpeed = 1000;
         }
     }
 
 
     private void FixedUpdate()
     {
+        if (currentState is YaggiStandardState.DEAD)
+        {
+            return;
+        }
+
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
@@ -340,7 +330,7 @@ public class YaggiStandardController : MonoBehaviour
                     fadeOutDuration -= ScaledDeltaTime;
                     return;
                 }
-                Debug.Log("Enemy Dead");
+                SwitchState(YaggiStandardState.DEAD);
                 Died();
                 break;
             default:
@@ -521,7 +511,7 @@ public class YaggiStandardController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        if (currentState is YaggiStandardState.DYING)
+        if (currentState is YaggiStandardState.DYING or YaggiStandardState.DEAD)
         {
             return;
         }
@@ -548,7 +538,7 @@ public class YaggiStandardController : MonoBehaviour
         {
             sensorController.SetState(SensorState.SEARCHING);
         }
-        else if (state is not YaggiStandardState.DYING)
+        else if (state is not YaggiStandardState.DYING and not YaggiStandardState.DEAD)
         {
             sensorController.SetState(SensorState.IDLE);
         }
@@ -562,8 +552,7 @@ public class YaggiStandardController : MonoBehaviour
 
     public void Died()
     {
-        Debug.Log("Is Dying");
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     public void HitByPlayerFrom(Vector3 hitDirection)

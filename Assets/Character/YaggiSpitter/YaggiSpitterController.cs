@@ -21,7 +21,8 @@ public enum YaggiSpitterState
     RETURN_TO_IDLE,
     PATROLLING,
     HIT,
-    DYING
+    DYING,
+    DEAD
 }
 
 public enum YaggiSpitterAttackState
@@ -209,6 +210,8 @@ public class YaggiSpitterController : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
                 break;
+            case YaggiSpitterState.DEAD:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
@@ -216,33 +219,20 @@ public class YaggiSpitterController : MonoBehaviour
 
     private void ExitState(YaggiSpitterState currentState)
     {
-        switch (currentState)
+        if (currentState is YaggiSpitterState.AGGRESSIVE)
         {
-            case YaggiSpitterState.IDLE:
-                break;
-            case YaggiSpitterState.PATROLLING:
-                break;
-            case YaggiSpitterState.AGGRESSIVE:
-                navMeshAgent.angularSpeed = 1000;
-                break;
-            case YaggiSpitterState.CHECKING:
-                break;
-            case YaggiSpitterState.SUSPICIOUS:
-                break;
-            case YaggiSpitterState.RETURN_TO_IDLE:
-                break;
-            case YaggiSpitterState.HIT:
-                break;
-            case YaggiSpitterState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
+            navMeshAgent.angularSpeed = 1000;
         }
     }
 
 
     private void FixedUpdate()
     {
+        if (currentState is YaggiSpitterState.DEAD)
+        {
+            return;
+        }
+
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
@@ -350,7 +340,7 @@ public class YaggiSpitterController : MonoBehaviour
                     fadeOutDuration -= ScaledDeltaTime;
                     return;
                 }
-                Debug.Log("Enemy Dead");
+                SwitchState(YaggiSpitterState.DEAD);
                 Died();
                 break;
             default:
@@ -540,7 +530,6 @@ public class YaggiSpitterController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        Debug.Log("YaggiSpitter Hit: " + damage);
         if (currentState is YaggiSpitterState.DYING)
         {
             return;

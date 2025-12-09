@@ -21,7 +21,8 @@ public enum YaggiShieldSpitterState
     RETURN_TO_IDLE,
     PATROLLING,
     HIT,
-    DYING
+    DYING,
+    DEAD
 }
 
 public enum YaggiShieldSpitterAttackState
@@ -200,6 +201,8 @@ public class YaggiShieldSpitterController : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
                 break;
+            case YaggiShieldSpitterState.DEAD:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
@@ -207,38 +210,25 @@ public class YaggiShieldSpitterController : MonoBehaviour
 
     private void ExitState(YaggiShieldSpitterState currentState)
     {
-        switch (currentState)
+        if (currentState is YaggiShieldSpitterState.AGGRESSIVE)
         {
-            case YaggiShieldSpitterState.IDLE:
-                break;
-            case YaggiShieldSpitterState.PATROLLING:
-                break;
-            case YaggiShieldSpitterState.AGGRESSIVE:
-                navMeshAgent.angularSpeed = 1000;
-                break;
-            case YaggiShieldSpitterState.CHECKING:
-                break;
-            case YaggiShieldSpitterState.SUSPICIOUS:
-                break;
-            case YaggiShieldSpitterState.RETURN_TO_IDLE:
-                break;
-            case YaggiShieldSpitterState.HIT:
-                break;
-            case YaggiShieldSpitterState.DYING:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
+            navMeshAgent.angularSpeed = 1000;
         }
     }
 
 
     private void FixedUpdate()
     {
+        if (currentState is YaggiShieldSpitterState.DEAD)
+        {
+            return;
+        }
+
         debugIsStopped = navMeshAgent.isStopped;
         debugStoppingDistance = navMeshAgent.stoppingDistance;
 
 
-        if (currentState != YaggiShieldSpitterState.DYING && currentState != YaggiShieldSpitterState.AGGRESSIVE && sensorController.HasTarget())
+        if (currentState is not YaggiShieldSpitterState.DYING and not YaggiShieldSpitterState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(YaggiShieldSpitterState.AGGRESSIVE);
         }
@@ -343,7 +333,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
                     fadeOutDuration -= ScaledDeltaTime;
                     return;
                 }
-                Debug.Log("Enemy Dead");
+                SwitchState(YaggiShieldSpitterState.DEAD);
                 Died();
                 break;
             default:

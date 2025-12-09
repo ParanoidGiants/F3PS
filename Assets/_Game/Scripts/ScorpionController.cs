@@ -21,7 +21,8 @@ public enum ScorpionState
     RETURN_TO_IDLE,
     PATROLLING,
     HIT,
-    DYING
+    DYING,
+    DEAD
 }
 
 public enum ScorpionAttackState
@@ -179,6 +180,8 @@ public class ScorpionController : MonoBehaviour
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
                 break;
+            case ScorpionState.DEAD:
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
@@ -194,6 +197,11 @@ public class ScorpionController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (currentState is ScorpionState.DEAD)
+        {
+            return;
+        }
+
         if (currentState != ScorpionState.DYING && currentState != ScorpionState.AGGRESSIVE && sensorController.HasTarget())
         {
             SwitchState(ScorpionState.AGGRESSIVE);
@@ -289,6 +297,7 @@ public class ScorpionController : MonoBehaviour
                 }
                 Debug.Log("Enemy Dead");
                 Died();
+                SwitchState(ScorpionState.DEAD);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currentState), currentState, null);
@@ -507,7 +516,7 @@ public class ScorpionController : MonoBehaviour
         {
             sensorController.SetState(SensorState.SEARCHING);
         }
-        else if (state is not ScorpionState.DYING)
+        else if (state is not ScorpionState.DYING and not ScorpionState.DEAD)
         {
             sensorController.SetState(SensorState.IDLE);
         }
