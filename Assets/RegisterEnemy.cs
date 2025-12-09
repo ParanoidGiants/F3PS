@@ -1,23 +1,15 @@
+using System.Linq;
 using F3PS;
 using UnityEngine;
 
 public class RegisterEnemy : MonoBehaviour
 {
-    private void OnEnable()
+    private void Start()
     {
-        GameManager.Instance.saveGameManager.EnemyEventController.OnEnemyDied += OnKillEnemy;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.Instance.saveGameManager.EnemyEventController.OnEnemyDied -= OnKillEnemy;
-    }
-
-    private void OnKillEnemy(string name)
-    {
-        if (gameObject.name == name)
+        if (GameManager.Instance.saveGameManager.GameData.EnemiesData.Enemies.Any(e => e.name == gameObject.name && !e.isAlive))
         {
             Destroy(gameObject);
+            return;
         }
     }
 
