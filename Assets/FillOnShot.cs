@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using DG.Tweening;
 using F3PS;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,6 +13,7 @@ public class FillOnShot : MonoBehaviour
     public float fillPerProjectile = 0.2f;
     public float unfillPerSecond = 0.2f;
     public MeshRenderer liquidRenderer;
+    public MeshRenderer containerRenderer;
     public TimeObject timeObject;
     public bool isFilled = false;
     public UnityEvent isFilledEvent;
@@ -19,6 +21,9 @@ public class FillOnShot : MonoBehaviour
     private void OnEnable()
     {
         SwitchEventController.OnSwitchTriggered += OnSwitchTriggered;
+        // pulsate container material's alpha to indicate interactability
+        containerRenderer.material.DOKill();
+        containerRenderer.material.DOFloat(0.5f, "_Alpha", 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     private void OnDisable()
@@ -27,23 +32,20 @@ public class FillOnShot : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    public void Fill()
     {
         if (isFilled)
         {
             return;
         }
 
-        if (collision.gameObject.TryGetComponent<OsirisKickProjectile>(out var _) || collision.gameObject.TryGetComponent<HorusPalmProjectile>(out var _))
+        fill += fillPerProjectile;
+        fill = Mathf.Clamp01(fill);
+        liquidRenderer.material.SetFloat("_Fill", fill);
+        if (Mathf.Approximately(fill, 1f))
         {
-            fill += fillPerProjectile;
-            fill = Mathf.Clamp01(fill);
-            liquidRenderer.material.SetFloat("_Fill", fill);
-            if (Mathf.Approximately(fill, 1f))
-            {
-                SwitchEventController.UpdateSwitchTriggered(gameObject.name);
-                isFilledEvent.Invoke();
-            }
+            SwitchEventController.UpdateSwitchTriggered(gameObject.name);
+            isFilledEvent.Invoke();
         }
     }
 

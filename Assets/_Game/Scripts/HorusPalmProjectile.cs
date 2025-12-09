@@ -89,6 +89,13 @@ public class HorusPalmProjectile : MonoBehaviour
             Debug.Log($"HorusPalmProjectile hit {hittable.name} with damage: {HorusPalmData.Damage}");
             hittable.OnHit(HorusPalmData.Damage, transform.forward);
         }
+
+        if (collision.gameObject.TryGetComponent<FillOnShot>(out var fillOnShot))
+        {
+            fillOnShot.Fill();
+        }
+
+        Debug.Log("HorusPalmProjectile collided with " + collision.gameObject.name);
     }
 
     public void Init(GameObject owner, Collider[] ownerColliders)
