@@ -13,7 +13,6 @@ public class FillOnShot : MonoBehaviour
     public float fillPerProjectile = 0.2f;
     public float unfillPerSecond = 0.2f;
     public MeshRenderer liquidRenderer;
-    public MeshRenderer containerRenderer;
     public TimeObject timeObject;
     public bool isFilled = false;
     public UnityEvent isFilledEvent;
@@ -21,9 +20,6 @@ public class FillOnShot : MonoBehaviour
     private void OnEnable()
     {
         SwitchEventController.OnSwitchTriggered += OnSwitchTriggered;
-        // pulsate container material's alpha to indicate interactability
-        containerRenderer.material.DOKill();
-        containerRenderer.material.DOFloat(0.5f, "_Alpha", 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     private void OnDisable()

@@ -94,8 +94,6 @@ public class HorusPalmProjectile : MonoBehaviour
         {
             fillOnShot.Fill();
         }
-
-        Debug.Log("HorusPalmProjectile collided with " + collision.gameObject.name);
     }
 
     public void Init(GameObject owner, Collider[] ownerColliders)
