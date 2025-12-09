@@ -532,7 +532,7 @@ public class YaggiSpitterController : MonoBehaviour
 
     public virtual void Hit(int damage)
     {
-        if (currentState is YaggiSpitterState.DYING)
+        if (currentState is YaggiSpitterState.DYING or YaggiSpitterState.DEAD)
         {
             return;
         }
