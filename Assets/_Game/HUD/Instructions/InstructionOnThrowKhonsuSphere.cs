@@ -4,12 +4,12 @@ using UnityEngine;
 public class InstructionOnThrowKhonsuSphere : MonoBehaviour
 {
     private InstructionElementController _instruction;
-    private KhonsuSphereController _controller;
+    private KhonsuSphereProjectile _controller;
     private bool _triggered;
 
     void Awake()
     {
-        _controller = FindFirstObjectByType<KhonsuSphereController>();
+        _controller = FindFirstObjectByType<KhonsuSphereProjectile>();
         _instruction = GetComponent<InstructionElementController>();
     }
 
@@ -17,7 +17,7 @@ public class InstructionOnThrowKhonsuSphere : MonoBehaviour
     {
         if (_triggered) return;
 
-        if (_controller.isKhonsuSphereActive)
+        if (_controller.isUpAndRunning)
         {
             _instruction.ProcessFollowedInstruction();
             _triggered = true;

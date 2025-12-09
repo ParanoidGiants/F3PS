@@ -14,7 +14,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
     public Rigidbody _rigidbody;
     public bool _isInitialized = false;
     public bool _isHit = false;
-    public bool _isUpAndRunning = false;
+    public bool isUpAndRunning = false;
     public float _speed;
     public Collider[] _collidersToIgnore;
 
@@ -31,9 +31,6 @@ public class KhonsuSphereProjectile : MonoBehaviour
     public float shakePower = 1f;
     public float enableCollisionsTime = 0f;
     public float enableCollisionsTimer = .2f;
-
-    public bool IsKhonsuSphereActiveAndEnabled => khonsuSphere.isActiveAndEnabled;
-    public bool IsProjectileUpAndRunning => _isUpAndRunning;
 
     private void Awake()
     {
@@ -83,7 +80,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     private void Update()
     {
-        if (!_isHit || !_isUpAndRunning) return;
+        if (!_isHit || !isUpAndRunning) return;
 
         var activeTime = KhonsuSphereData.ActiveTime + Time.deltaTime;
         PlayerEventController.SetKhonsuSphereActiveTime(activeTime);
@@ -140,14 +137,14 @@ public class KhonsuSphereProjectile : MonoBehaviour
             .SetEase(Ease.OutCubic)
             .OnComplete(() =>
              {
-                 _isUpAndRunning = true;
+                 isUpAndRunning = true;
              });
     }
 
     public void DeactivateKhonsuSphere()
     {
         PlayerEventController.SetKhonsuSphereActiveTime(0f);
-        _isUpAndRunning = false;
+        isUpAndRunning = false;
         khonsuSphere.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)
             .OnComplete(() =>
@@ -161,7 +158,7 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     public void InterruptThrow()
     {
-        _isUpAndRunning = false;
+        isUpAndRunning = false;
         khonsuSphere.Clear();
         khonsuSphere.gameObject.SetActive(false);
         gameObject.SetActive(false);

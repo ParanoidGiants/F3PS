@@ -60,8 +60,8 @@ public class KhonsuSphere : MonoBehaviour
     private void UpdateTimeScale(float timeScale)
     {
         var emissionColor = Color.Lerp(Color.white, baseColor, timeScale);
-        _renderer.material.SetFloat("_BrackeysMoveSpeed", timeScale * 0.25f);
-        _renderer.material.SetColor("_BrackeysEmission", emissionColor);
+        // _renderer.material.SetFloat("_BrackeysMoveSpeed", timeScale * 0.25f);
+        // _renderer.material.SetColor("_BrackeysEmission", emissionColor);
         foreach (var timeObject in timeObjects)
         {
             timeObject.PitchTimeScale(timeScale);
