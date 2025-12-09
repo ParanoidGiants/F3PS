@@ -52,6 +52,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
     public GameObject hittableParent;
     public Collider[] collidersThatShouldntBeHit;
     public Transform uiHealthBarAnchor;
+    public OnTouchHeal healthCollectable;
 
     [Space(20)]
     [Header("Settings")]
@@ -200,6 +201,7 @@ public class YaggiShieldSpitterController : MonoBehaviour
             case YaggiShieldSpitterState.DYING:
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
+                healthCollectable.gameObject.SetActive(true);
                 break;
             case YaggiShieldSpitterState.DEAD:
                 break;

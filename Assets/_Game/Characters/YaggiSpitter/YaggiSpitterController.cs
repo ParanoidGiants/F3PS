@@ -52,6 +52,7 @@ public class YaggiSpitterController : MonoBehaviour
     public SensorController sensorController;
     public GameObject hittableParent;
     public Transform uiHealthBarAnchor;
+    public OnTouchHeal healthCollectable;
 
     [Space(20)]
     [Header("Settings")]
@@ -209,6 +210,7 @@ public class YaggiSpitterController : MonoBehaviour
             case YaggiSpitterState.DYING:
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
+                healthCollectable.gameObject.SetActive(true);
                 break;
             case YaggiSpitterState.DEAD:
                 break;

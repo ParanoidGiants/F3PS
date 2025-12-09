@@ -55,6 +55,7 @@ public class YaggiStandardController : MonoBehaviour
     public GameObject hittableParent;
     public Collider attackHitBox;
     public Transform uiHealthBarAnchor;
+    public OnTouchHeal healthCollectable;
 
     [Space(20)]
     [Header("Settings")]
@@ -197,6 +198,7 @@ public class YaggiStandardController : MonoBehaviour
             case YaggiStandardState.DYING:
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
+                healthCollectable.gameObject.SetActive(true);
                 break;
             case YaggiStandardState.DEAD:
                 break;

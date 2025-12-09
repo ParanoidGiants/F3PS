@@ -58,6 +58,7 @@ public class ScorpionController : MonoBehaviour
     public GameObject chargeFlare;
     public Collider attackHitBox;
     public Transform uiHealthBarAnchor;
+    public OnTouchHeal healthCollectable;
 
     [Space(20)]
     [Header("Settings")]
@@ -180,6 +181,7 @@ public class ScorpionController : MonoBehaviour
             case ScorpionState.DYING:
                 navMeshAgent.isStopped = true;
                 animator.SetTrigger("Die");
+                healthCollectable.gameObject.SetActive(true);
                 break;
             case ScorpionState.DEAD:
                 break;
