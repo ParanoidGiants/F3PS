@@ -24,7 +24,7 @@ public class ScorpionHittable : Hittable
     override
     public void OnHit(int damage, Vector3 hitDirection)
     {
-        if (scorpion.isDead)
+        if (scorpion.IsDead)
         {
             return;
         }

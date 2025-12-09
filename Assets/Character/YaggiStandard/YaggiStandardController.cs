@@ -39,7 +39,6 @@ public class YaggiStandardController : MonoBehaviour
 {
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
-
     public bool IsDead => currentState is YaggiStandardState.DEAD or YaggiStandardState.DYING;
 
     public bool debugIsStopped;

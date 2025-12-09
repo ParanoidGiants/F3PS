@@ -22,7 +22,7 @@ public class YaghotepHittable : Hittable
     override
     public void OnHit(int damage, Vector3 hitDirection)
     {
-        if (yaggi.isDead)
+        if (yaggi.IsDead)
         {
             return;
         }

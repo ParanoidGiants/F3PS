@@ -1,6 +1,7 @@
 using DarkTonic.MasterAudio;
 using F3PS;
 using F3PS.AI.Sensors;
+using F3PS.AI.States;
 using F3PS.Enemy.UI;
 using System;
 using UnityEngine;
@@ -38,12 +39,12 @@ public class ScorpionController : MonoBehaviour
 {
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
+    public bool IsDead => currentState is ScorpionState.DYING or ScorpionState.DEAD;
 
     [Space(20)]
     [Header("Debug")]
     public EnemyHealthUIPool _healthUIPool;
     public ScorpionState currentState = ScorpionState.PATROLLING;
-    public bool isDead = false;
     public Vector3 checkingDestination = Vector3.zero;
 
     [Header("References")]

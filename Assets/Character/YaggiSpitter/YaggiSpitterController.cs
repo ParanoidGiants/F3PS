@@ -37,6 +37,7 @@ public class YaggiSpitterController : MonoBehaviour
 {
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
+    public bool IsDead => currentState is YaggiSpitterState.DYING or YaggiSpitterState.DEAD;
 
     public bool debugIsStopped;
     public float debugStoppingDistance;
@@ -127,7 +128,6 @@ public class YaggiSpitterController : MonoBehaviour
     [Header("Watchers")]
     public EnemyHealthUIPool _healthUIPool;
     public YaggiSpitterState currentState = YaggiSpitterState.IDLE;
-    public bool isDead = false;
     private Vector3 lastTargetPosition;
 
     protected void Awake()

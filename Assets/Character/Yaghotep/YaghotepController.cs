@@ -54,6 +54,7 @@ public class YaghotepController : MonoBehaviour
 {
     public float ScaledDeltaTime => timeObject.ScaledDeltaTime;
     public float TimeScale => timeObject.currentTimeScale;
+    public bool IsDead => currentState is YaghotepState.DYING or YaghotepState.DEAD;
 
     public YaghotepJumpAttack jumpAttack;
 
@@ -61,7 +62,6 @@ public class YaghotepController : MonoBehaviour
     public Transform navMeshDestination;
     public EnemyHealthUIPool _healthUIPool;
     public YaghotepState currentState = YaghotepState.IDLE;
-    public bool isDead = false;
     public Vector3 lastPosition;
     public bool debugIsStopped;
     public float debugStoppingDistance;
