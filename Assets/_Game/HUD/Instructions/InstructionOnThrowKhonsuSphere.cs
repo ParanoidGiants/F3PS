@@ -9,7 +9,7 @@ public class InstructionOnThrowKhonsuSphere : MonoBehaviour
 
     void Awake()
     {
-        _controller = FindFirstObjectByType<KhonsuSphereProjectile>();
+        _controller = FindFirstObjectByType<KhonsuSphereProjectile>(FindObjectsInactive.Include);
         _instruction = GetComponent<InstructionElementController>();
     }
 
