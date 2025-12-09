@@ -23,9 +23,6 @@ public class InstructionController : MonoBehaviour
         if (GameManager.Instance.saveGameManager.GameData.PlayerData.CurrentSpawnPoint == 0)
         {
             ShowMovementInstruction();
-            ShowSprintingInstruction();
-            ShowDodgeInstruction();
-            ShowJumpInstruction();
         }
 
         GameManager.Instance.saveGameManager.PlayerEventController.OnAttackUnlocked += (attack) =>
@@ -48,37 +45,49 @@ public class InstructionController : MonoBehaviour
     public void ShowMovementInstruction()
     {
         instructionOnMove.gameObject.SetActive(true);
-        instructionOnMove.SetupInstructionToFollow("Use the left stick to move");
+        instructionOnMove.SetupInstructionToFollow("Use [LEFT STICK] to move");
+        instructionOnMove.OnInstructionFollowed = () =>
+        {
+            ShowSprintingInstruction();
+        };
     }
 
     public void ShowSprintingInstruction()
     {
         instructionOnSprint.gameObject.SetActive(true);
-        instructionOnSprint.SetupInstructionToFollow("Hold ZL (the left shoulder trigger) to run faster");
+        instructionOnSprint.SetupInstructionToFollow("Hold [LEFT TRIGGER] to run faster");
+        instructionOnSprint.OnInstructionFollowed = () =>
+        {
+            ShowDodgeInstruction();
+        };
     }
 
     public void ShowDodgeInstruction()
     {
         instructionOnDodge.gameObject.SetActive(true);
-        instructionOnDodge.SetupInstructionToFollow("Press Y to dodge roll");
+        instructionOnDodge.SetupInstructionToFollow("Press [BUTTON WEST] to dodge roll");
+        instructionOnDodge.OnInstructionFollowed = () =>
+        {
+            ShowJumpInstruction();
+        };
     }
 
     public void ShowJumpInstruction()
     {
         instructionOnJump.gameObject.SetActive(true);
-        instructionOnJump.SetupInstructionToFollow("Press B to jump");
+        instructionOnJump.SetupInstructionToFollow("Press [BUTTON SOUTH] to jump");
     }
 
     public void ShowShootInstruction()
     {
         instructionOnShootHorusPalm.gameObject.SetActive(true);
-        instructionOnShootHorusPalm.SetupInstructionToFollow("Press the ZR (right shoulder trigger) to use the Horus Palm");
+        instructionOnShootHorusPalm.SetupInstructionToFollow("Press [RIGHT TRIGGER] to use the Horus Palm");
     }
     
 
     private void ShowThrowKhonsuSphereInstruction()
     {
         instructionOnThrowKhonsuSphere.gameObject.SetActive(true);
-        instructionOnThrowKhonsuSphere.SetupInstructionToFollow("Press the R (right shoulder button) to throw the Khonsu Sphere");
+        instructionOnThrowKhonsuSphere.SetupInstructionToFollow("Press [RIGHT SHOULDER] to throw the Khonsu Sphere");
     }
 }

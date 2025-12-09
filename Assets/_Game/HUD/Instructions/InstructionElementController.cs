@@ -6,6 +6,10 @@ public class InstructionElementController : MonoBehaviour
     public TMPro.TextMeshProUGUI instructionText;
     public Animator animator;
     public Action OnInstructionFollowed;
+    private void OnEnable()
+    {
+        animator.SetTrigger("Show");
+    }
 
     public void SetupInstructionToFollow(string text)
     {
