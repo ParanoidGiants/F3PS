@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class YaggiStandardHittable : Hittable
 {
     public YaggiStandardController yaggi;

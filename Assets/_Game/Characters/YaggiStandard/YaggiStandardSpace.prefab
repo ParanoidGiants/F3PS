@@ -388,9 +388,9 @@ MonoBehaviour:
   uiHealthBarAnchor: {fileID: 8810228909879380833}
   healthCollectable: {fileID: 3408606662450820247}
   health: 0
-  maxHealth: 500
+  maxHealth: 100
   moveSpeed: 5
-  idleDuration: 3
+  idleDuration: 1
   idleTime: 0
   patrolMoveSpeed: 5
   checkingMoveSpeed: 5
@@ -419,8 +419,8 @@ MonoBehaviour:
   attackAnticipationDuration: 1
   attackAnticipationRotationSpeed: 180
   attackExecutionTime: 0
-  attackExecutionDuration: 0.5
-  attackExecutionDistance: 12
+  attackExecutionDuration: 0.8
+  attackExecutionDistance: 20
   attackExecutionStartPosition: {x: 0, y: 0, z: 0}
   attackExecutionEndPosition: {x: 0, y: 0, z: 0}
   attackRecoveryTime: 0
