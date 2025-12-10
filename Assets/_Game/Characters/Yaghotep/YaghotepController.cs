@@ -56,8 +56,6 @@ public class YaghotepController : MonoBehaviour
     public float TimeScale => timeObject.currentTimeScale;
     public bool IsDead => currentState is YaghotepState.DYING or YaghotepState.DEAD;
 
-    public YaghotepJumpAttack jumpAttack;
-
     [Header("Debug")]
     public Transform navMeshDestination;
     public EnemyHealthUIPool _healthUIPool;
@@ -130,6 +128,7 @@ public class YaghotepController : MonoBehaviour
     [Header("Attacks")]
     public YaghotepSpawnMinionsAttack spawnAttack;
     public YaghotepFormationAttack formationAttack;
+    public YaghotepJumpAttack jumpAttack;
 
     protected void Awake()
     {
@@ -465,6 +464,7 @@ public class YaghotepController : MonoBehaviour
 
     private void DetermineAttackType(float distanceToTarget)
     {
+        Debug.Log($"Distance to target: {distanceToTarget}");
         switch (currentAttackPhase)
         {
             case YaghotepAttackPhase.INTRO:
