@@ -90,6 +90,7 @@ public class YaggiSpitterController : MonoBehaviour
     [Header("Dying Settings")]
     public bool fadingOut = false;
     public float dieTime = 0f;
+    public float fadeOutTime = 1f;
     public float fadeOutDuration = 1f;
 
     [Space(10)]
@@ -334,12 +335,12 @@ public class YaggiSpitterController : MonoBehaviour
                 if (!fadingOut)
                 {
                     fadingOut = true;
-                    animateMesh.FadeOut(fadeOutDuration);
                 }
 
-                if (fadeOutDuration >= 0f)
+                if (fadeOutTime >= 0f)
                 {
-                    fadeOutDuration -= ScaledDeltaTime;
+                    fadeOutTime -= ScaledDeltaTime;
+                    animateMesh.FadeOut(fadeOutTime, fadeOutDuration);
                     return;
                 }
                 SwitchState(YaggiSpitterState.DEAD);

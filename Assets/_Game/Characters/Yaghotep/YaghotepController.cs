@@ -111,6 +111,7 @@ public class YaghotepController : MonoBehaviour
     [Header("Dying Settings")]
     public bool fadingOut = false;
     public float dieTime = 0f;
+    public float fadeTime = 0f;
     public float fadeOutDuration = 1f;
 
     [Space(10)]
@@ -311,12 +312,14 @@ public class YaghotepController : MonoBehaviour
                 if (!fadingOut)
                 {
                     fadingOut = true;
-                    animateMesh.FadeOut(fadeOutDuration);
+                    fadeTime = fadeOutDuration;
+                    animateMesh.FadeOut(fadeTime,fadeOutDuration);
                 }
 
-                if (fadeOutDuration >= 0f)
+                if (fadeTime >= 0f)
                 {
-                    fadeOutDuration -= ScaledDeltaTime;
+                    fadeTime -= ScaledDeltaTime;
+                    animateMesh.FadeOut(fadeTime,fadeOutDuration);
                     return;
                 }
                 SwitchState(YaghotepState.DEAD);

@@ -93,6 +93,7 @@ public class YaggiStandardController : MonoBehaviour
     [Header("Dying Settings")]
     public bool fadingOut = false;
     public float dieTime = 0f;
+    public float fadeOutTime = 1f;
     public float fadeOutDuration = 1f;
 
     [Space(10)]
@@ -323,12 +324,13 @@ public class YaggiStandardController : MonoBehaviour
                 if (!fadingOut)
                 {
                     fadingOut = true;
-                    animateMesh.FadeOut(fadeOutDuration);
+                    fadeOutTime = fadeOutDuration;
                 }
 
-                if (fadeOutDuration >= 0f)
+                if (fadeOutTime >= 0f)
                 {
-                    fadeOutDuration -= ScaledDeltaTime;
+                    fadeOutTime -= ScaledDeltaTime;
+                    animateMesh.FadeOut(fadeOutTime, fadeOutDuration);
                     return;
                 }
                 SwitchState(YaggiStandardState.DEAD);

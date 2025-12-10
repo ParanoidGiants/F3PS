@@ -42,6 +42,7 @@ public class AnimateMesh : MonoBehaviour
         }
     }
 
+    // TODO: Maybe redundant with OnDisable
     private void OnDestroy()
     {
         if (_hitFlashSequence != null)
@@ -234,26 +235,15 @@ public class AnimateMesh : MonoBehaviour
 
     
 
-    public void FadeOut(float fadeDuration)
+    public void FadeOut(float fadeTime, float fadeDuration)
     {
-        var currentAlpha = 1f;
-        Tweener dying = DOTween.To(
-            () => currentAlpha,
-            x =>
+        var alpha = fadeTime / fadeDuration;
+        foreach (var renderer in _renderers)
+        {
+            foreach (var material in renderer.materials)
             {
-                currentAlpha = x;
-                foreach (var renderer in _renderers)
-                {
-                    foreach (var material in renderer.materials)
-                    {
-                        material.SetFloat("_Alpha", currentAlpha);
-                    }
-                }
-            },
-            0f,
-            fadeDuration
-        );
-        dying.timeScale = timeScale;
-        dying.Play();
+                material.SetFloat("_Alpha", alpha);
+            }
+        }
     }
 }

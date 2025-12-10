@@ -9,6 +9,7 @@ namespace F3PS.AI.States
         public AnimateMesh animateMesh;
         private float _dieTime;
         private float _fadeOutTime = 1f;
+        private float _fadeOutDuration = 1f;
         private bool _fadeOut = false;
         public AnimationClip dieAnimation;
 
@@ -34,12 +35,13 @@ namespace F3PS.AI.States
             if (!_fadeOut)
             {
                 _fadeOut = true;
-                animateMesh.FadeOut(_fadeOutTime);
+                _fadeOutTime = _fadeOutDuration;
             }
 
             if (_fadeOutTime >= 0f)
             {
                 _fadeOutTime -= enemy.ScaledDeltaTime;
+                animateMesh.FadeOut(_fadeOutTime, _fadeOutDuration);
                 return;
             }
             Debug.Log("Enemy Dead");
