@@ -68,7 +68,7 @@ public class RigidbodyHub : MonoBehaviour
             }
             else
             {
-                if (!isMovingByThotMind)
+                if (!isMovingByThotMind && !_rigidbody.isKinematic)
                 {
                     _rigidbody.linearVelocity *= relation;
                     _rigidbody.angularVelocity *= relation;
