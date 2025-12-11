@@ -141,6 +141,11 @@ public class SaveGameManager : MonoBehaviour
         var enemyGroupNames = new List<string>();
         var enemyGroups = FindObjectsByType<RegisterEnemy>(FindObjectsSortMode.InstanceID);
         enemyGroupNames.AddRange(enemyGroups.Select(enemyGroup => enemyGroup.gameObject.name));
+        if (enemyGroupNames.Count != enemyGroupNames.Distinct().Count())
+        {
+            Debug.LogError("Every enemy group needs to have a unique name");
+            throw new Exception("Duplicate enemy groups found");
+        }
         GameData.EnemiesData.Initialize(enemyGroupNames.ToArray());
 
         // register switches from scene
