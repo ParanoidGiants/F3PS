@@ -13,7 +13,7 @@ public class InstructionController : MonoBehaviour
 
 
 
-    private void Start()
+    private void OnEnable()
     {
         foreach (var instruction in GetComponentsInChildren<InstructionElementController>())
         {
@@ -25,21 +25,14 @@ public class InstructionController : MonoBehaviour
             ShowMovementInstruction();
         }
 
-        GameManager.Instance.saveGameManager.PlayerEventController.OnAttackUnlocked += (attack) =>
-        {
-            if (attack == Attack.HorusPalm)
-            {
-                ShowShootInstruction();
-            }
-        };
+        GameManager.Instance.saveGameManager.PlayerEventController.OnAttackUnlocked += ShowShootInstruction;
+        GameManager.Instance.saveGameManager.PlayerEventController.OnSkillUnlocked += ShowThrowKhonsuSphereInstruction;
+    }
 
-        GameManager.Instance.saveGameManager.PlayerEventController.OnSkillUnlocked += (skill) =>
-        {
-            if (skill == Skill.KhonsuSphere)
-            {
-                ShowThrowKhonsuSphereInstruction();
-            }
-        };
+    private void OnDisable()
+    {
+        GameManager.Instance.saveGameManager.PlayerEventController.OnAttackUnlocked -= ShowShootInstruction;
+        GameManager.Instance.saveGameManager.PlayerEventController.OnSkillUnlocked -= ShowThrowKhonsuSphereInstruction;
     }
 
     public void ShowMovementInstruction()
@@ -78,15 +71,24 @@ public class InstructionController : MonoBehaviour
         instructionOnJump.SetupInstructionToFollow("Press B to jump");
     }
 
-    public void ShowShootInstruction()
+    public void ShowShootInstruction(Attack attack)
     {
+        if (attack != Attack.HorusPalm)
+        {
+            return;
+        }
+
         instructionOnShootHorusPalm.gameObject.SetActive(true);
         instructionOnShootHorusPalm.SetupInstructionToFollow("Press ZR to use the Horus Palm");
     }
     
 
-    private void ShowThrowKhonsuSphereInstruction()
+    private void ShowThrowKhonsuSphereInstruction(Skill skill)
     {
+        if (skill != Skill.KhonsuSphere)
+        {
+            return;
+        }
         instructionOnThrowKhonsuSphere.gameObject.SetActive(true);
         instructionOnThrowKhonsuSphere.SetupInstructionToFollow("Press R to throw the Khonsu Sphere");
     }
