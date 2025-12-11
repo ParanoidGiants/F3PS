@@ -36,23 +36,23 @@ public class FallOnTouch : MonoBehaviour
 
     private void OnTriggerZoneEnter(Collider collider)
     {
-        if (!collider.TryGetComponent<ThirdPersonController>(out var player))
+        if (!collider.TryGetComponent<ThirdPersonController>(out var _))
         {
             return;
         }
         isTouched = true;
-        shakeAnimation.Play();
+        shakeAnimation?.Play();
     }
 
     private void OnTriggerZoneExit(Collider collider)
     {
-        if (!collider.TryGetComponent<ThirdPersonController>(out var player))
+        if (!collider.TryGetComponent<ThirdPersonController>(out var _))
         {
             return;
         }
         isTouched = false;
         shakeUntilFallTime = 0;
-        shakeAnimation.Pause();
+        shakeAnimation?.Pause();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -65,7 +65,7 @@ public class FallOnTouch : MonoBehaviour
         transform.rotation = startRotation;
         _rigidbodyHub.useGravity = false;
         _rigidbodyHub.SetKinematic();
-        shakeAnimation.Pause();
+        shakeAnimation?.Pause();
         isFalling = false;
         isTouched = false;
     }
@@ -80,7 +80,7 @@ public class FallOnTouch : MonoBehaviour
         shakeUntilFallTime += Time.deltaTime;
         if (shakeUntilFallTime >= shakeUntilFallDuration)
         {
-            shakeAnimation.Pause();
+            shakeAnimation?.Pause();
             isFalling = true;
             _rigidbodyHub.useGravity = true;
             _rigidbodyHub.UnsetKinematic();
