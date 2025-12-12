@@ -343,8 +343,8 @@ MonoBehaviour:
       CurrentHealth: 100
       MaxHealth: 100
       RotationSmoothTime: 0.12
-      RotationSpeedPitch: 0.2
-      RotationSpeedYaw: 0.2
+      RotationSpeedPitch: 0.6
+      RotationSpeedYaw: 0.6
       AimSpeed: 2
       CurrentSpawnPoint: 0
       AscendHeight: 1

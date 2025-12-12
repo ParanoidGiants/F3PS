@@ -100,17 +100,33 @@ public class ThirdPersonCameraSettings
         var look = GameManager.Instance.inputs.look;
         if (look.sqrMagnitude >= _threshold)
         {
-            //Don't multiply mouse input by Time.deltaTime;
-            float deltaTimeMultiplierPitch = GameManager.Instance.IsCurrentDeviceMouse
-                ? 1.0f
-                : Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedPitch;
-            float deltaTimeMultiplierYaw = GameManager.Instance. IsCurrentDeviceMouse
-                ? 1.0f
-                : Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedYaw;
+            float deltaTimeMultiplierPitch = 1f;
+            float deltaTimeMultiplierYaw = 1f;
+            if (!GameManager.Instance.IsCurrentDeviceMouse)
+            {
+                deltaTimeMultiplierPitch = Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedPitch;
+                deltaTimeMultiplierYaw = Time.unscaledDeltaTime * GameManager.Instance.GameData.PlayerData.RotationSpeedYaw;
+                // I don't know why, but for gamepads the look input is between -300 and 300
+                var gamePadMax = 300f;
+                // remap to -1 to 1 with S-curve sensitivity curve
+                var yawRemapped = Helper.Remap(Mathf.Abs(look.x), 0f, gamePadMax, 0f, 1f);
+                var yawModifier = Mathf.Sin(yawRemapped * Mathf.PI - Helper.HALF_PI) + 1f;
+                
+                var pitchRemapped = Helper.Remap(Mathf.Abs(look.y), 0f, gamePadMax, 0f, 1f);
+                var pitchModifier = Mathf.Sin(pitchRemapped * Mathf.PI - Helper.HALF_PI) + 1f;
 
+                Debug.Log($"Yaw input: {look.x}, remapped: {yawRemapped}, modifier: {yawModifier}");
+                Debug.Log($"Pitch input: {look.y}, remapped: {pitchRemapped}, modifier: {pitchModifier}");
+
+                look = new Vector2(
+                    look.x * yawModifier,
+                    look.y * pitchModifier
+                );
+            }
             cameraTargetYaw += look.x * deltaTimeMultiplierYaw;
             cameraTargetPitch += look.y * deltaTimeMultiplierPitch;
         }
+
 
         // clamp our rotations so our values are limited 360 degrees
         cameraTargetYaw = ClampAngle(cameraTargetYaw, float.MinValue, float.MaxValue);
