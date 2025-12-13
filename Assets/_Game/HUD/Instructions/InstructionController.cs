@@ -11,8 +11,6 @@ public class InstructionController : MonoBehaviour
     public InstructionElementController instructionOnShootHorusPalm;
     public InstructionElementController instructionOnThrowKhonsuSphere;
 
-
-
     private void OnEnable()
     {
         foreach (var instruction in GetComponentsInChildren<InstructionElementController>())
@@ -38,7 +36,7 @@ public class InstructionController : MonoBehaviour
     public void ShowMovementInstruction()
     {
         instructionOnMove.gameObject.SetActive(true);
-        instructionOnMove.SetupInstructionToFollow("Use the left stick to move");
+        instructionOnMove.ShowInstructionToFollow();
         instructionOnMove.OnInstructionFollowed = () =>
         {
             ShowSprintingInstruction();
@@ -48,7 +46,7 @@ public class InstructionController : MonoBehaviour
     public void ShowSprintingInstruction()
     {
         instructionOnSprint.gameObject.SetActive(true);
-        instructionOnSprint.SetupInstructionToFollow("Hold ZL to run faster");
+        instructionOnSprint.ShowInstructionToFollow();
         instructionOnSprint.OnInstructionFollowed = () =>
         {
             ShowDodgeInstruction();
@@ -58,7 +56,7 @@ public class InstructionController : MonoBehaviour
     public void ShowDodgeInstruction()
     {
         instructionOnDodge.gameObject.SetActive(true);
-        instructionOnDodge.SetupInstructionToFollow("Press Y to dodge roll");
+        instructionOnDodge.ShowInstructionToFollow();
         instructionOnDodge.OnInstructionFollowed = () =>
         {
             ShowJumpInstruction();
@@ -68,7 +66,7 @@ public class InstructionController : MonoBehaviour
     public void ShowJumpInstruction()
     {
         instructionOnJump.gameObject.SetActive(true);
-        instructionOnJump.SetupInstructionToFollow("Press B to jump");
+        instructionOnJump.ShowInstructionToFollow();
     }
 
     public void ShowShootInstruction(Attack attack)
@@ -79,7 +77,7 @@ public class InstructionController : MonoBehaviour
         }
 
         instructionOnShootHorusPalm.gameObject.SetActive(true);
-        instructionOnShootHorusPalm.SetupInstructionToFollow("Press ZR to use the Horus Palm");
+        instructionOnShootHorusPalm.ShowInstructionToFollow();
     }
     
 
@@ -90,6 +88,6 @@ public class InstructionController : MonoBehaviour
             return;
         }
         instructionOnThrowKhonsuSphere.gameObject.SetActive(true);
-        instructionOnThrowKhonsuSphere.SetupInstructionToFollow("Press R to throw the Khonsu Sphere");
+        instructionOnThrowKhonsuSphere.ShowInstructionToFollow();
     }
 }
