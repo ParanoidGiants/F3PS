@@ -57,6 +57,7 @@
   <Project Path="Unity.Formats.Fbx.Editor.csproj" />
   <Project Path="Unity.Performance.Profile-Analyzer.Editor.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
+  <Project Path="Unity.2D.Sprite.Editor.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
   <Project Path="Unity.Recorder.csproj" />
   <Project Path="Unity.ProBuilder.KdTree.csproj" />
@@ -88,6 +89,7 @@
   <Project Path="Unity.Formats.Fbx.Runtime.csproj" />
   <Project Path="Unity.Toolchain.Linux-x86_64.csproj" />
   <Project Path="Unity.Sysroot.Linux_x86_64.csproj" />
+  <Project Path="Unity.2D.Sprite.AIIntegration.Editor.csproj" />
   <Project Path="Unity.ProBuilder.Stl.csproj" />
   <Project Path="Unity.VisualScripting.DocCodeExamples.csproj" />
   <Project Path="Autodesk.Fbx.Editor.csproj" />
