@@ -51,6 +51,7 @@ namespace StarterAssets
         public float dodgeLandTime;
         public float dodgeCoolDownTime;
         public Vector3 dodgeDirection = Vector3.forward;
+        private float _dodgeSpeed;
 
         [Space(10)]
         [Header("Stair Climbing")]
@@ -80,14 +81,14 @@ namespace StarterAssets
         public float checkGroundTime = 0f;
 
         [Header("Watchers")]
-        [SerializeField] private bool _isGrounded;
-        [SerializeField] private bool _isSprinting;
-        [SerializeField] private bool _isShooting;
-        [SerializeField] private bool _isReloading;
-        [SerializeField] private bool _isDodging;
-        [SerializeField] private bool _isSlowMoToggle;
-        [SerializeField] private bool _isSlowMoStarted;
-        [SerializeField] private bool _isDying;
+        public bool isGrounded;
+        public bool isSprinting;
+        public bool isShooting;
+        public bool isReloading;
+        public bool isDodging;
+        public bool isSlowMoToggle;
+        public bool isSlowMoStarted;
+        public bool isDying;
         [SerializeField] private float _rotationVelocity;
         [SerializeField] private float _speed;
         [SerializeField] private float _animationBlend;
@@ -119,7 +120,7 @@ namespace StarterAssets
         private PlayerData Data => GameManager.Instance.GameData.PlayerData;
         private PlayerEventController DataEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
-        public bool IsGrounded => _isGrounded;
+        public bool IsGrounded => isGrounded;
 
         private void Awake()
         {
@@ -166,13 +167,13 @@ namespace StarterAssets
         private void Update()
         {
             if (GameManager.Instance.isMenuOpen) return;
-            if (_isDying) return;
+            if (isDying) return;
 
             cameraSettings.HandleFreeCamera();
 
             if (!Inputs.canControlPlayer) return;
             if (timeManager.isPaused) return;
-            if (_isDying) return;
+            if (isDying) return;
 
             if (wasHitAndIsInvincibleForTime)
             {
@@ -183,7 +184,7 @@ namespace StarterAssets
                 }
             }
 
-            animator.SetBool(_animIDGrounded, _isGrounded);
+            animator.SetBool(_animIDGrounded, isGrounded);
 
             skillManager.OnUpdate();
             attackManager.OnUpdate();
@@ -198,7 +199,7 @@ namespace StarterAssets
             {
                 cameraSettings.CameraTargetRotation();
             }
-            if (Inputs.canControlPlayer && !timeManager.isPaused && !_isDying)
+            if (Inputs.canControlPlayer && !timeManager.isPaused && !isDying)
             {
                 skillManager.OnLateUpdate();
             }
@@ -215,7 +216,7 @@ namespace StarterAssets
 
         private void FixedUpdate()
         {
-            if (!Inputs.canControlPlayer || timeManager.isPaused || _isDying) return;
+            if (!Inputs.canControlPlayer || timeManager.isPaused || isDying) return;
 
             GroundedCheck();
             UpdatePlatformVelocity();
@@ -229,8 +230,57 @@ namespace StarterAssets
                 JumpAndDodge();
             }
 
-            Move(skillManager.IsAiming());
+            if (isDodging)
+            {
+                HandleDodgeRoll();
+            }
+            else
+            {
+                Move(skillManager.IsAiming());
+            }
         }
+
+        private void HandleDodgeRoll()
+        {
+            if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
+            {
+                isDodging = false;
+                return;
+            }
+            else if (dodgeAscendTime < Data.DodgeAscendTimer)
+            {
+                dodgeAscendTime += Time.deltaTime;
+            }
+            else if (isGrounded)
+            {
+                dodgeAscendTime = Data.DodgeAscendTimer;
+                dodgeLandTime += Time.deltaTime;
+            }
+            else
+            {
+                dodgeAscendTime = Data.DodgeAscendTimer;
+            }
+
+            var currentTime = dodgeAscendTime + dodgeLandTime;
+            var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
+            var timeFactor = currentTime / totalTime;
+            timeFactor = Mathf.Min(timeFactor, 1f);
+            var speed = Mathf.Lerp(
+                _dodgeSpeed,
+                0f,
+                timeFactor
+            );
+            _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
+            _lookYaw = Mathf.SmoothDampAngle(
+                transform.eulerAngles.y,
+                _targetYaw,
+                ref _rotationVelocity,
+                Data.RotationSmoothTime * Time.unscaledDeltaTime
+            );
+            _rigidbody.linearVelocity = dodgeDirection * speed
+                + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
+        }
+
         private void UpdatePlatformVelocity()
         {
             if (_activePlatform == null)
@@ -261,7 +311,7 @@ namespace StarterAssets
 
             if (Physics.SphereCast(spherePosition + Vector3.up * 0.1f, GroundedRadius, Vector3.down, out RaycastHit hit, 0.2f, GroundLayers, QueryTriggerInteraction.Ignore))
             {
-                _isGrounded = true;
+                isGrounded = true;
                 groundNormal = hit.normal;
 
                 Rigidbody newPlatform = hit.collider.GetComponentInParent<Rigidbody>();
@@ -272,7 +322,7 @@ namespace StarterAssets
             }
             else
             {
-                _isGrounded = false;
+                isGrounded = false;
                 groundNormal = Vector3.up;
 
                 if (_activePlatform != null)
@@ -295,45 +345,6 @@ namespace StarterAssets
         }
         private void Move(bool isAiming)
         {
-            if (_isDodging)
-            {
-
-                if (dodgeAscendTime >= Data.DodgeAscendTimer && dodgeLandTime >= Data.DodgeLandTimer)
-                {
-                    _isDodging = false;
-                    return;
-                }
-                else if (dodgeAscendTime < Data.DodgeAscendTimer)
-                {
-                    dodgeAscendTime += Time.deltaTime;
-                }
-                else if (_isGrounded)
-                {
-                    dodgeAscendTime = Data.DodgeAscendTimer;
-                    dodgeLandTime += Time.deltaTime;
-                }
-                else
-                {
-                    dodgeAscendTime = Data.DodgeAscendTimer;
-                }
-
-                var currentTime = dodgeAscendTime + dodgeLandTime;
-                var totalTime = Data.DodgeAscendTimer + Data.DodgeLandTimer;
-                var timeFactor = currentTime / totalTime;
-                timeFactor = Mathf.Min(timeFactor, 1f);
-                var speed = Mathf.Lerp(Data.DodgeSpeed, 0f, Mathf.Pow(timeFactor, 4f));
-                _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
-                _lookYaw = Mathf.SmoothDampAngle(
-                    transform.eulerAngles.y,
-                    _targetYaw,
-                    ref _rotationVelocity,
-                    Data.RotationSmoothTime * Time.unscaledDeltaTime
-                );
-                _rigidbody.linearVelocity = dodgeDirection * speed
-                    + new Vector3(0.0f, currentVerticalSpeed, 0.0f);
-                return;
-            }
-
             float targetSpeed = 0f;
             if (Inputs.move.magnitude > 0f)
             {
@@ -341,7 +352,7 @@ namespace StarterAssets
                 {
                     targetSpeed = Data.AimSpeed;
                 }
-                else if (_isSprinting)
+                else if (isSprinting)
                 {
                     targetSpeed = Data.SprintSpeed;
                 }
@@ -435,20 +446,21 @@ namespace StarterAssets
         {
             var moving = Inputs.move != Vector2.zero;
             var sprint = Inputs.sprint;
-            if (!sprint || !Data.UnlockedAbilities.Contains(Ability.Sprint))
+            if (!sprint)
             {
-                _isSprinting = false;
+                isSprinting = false;
                 return;
             }
+
             var sprintStaminaDepletion = GameManager.Instance.GameData.PlayerData.SprintDepletionRate * Time.deltaTime;
-            if (staminaManager.IsRecoveringStamina || !moving || !_isGrounded)
+            if (staminaManager.IsRecoveringStamina || !moving)
             {
-                _isSprinting = false;
+                isSprinting = false;
             }
             else
             {
                 staminaManager.Deplete(sprintStaminaDepletion);
-                _isSprinting = true;
+                isSprinting = true;
             }
         }
 
@@ -457,7 +469,6 @@ namespace StarterAssets
             transform.position = beforeLastValidGroundPosition + Vector3.up;
             _rigidbody.linearVelocity = Vector3.zero;
         }
-
 
         private void JumpAndDodge()
         {
@@ -470,7 +481,7 @@ namespace StarterAssets
             wasDodgePressedLastFrame = dodgeInput;
             if (isAscending 
                 || isGliding
-                || !_isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
+                || !isGrounded && groundedCoyoteDuration <= _groundedCoyoteTime
             ) {
                 return;
             }
@@ -485,7 +496,7 @@ namespace StarterAssets
                 isAscending = true;
                 ascendTime = 0f;
             }
-            else if (dodge && dodgeCoolDownTime <= 0.0f && !staminaManager.IsRecoveringStamina)
+            else if (dodge && dodgeCoolDownTime <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 currentVerticalSpeed = Mathf.Sqrt(Data.DodgeHeight * -2f * Gravity);
@@ -495,11 +506,11 @@ namespace StarterAssets
 
                 _targetYaw = cameraSettings.GetTargetYawFromInputDirection(_lastInputDirection);
                 dodgeDirection = Quaternion.Euler(0.0f, _targetYaw, 0.0f) * Vector3.forward;
-                _isDodging = true;
+                isDodging = true;
                 dodgeAscendTime = 0f;
                 dodgeLandTime = 0f;
+                _dodgeSpeed = isSprinting ? Data.SprintSpeed / Data.MoveSpeed * Data.DodgeSpeed : Data.DodgeSpeed;
                 dodgeCoolDownTime = Data.DodgeCoolDownTimer;
-                staminaManager.Deplete(Data.DodgeStaminaDepletionRate);
             }
         }
 
@@ -518,7 +529,7 @@ namespace StarterAssets
         private void  HandleFallAndGravity()
         {
             var jumpInput = Inputs.jump;
-            if (_isGrounded)
+            if (isGrounded)
             {
                 animator.SetBool(_animIDDodge, false);
 
@@ -605,7 +616,7 @@ namespace StarterAssets
 
         public void Hit(int damage, Vector3 hitDirection)
         {
-            if (_isDying || wasHitAndIsInvincibleForTime)
+            if (isDying || wasHitAndIsInvincibleForTime)
             {
                 return;
             }
@@ -613,9 +624,9 @@ namespace StarterAssets
 
             DataEventController.UpdateCurrentHealth(Data.CurrentHealth - damage);
             MasterAudio.PlaySound3DAtTransformAndForget("Hit", transform);
-            if (Data.CurrentHealth <= 0 && !_isDying)
+            if (Data.CurrentHealth <= 0 && !isDying)
             {
-                _isDying = true;
+                isDying = true;
                 Die(hitDirection);
             }
             else
@@ -643,7 +654,7 @@ namespace StarterAssets
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
             Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-            if (_isGrounded) Gizmos.color = transparentGreen;
+            if (isGrounded) Gizmos.color = transparentGreen;
             else Gizmos.color = transparentRed;
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
@@ -697,23 +708,27 @@ namespace StarterAssets
         private IEnumerator FreezeAndRevertToPositionCoroutine(Vector3 position, Quaternion rotation)
         {
             Debug.Log("FreezeAndRevertToPosition");
+            Debug.Log($"CurrentPosition: {_rigidbody.position}");
+            Debug.Log($"TargetPosition: {position}");
             var flashScreenController = FindFirstObjectByType<FlashScreenController>();
-            animateMesh.FlashFreeze();
+            animateMesh.FlashFreeze(0f);
             Inputs.canControlPlayer = false;
             animator.speed = 0f;
             _rigidbody.isKinematic = true;
-            yield return new WaitForSeconds(0.5f);
-            flashScreenController.CoverScreen();
+            flashScreenController.CoverScreen(0.1f);
             _rigidbody.MovePosition(position);
             _rigidbody.MoveRotation(rotation);
             yield return new WaitForFixedUpdate();
+            Debug.Log(_rigidbody.isKinematic);
+            Debug.Log($"New Position {_rigidbody.position}");
             cameraSettings.Spawn(rotation);
             _targetYaw = cameraSettings.cameraTargetYaw;
             _lookYaw = cameraSettings.cameraTargetYaw;
             _rotationVelocity = 0f;
             armature.rotation = Quaternion.Euler(0.0f, cameraSettings.cameraTargetYaw, 0.0f);
-            flashScreenController.UncoverScreen();
-            animateMesh.Unfreeze();
+            flashScreenController.UncoverScreen(1f);
+            animateMesh.Unfreeze(0.5f);
+            yield return new WaitForFixedUpdate();
             animator.speed = 1f;
             _rigidbody.isKinematic = false;
             Inputs.canControlPlayer = true;

@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b35957b527efc041a89a9e4adf14202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveGameManager: {fileID: 2927450651173564445}
+  saveGameManager: {fileID: 3507172961415624273}
   inputs: {fileID: 5736421558823638681}
   _fps: 60
   isMenuOpen: 0
@@ -287,7 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6439659538927075417}
-  - component: {fileID: 2927450651173564445}
+  - component: {fileID: 3507172961415624273}
   m_Layer: 0
   m_Name: SaveGameManager
   m_TagString: Untagged
@@ -310,7 +310,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 153210392170721218}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2927450651173564445
+--- !u!114 &3507172961415624273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -325,7 +325,7 @@ MonoBehaviour:
   GameData:
     PlayerData:
       MoveSpeed: 30
-      SpeedChangeRate: 15
+      SpeedChangeRate: 10
       SprintDepletionRate: 0.05
       SprintSpeed: 45
       JumpHeight: 8
@@ -335,7 +335,6 @@ MonoBehaviour:
       DodgeAscendTimer: 0.05
       DodgeLandTimer: 0.1
       DodgeCoolDownTimer: 0.4
-      DodgeStaminaDepletionRate: 0.15
       CurrentStamina: 1
       MaxStamina: 1
       StaminaRecoveryRate: 0.2
@@ -344,13 +343,13 @@ MonoBehaviour:
       CurrentHealth: 100
       MaxHealth: 100
       RotationSmoothTime: 0.12
-      RotationSpeedPitch: 0.2
-      RotationSpeedYaw: 0.2
+      RotationSpeedPitch: 0.6
+      RotationSpeedYaw: 0.6
       AimSpeed: 2
       CurrentSpawnPoint: 0
       AscendHeight: 1
       AscendDuration: 1
-      GlideDuration: 1
+      GlideDuration: 1.1
       GlideDepletionRate: 0.5
       LandingDepth: 20
       UnlockedAttacks: 
@@ -358,13 +357,13 @@ MonoBehaviour:
       OsirisKickData:
         Damage: 10
         NumberOfProjectiles: 8
-        StaminaCost: 10
-        SpreadAngle: 45
+        StaminaCost: 0.2
+        SpreadAngle: 20
         AttackSpeed: 100
         AttackCoolDownTimer: 0.2
         ProjectileLifeDuration: 5
       HorusPalmData:
-        Damage: 20
+        Damage: 15
         AttackSpeed: 100
         ImpactForceMultiplier: 1
         AttackCoolDownTimer: 0.2
@@ -405,7 +404,8 @@ MonoBehaviour:
       Switches: []
     DoorsData:
       Doors: []
-    EnemiesData: []
+    EnemiesData:
+      Enemies: []
 --- !u!1 &6633928464503870051
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,7 +462,6 @@ MonoBehaviour:
   skill: 0
   grab: 0
   aim: 0
-  reload: 0
   slowmo: 0
   dodge: 0
   switchWeapon: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using DG.Tweening;
 using F3PS;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,23 +28,20 @@ public class FillOnShot : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    public void Fill()
     {
         if (isFilled)
         {
             return;
         }
 
-        if (collision.gameObject.TryGetComponent<OsirisKickProjectile>(out var _) || collision.gameObject.TryGetComponent<HorusPalmProjectile>(out var _))
+        fill += fillPerProjectile;
+        fill = Mathf.Clamp01(fill);
+        liquidRenderer.material.SetFloat("_Fill", fill);
+        if (Mathf.Approximately(fill, 1f))
         {
-            fill += fillPerProjectile;
-            fill = Mathf.Clamp01(fill);
-            liquidRenderer.material.SetFloat("_Fill", fill);
-            if (Mathf.Approximately(fill, 1f))
-            {
-                SwitchEventController.UpdateSwitchTriggered(gameObject.name);
-                isFilledEvent.Invoke();
-            }
+            SwitchEventController.UpdateSwitchTriggered(gameObject.name);
+            isFilledEvent.Invoke();
         }
     }
 

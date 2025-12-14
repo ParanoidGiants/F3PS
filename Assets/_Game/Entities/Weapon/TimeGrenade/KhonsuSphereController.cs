@@ -22,7 +22,6 @@ public class KhonsuSphereController : MonoBehaviour
     [Space(10)]
     [Header("Watchers")]
     public bool isThrown;
-    public bool isKhonsuSphereActive;
     public bool isAimingThisFrame;
     public bool wasAimingLastFrame;
     public bool isDeactivated;
@@ -45,7 +44,7 @@ public class KhonsuSphereController : MonoBehaviour
         isAimingThisFrame = isAiming;
 
         throwDirection = (targetPosition - spawnTransform.position).normalized;
-        if (khonsuSphereProjectile.IsProjectileUpAndRunning)
+        if (khonsuSphereProjectile.isUpAndRunning)
         {
             if (isAimingThisFrame && !wasAimingLastFrame)
             {
@@ -63,7 +62,7 @@ public class KhonsuSphereController : MonoBehaviour
                 khonsuSphereProjectile.InterruptThrow();
             }
         }
-        else if (!khonsuSphereProjectile.IsKhonsuSphereActiveAndEnabled)
+        else if (!khonsuSphereProjectile.khonsuSphere.isActiveAndEnabled)
         {
             if (!isDeactivated)
             {
@@ -160,9 +159,9 @@ public class KhonsuSphereController : MonoBehaviour
 
     public bool IsAiming()
     {
-        return !khonsuSphereProjectile.IsProjectileUpAndRunning
+        return !khonsuSphereProjectile.isUpAndRunning
             && !isThrown
-            && !khonsuSphereProjectile.IsKhonsuSphereActiveAndEnabled
+            && !khonsuSphereProjectile.isActiveAndEnabled
             && !isDeactivated
             && isAimingThisFrame
             && wasAimingLastFrame;

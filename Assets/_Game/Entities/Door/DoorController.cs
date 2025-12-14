@@ -33,6 +33,11 @@ public class DoorController : MonoBehaviour
     public TimeObject _timeObject;
 
     [Space(10)]
+    [Header("Door Rendering")]
+    public Renderer doorRenderer;
+
+
+    [Space(10)]
     [Header("Watcher")]
     public DoorState state = DoorState.CLOSED;
     public float _animationTime = 0f;
@@ -112,6 +117,7 @@ public class DoorController : MonoBehaviour
             return;
         }
         state = DoorState.OPENING;
+        doorRenderer.material.EnableKeyword("_EMISSION");
         GameManager.Instance.saveGameManager.DoorEventController.UpdateDoorOpened(gameObject.name);
         Debug.Log("Opening Door");
     }

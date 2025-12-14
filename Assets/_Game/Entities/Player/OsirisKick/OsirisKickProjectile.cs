@@ -78,6 +78,11 @@ public class OsirisKickProjectile : MonoBehaviour
         {
             hittable.OnHit(OsirisKickData.Damage, transform.forward);
         }
+
+        if (collision.gameObject.TryGetComponent<FillOnShot>(out var fillOnShot))
+        {
+            fillOnShot.Fill();
+        }
     }
 
     public void Init(GameObject owner, Collider[] ownerColliders)

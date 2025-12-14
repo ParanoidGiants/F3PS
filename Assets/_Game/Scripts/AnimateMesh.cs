@@ -42,6 +42,7 @@ public class AnimateMesh : MonoBehaviour
         }
     }
 
+    // TODO: Maybe redundant with OnDisable
     private void OnDestroy()
     {
         if (_hitFlashSequence != null)
@@ -205,19 +206,11 @@ public class AnimateMesh : MonoBehaviour
     [Space(20)]
     [Header("Freeze Flash Animation Settings")]
     public Color freezeEmissionColor;
-    public float unfreezeDuration;
 
-    public void FlashFreeze()
-    {
-        SetEmission(freezeEmissionColor);
-    }
-
-    public void Unfreeze()
+    private void Flash(Color startEmission, Color endEmission, float duration)
     {
         var animate = 0f;
-        Color startEmission = freezeEmissionColor;
-        Color endEmission = Color.black;
-        Tweener unfreeze = DOTween.To(
+        Tweener flash = DOTween.To(
             () => animate,
             x =>
             {
@@ -226,32 +219,31 @@ public class AnimateMesh : MonoBehaviour
                 SetEmission(emission);
             },
             1f,
-            unfreezeDuration
+            duration
         );
+    }
+
+    public void FlashFreeze(float duration)
+    {
+        Flash(Color.black, freezeEmissionColor, duration);
+    }
+
+    public void Unfreeze(float duration)
+    {
+        Flash(freezeEmissionColor, Color.black, duration);
     }
 
     
 
-    public void FadeOut(float fadeDuration)
+    public void FadeOut(float fadeTime, float fadeDuration)
     {
-        var currentAlpha = 1f;
-        Tweener dying = DOTween.To(
-            () => currentAlpha,
-            x =>
+        var alpha = fadeTime / fadeDuration;
+        foreach (var renderer in _renderers)
+        {
+            foreach (var material in renderer.materials)
             {
-                currentAlpha = x;
-                foreach (var renderer in _renderers)
-                {
-                    foreach (var material in renderer.materials)
-                    {
-                        material.SetFloat("_Alpha", currentAlpha);
-                    }
-                }
-            },
-            0f,
-            fadeDuration
-        );
-        dying.timeScale = timeScale;
-        dying.Play();
+                material.SetFloat("_Alpha", alpha);
+            }
+        }
     }
 }

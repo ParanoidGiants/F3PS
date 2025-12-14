@@ -8,13 +8,13 @@ public class FlashScreenController : MonoBehaviour
 
     private void Awake() { hudOverlay = GetComponent<Image>(); }
 
-    public void CoverScreen()
+    public void CoverScreen(float duration)
     {
-        hudOverlay.color = new Color(1, 1, 1, 1);
+        hudOverlay.DOFade(1, duration);
     }
 
-    public void UncoverScreen()
+    public void UncoverScreen(float duration)
     {
-        hudOverlay.DOFade(0, 0.25f);
+        hudOverlay.DOFade(0, duration);
     }
 }

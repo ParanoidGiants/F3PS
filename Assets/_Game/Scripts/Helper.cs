@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public static class Helper
 {
+    public static float HALF_PI = Mathf.PI / 2f;
     public static LayerMask PlayerLayer => LayerMask.GetMask("Character");
     public static LayerMask DefaultLayer => LayerMask.GetMask("Default");
     public static LayerMask GroundLayer => LayerMask.GetMask("Ground");
@@ -129,5 +130,10 @@ public static class Helper
             }
         }
         return -1f;
+    }
+
+    public static float Remap(this float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }

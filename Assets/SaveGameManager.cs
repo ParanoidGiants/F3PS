@@ -11,6 +11,7 @@ public class SaveGameManager : MonoBehaviour
     public PlayerEventController PlayerEventController;
     public SwitchEventController SwitchEventController;
     public DoorEventController DoorEventController;
+    public EnemyEventController EnemyEventController;
 
     private const string GAME_DATA = "GameData";
     private const string DEFAULT_GAME_DATA = "GameDataDefault";
@@ -18,9 +19,14 @@ public class SaveGameManager : MonoBehaviour
 
     private void Awake()
     {
+        CreateDefaultGameData();
+        var gameDataJson = JsonUtility.ToJson(GameData);
+        PlayerPrefs.SetString(DEFAULT_GAME_DATA, gameDataJson);
+        PlayerPrefs.Save();
         PlayerEventController = new PlayerEventController();
         SwitchEventController = new SwitchEventController();
         DoorEventController = new DoorEventController();
+        EnemyEventController = new EnemyEventController();
     }
 
     private void OnEnable()
@@ -38,6 +44,7 @@ public class SaveGameManager : MonoBehaviour
         PlayerEventController.InitializeData(GameData.PlayerData);
         SwitchEventController.InitializeData(GameData.SwitchesData);
         DoorEventController.InitializeData(GameData.DoorsData);
+        EnemyEventController.InitializeData(GameData.EnemiesData);
     }
 
     public GameData LoadCurrentGameData()
@@ -78,13 +85,6 @@ public class SaveGameManager : MonoBehaviour
         }
     }
 
-    private void SaveDefaultGameData()
-    {
-        var gameDataJson = JsonUtility.ToJson(GameData);
-        PlayerPrefs.SetString(DEFAULT_GAME_DATA, gameDataJson);
-        PlayerPrefs.Save();
-    }
-
     private void OnCurrentSpawnPointChanged(int _)
     {
         SaveGameData();
@@ -98,18 +98,15 @@ public class SaveGameManager : MonoBehaviour
             ** Save game data from Inspector is used.
             ** Just use values found in inspector and scene.
             */
-            Debug.Log("Not isActiveAndEnabled");
             InitializeEventControllers();
             return;
         }
 
-        Debug.Log("isActiveAndEnabled");
         if (HasSaveGameData())
         {
             /*
             ** Use Existing save game data.
             **/
-            Debug.Log("HasSaveGameData");
             GameData = LoadCurrentGameData();
             InitializeEventControllers();
             return;
@@ -120,8 +117,6 @@ public class SaveGameManager : MonoBehaviour
         **/
         try
         {
-            Debug.Log("HasNoSaveGameData");
-            CreateDefaultGameData();
             InitializeEventControllers();
         }
         catch (Exception ex)
@@ -135,16 +130,15 @@ public class SaveGameManager : MonoBehaviour
     private void CreateDefaultGameData()
     {
         // register enemies from scene
-        var enemiesInstanceIds = new List<int>();
-        var scorpions = FindObjectsByType<ScorpionController>(FindObjectsSortMode.InstanceID);
-        var yaggiStandards = FindObjectsByType<YaggiStandardController>(FindObjectsSortMode.InstanceID);
-        var yaggiSpitters = FindObjectsByType<YaggiSpitterController>(FindObjectsSortMode.InstanceID);
-        var yaggiShieldSpitters = FindObjectsByType<YaggiShieldSpitterController>(FindObjectsSortMode.InstanceID);
-        enemiesInstanceIds.AddRange(scorpions.Select(scorpion => scorpion.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiStandards.Select(yaggiStandard => yaggiStandard.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiSpitters.Select(yaggiSpitter => yaggiSpitter.gameObject.GetInstanceID()));
-        enemiesInstanceIds.AddRange(yaggiShieldSpitters.Select(yaggiShieldSpitter => yaggiShieldSpitter.gameObject.GetInstanceID()));
-        GameData.RegisterAllEnemies(enemiesInstanceIds.ToArray());
+        var enemyGroupNames = new List<string>();
+        var enemyGroups = FindObjectsByType<RegisterEnemy>(FindObjectsSortMode.InstanceID);
+        enemyGroupNames.AddRange(enemyGroups.Select(enemyGroup => enemyGroup.gameObject.name));
+        if (enemyGroupNames.Count != enemyGroupNames.Distinct().Count())
+        {
+            Debug.LogError("Every enemy group needs to have a unique name");
+            throw new Exception("Duplicate enemy groups found");
+        }
+        GameData.EnemiesData.Initialize(enemyGroupNames.ToArray());
 
         // register switches from scene
         GameData.SwitchesData = new SwitchesData();
@@ -172,8 +166,5 @@ public class SaveGameManager : MonoBehaviour
             throw new Exception("Duplicate doors found");
         }
         GameData.DoorsData.Initialize(doorsIds.ToArray());
-
-        SaveDefaultGameData();
-        SaveGameData();
     }
 }

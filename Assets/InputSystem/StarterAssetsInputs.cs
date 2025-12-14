@@ -22,10 +22,7 @@ namespace StarterAssets
 		public bool shoot;
         public bool skill;
         public bool grab;
-
-
         public bool aim;
-		public bool reload;
 		public bool slowmo;
 		public bool dodge;
         public bool switchWeapon;
@@ -86,11 +83,6 @@ namespace StarterAssets
         public void OnAim(InputValue value)
 		{
 			AimInput(value.isPressed);
-		}
-
-		public void OnReload(InputValue value)
-		{
-			ReloadInput(value.isPressed);
 		}
 
 		public void OnSlowMo(InputValue value)
@@ -172,11 +164,6 @@ namespace StarterAssets
 		private void AimInput(bool newAimState)
 		{
 			aim = newAimState;
-		}
-		
-		private void ReloadInput(bool valueIsPressed)
-		{
-			reload = valueIsPressed;
 		}
 
 		private void SlowMoInput(bool valueIsPressed)

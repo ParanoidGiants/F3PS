@@ -15,6 +15,11 @@ public class Hittable : MonoBehaviour
         
     public Vector3 Center()
     {
+        if (_collider == null)
+        {
+            Debug.LogWarning($"Collider of {owner.name} is null in Hittable.Center()");
+            return owner.transform.position;
+        }
         return _collider.bounds.center;
     }
 

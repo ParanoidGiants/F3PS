@@ -12,11 +12,14 @@ public class FallOnTouch : MonoBehaviour
     public bool isFalling;
     private TriggerZone _triggerZone;
     private Vector3 startPosition;
+    private Quaternion startRotation;
+
 
     private void Awake()
     {
         _triggerZone = GetComponentInChildren<TriggerZone>();
         startPosition = transform.position;
+        startRotation = transform.rotation;
         _rigidbodyHub = GetComponent<RigidbodyHub>();
         _rigidbodyHub.SetKinematic();
         _rigidbodyHub.useGravity = false;
@@ -33,23 +36,23 @@ public class FallOnTouch : MonoBehaviour
 
     private void OnTriggerZoneEnter(Collider collider)
     {
-        if (!collider.TryGetComponent<ThirdPersonController>(out var player))
+        if (!collider.TryGetComponent<ThirdPersonController>(out var _))
         {
             return;
         }
         isTouched = true;
-        shakeAnimation.Play();
+        shakeAnimation?.Play();
     }
 
     private void OnTriggerZoneExit(Collider collider)
     {
-        if (!collider.TryGetComponent<ThirdPersonController>(out var player))
+        if (!collider.TryGetComponent<ThirdPersonController>(out var _))
         {
             return;
         }
         isTouched = false;
         shakeUntilFallTime = 0;
-        shakeAnimation.Pause();
+        shakeAnimation?.Pause();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -59,9 +62,10 @@ public class FallOnTouch : MonoBehaviour
             return;
         }
         transform.position = startPosition;
+        transform.rotation = startRotation;
         _rigidbodyHub.useGravity = false;
         _rigidbodyHub.SetKinematic();
-        shakeAnimation.Pause();
+        shakeAnimation?.Pause();
         isFalling = false;
         isTouched = false;
     }
@@ -74,10 +78,9 @@ public class FallOnTouch : MonoBehaviour
         }
 
         shakeUntilFallTime += Time.deltaTime;
-        Debug.Log(shakeUntilFallTime);
         if (shakeUntilFallTime >= shakeUntilFallDuration)
         {
-            shakeAnimation.Pause();
+            shakeAnimation?.Pause();
             isFalling = true;
             _rigidbodyHub.useGravity = true;
             _rigidbodyHub.UnsetKinematic();

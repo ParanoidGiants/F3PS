@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "StarterAssets",
     "maps": [
         {
@@ -72,15 +73,6 @@
                     "name": "Aim",
                     "type": "PassThrough",
                     "id": "eeaad758-1720-4d5d-88a7-3fd7c28c55c0",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "PassThrough",
-                    "id": "8d948e55-3097-46d6-b803-d8a7ad4716c2",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -361,7 +353,7 @@
                 {
                     "name": "",
                     "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -427,33 +419,11 @@
                 {
                     "name": "",
                     "id": "5bb57161-7efe-4fc1-ae3a-c3451f051628",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0c6ff8f6-35c4-48ee-a579-6f0181ad95c1",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "efeb28bc-2bdf-47d6-9de9-c55ae3c11993",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -779,7 +749,7 @@
                 {
                     "name": "",
                     "id": "efba5c20-dcff-429f-9844-b9e65577e16b",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
