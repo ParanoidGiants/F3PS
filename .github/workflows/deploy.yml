@@ -10,6 +10,7 @@ on:
       - 'release/*'
       - development
       - main
+  workflow_dispatch:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
