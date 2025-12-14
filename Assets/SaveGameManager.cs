@@ -19,6 +19,7 @@ public class SaveGameManager : MonoBehaviour
 
     private void Awake()
     {
+        SaveDefaultGameData();
         PlayerEventController = new PlayerEventController();
         SwitchEventController = new SwitchEventController();
         DoorEventController = new DoorEventController();
