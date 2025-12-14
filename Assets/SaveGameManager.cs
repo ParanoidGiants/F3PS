@@ -19,7 +19,10 @@ public class SaveGameManager : MonoBehaviour
 
     private void Awake()
     {
-        SaveDefaultGameData();
+        CreateDefaultGameData();
+        var gameDataJson = JsonUtility.ToJson(GameData);
+        PlayerPrefs.SetString(DEFAULT_GAME_DATA, gameDataJson);
+        PlayerPrefs.Save();
         PlayerEventController = new PlayerEventController();
         SwitchEventController = new SwitchEventController();
         DoorEventController = new DoorEventController();
@@ -82,13 +85,6 @@ public class SaveGameManager : MonoBehaviour
         }
     }
 
-    private void SaveDefaultGameData()
-    {
-        var gameDataJson = JsonUtility.ToJson(GameData);
-        PlayerPrefs.SetString(DEFAULT_GAME_DATA, gameDataJson);
-        PlayerPrefs.Save();
-    }
-
     private void OnCurrentSpawnPointChanged(int _)
     {
         SaveGameData();
@@ -102,18 +98,15 @@ public class SaveGameManager : MonoBehaviour
             ** Save game data from Inspector is used.
             ** Just use values found in inspector and scene.
             */
-            Debug.Log("Not isActiveAndEnabled");
             InitializeEventControllers();
             return;
         }
 
-        Debug.Log("isActiveAndEnabled");
         if (HasSaveGameData())
         {
             /*
             ** Use Existing save game data.
             **/
-            Debug.Log("HasSaveGameData");
             GameData = LoadCurrentGameData();
             InitializeEventControllers();
             return;
@@ -124,8 +117,6 @@ public class SaveGameManager : MonoBehaviour
         **/
         try
         {
-            Debug.Log("HasNoSaveGameData");
-            CreateDefaultGameData();
             InitializeEventControllers();
         }
         catch (Exception ex)
@@ -175,8 +166,5 @@ public class SaveGameManager : MonoBehaviour
             throw new Exception("Duplicate doors found");
         }
         GameData.DoorsData.Initialize(doorsIds.ToArray());
-
-        SaveDefaultGameData();
-        SaveGameData();
     }
 }
