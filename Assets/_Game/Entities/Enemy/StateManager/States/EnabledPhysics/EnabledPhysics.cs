@@ -10,8 +10,9 @@ namespace F3PS.AI.States
 
         private Rigidbody _rb;
         [SerializeField] private float _physicsEnabledTime;
-        [SerializeField] private float _physicsEnabledTimer = 2f;
-        private bool _enabled;
+        
+        // Since not in usage, this is commented out
+        // [SerializeField] private float _physicsEnabledTimer = 2f;
 
         public void Start()
         {
@@ -32,13 +33,11 @@ namespace F3PS.AI.States
         public void EnablePhysics()
         {
             _rb.isKinematic = false;
-            _enabled = true;
         }
 
         public void DisablePhysics()
         { 
             _rb.isKinematic = true;
-            _enabled = false;
         }
     }
 }

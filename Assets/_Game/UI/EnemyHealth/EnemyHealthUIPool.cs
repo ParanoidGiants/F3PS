@@ -1,45 +1,47 @@
 using UnityEngine;
 using F3PS.AI;
+using System.Collections.Generic;
+using System;
 
 namespace F3PS.Enemy.UI
 {
     public class EnemyHealthUIPool : MonoBehaviour
     {
-        public EnemyHealthUI enemyHealthUI;
-        public BossHealthUI bossHealthUI;
+        public GameObject healthUIPrefab;
+        public Dictionary<Transform, EnemyHealthUI> healthUIs = new Dictionary<Transform, EnemyHealthUI>();
 
-        private void Start()
+        public void CreateEnemyHealthUI(Transform target)
         {
-            enemyHealthUI.gameObject.SetActive(false);
+            var healthUI = Instantiate(healthUIPrefab, transform.parent).GetComponent<EnemyHealthUI>();
+            healthUI.SetTarget(target);
+            healthUIs.Add(target, healthUI);
+            healthUI.gameObject.SetActive(false);
         }
 
-        public void OnHitTarget(BaseEnemy target)
+        public void RemoveEnemyHealthUI(Transform target)
         {
-            var bodyTransform = target.body.transform;
-            if (enemyHealthUI.target != bodyTransform)
+            if (healthUIs.TryGetValue(target, out var healthUI))
             {
-                enemyHealthUI.gameObject.SetActive(true);
-                enemyHealthUI.SetTarget(bodyTransform);
+                Destroy(healthUI.gameObject);
+                healthUIs.Remove(target);
             }
-            
-            enemyHealthUI.SetFill(target.health/ (float) target.maxHealth);
         }
-        
-        public void OnKillTarget(Transform target)
+
+        public void OnHitTarget(Transform target, int health, int maxHealth)
         {
-            if (enemyHealthUI.target != target) return;
-            
-            
-            enemyHealthUI.SetFill(1);
-            enemyHealthUI.SetTarget(null);
-            enemyHealthUI.gameObject.SetActive(false);
+            if (!healthUIs.TryGetValue(target, out var healthUI))
+            {
+                Debug.LogWarning($"No health UI found for target {target.name}.");
+                return;
+            }
+            healthUI.SetFill((float) health / maxHealth);
+            if (!healthUI.gameObject.activeSelf)
+            {
+                healthUI.gameObject.SetActive(true);
+            }
         }
-        
-        public void OnHitBoss(BossEnemy boss)
-        {
-            bossHealthUI.SetFill(boss.health/ (float) boss.maxHealth);
-        }
-        
+
+        public BossHealthUI bossHealthUI;
         public void EnableBossUI()
         {
             bossHealthUI.gameObject.SetActive(true);
@@ -48,6 +50,11 @@ namespace F3PS.Enemy.UI
         public void DisableBossUI()
         {
             bossHealthUI.gameObject.SetActive(false);
+        }
+
+        public void OnHitBoss(int health, int maxHealth)
+        {
+            bossHealthUI.SetFill(health / (float)maxHealth);
         }
     }
 }

@@ -4,7 +4,7 @@ using Weapon;
 
 namespace F3PS.AI.States.Action
 {
-    public class Shoot : Attack
+    public class Shoot : EnemyAttack
     {
         [Space(10)]
         [Header("Shoot Settings")]
@@ -12,7 +12,7 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Shoot Watchers")]
-        public BaseGun gun;
+        public BaseProjectileShooter gun;
         public float requiredAngle;
 
         private bool _isShootingPressed = false;
@@ -20,7 +20,7 @@ namespace F3PS.AI.States.Action
         override
         public void Initialize(Material aggressiveMaterial)
         {
-            gun = GetComponentInChildren<BaseGun>();
+            gun = GetComponentInChildren<BaseProjectileShooter>();
             gun.Init(enemy.body.transform.parent);        
             base.Initialize(aggressiveMaterial);
         }
@@ -43,7 +43,7 @@ namespace F3PS.AI.States.Action
         {
             UpdateGunAndEnemyRotation();
             _isShootingPressed = !_isShootingPressed;
-            gun.HandleShoot(_isShootingPressed);
+            gun.HandleShoot(_isShootingPressed, _target.Center());
             
             
             if (gun.IsMagazineEmpty() || !IsTargetInLineOfSight(_target.Center()))

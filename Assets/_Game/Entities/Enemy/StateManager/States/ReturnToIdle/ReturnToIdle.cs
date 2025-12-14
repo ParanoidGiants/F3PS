@@ -15,6 +15,7 @@ namespace F3PS.AI.States.Action
         public override void OnEnter()
         {
             enemy.navMeshAgent.destination = _originalPosition;
+            animator.SetFloat("Speed", 1f);
         }
 
         public override void OnPhysicsUpdate()

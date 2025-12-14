@@ -430,7 +430,6 @@ namespace DarkTonic.MasterAudio {
             if (_maThisFrame.occlusionShowRaycasts) {
                 var endPoint = isHit ? hitPoint : _listenerThisFrame.position;
                 var lineColor = isHit ? Color.red : Color.green;
-                Debug.DrawLine(raycastOrigin, endPoint, lineColor, .1f);
             }
 
             if (!isHit) {

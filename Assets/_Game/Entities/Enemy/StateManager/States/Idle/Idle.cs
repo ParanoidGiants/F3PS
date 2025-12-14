@@ -15,6 +15,7 @@ namespace F3PS.AI.States
             base.OnEnter();
             _idleTime = 0f;
             _navMeshAgent.isStopped = true;
+            animator.SetFloat("Speed", 0f);
         }
         
         override

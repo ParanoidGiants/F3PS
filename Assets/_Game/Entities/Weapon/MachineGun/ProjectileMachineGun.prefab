@@ -12,6 +12,31 @@ PrefabInstance:
       propertyPath: damage
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 8536122440376956845}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 7343387632890893763}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 7850838137853121458}
+    - target: {fileID: 6781872152688321966, guid: 540c7b130eeac7c4b89347aae834408b,
+        type: 3}
+      propertyPath: renderers.Array.data[3]
+      value: 
+      objectReference: {fileID: 5966139024658751579}
     - target: {fileID: 7785563140789300818, guid: 540c7b130eeac7c4b89347aae834408b,
         type: 3}
       propertyPath: m_RootOrder
@@ -79,3 +104,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 540c7b130eeac7c4b89347aae834408b, type: 3}
+--- !u!23 &5966139024658751579 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8294872423647169855, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2438335604842114404}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &7343387632890893763 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 4917439815977826471, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2438335604842114404}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &7850838137853121458 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5558975623774224086, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2438335604842114404}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &8536122440376956845 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6314279165363591881, guid: 540c7b130eeac7c4b89347aae834408b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2438335604842114404}
+  m_PrefabAsset: {fileID: 0}

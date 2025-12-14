@@ -4,98 +4,107 @@ using UnityEngine;
 
 public class BaseProjectile : MonoBehaviour
 {
+    [Header("Reference")]
+    public ParticleSystem hitParticleSystem;
+    public ParticleSystem noHitParticleSystem;
+    public GameObject mesh;
+    public HitBox hitBox;
+    public Rigidbody rb;
+    public Collider col;
+
     [Header("Settings")]
     public int damage = 50;
     public float lifeTime = 0f;
-    public float maximumLifeTime = 5f;
-    public float removeAfterSeconds = .2f;
-    
+    public float maximumLifeTimer = 5f;
+    public float enableCollisionsTime = 0f;
+    public float enableCollisionsTimer = .2f;
+    private bool collisionsEnabled = false;
+
     private float _speed;
-    private HitBox _hitBox;
-    protected Rigidbody _rb;
-    protected ProjectileTimeObject _timeObject;
+
     protected bool _isHit = false;
-    
-    [Header("Watchers")]
-    public bool isPlayer;
-    
-    public bool Hit => _isHit;
+    private Collider[] collidersToIgnore;
+    private bool _isInitialized = false;
 
-    private void Awake()
+    public void Init(int userSpaceId, Collider[] colliders)
     {
-        InitReferences();
-    }
-
-    public virtual void InitReferences()
-    {
-        _hitBox = GetComponent<HitBox>();
-        _rb = GetComponent<Rigidbody>();
-        _timeObject = GetComponent<ProjectileTimeObject>();
-    }
-
-    public void Init(int attackerId, bool isPlayer = false)
-    {
-        this.isPlayer = isPlayer;
-        _hitBox.attackerId = attackerId;
+        collidersToIgnore = colliders;
+        _isInitialized = true;
     }
     
     private void Update()
     {
-        lifeTime += _timeObject.ScaledDeltaTime;
-        if (lifeTime > maximumLifeTime)
+        if (_isHit) return;
+
+        lifeTime += Time.deltaTime;
+        if (lifeTime > maximumLifeTimer)
         {
             gameObject.SetActive(false);
         }
+
+        enableCollisionsTime += Time.deltaTime;
+        if (enableCollisionsTime > enableCollisionsTimer && !collisionsEnabled)
+        {
+            collisionsEnabled = true;
+            foreach (var hittableCollider in collidersToIgnore)
+            {
+                Physics.IgnoreCollision(col, hittableCollider, false);
+            }
+        }
     }
 
-    public virtual void BeforeSetActive(Vector3 position, Quaternion rotation, float shootSpeed)
+    public virtual void BeforeSetActive(Vector3 position, Vector3 targetPosition, float shootSpeed)
     {
         transform.position = position;
-        transform.rotation = rotation;
+        transform.forward = targetPosition - position;
         _speed = shootSpeed;
+    }
+
+
+    private void SetupProjectile()
+    {
         _isHit = false;
+        collisionsEnabled = false;
+        foreach (var hittableCollider in collidersToIgnore)
+        {
+            Physics.IgnoreCollision(col, hittableCollider);
+        }
+        rb.isKinematic = false;
+        rb.linearVelocity = transform.forward * _speed;
+        lifeTime = 0f;
+        enableCollisionsTime = 0f;
+        col.enabled = true;
     }
     
     private void OnEnable()
     {
-        _timeObject.ClearTrail();
-        _rb.velocity = transform.forward * _speed;
-        lifeTime = 0f;
+        if (!_isInitialized)
+        {
+            return;
+        }
+        SetupProjectile();
     }
 
     private void OnDisable()
     {
-        _rb.velocity = Vector3.zero;
+        mesh.SetActive(true);
+        hitParticleSystem.gameObject.SetActive(false);
+        noHitParticleSystem.gameObject.SetActive(false);
     }
 
-    public virtual void SetHit()
+    protected virtual void ProjectileSpecificActions()
     {
-        if (Hit) return;
-        
-        _isHit = true;
-        StartCoroutine(SetInactiveAfterSeconds(removeAfterSeconds));
+        StartCoroutine(SetInactiveAfterSeconds());
     }
 
-    protected IEnumerator SetInactiveAfterSeconds(float seconds)
+    private IEnumerator SetInactiveAfterSeconds()
     {
-        yield return new WaitForSeconds(seconds);
+        yield return new WaitForFixedUpdate();
+        col.enabled = false;
+        yield return new WaitForFixedUpdate();
+        rb.isKinematic = true;
+
+        yield return new WaitForSeconds(hitParticleSystem.main.duration);
         gameObject.SetActive(false);
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        var hittable = other.gameObject.GetComponent<Hittable>();
-        // Debug.Log("HIT: " + other.transform.name);
-        if (hittable != null 
-            && hittable.hittableId != _hitBox.attackerId
-        ) {
-            if (isPlayer && hittable is EnemyHittable enemyHittable)
-            {
-                Debug.Log(enemyHittable.enemy.name);
-                enemyHittable.OnHitByPlayer((-1) * other.impulse);
-            }
-            hittable.OnHit(_hitBox);
-        }
-        SetHit();
     }
 }

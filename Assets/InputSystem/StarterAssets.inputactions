@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "StarterAssets",
     "maps": [
         {
@@ -25,9 +26,9 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "8c4abdf8-4099-493a-aa1a-129acec7c3df",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -36,6 +37,24 @@
                     "name": "Sprint",
                     "type": "PassThrough",
                     "id": "980e881e-182c-404c-8cbf-3d09fdb48fef",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill",
+                    "type": "PassThrough",
+                    "id": "3e4d2340-9236-4b08-b3a0-0dd4fd327096",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Grab",
+                    "type": "PassThrough",
+                    "id": "d1a52ce7-e560-486a-b394-9c0c9356c50b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -60,19 +79,10 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reload",
-                    "type": "PassThrough",
-                    "id": "8d948e55-3097-46d6-b803-d8a7ad4716c2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "SlowMo",
                     "type": "Value",
                     "id": "aef0cd7d-937e-4803-a235-108a317d3a25",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -87,37 +97,55 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Pause",
-                    "type": "PassThrough",
-                    "id": "d5601090-8118-4fec-bdf0-23d1a77722cf",
-                    "expectedControlType": "DiscreteButton",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "SwitchWeapon",
                     "type": "PassThrough",
                     "id": "bea0ccb4-c303-49e6-a821-0c358fadb7b1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchSkill",
+                    "type": "PassThrough",
+                    "id": "99b9fdcb-6e57-4622-abc4-160b3f5e6899",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Menu",
+                    "type": "PassThrough",
+                    "id": "5e795920-46ae-4a0d-ac62-231172c4c1f7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "PassThrough",
+                    "id": "d5601090-8118-4fec-bdf0-23d1a77722cf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FreeCamera",
+                    "type": "PassThrough",
+                    "id": "4e67d373-f1cc-4c07-a6f8-a5dc35b43c27",
                     "expectedControlType": "DiscreteButton",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AimGrenade",
+                    "name": "PushPull",
                     "type": "PassThrough",
-                    "id": "3e4d2340-9236-4b08-b3a0-0dd4fd327096",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Restart",
-                    "type": "PassThrough",
-                    "id": "5e795920-46ae-4a0d-ac62-231172c4c1f7",
-                    "expectedControlType": "",
+                    "id": "5402a087-ea25-40a7-a012-55430172355e",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -236,6 +264,17 @@
                 },
                 {
                     "name": "",
+                    "id": "45385d6f-0def-4826-9dc6-1cc95fbe8bd2",
+                    "path": "<SwitchProControllerHID>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ed66cbff-2900-4a62-8896-696503cfcd31",
                     "path": "<Pointer>/delta",
                     "interactions": "",
@@ -252,6 +291,17 @@
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)",
                     "groups": "Gamepad",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d705d42f-1cd5-46bf-8af2-8e9906e878f5",
+                    "path": "<SwitchProControllerHID>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -280,6 +330,17 @@
                 },
                 {
                     "name": "",
+                    "id": "bb840a13-0d3b-48a2-bd47-6c29963e9352",
+                    "path": "<SwitchProControllerHID>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "dc65b89f-9bd3-43fb-92af-d0d87ba5faa4",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -292,10 +353,21 @@
                 {
                     "name": "",
                     "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95ecd627-339a-4dee-b39b-6a915db9a6e5",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -324,6 +396,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b8ffac17-d498-4301-a260-d182d8a2cb31",
+                    "path": "<SwitchProControllerHID>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "1e812da9-eeb8-4089-ae50-7bd71e59b4ac",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -336,7 +419,7 @@
                 {
                     "name": "",
                     "id": "5bb57161-7efe-4fc1-ae3a-c3451f051628",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -346,30 +429,8 @@
                 },
                 {
                     "name": "",
-                    "id": "0c6ff8f6-35c4-48ee-a579-6f0181ad95c1",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "efeb28bc-2bdf-47d6-9de9-c55ae3c11993",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2645569a-2949-4076-a41a-06afd6a71cab",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -390,8 +451,19 @@
                 },
                 {
                     "name": "",
+                    "id": "71a722f1-143c-4271-8461-bca450e53506",
+                    "path": "<SwitchProControllerHID>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "SlowMo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "db134118-c92f-405c-bc29-cadc5620656e",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/capsLock",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -402,11 +474,88 @@
                 {
                     "name": "",
                     "id": "f5169e88-f266-4fe9-9a2d-f8acbe775ff3",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "43234d8f-bcb7-4702-a175-97af04a5d596",
+                    "path": "<SwitchProControllerHID>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afd82b8f-ebf2-40db-82c5-9476045156e8",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SwitchWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "694f6bac-2b05-4748-9d94-022cc36afa6b",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SwitchWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a4f6b18-1193-49cc-a64c-51be83887773",
+                    "path": "<SwitchProControllerHID>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "SwitchWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5966f2e6-4409-4f9b-8d73-132ca9d672e6",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe6247d1-fca6-480b-8d62-75b02fc9d272",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "07d81ae4-dd11-4c37-b80d-3e0e45a1cbe3",
+                    "path": "<SwitchProControllerHID>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -434,45 +583,133 @@
                 },
                 {
                     "name": "",
-                    "id": "afd82b8f-ebf2-40db-82c5-9476045156e8",
-                    "path": "<Keyboard>/z",
+                    "id": "0bd71973-ff9b-4fc4-bbdb-bc960c17d777",
+                    "path": "<SwitchProControllerHID>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7b018be-e89d-4a70-910f-f304640279a2",
+                    "path": "<Keyboard>/o",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "SwitchWeapon",
+                    "action": "FreeCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "9d89573a-cde4-485f-afd5-7db241a1f08d",
-                    "path": "<Keyboard>/y",
+                    "name": "TG",
+                    "id": "24044fc4-781e-4ca6-bef1-53b8ed0e2be1",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchWeapon",
-                    "isComposite": false,
+                    "action": "PushPull",
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "694f6bac-2b05-4748-9d94-022cc36afa6b",
-                    "path": "<Gamepad>/dpad/left",
+                    "name": "negative",
+                    "id": "5e3a1f0f-afda-4762-bfd1-e497ec673728",
+                    "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "SwitchWeapon",
+                    "groups": "",
+                    "action": "PushPull",
                     "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "ba18e404-0ad4-4e85-9512-fa04683d47f4",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Vertical D-Pad",
+                    "id": "592726e4-e5c4-4570-8ec5-7e25e056e128",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PushPull",
+                    "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "c77aafe2-140a-427f-900c-b7480403123e",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "49ddfe5e-995a-4980-84c7-4c9cc70525df",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "c2fb7781-45ad-430c-bd74-d9d7f03bff7f",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PushPull",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "e6c3f192-6c87-4f85-bb7f-42b72a282df1",
+                    "path": "<SwitchProControllerHID>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "PushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "43eae9a9-b5e7-4acc-a9f2-1578b3bbe619",
+                    "path": "<SwitchProControllerHID>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "PushPull",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
                     "id": "4dcdbd23-f2f8-4f5a-bae7-6d2d8f1c101a",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "AimGrenade",
+                    "action": "Skill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -483,29 +720,73 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "AimGrenade",
+                    "action": "Skill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "5966f2e6-4409-4f9b-8d73-132ca9d672e6",
+                    "id": "70ca3dab-e84c-4088-b45b-6d8c4ef888d6",
+                    "path": "<SwitchProControllerHID>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "Skill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "028c1c4a-0d05-473e-854c-d3d2f4ebf688",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Restart",
+                    "action": "Grab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "fe6247d1-fca6-480b-8d62-75b02fc9d272",
-                    "path": "<Gamepad>/start",
+                    "id": "efba5c20-dcff-429f-9844-b9e65577e16b",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Restart",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "026523c1-834b-4854-879a-ac9e47fb3a60",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SwitchSkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e13a923-84bd-4f61-81fd-c9d97334d520",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SwitchSkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e2ef2e4-ea92-4e8a-9028-c1f1e7cebe2d",
+                    "path": "<SwitchProControllerHID>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Switch Pro Controller",
+                    "action": "SwitchSkill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -558,6 +839,11 @@
         {
             "name": "PS4 Controller",
             "bindingGroup": "PS4 Controller",
+            "devices": []
+        },
+        {
+            "name": "Switch Pro Controller",
+            "bindingGroup": "Switch Pro Controller",
             "devices": []
         }
     ]

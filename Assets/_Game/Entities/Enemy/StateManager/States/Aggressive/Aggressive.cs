@@ -12,16 +12,20 @@ namespace F3PS.AI.States
         
         [Space(10)]
         [Header("Specific Watchers")]
-        [SerializeField] private Hittable _selectedTarget;
         [SerializeField] private bool _isStaying;
-        [SerializeField] private Attack _currentAttack;
-        [SerializeField] private Attack[] _attacks;
+        [SerializeField] private Hittable _selectedTarget;
+        [SerializeField] private EnemyAttack _currentAttack;
+        [SerializeField] private EnemyAttack[] _attacks;
+        
+        [SerializeField] private bool _isAttacking;
+        public bool IsAttacking => _isAttacking;
+
 
         override
         public void Initialize()
         {
             base.Initialize();
-            _attacks = GetComponentsInChildren<Attack>();
+            _attacks = GetComponentsInChildren<EnemyAttack>();
             foreach (var attack in _attacks)
             {
                 attack.Initialize(material);
@@ -36,6 +40,7 @@ namespace F3PS.AI.States
             _navMeshAgent.isStopped = false;
             ChangeAttack(AttackType.RUSH);
             HandleStoppingDistance();
+            animator.SetFloat("Speed", 1f);
         }
         
         override 
@@ -48,13 +53,14 @@ namespace F3PS.AI.States
         override
         public void OnPhysicsUpdate()
         {
+            _isAttacking = _currentAttack.isActive;
             if (_currentAttack.isActive)
             {
                 _currentAttack.OnPhysicsUpdate();
                 return;
             }
             
-            bool hasTarget = stateManager.sensorController.IsTargetDetected();
+            bool hasTarget = stateManager.sensorController.HasTarget();
             if (!hasTarget)
             {
                 stateManager.SwitchState(StateType.CHECKING);
@@ -80,7 +86,7 @@ namespace F3PS.AI.States
             }
             
             if (_currentAttack.isActive
-                || !stateManager.sensorController.IsTargetDetected()
+                || !stateManager.sensorController.HasTarget()
                 || !_selectedTarget
             )
                 return;
@@ -91,19 +97,19 @@ namespace F3PS.AI.States
         private void HandlePositionAndRotation()
         {
             bool isInAttackDistance = Helper.HasReachedDestination(_navMeshAgent);
-            if (isInAttackDistance)
+            if (!isInAttackDistance)
             {
-                var enemyTransform = enemy.body.transform;
-                var position = enemyTransform.position;
-                var lookDirection = _selectedTarget.Center() - position;
-                var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
-                var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
-                enemyTransform.rotation = Quaternion.RotateTowards(
-                    enemyTransform.rotation,
-                    newRotation,
-                    enemy.ScaledDeltaTime * rotationSpeed
-                );
+                return;
             }
+            var enemyTransform = enemy.body.transform;
+            var lookDirection = _selectedTarget.Center() - enemyTransform.position;
+            var newForward = Vector3.ProjectOnPlane(lookDirection, enemyTransform.up);
+            var newRotation = Quaternion.LookRotation(newForward, enemyTransform.up);
+            enemyTransform.rotation = Quaternion.RotateTowards(
+                enemyTransform.rotation,
+                newRotation,
+                enemy.ScaledDeltaTime * rotationSpeed
+            );
         }
 
         private void HandleStoppingDistance()

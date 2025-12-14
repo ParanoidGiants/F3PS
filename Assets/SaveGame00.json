@@ -1,0 +1,152 @@
+{
+    "PlayerData": {
+        "MoveSpeed": 30.0,
+        "SpeedChangeRate": 15.0,
+        "SprintDepletionRate": 0.05000000074505806,
+        "SprintSpeed": 60.0,
+        "JumpHeight": 8.0,
+        "JumpCoolDownTimer": 0.25,
+        "DodgeHeight": 1.5,
+        "DodgeSpeed": 30.0,
+        "DodgeAscendTimer": 0.05000000074505806,
+        "DodgeLandTimer": 0.10000000149011612,
+        "DodgeCoolDownTimer": 0.4000000059604645,
+        "DodgeStaminaDepletionRate": 0.15000000596046449,
+        "CurrentStamina": 1.0,
+        "MaxStamina": 1.0,
+        "StaminaRecoveryRate": 0.20000000298023225,
+        "IsRecoveringStamina": false,
+        "IsDepletingStamina": false,
+        "CurrentHealth": 20,
+        "MaxHealth": 100,
+        "RotationSmoothTime": 0.11999999731779099,
+        "RotationSpeedPitch": 0.20000000298023225,
+        "RotationSpeedYaw": 0.20000000298023225,
+        "AimSpeed": 15.0,
+        "CurrentSpawnPoint": 5,
+        "AscendHeight": 1.0,
+        "AscendDuration": 1.0,
+        "GlideDuration": 1.0,
+        "GlideDepletionRate": 0.5,
+        "LandingDepth": 20.0,
+        "UnlockedAttacks": [
+            1
+        ],
+        "ActiveAttack": 1,
+        "OsirisKickData": {
+            "Damage": 10,
+            "NumberOfProjectiles": 8,
+            "StaminaCost": 10.0,
+            "SpreadAngle": 45.0,
+            "AttackSpeed": 100.0,
+            "AttackCoolDownTimer": 0.20000000298023225,
+            "ProjectileLifeDuration": 5.0
+        },
+        "HorusPalmData": {
+            "Damage": 20,
+            "AttackSpeed": 100.0,
+            "ImpactForceMultiplier": 1.0,
+            "AttackCoolDownTimer": 0.20000000298023225,
+            "StaminaCost": 0.30000001192092898,
+            "ProjectileLifeDuration": 5.0
+        },
+        "UnlockedSkills": [
+            1
+        ],
+        "ActiveSkill": 1,
+        "KhonsuSphereSkillData": {
+            "TargetSize": 20.0,
+            "ActiveDuration": 20.0,
+            "ThrowPower": 30.0,
+            "ChangeTimeScaleSpeed": 0.0,
+            "IsEnabled": false,
+            "Position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "TimeScale": 0.20000000298023225,
+            "ActiveTime": 6.166710376739502
+        },
+        "AnubisScrollSkillData": {
+            "CoolDownTime": 0.5,
+            "Duration": 2.0,
+            "Speed": 1.0,
+            "ScrollSpeed": 1.0,
+            "MinimumDistance": 3.0,
+            "MaximumDistance": 50.0,
+            "FrameDuration": 0.10000000149011612,
+            "State": 0,
+            "CurrentFrame": 0,
+            "TotalFrames": 0,
+            "CurrentRecordingTime": 0.0
+        },
+        "ThotMindSkillData": {
+            "PushPullSpeed": 5.0,
+            "RotateTimer": 1.0,
+            "MoveSpeed": 5.0,
+            "MinimumDistance": 3.0,
+            "MaximumDistance": 50.0,
+            "MaximumThrowSpeed": 3.0
+        },
+        "UnlockedAbilities": [
+            2
+        ]
+    },
+    "EnemiesData": [
+        {
+            "instanceId": -9872,
+            "isAlive": true
+        },
+        {
+            "instanceId": -8108,
+            "isAlive": true
+        },
+        {
+            "instanceId": -7774,
+            "isAlive": true
+        },
+        {
+            "instanceId": -5554,
+            "isAlive": true
+        },
+        {
+            "instanceId": -3782,
+            "isAlive": true
+        },
+        {
+            "instanceId": -9300,
+            "isAlive": true
+        },
+        {
+            "instanceId": -4318,
+            "isAlive": true
+        },
+        {
+            "instanceId": -4860,
+            "isAlive": true
+        }
+    ],
+    "SwitchesData": [
+        {
+            "instanceId": -9248,
+            "isOn": false
+        },
+        {
+            "instanceId": -3740,
+            "isOn": false
+        },
+        {
+            "instanceId": -2302,
+            "isOn": false
+        },
+        {
+            "instanceId": 51782,
+            "isOn": false
+        },
+        {
+            "instanceId": 54314,
+            "isOn": false
+        }
+    ]
+}

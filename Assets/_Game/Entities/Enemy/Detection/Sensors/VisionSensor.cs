@@ -1,16 +1,22 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace F3PS.AI.Sensors
 {
     public class VisionSensor : BaseSensor
     {
-        [Space(10)]
-        [Header("Reference")]
+        public bool IsTargetInSight { get; private set; }
         public Transform eyes;
 
-        public bool IsTargetInSight()
+
+        private void FixedUpdate()
         {
-            if (!HasTarget || TargetCandidates.Count < 2) return false;
+            if (!HasTarget || TargetCandidates.Count < 2)
+            {
+                IsTargetInSight = false;
+                return;
+            }
 
             int targetsInSight = 0;
             var position = eyes.position;
@@ -20,15 +26,13 @@ namespace F3PS.AI.Sensors
                 var direction = targetPosition - position;
                 var playerPartDistance = direction.magnitude;
                 direction.Normalize();
-                Debug.DrawRay(position, direction * playerPartDistance, Color.red);
-                    
                 // check if something is between the player and the eyes
-                if (!Physics.Raycast(position, direction, playerPartDistance, Helper.DefaultLayer))
+                if (!Physics.Raycast(position, direction, out var hit, playerPartDistance, Helper.DefaultLayer | Helper.GroundLayer))
                 {
                     targetsInSight++;
                 }
             }
-            return targetsInSight >= 2;
+            IsTargetInSight = targetsInSight > 0;
         }
     }
 }

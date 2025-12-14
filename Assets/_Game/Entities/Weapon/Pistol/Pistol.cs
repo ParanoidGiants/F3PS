@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace Weapon
 {
-    public class Pistol : BaseGun
+    public class Pistol : BaseProjectileShooter
     {
         [SerializeField] private bool _wasShootingPressedLastFrame = false;
 
         override
-        public void HandleShoot(bool isShootingPressed)
+        public void HandleShoot(bool isShootingPressed, Vector3 targetPosition)
         {
             if (!_wasShootingPressedLastFrame && isShootingPressed)
             {
                 if (IsMagazineEmpty())
                 {
-                    weaponUI?.OnTryShootWithEmptyClip();
+                    skillUI?.OnTryShootWithEmptyClip();
                 }
                 else
                 {
-                    StartCoroutine(Shoot());
+                    StartCoroutine(Shoot(targetPosition));
                     UpdateWeaponUI();
                 }
                 _wasShootingPressedLastFrame = true;
@@ -32,16 +32,13 @@ namespace Weapon
         
         
         override
-        protected IEnumerator Shoot()
+        protected IEnumerator Shoot(Vector3 targetPosition)
         {
             isShooting = true;
             shootCoolDownTime = shootCoolDownTimer;
             currentMagazineAmount--;
-            projectilePool.ShootBullet(
-                projectileSpawn.position,
-                meshHolder.rotation,
-                shotSpeed
-            );
+            var shootDirection = targetPosition - projectileSpawn.position;
+            Shake(-shootDirection);
             MasterAudio.PlaySound3DAtTransformAndForget("Weapon", transform);
             while (shootCoolDownTime > 0f && !isReloadingMagazine)
             {

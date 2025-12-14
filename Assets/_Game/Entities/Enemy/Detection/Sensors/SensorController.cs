@@ -41,19 +41,23 @@ namespace F3PS.AI.Sensors
             }
         }
         
-        public virtual bool IsTargetDetected()
+        public virtual bool HasTarget()
         {
             if (state == SensorState.IDLE)
             {
-                return defaultVision.IsTargetInSight();
+                return defaultVision.IsTargetInSight;
+            }
+            if (state == SensorState.SEARCHING)
+            {
+                return aggressiveVision.IsTargetInSight;
+            }
+            // else state is aggressive
+            if (aggressiveVision.HasTarget)
+            {
+                return aggressiveVision.IsTargetInSight;
             }
             
-            if (state == SensorState.AGGRESSIVE && aggressiveMovement.HasTarget)
-            {
-                return true;
-            }
-
-            return aggressiveVision.IsTargetInSight();
+            return aggressiveMovement.HasTarget;
         }
 
         public virtual Hittable GetTargetFromSensors()
@@ -67,10 +71,6 @@ namespace F3PS.AI.Sensors
                 return aggressiveVision.SelectedTarget;
             }
             // else state is aggressive
-            if (aggressiveMovement.HasTarget)
-            {
-                return aggressiveMovement.SelectedTarget;
-            }
             if (aggressiveVision.HasTarget)
             {
                 return aggressiveVision.SelectedTarget;
@@ -81,7 +81,7 @@ namespace F3PS.AI.Sensors
 
         public virtual bool IsTargetInLineOfSight()
         {
-            return aggressiveVision.IsTargetInSight() || defaultVision.IsTargetInSight();
+            return defaultVision.IsTargetInSight || state != SensorState.IDLE && aggressiveVision.IsTargetInSight;
         }
     }
 }

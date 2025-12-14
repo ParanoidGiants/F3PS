@@ -105,12 +105,12 @@ PrefabInstance:
     - target: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.046
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.06
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3861706144474456395, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
@@ -125,17 +125,17 @@ PrefabInstance:
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.067
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.347
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.485
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657352484182213049, guid: 961cf1379f54b3148a33ef308d4eb4dd,
         type: 3}
@@ -210,11 +210,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb4d28895432e24084bc54a496c7ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshHolder: {fileID: 5138319323999887027}
+  screenShakeSource: {fileID: 3833294473985770251}
   projectilePrefab: {fileID: 5610734431637848881, guid: 6f0d66b28379db448b3bbdd64f8b7586,
     type: 3}
   projectileSpawn: {fileID: 7420966541678857242}
   projectilePool: {fileID: 2891245280591940539}
-  meshHolder: {fileID: 5138319323999887027}
   icon: {fileID: 21300000, guid: 85da131e49e18674399c1418f4732177, type: 3}
   maxAmmo: 10000
   maxMagazineAmmo: 100
@@ -222,12 +223,66 @@ MonoBehaviour:
   shootCoolDownTimer: 0.1
   reloadMagazineTimer: 2
   isShooting: 0
+  recoilPower: 0.005
   totalAmount: 100
   currentMagazineAmount: 100
   shootCoolDownTime: 0
   reloadMagazineTime: 0
   isReloadingMagazine: 0
   weaponUI: {fileID: 0}
+--- !u!114 &3833294473985770251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6708543336009785340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 1
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.1
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!4 &7420966541678857242 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1041052903905260205, guid: 961cf1379f54b3148a33ef308d4eb4dd,

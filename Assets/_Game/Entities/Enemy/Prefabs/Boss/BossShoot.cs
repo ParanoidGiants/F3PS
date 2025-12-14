@@ -5,7 +5,7 @@ using Weapon;
 
 namespace F3PS.AI.States.Action
 {
-    public class BossShoot : Attack
+    public class BossShoot : EnemyAttack
     {
         [Space(10)]
         [Header("Shoot Settings")]
@@ -13,10 +13,9 @@ namespace F3PS.AI.States.Action
         
         [Space(10)]
         [Header("Shoot Watchers")]
-        public BaseGun[] guns;
+        public BaseProjectileShooter[] guns;
         public float requiredAngle;
 
-        private bool _isShootingPressed = false;
         public float shootTime = 0f;
         public float shootTimer;
         private BossEnemy _boss;
@@ -25,7 +24,7 @@ namespace F3PS.AI.States.Action
         override
         public void Initialize(Material aggressiveMaterial)
         {
-            guns = shooterLayer.GetComponentsInChildren<BaseGun>();
+            guns = shooterLayer.GetComponentsInChildren<BaseProjectileShooter>();
             foreach (var gun in guns)
             {
                 gun.Init(enemy.body.transform.parent);
@@ -60,8 +59,8 @@ namespace F3PS.AI.States.Action
             bool isMagazineEmpty = false;
             foreach (var gun in guns)
             {
-                gun.HandleShoot(true);
-                gun.HandleShoot(false);
+                gun.HandleShoot(true, _target.Center());
+                gun.HandleShoot(false, _target.Center());
                 isMagazineEmpty = isMagazineEmpty || gun.IsMagazineEmpty();
             }
             if (isMagazineEmpty || !IsTargetInLineOfSight(_target.Center()))

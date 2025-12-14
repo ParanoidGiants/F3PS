@@ -23,7 +23,7 @@ namespace F3PS.AI.Sensors
         {
             var hittable = other.GetComponent<PlayerHittable>();
             if (!hittable) return;
-            
+
             // AddHittableCandidate(hittable)
             _targetCandidates.Add(hittable);
             _targetCandidates.Sort((x, y) =>
@@ -32,6 +32,8 @@ namespace F3PS.AI.Sensors
                 if (x.damageMultiplier < y.damageMultiplier) return 1;
                 return 0;
             });
+
+            hittable.onDisabled += HandleTargetDestroyed;
         }
 
         private void OnTriggerExit(Collider other)
@@ -41,6 +43,13 @@ namespace F3PS.AI.Sensors
 
             // RemoveHittableCandidate(hittable);
             _targetCandidates.Remove(hittable);
+            hittable.onDisabled -= HandleTargetDestroyed;
+        }
+
+        private void HandleTargetDestroyed(Hittable target)
+        {
+            _targetCandidates.Remove(target);
+            target.onDisabled -= HandleTargetDestroyed;
         }
 
         public void SetActive(bool active)

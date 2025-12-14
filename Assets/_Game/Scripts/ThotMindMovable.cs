@@ -1,0 +1,152 @@
+using System.Collections;
+using UnityEngine;
+
+public class ThotMindMovable : MonoBehaviour
+{
+    private RigidbodyHub _rigidbodyHub;
+    private Quaternion _initialRotation;
+
+    [Header("References")]
+    public ThotMindOutline outline;
+
+    [Space(10)]
+    [Header("Watcher")]
+    public bool isMoving;
+    public bool isBeingRotated = false;
+    public bool isCurrentlyTouchedByPlayer = false;
+    private Coroutine _rotateCoroutine;
+    public bool IsLocked => _rigidbodyHub.isAnubisScrolling;
+    public Quaternion relativeRotation = Quaternion.identity;
+
+    private void Awake()
+    {
+        _rigidbodyHub = GetComponent<RigidbodyHub>();
+        var meshFilter = GetComponent<MeshFilter>();
+        outline.Init(meshFilter.mesh);
+        outline.gameObject.SetActive(false);
+    }
+
+    public void SetLocked()
+    {
+        outline.Lock();
+    }
+    public void SetUnpicked()
+    {
+        outline.Unpick();
+    }
+
+    public void SelectAsCandidate()
+    {
+        outline.gameObject.SetActive(true);
+    }
+
+    public void UnselectAsCandidate()
+    {
+        outline.gameObject.SetActive(false);
+    }
+
+    public void StartMoving()
+    {
+        isMoving = true;
+        _rigidbodyHub.StartThotMindMoving();
+        _initialRotation = transform.rotation;
+        outline.Pick();
+    }
+    public void StopMoving(float maximumThrowSpeed)
+    {
+        isMoving = false;
+        _rigidbodyHub.StopThotMindMoving(maximumThrowSpeed);
+        outline.Unpick();
+    }
+
+    public void MoveTowards(Vector3 moveTo, float moveSpeed, Vector3 subjectRight)
+    {
+        Vector3 direction = (moveTo - transform.position);
+        Vector3 velocity = direction * moveSpeed;
+        _rigidbodyHub.SetThotMindVelocity(velocity);
+    }
+
+    public void StartRotating()
+    {
+        outline.StartRotate();
+    }
+
+    public void StopRotating()
+    {
+        outline.StopRotate();
+    }
+
+    public void UpdateRelativeRotation(Quaternion subjectOrientation)
+    {
+        var worldRotation = transform.rotation;
+        var objectRotation = Quaternion.Inverse(subjectOrientation) * worldRotation;
+        relativeRotation = ThotMindController.GetClosestRotation(objectRotation);
+    }
+
+    public void SnapToRelativeRotation(Quaternion subjectOrientation)
+    {
+        if (isBeingRotated)
+        {
+            return;
+        }
+
+        transform.rotation = subjectOrientation * relativeRotation;
+    }
+
+    public void Rotate(RotationCommand rotationCommand, Quaternion subjectOrientation, float rotateTimer)
+    {
+        if (rotationCommand == RotationCommand.None)
+        {
+            return;
+        }
+        if (isBeingRotated)
+        {
+            return;
+        }
+        isBeingRotated = true;
+        if (_rotateCoroutine != null)
+        {
+            StopCoroutine(_rotateCoroutine);
+        }
+
+        _rotateCoroutine = StartCoroutine(RotateCoroutine(rotationCommand, subjectOrientation, rotateTimer));
+    }
+
+    private IEnumerator RotateCoroutine(RotationCommand rotationCommand, Quaternion subjectOrientation, float rotateTimer)
+    {
+        var worldStartRotation = transform.rotation;
+        var objectStartRotation = Quaternion.Inverse(subjectOrientation) * worldStartRotation;
+        var rotationToApply = ThotMindController.GetStepRotationByRotationCommand(rotationCommand);
+        var objectTargetRotation = ThotMindController.GetClosestRotation(rotationToApply * objectStartRotation);
+        var worldTargetRotation = subjectOrientation * objectTargetRotation;
+
+        var time = 0f;
+        while (time < rotateTimer)
+        {
+            time += Time.deltaTime;
+            var t = Mathf.Clamp01(time / rotateTimer);
+            var rotation = Quaternion.Slerp(worldStartRotation, worldTargetRotation, t);
+            transform.rotation = rotation;
+            yield return null;
+        }
+        transform.rotation = worldTargetRotation;
+        UpdateRelativeRotation(subjectOrientation);
+        isBeingRotated = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            isCurrentlyTouchedByPlayer = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            isCurrentlyTouchedByPlayer = false;
+        }
+    }
+}

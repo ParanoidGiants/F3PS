@@ -1,0 +1,17 @@
+ARG GAMECI_IMAGE=unityci/editor:ubuntu-6000.2.10f1-webgl-3.2.0  
+FROM $GAMECI_IMAGE
+
+ARG BLENDER_SHORT_VERSION=4.2
+ARG BLENDER_FULL_VERSION=4.2.7
+
+# Copy Blender archive into the image
+COPY blender-${BLENDER_FULL_VERSION}-linux-x64.tar.xz /tmp/
+
+RUN echo "BLENDER_SHORT_VERSION: $BLENDER_SHORT_VERSION" && \
+    echo "BLENDER_FULL_VERSION: $BLENDER_FULL_VERSION" && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends tar && \
+    tar -xf /tmp/blender-${BLENDER_FULL_VERSION}-linux-x64.tar.xz -C /opt && \
+    rm /tmp/blender-${BLENDER_FULL_VERSION}-linux-x64.tar.xz
+
+ENV PATH="/opt/blender-${BLENDER_FULL_VERSION}-linux-x64:$PATH"

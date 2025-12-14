@@ -8,18 +8,11 @@ public class BossHittable : Hittable
     void Awake()
     {
         _collider = GetComponent<Collider>();
-        hittableId = boss.GetInstanceID();
     }
 
     override
-    public void OnHit(HitBox hitBy)
+    public void OnHit(int damage, Vector3 hitDirection)
     {
-        // Hit by projectile
-        var projectile = hitBy.GetComponent<BaseProjectile>();
-        if (projectile && projectile.isPlayer && !projectile.Hit)
-        {
-            Debug.Log("Boss' " + name + " hit by projectile from " + hitBy.name);
-            boss.Hit((int)(damageMultiplier * projectile.damage));
-        }
+        boss.Hit((int)(damageMultiplier * damage));
     }
 }
