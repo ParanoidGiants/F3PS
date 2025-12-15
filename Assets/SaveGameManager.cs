@@ -51,7 +51,6 @@ public class SaveGameManager : MonoBehaviour
     {
         var gameDataJson = PlayerPrefs.GetString(GAME_DATA);
         GameData gameData = JsonUtility.FromJson<GameData>(gameDataJson);
-        Debug.Log(gameDataJson);
         return gameData;
     }
 
@@ -74,7 +73,6 @@ public class SaveGameManager : MonoBehaviour
             var gameDataJson = JsonUtility.ToJson(GameData);
             PlayerPrefs.SetString(GAME_DATA, gameDataJson);
             PlayerPrefs.Save();
-            Debug.Log(gameDataJson);
         }
         catch (Exception ex)
         {
