@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -16,16 +17,18 @@ public class RevertBallSpawner : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < ballCount; i++)
-        {
-            var spawnPosition = ballSpawnPoint.position;
-            var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation, transform.parent);
-            var revertBall = ball.GetComponent<RevertBall>();
-            revertBall.Init(revertPlayerToPoint);
-            revertBalls.Add(revertBall);
-            ball.SetActive(false);
-        }
         time = spawnEverySeconds;
+    }
+
+    private RevertBall SpawnBall()
+    {
+        var spawnPosition = ballSpawnPoint.position;
+        var ball = Instantiate(revertBallPrefab, spawnPosition, ballSpawnPoint.rotation, transform.parent);
+        var revertBall = ball.GetComponent<RevertBall>();
+        revertBall.Init(revertPlayerToPoint);
+        revertBalls.Add(revertBall);
+        ball.SetActive(false);
+        return revertBall;
     }
 
     private void Update()
@@ -36,7 +39,11 @@ public class RevertBallSpawner : MonoBehaviour
             return;
         }
         time %= spawnEverySeconds;
-        var nextBall = revertBalls.First(b => !b.gameObject.activeSelf);
+        var nextBall = revertBalls.FirstOrDefault(b => !b.gameObject.activeSelf);
+        if (nextBall == null)
+        {
+            nextBall = SpawnBall();
+        }
         nextBall.gameObject.SetActive(true);
         nextBall.StartRun(ballSpeed);
     }
