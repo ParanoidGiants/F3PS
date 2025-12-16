@@ -16,15 +16,15 @@ public class KhonsuSphereHUD : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
+        // khonsuSphereBar.SetActive(true);
+        // PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
         PlayerEventController.OnKhonsuSphereActiveTimeChanged += UpdateActiveTime;
-        khonsuSphereBar.SetActive(true);
     }
     private void OnDisable()
     {
-        PlayerEventController.OnKhonsuSphereTimeScaleChanged -= UpdateTimeScale;
+        // khonsuSphereBar.SetActive(false);
+        // PlayerEventController.OnKhonsuSphereTimeScaleChanged -= UpdateTimeScale;
         PlayerEventController.OnKhonsuSphereActiveTimeChanged -= UpdateActiveTime;
-        khonsuSphereBar.SetActive(false);
     }
 
     public void UpdateActiveTime(float activeTime)
