@@ -129,7 +129,7 @@ public class SaveGameManager : MonoBehaviour
     {
         // register enemies from scene
         var enemyGroupNames = new List<string>();
-        var enemyGroups = FindObjectsByType<RegisterEnemy>(FindObjectsSortMode.InstanceID);
+        var enemyGroups = FindObjectsByType<RegisterEnemy>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
         enemyGroupNames.AddRange(enemyGroups.Select(enemyGroup => enemyGroup.gameObject.name));
         if (enemyGroupNames.Count != enemyGroupNames.Distinct().Count())
         {
@@ -141,7 +141,7 @@ public class SaveGameManager : MonoBehaviour
         // register switches from scene
         GameData.SwitchesData = new SwitchesData();
         var switchesIds = new List<string>();
-        var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsSortMode.InstanceID);
+        var fillOnShotSwitches = FindObjectsByType<FillOnShot>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
         switchesIds.AddRange(fillOnShotSwitches.Select(fillOnShotSwitch => fillOnShotSwitch.gameObject.name));
         if (switchesIds.Count != switchesIds.Distinct().Count())
         {
@@ -155,7 +155,7 @@ public class SaveGameManager : MonoBehaviour
         // register doors from scene
         GameData.DoorsData = new DoorsData();
         var doorsIds = new List<string>();
-        var doors = FindObjectsByType<DoorController>(FindObjectsSortMode.InstanceID);
+        var doors = FindObjectsByType<DoorController>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
         doorsIds.AddRange(doors.Select(door => door.gameObject.name));
         // are there any duplicate doors?
         if (doorsIds.Count != doorsIds.Distinct().Count())
