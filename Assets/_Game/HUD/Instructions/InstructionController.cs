@@ -11,7 +11,7 @@ public class InstructionController : MonoBehaviour
     public InstructionElementController instructionOnShootHorusPalm;
     public InstructionElementController instructionOnThrowKhonsuSphere;
 
-    private void OnEnable()
+    private void Start()
     {
         foreach (var instruction in GetComponentsInChildren<InstructionElementController>())
         {
@@ -22,7 +22,10 @@ public class InstructionController : MonoBehaviour
         {
             ShowMovementInstruction();
         }
+    }
 
+    private void OnEnable()
+    {
         GameManager.Instance.saveGameManager.PlayerEventController.OnAttackUnlocked += ShowShootInstruction;
         GameManager.Instance.saveGameManager.PlayerEventController.OnSkillUnlocked += ShowThrowKhonsuSphereInstruction;
     }
