@@ -12,6 +12,14 @@ public class SelectSkillControllerHUD : MonoBehaviour
 
     public SelectableSkillHUD[] activeSkillHuds;
 
+    private void Start()
+    {
+        foreach (var skillHud in skillHuds)
+        {
+            skillHud.gameObject.SetActive(PlayerData.UnlockedSkills.Contains(skillHud.skillType));
+        }
+    } 
+
     private void OnEnable()
     {
         PlayerEventController.OnActiveSkillChanged += SelectSkillHud;
