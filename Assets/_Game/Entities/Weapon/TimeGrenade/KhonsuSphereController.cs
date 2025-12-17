@@ -1,9 +1,11 @@
+using System;
 using F3PS;
 using UnityEngine;
     
 public class KhonsuSphereController : MonoBehaviour
 {
     private KhonsuSphereSkillData KhonsuSphereData => GameManager.Instance.GameData.PlayerData.KhonsuSphereSkillData;
+    private PlayerEventController PlayerEventController => GameManager.Instance.saveGameManager.PlayerEventController;
 
     [Header("References")]
     public Transform userSpace;
@@ -26,6 +28,8 @@ public class KhonsuSphereController : MonoBehaviour
     public bool wasAimingLastFrame;
     public bool isDeactivated;
     public Vector3 throwDirection;
+    public bool wasKhonsuSphereUpAndRunningLastFrame;
+    public bool isRecovering = false;
 
     private void Awake()
     {
@@ -40,6 +44,12 @@ public class KhonsuSphereController : MonoBehaviour
 
     public void OnUpdate(bool isAiming, float bubbleTimeScaleChange, Vector3 targetPosition)
     {
+        HandleCoolDown();
+        if (isRecovering)
+        {
+            return;
+        }
+
         wasAimingLastFrame = isAimingThisFrame;
         isAimingThisFrame = isAiming;
 
@@ -93,6 +103,22 @@ public class KhonsuSphereController : MonoBehaviour
         {
             khonsuSphereProjectile.PitchTimeScale(bubbleTimeScaleChange * KhonsuSphereData.ChangeTimeScaleSpeed);
         }
+    }
+
+    private void HandleCoolDown()
+    {
+        if (isRecovering || wasKhonsuSphereUpAndRunningLastFrame && !khonsuSphereProjectile.isUpAndRunning)
+        {
+            var recoveringTime = KhonsuSphereData.CoolDownTime + Time.deltaTime;
+            PlayerEventController.SetKhonsuSphereCoolDownTime(recoveringTime);
+            isRecovering = recoveringTime < KhonsuSphereData.CoolDownDuration;
+            if (!isRecovering)
+            {
+                PlayerEventController.SetKhonsuSphereCoolDownTime(0f);
+            }
+            return;
+        }
+        wasKhonsuSphereUpAndRunningLastFrame = khonsuSphereProjectile.isUpAndRunning;
     }
 
     private void ThrowProjectile()

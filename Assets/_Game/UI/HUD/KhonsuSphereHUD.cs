@@ -19,12 +19,27 @@ public class KhonsuSphereHUD : MonoBehaviour
         // khonsuSphereBar.SetActive(true);
         // PlayerEventController.OnKhonsuSphereTimeScaleChanged += UpdateTimeScale;
         PlayerEventController.OnKhonsuSphereActiveTimeChanged += UpdateActiveTime;
+        PlayerEventController.OnKhonsuSphereCoolDownTimeChanged += UpdateCoolDownTime;
     }
     private void OnDisable()
     {
         // khonsuSphereBar.SetActive(false);
         // PlayerEventController.OnKhonsuSphereTimeScaleChanged -= UpdateTimeScale;
         PlayerEventController.OnKhonsuSphereActiveTimeChanged -= UpdateActiveTime;
+        PlayerEventController.OnKhonsuSphereCoolDownTimeChanged -= UpdateCoolDownTime;
+    }
+
+    private void UpdateCoolDownTime(float coolDownTime)
+    {
+        var percentage = coolDownTime / KhonsuSphereData.CoolDownDuration;
+        if (percentage == 0f)
+        {
+            lifeTimeCircle.fillAmount = 0f;
+        }
+        else
+        {
+            lifeTimeCircle.fillAmount = 1f - percentage;
+        }
     }
 
     public void UpdateActiveTime(float activeTime)
@@ -36,7 +51,7 @@ public class KhonsuSphereHUD : MonoBehaviour
         }
         else
         {
-            lifeTimeCircle.fillAmount = 1f - percentage;
+            lifeTimeCircle.fillAmount = percentage;
         }
     }
 

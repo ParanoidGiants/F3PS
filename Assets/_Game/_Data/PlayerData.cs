@@ -31,6 +31,7 @@ public class KhonsuSphereSkillData
     public float TargetSize = 20;
     public float ActiveDuration = 20;
     public float ThrowPower = 30;
+    public float CoolDownDuration = 5;
     public float ChangeTimeScaleSpeed = 0;
 
     [Header("Watchers")]
@@ -38,6 +39,7 @@ public class KhonsuSphereSkillData
     public Vector3 Position = Vector3.zero;
     public float TimeScale = 0.2f;
     public float ActiveTime = 0f;
+    public float CoolDownTime = 0f;
 }
 
 public enum AnubisScrollState
