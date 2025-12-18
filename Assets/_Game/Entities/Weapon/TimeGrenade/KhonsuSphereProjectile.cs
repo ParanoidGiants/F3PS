@@ -143,7 +143,6 @@ public class KhonsuSphereProjectile : MonoBehaviour
 
     public void DeactivateKhonsuSphere()
     {
-        PlayerEventController.SetKhonsuSphereActiveTime(0f);
         isUpAndRunning = false;
         khonsuSphere.gameObject.transform.DOScale(Vector3.zero, animationDuration)
             .SetEase(Ease.InCubic)

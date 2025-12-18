@@ -29,7 +29,6 @@ public class KhonsuSphereController : MonoBehaviour
     public bool isDeactivated;
     public Vector3 throwDirection;
     public bool wasKhonsuSphereUpAndRunningLastFrame;
-    public bool isRecovering = false;
 
     private void Awake()
     {
@@ -45,7 +44,7 @@ public class KhonsuSphereController : MonoBehaviour
     public void OnUpdate(bool isAiming, float bubbleTimeScaleChange, Vector3 targetPosition)
     {
         HandleCoolDown();
-        if (isRecovering)
+        if (KhonsuSphereData.IsOnCoolDown)
         {
             return;
         }
@@ -107,18 +106,25 @@ public class KhonsuSphereController : MonoBehaviour
 
     private void HandleCoolDown()
     {
-        if (isRecovering || wasKhonsuSphereUpAndRunningLastFrame && !khonsuSphereProjectile.isUpAndRunning)
+        if (!KhonsuSphereData.IsOnCoolDown && wasKhonsuSphereUpAndRunningLastFrame && !khonsuSphereProjectile.isUpAndRunning)
         {
-            var recoveringTime = KhonsuSphereData.CoolDownTime + Time.deltaTime;
-            PlayerEventController.SetKhonsuSphereCoolDownTime(recoveringTime);
-            isRecovering = recoveringTime < KhonsuSphereData.CoolDownDuration;
-            if (!isRecovering)
-            {
-                PlayerEventController.SetKhonsuSphereCoolDownTime(0f);
-            }
-            return;
+            var coolDownTime = KhonsuSphereData.CoolDownDuration * KhonsuSphereData.ActiveTime / KhonsuSphereData.ActiveDuration;
+            PlayerEventController.SetKhonsuSphereCoolDownTime(coolDownTime);
+            PlayerEventController.SetKhonsuSphereIsOnCoolDown(true);
         }
         wasKhonsuSphereUpAndRunningLastFrame = khonsuSphereProjectile.isUpAndRunning;
+
+        if (KhonsuSphereData.IsOnCoolDown)
+        {
+            var recoveringTime = KhonsuSphereData.CoolDownTime - Time.deltaTime;
+            PlayerEventController.SetKhonsuSphereCoolDownTime(recoveringTime);
+            if (recoveringTime <= 0f)
+            {
+                PlayerEventController.SetKhonsuSphereCoolDownTime(0f);
+                PlayerEventController.SetKhonsuSphereActiveTime(0f);
+                PlayerEventController.SetKhonsuSphereIsOnCoolDown(false);
+            }
+        }
     }
 
     private void ThrowProjectile()

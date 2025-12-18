@@ -39,6 +39,7 @@ public class KhonsuSphereSkillData
     public Vector3 Position = Vector3.zero;
     public float TimeScale = 0.2f;
     public float ActiveTime = 0f;
+    public bool IsOnCoolDown = false;
     public float CoolDownTime = 0f;
 }
 

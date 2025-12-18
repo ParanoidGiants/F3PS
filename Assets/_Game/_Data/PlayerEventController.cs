@@ -151,6 +151,13 @@ public class PlayerEventController
         Data.KhonsuSphereSkillData.CoolDownTime = recoveringTime;
         OnKhonsuSphereCoolDownTimeChanged?.Invoke(recoveringTime);
     }
+
+    public event Action<bool> OnKhonsuSphereIsOnCoolDownChanged;
+    public void SetKhonsuSphereIsOnCoolDown(bool isOnCoolDown)
+    {
+        Data.KhonsuSphereSkillData.IsOnCoolDown = isOnCoolDown;
+        OnKhonsuSphereIsOnCoolDownChanged?.Invoke(isOnCoolDown);
+    }
     #endregion KhonsuSphere
     
     #region AnubisScroll

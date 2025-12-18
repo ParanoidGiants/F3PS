@@ -38,7 +38,7 @@ public class KhonsuSphereHUD : MonoBehaviour
         }
         else
         {
-            lifeTimeCircle.fillAmount = 1f - percentage;
+            lifeTimeCircle.fillAmount = percentage;
         }
     }
 
